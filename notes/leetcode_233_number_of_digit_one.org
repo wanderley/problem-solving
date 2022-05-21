@@ -46,7 +46,7 @@ Let's explore the fact that any given input will be a number with at most 9 digi
   assert d(5) == naive(99999) - naive(9999) == 46000
 #+end_src
 
-* TODO Explain the usage of [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Digit DP]] to solve the problem
+* TODO Explain the usage of [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]] to solve the problem
 
 #+begin_src python :exports none
   def c(n):

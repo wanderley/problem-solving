@@ -19,7 +19,7 @@ $$
   \left(\sum_{0 \leq i \leq |p|}p[i] + \sum_{0 \leq j \leq |q|}q[j]\right) \mod k
 $$
 
-The same applies for the digits multiplied by their respective powers of 10.  This means that keeping the modulo of the partial sum of digits and the modulo of the partial generated number are enough to check if we could generate or not a valid number, since both should be zero when there are no more digits to generate.  With this observation, we can solve the problem using [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Digit DP]] strategy.  The state consists on the digit to be generated, a flag to indicate if the current generated number is smaller or not the original number, the sum of the digits generated so far and the rest of division of the digits multiplied by their respective powers of 10 generated so far.
+The same applies for the digits multiplied by their respective powers of 10.  This means that keeping the modulo of the partial sum of digits and the modulo of the partial generated number are enough to check if we could generate or not a valid number, since both should be zero when there are no more digits to generate.  With this observation, we can solve the problem using [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]] strategy.  The state consists on the digit to be generated, a flag to indicate if the current generated number is smaller or not the original number, the sum of the digits generated so far and the rest of division of the digits multiplied by their respective powers of 10 generated so far.
 
 #+begin_src c
   #include <stdio.h>
