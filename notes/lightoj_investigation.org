@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID:       2DE40F07-59D3-4586-BE85-C282B0608D7B
+:ROAM_REFS: https://lightoj.com/problem/investigation
+:END:
+#+TITLE: LightOJ: Investigation
+
+We have to count how many numbers between $a$ and $b$ are divisible by $k$ and the sum of their digits are also divisible by $k$, where $1 \leq a \leq b \leq 2^{31}$ and $0 < k < 10000$.  Note that the answer is always 0 if $k$ is greater than 90, since $b \leq 2^{31} = 2147483648$ has at most 10 digits and the sum of digits of any candidate will not exceed 90 and will never be divisible for $k$ greater than 90.
+
+The slow solution consists on counting all numbers in the interval if the satisfy the conditions.  In order to solve the problem, we have to count the number without generating all them.  To do so, we have to use two properties of the [[id:13A69495-CA30-40DC-A722-B0327FB06D2D][modulo operation]]:
+
+1. $a + b \mod k = (a \mod k) + (b \mod k) \mod k$, and
+2. $a \times b \mod k = (a \mod k) \times (b \mod k) \mod k$.
+
+Be $p$ and $q$ digits of a candidate that satisfy the conditions.  For example, $p=[1,7]$ and $q=[0, 2]$ and $k=3$.  From the above properties, we know that
+
+$$
+  \left(\sum_{0 \leq i \leq |p|}p[i] \mod k + \sum_{0 \leq j \leq |q|}q[j] \mod k\right) \mod k
+  =
+  \left(\sum_{0 \leq i \leq |p|}p[i] + \sum_{0 \leq j \leq |q|}q[j]\right) \mod k
+$$
+
+The same applies for the digits multiplied by their respective powers of 10.  This means that keeping the modulo of the partial sum of digits and the modulo of the partial generated number are enough to check if we could generate or not a valid number, since both should be zero when there are no more digits to generate.  With this observation, we can solve the problem using [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Digit DP]] strategy.  The state consists on the digit to be generated, a flag to indicate if the current generated number is smaller or not the original number, the sum of the digits generated so far and the rest of division of the digits multiplied by their respective powers of 10 generated so far.
+
+#+begin_src c
+  #include <stdio.h>
+  #include <string.h>
+
+  int mem[10][2][100][100];
+  int digits[11];
+  int ndigits = 0;
+  int K;
+
+  int rec(int i, int smaller, int s, int mod) {
+    if (i == ndigits) {
+      return s == 0 && mod == 0 ? 1 : 0;
+    }
+    if (mem[i][smaller][s][mod] != -1) {
+      return mem[i][smaller][s][mod];
+    }
+    int limit = smaller == 1 ? 9 : digits[i];
+    int ret = 0;
+    for (int d = 0; d <= limit; d++) {
+      ret += rec(
+        i + 1,
+        smaller == 1 || d < digits[i] ? 1 : 0,
+        (s + d) % K,
+        (mod * 10 + d) % K
+      );
+    }
+    return mem[i][smaller][s][mod] = ret;
+  }
+
+  int solve(int a) {
+    ndigits = 0;
+    digits[0] = 0;
+    while (a > 0) {
+      digits[ndigits++] = a % 10;
+      a = a / 10;
+    }
+    for (int i = 0; i < ndigits / 2; i++) {
+      int tmp = digits[i];
+      digits[i] = digits[ndigits - i - 1];
+      digits[ndigits - i - 1] = tmp;
+    }
+    memset(mem, -1, sizeof(mem));
+    return rec(0, 0, 0, 0);
+  }
+
+  int main() {
+    int t;
+    scanf("%d", &t);
+    for (int c = 1; c <= t; c++) {
+      int a, b, ret;
+      scanf("%d %d %d", &a, &b, &K);
+      ret = K > 100 ? 0 : solve(b) - solve(a - 1);
+      printf("Case %d: %d\n", c, ret);
+    }
+  }
+#+end_src

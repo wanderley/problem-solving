@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       9FF985B9-B5FE-415C-94F0-CCBB3FF91F2F
+:END:
+#+TITLE: Count the number of digits of an integer
+
+There are many ways to do so.  The easiest way in Python consists on converting the number to string and returning the size of the string.  It is simple but not necessary useful as building block for other problems.
+
+#+begin_src python :exports none
+  assert len(str(0)) == 1
+  assert len(str(123456789)) == 9
+#+end_src
+
+#+RESULTS:
+: None
+
+It is possible to make this count using logarithm.  The logarithm is the inverse function to exponentiation.  Given a number $x$ such that $x=b^y$.  Then, $\log_b(x)=y$.  Note that non-negative integer can be expressed as a power of $10$ (or any other non-negative integer).  So, we can count the number of digits of an integer using the following code.
+
+#+begin_src python :exports none
+  import math
+
+  def count_digits(n):
+      if n == 0:
+          return 1
+      return math.ceil(math.log10(n))
+
+  assert count_digits(0) == 1
+  assert count_digits(123456789) == 9
+#+end_src
+
+#+RESULTS:
+: None

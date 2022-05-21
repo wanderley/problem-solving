@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       A8CF27F2-1B1E-4A5B-AB8C-75D301AF82B6
+:END:
+#+TITLE: Interesting Resources
+
+- flash7even's programming contest [[https://github.com/flash7even/programming-contest][repository]]

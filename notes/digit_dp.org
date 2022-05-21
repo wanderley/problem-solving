@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       4EABECD0-AEDD-4A57-8902-67F2BC6673AC
+:END:
+#+TITLE: Digit DP
+
+- [[https://codeforces.com/blog/entry/53960][Digit DP]]

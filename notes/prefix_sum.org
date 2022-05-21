@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID:       6C76A007-72FB-4495-904F-CC3407193847
+:END:
+#+TITLE: Prefix Sum
+
+* One-dimensional Prefix Sum
+:PROPERTIES:
+:ID:       1E82ABF5-661B-47CC-8656-26B50FE472B8
+:END:
+
+Given an array $v$, returns a new array where its i-th element is equal to $v[0] + v[1] + .. + v[i]$.  The following algorithm solves the problem with $O(n)$ time and space complexity where $n$ is the number of elements in the array.
+
+#+begin_src python :exports none
+  from itertools import accumulate
+
+  def prefix_sum(values):
+      cur, ret = 0, []
+      for value in values:
+          cur += value
+          ret.append(cur)
+      return ret
+
+  assert prefix_sum([])        == [*accumulate([])]        == []
+  assert prefix_sum([1])       == [*accumulate([1])]       == [1]
+  assert prefix_sum([1, 2, 3]) == [*accumulate([1, 2, 3])] == [1, 3, 6]
+#+end_src
+
+#+RESULTS:
+: None
+
+* TODO One-dimensional Prefix Sum using Binary Indexed Tree
+:PROPERTIES:
+:ID:       AAB0E765-81B4-4BA3-8CAB-6377460179E0
+:END:
+
+Useful when the problem requires query and update of the prefix sum.
+
+- [[https://en.wikipedia.org/wiki/Fenwick_tree][Wikipedia]]
+- [[https://www.youtube.com/watch?v=CWDQJGaN1gY][Tushar Roy's Fenwick Tree explanation]]
+
+* Two-dimensional Prefix Sum
+:PROPERTIES:
+:ID:       A66F1E43-D294-444A-A721-475E12AACCBE
+:END:
+
+Given a two-dimensional array, returns a new two-dimensional array where each position $(i, j)$ is the sum of all number in the subarray from the position $(0,0)$ to $(i,j)$.  The following code solves the problem with $O(n \times m)$ time and space complexity.
+
+#+begin_src python :exports none
+  from itertools import accumulate
+
+  def matrix_prefix_sum(m):
+      ret = [[0 for _ in row] for row in m]
+      N, M = len(m), len(m[0])
+      for i in range(N):
+          for j in range(M):
+              ret[i][j] = m[i][j]
+              if i > 0:
+                  ret[i][j] += ret[i-1][j]
+              if j > 0:
+                  ret[i][j] += ret[i][j-1]
+              if i > 0 and j > 0:
+                  ret[i][j] -= ret[i-1][j-1]
+      return ret
+
+  assert matrix_prefix_sum([[1, 1, 1],
+                            [2, 2, 2],
+                            [3, 3, 3]]) == [[1,  2,  3],
+                                            [3,  6,  9],
+                                            [6, 12, 18]]
+#+end_src
+
+#+RESULTS:
+: None

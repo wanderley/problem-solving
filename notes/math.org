@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       DBDF96ED-7731-40F0-BC12-C6B6C29FEF42
+:END:
+#+TITLE: Math
+
+* Numbers
+
+- [[id:6F4C3A50-C5F2-4D90-8A7B-62260B1181BA][Count leading zeros of a number]]
+- [[id:9FF985B9-B5FE-415C-94F0-CCBB3FF91F2F][Count the number of digits of an integer]]
+- [[id:13A69495-CA30-40DC-A722-B0327FB06D2D][Modulo Operation]]

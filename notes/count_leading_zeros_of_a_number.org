@@ -1,0 +1,65 @@
+:PROPERTIES:
+:ID:       6F4C3A50-C5F2-4D90-8A7B-62260B1181BA
+:END:
+#+TITLE: Count leading zeros of a number
+
+* Naive approach
+
+A naive consists on checking if the number is a multiple of 10 or not.  If so, divide ([[id:EA4496F1-4DE1-4F87-B23E-B7FA4CBCE33F][integer division]]) the number by 10 and repeat the process, counting how many times the number is divisible by 10.  The algorithm has time complexity of $O(n)$ where $n$ is the number of digits of the number and memory complexity of $O(1)$.  For example, $12300$ is divisible by 10, $1230$ is also divisible by 10 and $123$ is not.  So, the number leading zeros in $12300$ is $2$.
+
+#+begin_src python :exports none
+  def count_zeros(num: int) -> int:
+      ret = 0
+      while num % 10 == 0 and num > 9:
+          ret += 1
+          num = num // 10
+      return ret
+
+  assert count_zeros(12300) == 2
+  assert count_zeros(101) == 0
+#+end_src
+
+#+RESULTS:
+: None
+
+* Count leading zeros of a number using its 2's and 5's factors
+:PROPERTIES:
+:ID:       6B97E80F-C3C9-4D78-B24B-59B8EC5B97F0
+:END:
+
+As $10=2\times5$, we can re-write above =count_zeros= function as following:
+
+#+begin_src python :exports none
+  def count_zeros(num: int) -> int:
+      ret = 0
+      while num % (2 * 5) == 0 and num > 9:
+          ret += 1
+          num = num // (2 * 5)
+      return ret
+
+  assert count_zeros(12300) == 2
+  assert count_zeros(101) == 0
+#+end_src
+
+#+RESULTS:
+: None
+
+The code didn't change, but it is easier to see that counting 10 factors is the same as counting pairs of 2 and 5 factors.  With that, we could write a new version but slower of the algorithm:
+
+#+begin_src python :exports none
+  def count_factors(n: int, f: int) -> int:
+      ret = 0
+      while n % f == 0 and n >= f:
+          ret += 1
+          n = n // f
+      return ret
+
+  def count_zeros(n: int) -> int:
+      return min(count_factors(n, 2), count_factors(n, 5))
+
+  assert count_zeros(12300) == 2
+  assert count_zeros(101) == 0
+#+end_src
+
+#+RESULTS:
+: None

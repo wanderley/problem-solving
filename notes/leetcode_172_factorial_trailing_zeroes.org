@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:       A895C35A-7AD3-4C9E-A785-3C25C7FD0A8B
+:ROAM_REFS: https://leetcode.com/problems/factorial-trailing-zeroes/
+:END:
+#+TITLE: Leetcode: 172. Factorial Trailing Zeroes
+
+The simplest approach is to compute $n!$ and then counting the leading zeros.  Note that it would require a big integer to compute factorial of $10^4!$ since it has $35660$ digits (see more about [[id:9FF985B9-B5FE-415C-94F0-CCBB3FF91F2F][Counting the number of digits of an integer]]).
+
+#+begin_src python :exports none
+  from operator import mul
+  from functools import reduce
+
+  return len(str(reduce(mul, [i for i in range(1, 10**4+1)])))
+#+end_src
+
+#+RESULTS:
+: 35660
+
+Other way without use of big integers consist on [[id:6B97E80F-C3C9-4D78-B24B-59B8EC5B97F0][Count leading zeros of a number using its 2's and 5's factors]].  The number of leading zeros in $n!$ is the minimum between the number of its 2's and 5's factors.
+
+#+begin_src python :exprts none
+  from functools import reduce
+  from operator import add
+
+
+  class Solution:
+      def trailingZeroes(self, n: int) -> int:
+          def count_factors(n, f):
+              ret = 0
+              while n % f == 0 and n >= f:
+                  ret += 1
+                  n = n // f
+              return ret
+
+          if n == 0:
+              return 0
+
+          f2 = reduce(add, [count_factors(k, 2) for k in range(1, n + 1)])
+          f5 = reduce(add, [count_factors(k, 5) for k in range(1, n + 1)])
+
+          return min(f2, f5)
+
+
+  assert Solution().trailingZeroes(3) == 0
+  assert Solution().trailingZeroes(5) == 1
+  assert Solution().trailingZeroes(0) == 0
+#+end_src
+
+#+RESULTS:
+: None

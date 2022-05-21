@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       B0399413-0375-4F60-85DA-CF98482CFF02
+:END:
+#+TITLE: Binomial coefficient

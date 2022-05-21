@@ -1,0 +1,96 @@
+:PROPERTIES:
+:ID:       BCB2026F-5A0B-4C8D-A079-5DE04E8962E2
+:ROAM_REFS: https://leetcode.com/problems/maximum-trailing-zeros-in-a-cornered-path
+:END:
+#+TITLE: Leetcode: 2245. Maximum Trailing Zeros in a Cornered Path
+
+* Building blocks
+
+- [[id:6B97E80F-C3C9-4D78-B24B-59B8EC5B97F0][Count leading zeros of a number by using its 2's and 5's factors]]
+- [[id:6C76A007-72FB-4495-904F-CC3407193847][Prefix Sum]]
+
+* Solution
+
+#+begin_src python :exports none
+  from typing import List
+
+
+  class Solution:
+      def maxTrailingZeros(self, grid: List[List[int]]) -> int:
+          def count_factors(n: int, f: int) -> int:
+              ret = 0
+              while n % f == 0 and n >= f:
+                  ret += 1
+                  n = n // f
+              return ret
+
+          def add(a, b):
+              return (a[0] + b[0], a[1] + b[1])
+
+          def sub(a, b):
+              return (a[0] - b[0], a[1] - b[1])
+
+          N, M = len(grid), len(grid[0])
+          vert = [
+              [(count_factors(e, 2), count_factors(e, 5)) for e in row] for row in grid
+          ]
+          horz = [
+              [(count_factors(e, 2), count_factors(e, 5)) for e in row] for row in grid
+          ]
+          for i in range(N):
+              for j in range(M):
+                  if i > 0:
+                      vert[i][j] = add(vert[i][j], vert[i - 1][j])
+                  if j > 0:
+                      horz[i][j] = add(horz[i][j], horz[i][j - 1])
+
+          ret = 0
+          for i in range(N):
+              for j in range(M):
+                  uv = vert[i][j]
+                  lv = sub(vert[N - 1][j], vert[i - 1][j] if i > 0 else (0, 0))
+                  lh = horz[i][j - 1] if j > 0 else (0, 0)
+                  rh = sub(horz[i][M - 1], horz[i][j])
+                  ret = max(
+                      ret,
+                      min(add(uv, rh)),
+                      min(add(uv, lh)),
+                      min(add(lv, rh)),
+                      min(add(lv, lh)),
+                  )
+          return ret
+
+
+  assert (
+      Solution().maxTrailingZeros(
+          grid=[
+              [23, 17, 15, 3, 20],
+              [8, 1, 20, 27, 11],
+              [9, 4, 6, 2, 21],
+              [40, 9, 1, 10, 6],
+              [22, 7, 4, 5, 3],
+          ]
+      )
+      == 3
+  )
+  assert (
+      Solution().maxTrailingZeros(
+          grid=[
+              [824, 709, 193, 413, 701, 836, 727],
+              [135, 844, 599, 211, 140, 933, 205],
+              [329, 68, 285, 282, 301, 387, 231],
+              [293, 210, 478, 352, 946, 902, 137],
+              [806, 900, 290, 636, 589, 522, 611],
+              [450, 568, 990, 592, 992, 128, 92],
+              [780, 653, 795, 457, 980, 942, 927],
+              [849, 901, 604, 906, 912, 866, 688],
+          ]
+      )
+      == 6
+  )
+  assert Solution().maxTrailingZeros(grid=[[10], [6], [15]]) == 2
+  assert Solution().maxTrailingZeros(grid=[[1, 5, 2, 4, 25]]) == 3
+#+end_src
+
+#+RESULTS:
+: None
