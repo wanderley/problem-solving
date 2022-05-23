@@ -13,9 +13,9 @@ Suppose that $i$ digits ($a_1, a_2, ..., a_i$ where $a_1$ is the left-most digit
   &= a_k + 10 \times\left(a_{k-1} + 10 \times \left(a_{k-2} + 10 \times \left(\dots\right)\right)\right).
 \end{align*}
 
-As $x + y \mod m = \big(\left(x \mod m\right) + \left(y \mod m\right)\big) \mod m$, we can compute the modulo of the generated number as each digit is generated.  This means that we don't need to store the generated digits, but make sure that the generated number is a d-magic number and after the last digit generated the rest of division by $m$ is zero.
+As $x + y \mod m = \big(\left(x \mod m\right) + \left(y \mod m\right)\big) \mod m$, we can compute the modulo of the generated number as each digit is generated.  This means that we don't need to store the generated digits, while making sure that the generated number is a d-magic number and on the end checking if the rest of its division by $m$ is zero.
 
-The following recursion uses this idea, but doesn't pass to the judge due a limit of recursion calls.  Besides that, I wrote this code without taking an important restriction in the problem.  The numbers $a$ and $b$ have same number of digits while $a<=b$.  This restriction would simplify a lot the code by removing the logic to determine if a given index is or is not even.  I will leave it here since the code end up to be interesting.
+The following recursion uses this idea, but doesn't pass to the judge due a limit of recursion calls.  Besides that, I wrote this code without using an important information about the problem.  The numbers $a$ and $b$ have same number of digits while $a<=b$.  This restriction would simplify a lot the code by removing the logic to determine if a given index is even or not.  I will leave it here since the code end up to be interesting.
 
 #+begin_src python :exports none
   from functools import cache
