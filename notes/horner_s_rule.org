@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       D67C891B-7BF8-46AA-BC78-E88F9A14246D
+:ROAM_REFS: https://en.wikipedia.org/wiki/Horner%27s_method
+:END:
+#+TITLE: Horner's rule
