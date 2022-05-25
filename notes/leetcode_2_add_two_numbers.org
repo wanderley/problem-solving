@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       8CA51713-ACC3-4896-B580-FD345D463479
+:END:
+#+TITLE: Leetcode: 2. Add Two Numbers
+
+This problem can be solved using the add algorithm that we learned on the school, and I don't know why it is marked as medium in Leetcode.  The following algorithm uses [[id:D9849396-EA57-4F4F-BA34-D8910B8422F0][Recursion]] to compute for each pair of digits until there is no more digits to add up.
+
+#+begin_src python :exports none
+  from typing import Optional
+
+
+  class ListNode:
+      def __init__(self, val=0, next=None):
+          self.val = val
+          self.next = next
+
+      def as_list(self):
+          cur = self
+          ans = []
+          while cur:
+              ans.append(cur.val)
+              cur = cur.next
+          return ans
+
+
+  class Solution:
+      def addTwoNumbers(
+          self, l1: Optional[ListNode], l2: Optional[ListNode]
+      ) -> Optional[ListNode]:
+          def sum(l1, l2, rest):
+              if l1 is None and l2 is None:
+                  if rest > 0:
+                      return ListNode(rest, None)
+                  return None
+              val = (l1.val if l1 else 0) + (l2.val if l2 else 0) + rest
+              return ListNode(
+                  val % 10,
+                  sum(
+                      l1.next if l1 else None,
+                      l2.next if l2 else None,
+                      1 if val > 9 else 0,
+                  ),
+              )
+
+          return sum(l1, l2, 0)
+
+
+  assert Solution().addTwoNumbers(
+      ListNode(2, ListNode(4, ListNode(3))),
+      ListNode(5, ListNode(6, ListNode(4))),
+  ).as_list() == [7, 0, 8]
+#+end_src
