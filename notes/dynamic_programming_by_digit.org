@@ -3,6 +3,8 @@
 :END:
 #+TITLE: Dynamic Programming by Digit
 
+* TODO COMMENT Explain the technique
+
 * References
 
 - Codeforces: [[https://codeforces.com/blog/entry/53960][Digit DP]] by flash_7
