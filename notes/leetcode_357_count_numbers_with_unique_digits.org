@@ -1,0 +1,93 @@
+:PROPERTIES:
+:ID:       47EB665D-09E0-42E8-ABEC-E7592EA2B60B
+:END:
+#+TITLE: Leetcode: 357. Count Numbers with Unique Digits
+
+* Brute-Force Search
+
+The brute-force approach consists on iterating over all numbers between 0 and $x$ and counting ones that have only unique digits.  The following algorithm has time complexity of $x \times 16$ which is $16\times10^8 = 1,600,000,000$ in the worst-case scenario.  The 16 factor comes from the fact that each number needs to be decomposed on digits twice.
+
+#+begin_src python :exports none
+  def naive(n):
+      ans = 0
+      for i in range(10**n):
+          digits = str(i)
+          if len(digits) == len(set(digits)):
+              ans += 1
+      return ans
+
+  assert naive(2) == 91
+  assert naive(0) == 1
+  assert naive(5) == 32491
+#+end_src
+
+#+RESULTS: naive
+: None
+
+* Dynamic Programming
+
+This problem can be solved using [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]].  The numbers are generated digit while the used digits are kept on a set to avoid the same digit to be used twice.  It also needs to keep an extra variable to flag when the digit zero can be used, since the leading zeros aren't count as digits in the number.  There are $x \times 2^{10} \times 2 \leq 8 \times 2^{10} \times 2 = 2^{14} = 16\,384$ different possible states, where $x$ is the number of digits to be generated, $2^10$ is the number of possible ways to select digits that are used in the number, and finally 2 for the zero flag.  The following algorithm has time complexity of $O(2^{14} \times 10)$.
+
+#+begin_src python :exports none
+  from functools import cache
+
+
+  def solve(x):
+      @cache
+      def calc(i, d, all_zeros):
+          if i == x:
+              return 1
+
+          ans = 0
+          for c in range(10):
+              if (d & (1 << c)) != 0:
+                  continue
+
+              if c == 0 and all_zeros:
+                  ans += calc(i + 1, d, all_zeros)
+              else:
+                  ans += calc(i + 1, d | (1 << c), False)
+          return ans
+
+      return calc(0, 0, True)
+
+
+  assert solve(0) == 1
+  assert solve(2) == 91
+  assert solve(5) == 32491
+  assert solve(8) == 2345851
+  assert solve(3) == 739
+
+
+  class Solution:
+      def countNumbersWithUniqueDigits(self, n: int) -> int:
+          return solve(n)
+
+#+end_src
+
+#+RESULTS:
+: None
+
+* [[id:DBDF96ED-7731-40F0-BC12-C6B6C29FEF42][Math]]
+
+Be $f(x)$ the number of numbers with unique digits less or equal to $x$.  We have that $f(0)=1$, $f(1)=10$, $f(2)=9\times9$ because there are 9 candidates for the first digit ($1..9$) and 9 candidates for the second digit (excluding the digit used in the first digit).  For $f(3)=z + f(2)$ where $z$ is the number of number with unique digits and exactly 3 digits.  There are 9 candidates for the first digit of $z$, 9 for the second because 0 can be used but the number used on the first digit needs to be excluded, and finally 8 for the third.  The same process can be applied when $x\geq4$.  The following algorithm has time complexity of $O(x)$.
+
+#+begin_src python :export none
+  def count(x):
+      if x == 0:
+          return 1
+
+      ans = 9
+      for i in range(10 - x + 1, 10):
+          ans = ans * i
+      return ans + count(x - 1)
+
+
+  assert count(3) == 739
+  assert count(8) == 2345851
+
+
+  class Solution:
+      def countNumbersWithUniqueDigits(self, n: int) -> int:
+          return count(n)
+#+end_src

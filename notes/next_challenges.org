@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       858F485A-1654-4FB5-B938-922487F9D600
+:END:
+#+TITLE: Next Challenges
+
+- Leetcode
+  - https://leetcode.com/problems/unique-binary-search-trees/
+  - https://leetcode.com/problems/letter-case-permutation/
+  - https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/
