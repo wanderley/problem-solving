@@ -4,3 +4,5 @@
 #+TITLE: Array
 
 - [[id:1E82ABF5-661B-47CC-8656-26B50FE472B8][One-dimensional Prefix Sum]]
+- [[id:1C032394-9D5B-4A8C-8ACE-21ED5B0B4838][Merge Two Sorted Arrays]]
+- [[id:1C389876-295C-4FED-8F32-F7C767D4C3E8][Median of Two Sorted Arrays]]

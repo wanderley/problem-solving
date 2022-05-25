@@ -1,0 +1,117 @@
+:PROPERTIES:
+:ID:       1C389876-295C-4FED-8F32-F7C767D4C3E8
+:END:
+#+TITLE: Leetcode: 4. Median of Two Sorted Arrays
+
+* Brute Force
+
+[[id:1C032394-9D5B-4A8C-8ACE-21ED5B0B4838][Merge Two Sorted Arrays]] and then compute the median from the resulting array.
+
+- Time complexity: $O(|a| + |b|)$
+- Space complexity: $O(|a| + |b|)$
+
+#+begin_src python
+  def merge_sorted_arrays(a, b):
+      ans = []
+      i, j = 0, 0
+      while i < len(a) and j < len(b):
+          if a[i] < b[j]:
+              ans.append(a[i])
+              i += 1
+          else:
+              ans.append(b[j])
+              j += 1
+      if i < len(a):
+          ans = ans + a[i:]
+      if j < len(b):
+          ans = ans + b[j:]
+      return ans
+
+  def naive(a, b):
+      m = merge_sorted_arrays(a, b)
+      n = len(m)
+      if n % 2 == 1:
+          return m[n // 2]
+      return (m[n // 2 - 1] + m[n // 2]) / 2
+
+  assert naive([1, 2], [3, 4]) == 2.5
+  assert naive([], [1, 2, 3]) == 2
+  assert naive([1, 3, 5, 7], [2, 4, 6, 8]) == 4.5
+#+end_src
+
+#+RESULTS:
+: None
+
+* Two binary-searches
+
+Be $u(x)$ the count of numbers in $b$ that are less or equal than $x$.  With that, we could compute for each position $i$ in $a$ the size of the left partition which contains the values $a[0..i]$ and $b[0..u(a[i])]$.  The solution for the problem is to find such the position in $a$, if it exists, that cuts the array $a+b$ on the half.  When it isn't possible, we know that all elements of $a$ should be part of the left partition and the problem becomes finding the index on $b$ that cuts the whole array in the half.  The following algorithm uses one [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the position $i$ where $i=\lfloor\(|a|+|b|\) / 2\rfloor$, and for each candidate it uses other [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to compute $u(a[i])$.
+
+- Time complexity: $O(log(|a|) \times log(|b|))$
+- Space complexity: $O(1)$
+
+#+begin_src python
+  from typing import List
+
+
+  def solve(a, b):
+      na, nb = len(a), len(b)
+      n = na + nb
+
+      def upper_bound_index(x):
+          s, e = 0, nb - 1
+          while s <= e:
+              m = s + (e - s) // 2
+              if b[m] <= x:
+                  s = m + 1
+              else:
+                  e = m - 1
+          return s
+
+      def get(i):
+          """Return the value of element at position i on the sorted a + b"""
+          s, e = 0, na - 1
+          while s <= e:
+              m = s + (e - s) // 2
+              cb = upper_bound_index(a[m])
+              if m + cb == i:
+                  return a[m]
+              elif m + cb < i:
+                  s = m + 1
+              elif m + cb > i:
+                  e = m - 1
+          if s == na:
+              return b[i - na]
+          if s + upper_bound_index(a[s]) == i:
+              return a[s]
+          return b[i - s]
+
+      if n % 2 == 1:
+          return get(n // 2)
+      return (get(n // 2 - 1) + get(n // 2)) / 2
+
+
+  assert solve([1, 3, 5, 7], [2, 4, 6, 8]) == 4.5
+  assert solve([], [1, 2, 3]) == 2
+  assert solve([1, 2, 3], []) == 2
+  assert solve([1, 3], [2]) == 2
+  assert solve([1, 2], [3, 4]) == 2.5
+
+
+  class Solution:
+      def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+          return solve(nums1, nums2)
+
+
+  assert Solution().findMedianSortedArrays([1, 3], [2]) == 2
+#+end_src
+
+#+RESULTS:
+: None
+
+* TODO Write algorithm $O(log(|a|+|b|))$
+
+The above =upper_bound_index= function is not necessary, since if $a[x + k / 2 - 1] < b[y + k / 2 - 1]$ where $k$ is an index in the merged sorted arrays, and $x$ and $y$ are indexes on $a$ and $b$ respectively, then we know that $a[0..(x + k / 2 - 1)]$ are in the left partition.  Otherwise, we know that $b[y..(y + k / 2 - 1)]$ are in the left partition.  In both cases, we discovered $k/2$ elements of the left partition.  We can continue the process until there is no more elements in the left partition to find what gives us the searched element.  ([[https://leetcode.com/problems/median-of-two-sorted-arrays/discuss/2496/Concise-JAVA-solution-based-on-Binary-Search][Reference Implementation]])
+
+* Resources
+
+- [[https://www.youtube.com/watch?v=LPFhl65R7ww][Tushar Roy's Binary Search : Median of two sorted arrays of different sizes]]
