@@ -3,4 +3,6 @@
 :END:
 #+TITLE: Dynamic Programming by Digit
 
-- [[https://codeforces.com/blog/entry/53960][Digit DP]]
+* References
+
+- Codeforces: [[https://codeforces.com/blog/entry/53960][Digit DP]] by flash_7
