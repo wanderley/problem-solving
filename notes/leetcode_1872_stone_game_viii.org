@@ -1,0 +1,104 @@
+:PROPERTIES:
+:ID:       EDB33A76-BB4D-4432-83F2-F602EE24F026
+:END:
+#+TITLE: Leetcode: 1872. Stone Game VIII
+
+Both solution uses the fact that picking $x>1$ stones ($0..x$) and replacing them with their sum is the same as saying that the next player is obligated to pick $y>x>1$ stones ($0..y$).  So, we can first compute [[id:1E82ABF5-661B-47CC-8656-26B50FE472B8][One-dimensional Prefix Sum]] of the given array and use it quickly compute value that each player is adding to their score.
+
+* Quadratic solution
+
+Suppose that it is Alice turn to pick a stone and $i$ stones were already picked.  Since Alice has to take at least two stones, she will pick $j>i$ stones ($0..j$) which maximize the difference of the scores when Bob pick his stones (optimally).  So, for a given $i$, we can iterate over all positions $j$ from $i+1$ to $|stones|-1$ that maximizes the selection for the given player.
+
+- Time complexity: $O(|stones|^2)$
+- Space Complexity: $(|stones|)$
+
+#+begin_src python
+  from functools import cache
+
+
+  def solve(a):
+      n = len(a)
+      ac = [a[0]]
+      for i in a[1:]:
+          ac.append(ac[-1] + i)
+
+      @cache
+      def rec(player, i):
+          if i + 1 >= len(a):
+              return 0
+
+          ans = None
+          for j in range(i + 1, len(a)):
+              d = rec(not player, j)
+              v = d + (ac[j] if player else -ac[j])
+              if ans is None:
+                  ans = v
+              else:
+                  ans = max(ans, v) if player else min(ans, v)
+          return ans
+
+      return rec(True, 0)
+
+
+  assert solve([-1, 2, -3, 4, -5]) == 5
+  assert solve([7, -6, 5, 10, 5, -2, -6]) == 13, solve([7, -6, 5, 10, 5, -2, -6])
+  assert solve([-10, -12]) == -22
+
+
+  class Solution:
+      def stoneGameVIII(self, stones: List[int]) -> int:
+          return solve(stones)
+
+
+  assert Solution().stoneGameVIII([-10, -12, -10, -12]) == 12
+#+end_src
+
+* Linear solution
+
+To reduce the time complexity, we have to use the fact that at any given position $i$, the player can take the best of picking the stones at position $i$ or picking the stones at the position $i+1$.  Due the restriction of the problem, the player always pick the two left stones.
+
+- Time complexity: $O(|stones|)$
+- Space complexity: $O(|stones|)$
+
+#+begin_src python
+  from functools import cache
+  from typing import List
+
+
+  def solve(a):
+      n = len(a)
+      ac = [a[0]]
+      for i in a[1:]:
+          ac.append(ac[-1] + i)
+
+      Alice = True
+      Bob = False
+
+      @cache
+      def rec(player, i):
+          if i == len(a) - 1:
+              return ac[i] if player is Alice else -ac[i]
+
+          if player is Alice:
+              return max(ac[i] + rec(Bob, i + 1), rec(Alice, i + 1))
+          else:
+              return min(-ac[i] + rec(Alice, i + 1), rec(Bob, i + 1))
+
+      return rec(True, 1)
+
+
+  assert solve([-1, 2, -3, 4, -5]) == 5
+  assert solve([7, -6, 5, 10, 5, -2, -6]) == 13
+  assert solve([-10, -12]) == -22
+
+
+  class Solution:
+      def stoneGameVIII(self, stones: List[int]) -> int:
+          return solve(stones)
+
+
+  assert Solution().stoneGameVIII([-10, -12, -10, -12]) == 12
+#+end_src
+
+#+RESULTS:
+: None

@@ -1,0 +1,63 @@
+:PROPERTIES:
+:ID:       252C5055-2C0D-4B0E-A4BF-9507B85A179F
+:END:
+#+TITLE: Segment Tree from One-Dimensional Array
+
+* TODO Write explanation
+
+#+begin_src python
+  class Node:
+      def __init__(self, value, start, end, op, left=None, right=None):
+          self.value = value
+          self.start = start
+          self.end = end
+          self.op = op
+          self.left = left
+          self.right = right
+
+
+  def build_tree(a, s, e, op):
+      if s == len(a):
+          return None
+      if s == e:
+          return Node(a[s], s, e, op)
+      m = s + (e - s) // 2
+      l = build_tree(a, s, m, op)
+      r = build_tree(a, m + 1, e, op)
+      value = op(l.value, r.value) if l and r else l.value
+      return Node(value, s, e, op, l, r)
+
+
+  def query_tree(node, s, e):
+      if s <= node.start <= node.end <= e:
+          return node.value
+      if node.end < s or node.start > e:
+          return None
+
+      l = query_tree(node.left, s, e)
+      r = query_tree(node.right, s, e)
+
+      assert l is not None or r is not None
+
+      if l is None:
+          return r
+      if r is None:
+          return l
+
+      return node.op(l, r)
+
+
+  assert query_tree(build_tree([2, 1, 3, 4], 0, 3, max), 2, 3) == 4
+  assert query_tree(build_tree([2, 1, 3, 4], 0, 3, min), 0, 2) == 1
+  assert query_tree(build_tree([2, 1, 3, 4], 0, 3, min), 2, 2) == 3
+  assert query_tree(
+      build_tree(
+          [(0, 2), (1, 1), (2, 3), (3, 4)], 0, 3, lambda a, b: a if a[1] < b[1] else b
+      ),
+      0,
+      2,
+  ) == (1, 1)
+#+end_src
+
+#+RESULTS:
+: None
