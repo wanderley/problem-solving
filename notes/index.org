@@ -7,4 +7,7 @@
   - [[id:21C2B5E5-78D0-4A47-B69E-7B1FBA6A69A1][Array]]
   - [[id:0DE29B4D-0B7D-4B34-B370-F5D3193AA932][Matrix]]
 - [[id:DBDF96ED-7731-40F0-BC12-C6B6C29FEF42][Math]]
+- Dynamic Programming
+  - [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]]
+  - [[id:3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2][Dynamic Programming using Binary Search]]
 - [[id:A8CF27F2-1B1E-4A5B-AB8C-75D301AF82B6][Interesting Resources]]

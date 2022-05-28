@@ -62,7 +62,7 @@ With $n$ being the number of stones, we have that
   assert Solution().stoneGameV([6,2,3,4,5,5]) == 18
 #+end_src
 
-* Dynamic Programming using [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]]
+* [[id:3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2][Dynamic Programming using Binary Search]]
 
 To speed up the solution above, we have to avoid checking all possible intervals when computing $f(i,j)$.  But, how could we do that?  Is the cubic solution using all constraints of the problem?  The answer is *"No! The cubic solution is not using the fact that stone values are integers greater than 0"*.  How does this constraint help us when deciding where to split an interval?  Let's take $[1, 2, 1, 1, 1, 1]$ as example and $i=0$ (first stone) and $j=5$ (last stone).  These are all ways to split on an index $k$:
 
