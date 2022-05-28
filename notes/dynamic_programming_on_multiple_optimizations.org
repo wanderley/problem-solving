@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2
+:END:
+#+TITLE: Dynamic Programming on multiple optimizations
+
+Dynamic Programming applied on optimization problems that can be broken on smaller (and dependent) optimization problems.  For example, we want to compute $f(i, j)$ but you can break it down on $g(i, j)$ and $h(i, j)$ while $g$ and $h$ also depend on $f$.
