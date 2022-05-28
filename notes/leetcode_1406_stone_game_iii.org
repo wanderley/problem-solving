@@ -1,0 +1,98 @@
+:PROPERTIES:
+:ID:       BD69D994-C7F5-4F0B-942D-110D95922614
+:END:
+#+TITLE: Leetcode: 1406. Stone Game III
+
+Problem statement can be found [[https://leetcode.com/problems/stone-game-iii/][here]].
+
+* Linear solution
+
+This is an example of a classic [[id:4A2206E8-074B-4CDB-BD5B-01DE3C901C15][Min-Max Problem]].  Alice and Bob wants to maximize their score, which means that Alice wants to maximize the difference of their scores, while Bob wants to minimize it.  Be $a$ the array of stone values with $n$ elements.  Be $f(A, i)$ and $f(B, i)$ the max and min score difference that Alice and Bob can make starting on the $i$-th stone, respectively.  By the rules of the game, we know that
+
+\begin{align*}
+f(A, i)  = & \max_{i \leq j \leq min(|a|, i + 2)} f(B, j+1) + \sum_{i\leq k \leq j } a[k] \\
+f(B, i)  = & \min_{i \leq j \leq min(|a|, i + 2)} f(A, j+1) + \sum_{i\leq k \leq j } a[k].
+\end{align*}
+
+** Memoization
+
+- Time Complexity: $O(n)$
+- Space Complexity: $O(n)$
+
+#+begin_src python
+  from functools import cache
+
+  def solve_rec(a):
+      n = len(a)
+      Alice = True
+
+      @cache
+      def rec(player, i):
+          if i == n:
+              return 0
+          ac = 0
+          op = max if player is Alice else min
+          ans = None
+          for j in range(i, min(n, i + 3)):
+              ac += a[j] if player is Alice else -a[j]
+              v = ac + rec(not player, j + 1)
+              ans = op(ans if ans is not None else v, v)
+          return ans
+
+      ans = rec(Alice, 0)
+      if ans > 0:
+          return "Alice"
+      elif ans < 0:
+          return "Bob"
+      else:
+          return "Tie"
+
+  assert solve_rec([1,2,3,7]) == "Bob"
+  assert solve_rec([1,2,3,-9]) == "Alice"
+  assert solve_rec([1,2,3,6]) == "Tie"
+  assert solve_rec([1,2,3,-1,-2,-3,7]) == "Alice"
+
+  class Solution:
+      def stoneGameIII(self, stoneValue: List[int]) -> str:
+          return solve_rec(stoneValue)
+#+end_src
+
+** Dynamic Programming
+
+- Time Complexity: $O(n)$
+- Space Complexity: $O(1)$
+
+#+begin_src python
+  def solve(a):
+      n = len(a)
+      dp = [[None for _ in range(n + 1)] for _ in range(2)]
+      Alice = 0
+      Bob = 1
+      dp[Alice][n] = dp[Bob][n] = 0
+
+      for i in range(n-1, -1, -1):
+          for k in range(2):
+              ac = 0
+              op = max if k is Alice else min
+              for j in range(i, min(n, i + 3)):
+                  ac += a[j] if k is Alice else -a[j]
+                  nk = (k + 1) % 2
+                  v = ac + dp[nk][j + 1]
+                  dp[k][i] = op(dp[k][i] if dp[k][i] is not None else v, v)
+
+      if dp[Alice][0] > 0:
+          return "Alice"
+      elif dp[Alice][0] < 0:
+          return "Bob"
+      else:
+          return "Tie"
+
+  assert solve([1,2,3,7]) == "Bob"
+  assert solve([1,2,3,-9]) == "Alice"
+  assert solve([1,2,3,6]) == "Tie"
+  assert solve([1,2,3,-1,-2,-3,7]) == "Alice"
+
+  class Solution:
+      def stoneGameIII(self, stoneValue: List[int]) -> str:
+          return solve(stoneValue)
+#+end_src
