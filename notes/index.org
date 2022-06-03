@@ -10,6 +10,10 @@
 - Dynamic Programming
   - [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]]
   - [[id:3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2][Dynamic Programming on multiple optimizations]]
-- [[id:A8CF27F2-1B1E-4A5B-AB8C-75D301AF82B6][Interesting Resources]]
+- Search
+  - [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]]
+- String
+  - [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]]
 - Optimization
   - [[id:4A2206E8-074B-4CDB-BD5B-01DE3C901C15][Min-Max Problem]]
+- [[id:A8CF27F2-1B1E-4A5B-AB8C-75D301AF82B6][Interesting Resources]]

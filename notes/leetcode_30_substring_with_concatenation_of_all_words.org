@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID:       CE411032-EF29-4F13-96DA-A141BDFE282F
+:END:
+#+TITLE: Leetcode: 30. Substring with Concatenation of All Words
+
+Problem statement can be found [[https://leetcode.com/problems/substring-with-concatenation-of-all-words/][here]].
+
+Be $s$ the string with length $S$ and $w$ the list of $N$ words of length $W$.  The letter $s[i]$ can be the start of a permutation that satisfy the problem.  If so, then $s[i+N]$ can also be the start of desired permutation if $s[(i+N\times W)..(i+N\times W+W-1)]=s[i..i+W-1]$.  This means that we can use a [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]] to expand a match to find the next one which is suffix of the previous.  This observation is only true, because all words in $w$ have the same length, which means that there is always one possible match.   Even though the following implementation uses a =Counter= to store words in $w$, it could have used a [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]] for that.
+
+#+begin_src python
+  from itertools import cycle
+  from collections import Counter
+
+
+  def match_word(s, i, w):
+      j = 0
+      while i < len(s) and j < len(w) and s[i] == w[j]:
+          j += 1
+          i += 1
+      return j == len(w)
+
+
+  assert match_word("barfoothefoobarman", 0, "bar")
+  assert not match_word("barfoothefoobarman", 0, "foo")
+
+
+  def match_words(s, word_len, wc, start):
+      ans = []
+      seen = Counter()
+      for j in range(start, len(s), word_len):
+          w = s[j : j + word_len]
+          if wc[w] - seen[w] <= 0:
+              break
+          seen.update([w])
+          ans.append(w)
+      return ans
+
+
+  assert match_words("xyzabcbcd", 3, Counter(["bcd", "abc"]), 3) == ["abc", "bcd"]
+  assert match_words("xyzabcbce", 3, Counter(["bcd", "abc"]), 3) == ["abc"]
+
+
+  def solve(s, ws):
+      S = len(s)
+      N = len(ws)
+      W = len(ws[0])
+      wc = Counter(ws)
+      ans = set()
+      for i in range(S - N * W + 1):
+          if i in ans:
+              continue
+          words_found = match_words(s, W, wc, i)
+          if len(words_found) != len(ws):
+              continue
+          ans.add(i)
+          i += N * W
+          for word in cycle(words_found):
+              if i >= S or not match_word(s, i, word):
+                  break
+              ans.add(i - (N - 1) * W)
+              i += W
+      return ans
+
+
+  assert solve("barfoothefoobarman", ["foo", "bar"]) == {0, 9}
+  assert solve("barfoobarfoobarman", ["foo", "bar"]) == {0, 3, 6, 9}
+  assert solve("wordgoodgoodgoodbestword", ["word", "good", "best", "word"]) == set()
+  assert solve("barfoofoobarthefoobarman", ["bar", "foo", "the"]) == {6, 9, 12}
+
+
+  class Solution:
+      def findSubstring(self, s: str, words: List[str]) -> List[int]:
+          return list(solve(s, words))
+
+
+  assert Solution().findSubstring(
+      "wordgoodgoodgoodbestword", ["word", "good", "best", "good"]
+  ) == [8]
+#+end_src
