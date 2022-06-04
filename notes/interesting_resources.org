@@ -4,3 +4,4 @@
 #+TITLE: Interesting Resources
 
 - flash7even's programming contest [[https://github.com/flash7even/programming-contest][repository]]
+- indy256's [[https://codeforces.com/blog/entry/8219?f0a28=1][Dynamic Programming Optimizations]]
