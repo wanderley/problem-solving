@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       B316384D-956C-4E1C-9761-FE515D9B7D24
+:END:
+#+TITLE: leetcode: 3. Longest Substring Without Repeating Characters
+
+[[https://leetcode.com/problems/substring-with-concatenation-of-all-words/][Problem Statement]]: Find the length of the longest substring without repeating characters in $s$.
+
+Be $s_0, s_1, s_2, ..., s_{n-1}$ the characters in $s$ and $s_i, s_{i+1}, ..., s_{k}$ one substring without repeating characters in $s$.  If $s_{k+1}$ is not a character in $s[i..k]$, then we can append $s_{k+1}$ to the substring and make it longest.  If $s_{k+1}$ is a character already in $s[i..k]$, then appending $s_{k+1}$ would make the substring invalid.  Thus, the best we can do is to continue searching if the longest substring starts on $s_{j+1}$ for $i\leq j$ and $s_j=s_{k+1}$.  To summarize, we want to apply [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]] technique to go over $s$ expanding and contracting the longest substring until that point.  The following code uses a [[id:D449CB99-E7B7-4B35-AD73-26E996029D93][Deque]] to keep the string and a [[id:AF42C6EF-199F-4E9D-ADAE-822084DB6EEC][Set]] to quickly check if a given character was seen before.
+
+With $n=|s|$, we have
+- time complexity of $O(n)$, since checking if an item is part of the set is $O(1)$ on average and appending and popping elements from the deque is also $O(1)$; and
+- space complexity of $O(n)$ since it stores the characters on the set and deque and it could be necessary to store all of them.
+
+#+begin_src python
+  from collections import deque
+
+
+  def solve(s):
+      seen = set()
+      match = deque()
+      ans = 0
+      for sym in s:
+          if sym in seen:
+              while len(match) > 0 and match[0] != sym:
+                  seen.remove(match.popleft())
+              match.popleft()
+          seen.add(sym)
+          match.append(sym)
+          ans = max(ans, len(match))
+
+      return ans
+
+
+  assert solve("abcabcbb") == 3
+  assert solve("bbbbb") == 1
+  assert solve("pwwkew") == 3
+  assert solve("tmmzuxt") == 5
+
+
+  class Solution:
+      def lengthOfLongestSubstring(self, s: str) -> int:
+          return solve(s)
+#+end_src
