@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID:       65A2D62D-2D38-4D3B-9A15-76B01DEA4D6A
+:END:
+#+TITLE: Leetcode: 32. Longest Valid Parentheses
+
+[[https://leetcode.com/problems/longest-valid-parentheses/][Problem Statement]]: Given a string $s$ with parentheses, return the length of the longest well-formed substring of $s$.
+
+* [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]]
+
+Be $z$ a longest well-formed substring of $s$.  What do we know about it?  We know that it doesn't starts with a close parentheses, since it is well-formed.  And, it starts with an open parentheses.  If the second parentheses of $z$ is a close parentheses, then $z=\texttt{()}x$ where $x$ is a well-formed substring of $s$ and $|x|\geq0$.  Otherwise, $z=\texttt{(}y\texttt{)}z$, where $|y|>0$ and $|z|\geq 0$.  So, $z$ can be decomposed in well-formed substring of $s$.  This observation is the base for the recursion implemented by the following [[id:3463A33B-D953-4E75-895D-0BE4AAB16813][Top-down]] solution.
+
+- Time and space complexity: $O(|s|)$
+
+#+begin_src python
+  from functools import cache
+
+
+  def solve(s):
+      if s == "":
+          return 0
+
+      def is_open(i):
+          return i < len(s) and s[i] == "("
+
+      def is_close(i):
+          return i < len(s) and s[i] == ")"
+
+      @cache
+      def dfs(i):
+          if i >= len(s):
+              return 0
+
+          if is_close(i):
+              return 0
+
+          if is_open(i) and is_close(i + 1):
+              return 2 + dfs(i + 2)
+
+          assert is_open(i)
+
+          l = dfs(i + 1)
+          if not is_close(i + l + 1):
+              return 0
+
+          return 2 + l + dfs(i + l + 2)
+
+      return max([dfs(i) for i in range(len(s))])
+
+
+  assert solve("(()") == 2
+  assert solve(")()())") == 4
+  assert solve("") == 0
+  assert solve("))))((()((") == 2
+
+
+  class Solution:
+      def longestValidParentheses(self, s: str) -> int:
+          return solve(s)
+#+end_src
