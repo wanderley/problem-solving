@@ -1,0 +1,189 @@
+:PROPERTIES:
+:ID:       7FB1FE23-5F97-4B38-9364-059C13DB42F5
+:END:
+#+TITLE: Leetcode: 10. Regular Expression Matching
+
+[[https://leetcode.com/problems/regular-expression-matching/solution/][Problem Statement]]: Given two string $s$ and a pattern $p$, return if $s$ matches $p$.  Note that $p$ contains English letters, ~'.'~ and ~'*'~ (Kleene start).  The character ~'.'~ can be matched with any other character.
+
+* Simulating all transitions
+
+Let's use an example to explain the idea (kind of how I saw the solution).  Suppose that $s=aabb$ and $p=aa*a.*$.  Be $i$ the position on $s$ that was matched so far, and $j$ the position on the pattern that we are matching $s_i$ against.  initially $i=j=0$.  as $s_i=p_i$, we can move forward in $s$ and $p$ by adding one to $i$ and $j$.  Now, $s_1=a$, $p_1=a$ and $p_1$ is a zero or more pattern.  If we match $s_1$ with $p_1$, we won't be able to match the rest of $s$ because $p_3$ must be matched with an letter a in $s$ and $s_1$ is the last one.  Even thought we can't perform this match, it isn't always true for other inputs (e.g. $s=aaabb$ and $p=aa*a.*$).  The conclusion is that we have to branch the matching every time that $p_j$ is a Kleene star.   In this example, we would have to try matching $s_1$ with $p_1$ and $s_1$ with $p_3$ (we have to jump the ~*~).  So, for every $i$, we have to keep a set of position $js$ to match $s_i$ against.  After performing all matches, we would be able to generate the new $js$ to match $s_{i+1}$ against.  The following code implements this idea.
+
+With $N$ and $M$ being the length of $s$ and $p$ respectively,
+- Time complexity: $O(N\times M)$, since ~transition~ is $(M)$ and ~js~ has at most $N$ elements on every iteration of the loop.
+- Space complexity: $O(N + M^2)$. The function ~transition~ uses $O(M^2)$ space since it stores a list of $M$ values for each position $j$.  The variable $js$ contains at most $N$ values.
+
+#+begin_src python
+  from functools import cache
+
+
+  def solve(s, p):
+      def is_zero_or_more(j):
+          return p[j + 1 : j + 2] == "*"
+
+      def expand(j):
+          """Return list of all consecutives zero or more patterns starting on j."""
+          ans = [j]
+          k = 0
+          while k < len(ans):
+              if is_zero_or_more(ans[k]):
+                  ans.append(ans[k] + 2)
+              k += 1
+          return ans
+
+      @cache
+      def transition(j):
+          if j == len(p):
+              return []
+          if not is_zero_or_more(j):
+              return expand(j + 1)
+          return [j] + expand(j + 2)
+
+      i, js = 0, [0] if p[1:2] != "*" else [0] + expand(2)
+      while i < len(s) and len(js) > 0:
+          next_js = set()
+          for j in js:
+              if j == len(p):
+                  continue
+              assert p[j] != "*"
+              if p[j] == "." or p[j] == s[i]:
+                  next_js.update(transition(j))
+
+          if len(next_js) > 0:
+              i += 1
+          js = next_js
+      return len(p) in js and i == len(s)
+
+
+  assert solve("aa", "a") == False
+  assert solve("aa", "a*") == True
+  assert solve("ab", ".*") == True
+  assert solve("aabb", "a.*b") == True
+  assert solve("aabb", "a.*bc") == False
+  assert solve("a", ".*") == True
+  assert solve("a", "b") == False
+  assert solve("aaaaaaaaaaaaaaaaaaaa", ".*.*.*.*.*.*.*.*.*.*") == True
+  assert solve("a", ".*a") == True
+  assert solve("b", ".*a") == False
+  assert solve("aaa", ".*aaa") == True
+  assert solve("aaa", "ab*ac*a") == True
+  assert solve("aa", "ab*c*a") == True
+  assert solve("mississippi", "mis*is*p*.") == False
+  assert solve("aaabaaaababcbccbaab", "c*c*.*c*a*..*c*") == True
+
+
+  class Solution:
+      def isMatch(self, s: str, p: str) -> bool:
+          return solve(s, p)
+#+end_src
+
+* [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]]
+
+We would like to compute a function $f(i,j)$ that is true if it is possible to match $s$ starting on $i$ with $p$ starting on $j$, and false otherwise.  To do so, we have to try matching $s_i$ with $p_j$ if possible, and also skipping zero or more pattern.  The following code implements using top-down approach.
+
+#+begin_src python
+  from functools import cache
+
+
+  def solve(s, p):
+      def match(i, j):
+          return p[j] == "." or s[i] == p[j]
+
+      def is_zero_or_more(j):
+          return p[j + 1 : j + 2] == "*"
+
+      @cache
+      def dfs(i, j):
+          if i == len(s):
+              return j == len(p) or (is_zero_or_more(j) and dfs(i, j + 2))
+          if j == len(p):
+              return False
+
+          assert p[j] != "*"
+          if is_zero_or_more(j):
+              return dfs(i, j + 2) or (
+                  match(i, j) and (dfs(i + 1, j) or dfs(i + 1, j + 2))
+              )
+          elif match(i, j):
+              return dfs(i + 1, j + 1)
+
+          return False
+
+      return dfs(0, 0)
+
+
+  assert solve("aa", "a") == False
+  assert solve("aa", "a*") == True
+  assert solve("ab", ".*") == True
+  assert solve("aabb", "a.*b") == True
+  assert solve("aabb", "a.*bc") == False
+  assert solve("a", ".*") == True
+  assert solve("a", "b") == False
+  assert solve("aaaaaaaaaaaaaaaaaaaa", ".*.*.*.*.*.*.*.*.*.*") == True
+  assert solve("a", ".*a") == True
+  assert solve("b", ".*a") == False
+  assert solve("aaa", ".*aaa") == True
+  assert solve("aaa", "ab*ac*a") == True
+  assert solve("aa", "ab*c*a") == True
+  assert solve("mississippi", "mis*is*p*.") == False
+  assert solve("aaabaaaababcbccbaab", "c*c*.*c*a*..*c*") == True
+
+
+  class Solution:
+      def isMatch(self, s: str, p: str) -> bool:
+          return solve(s, p)
+#+end_src
+
+Sometimes, top-down approach doesn't work due stack limit.  So, it is a good training to also write a bottom-up solution.
+
+#+begin_src python
+  from functools import cache
+
+
+  def solve(s, p):
+      def match(i, j):
+          return p[j] == "." or s[i] == p[j]
+
+      def is_zero_or_more(j):
+          return p[j + 1 : j + 2] == "*"
+
+      dp = [[False for _ in range(len(p) + 1)] for _ in range(len(s) + 1)]
+      for j in range(len(p), -1, -1):
+          dp[len(s)][j] = j == len(p) or (is_zero_or_more(j) and dp[len(s)][j + 2])
+      for i in range(len(s) - 1, -1, -1):  # reversed(range(len(s))):
+          for j in range(len(p) - 1, -1, -1):  # reversed(range(len(p))):
+              if is_zero_or_more(j):
+                  dp[i][j] = dp[i][j + 2] or (
+                      match(i, j) and (dp[i + 1][j] or dp[i + 1][j + 2])
+                  )
+              elif match(i, j):
+                  dp[i][j] = dp[i + 1][j + 1]
+      return dp[0][0]
+
+
+  assert solve("aa", "a") == False
+  assert solve("aa", "a*") == True
+  assert solve("ab", ".*") == True
+  assert solve("aabb", "a.*b") == True
+  assert solve("aabb", "a.*bc") == False
+  assert solve("a", ".*") == True
+  assert solve("a", "b") == False
+  assert solve("aaaaaaaaaaaaaaaaaaaa", ".*.*.*.*.*.*.*.*.*.*") == True
+  assert solve("a", ".*a") == True
+  assert solve("b", ".*a") == False
+  assert solve("aaa", ".*aaa") == True
+  assert solve("aaa", "ab*ac*a") == True
+  assert solve("aa", "ab*c*a") == True
+  assert solve("mississippi", "mis*is*p*.") == False
+  assert solve("aaabaaaababcbccbaab", "c*c*.*c*a*..*c*") == True
+
+
+  class Solution:
+      def isMatch(self, s: str, p: str) -> bool:
+          return solve(s, p)
+#+end_src
+
+Both, implementations have
+
+- time complexity: $O(N \times N)$, and
+- space complexity: $O(N \times N)$.

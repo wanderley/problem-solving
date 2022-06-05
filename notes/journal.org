@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       1D831B69-EB70-4709-A336-06D3974FDDD0
+:END:
+#+TITLE: Journal
+
+* 2022-06-03 Fri - [[id:7FB1FE23-5F97-4B38-9364-059C13DB42F5][Leetcode: 10. Regular Expression Matching]]
+
+- I didn't notice that the transition function could land on Kleene star pattern: ~s=aa~ and ~p=ab*a~.  In this case, ~transition(0)=[1,3]~ instead of just ~[1]~.  I received 3 wrong answers while fixing this bug.  I found that creating functions like ~is_zero_or_more~ and ~expand~ were vital to continue to improve the solution.
+
+- I saw that plain recursion would result in exponential algorithm and didn't even considered trying to apply [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].
+
+** Takeaways
+
+- Check for [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]] even against your intuition.  If both solution have the same time complexity, implement the easy one during the competition and both while studying.
+
+- Try to create small examples that exercises all possible transitions when working with [[id:750DEF92-89C5-4324-9404-8D935632A2CB][Regular Expression]] problems.
