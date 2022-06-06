@@ -3,7 +3,7 @@
 :END:
 #+TITLE: Journal
 
-* 2022-06-04 Sat -
+* 2022-06-04 Sat - [[id:65A2D62D-2D38-4D3B-9A15-76B01DEA4D6A][Leetcode: 32. Longest Valid Parentheses]]
 
 - Didn't think about edge cases before the first submission.  Missed that could have a gap between $i$ and the start of the longest valid parentheses which could make impossible to combine them.
 - Though about defining ~dfs(i)~ as the longest valid subsequence, but implemented as the longest valid subsequence starting on ~i~ or any position after that.
