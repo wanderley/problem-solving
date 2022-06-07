@@ -39,9 +39,11 @@ The naive approach consist on generating all possible string ($2^{2 \times n}=4^
           return list(solve(n))
 #+end_src
 
-* TODO Combining well-formed expressions
+* Combining well-formed expressions
 
-A well-formed parentheses string can be represented by its parts: $s=\texttt{(}p\texttt{)}q$, where $0\leq|p|,|q|<|s|$ and $|p|+|q|+2=|s|$.
+A well-formed parentheses string can be represented by its parts: $s=\texttt{(}p\texttt{)}q$, where $0\leq|p|,|q|<|s|$ and $|p|+|q|+2=|s|$.  As $s$ is well-formed, follows that $p$ and $q$ are also well-formed.  Note that a well-formed string can't start with a close parentheses.  So, it starts with an open parentheses that can either close on the end of the string ($|q|=0$) or somewhere in the middle of $s$ ($|q|>0$).  In both cases, $|p|=|s|-|q|$.  The generation of well-formed strings works using this property, because all that we are saying is: (1) fix the first pair of parentheses and (2) fill it's gaps with all possible well-formed strings.
+
+- Time and space complexity: $O(4^n \times n)$.
 
 #+begin_src python
   from functools import cache
