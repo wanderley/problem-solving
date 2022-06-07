@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID:       B66BD2ED-B5E7-4F29-8230-3E74DADA7F47
+:END:
+#+TITLE: Leetcode: 22. Generate Parentheses
+
+[[https://leetcode.com/problems/generate-parentheses/][Problem Statement]]: Given an integer $n$, return all well-formed parentheses string formed with $n$ pair of parentheses.
+
+* [[id:F7D1B315-77B8-4556-B665-AFFD00550C1E][Constructive]]: one parentheses at time
+
+The naive approach consist on generating all possible string ($2^{2 \times n}=4^n$) and filter only the ones that are well-formed.  To do better than that, we have to understand what makes a candidate ill-formed.  Let's see some examples of possible candidates for $n=1$: =((=, =()=, =)(=, =))=.  If we compute the sum by the number of open parentheses subtracted by the number of close parentheses, we have that the =((= sums to 2 and =))= sums to -2.  The other two candidates have sum of 0, but only =()= is well-formed.  This example is enough to show that we can't compute this sum after all parentheses are in-place, but we have to filter out =)(=.  Observe that if the number of close parentheses is greater than the number of parentheses in a position $i$, then the candidate will always be ill-formed no matter what come later (the only way to close the extra close parentheses is by an open one that come first).  So, we have to check for two conditions to construct a well-formed string: (1) the number of sum of parentheses is never negative during construction and (2) after the last parentheses the sum must be 0.
+
+- Time and space complexity: $O(4^n \times n)$.
+
+#+begin_src python
+  def solve(n):
+
+      ans = []
+
+      def build(s, op):
+          if op < 0:
+              return
+          if len(s) == 2 * n:
+              if op == 0:
+                  ans.append(s)
+              return
+          build(s + "(", op + 1)
+          build(s + ")", op - 1)
+
+      build("", 0)
+      return ans
+
+
+  assert set(solve(3)) == set(["((()))", "(()())", "(())()", "()(())", "()()()"])
+  assert set(solve(1)) == set(["()"])
+
+
+  class Solution:
+      def generateParenthesis(self, n: int) -> List[str]:
+          return list(solve(n))
+#+end_src
+
+* TODO Combining well-formed expressions
+
+A well-formed parentheses string can be represented by its parts: $s=\texttt{(}p\texttt{)}q$, where $0\leq|p|,|q|<|s|$ and $|p|+|q|+2=|s|$.
+
+#+begin_src python
+  from functools import cache
+
+
+  @cache
+  def solve(n):
+      if n == 0:
+          return [""]
+      ans = []
+      for l in range(n):
+          for x in solve(l):
+              for y in solve(n - l - 1):
+                  ans.append(f"({x}){y}")
+      return ans
+
+
+  assert set(solve(3)) == set(["((()))", "(()())", "(())()", "()(())", "()()()"])
+  assert set(solve(1)) == set(["()"])
+
+
+  class Solution:
+      def generateParenthesis(self, n: int) -> List[str]:
+          return list(solve(n))
+#+end_src
