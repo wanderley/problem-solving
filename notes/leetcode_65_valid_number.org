@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID:       BFFA9C8E-F3D7-4135-9F2D-CF56C6725B24
+:END:
+#+TITLE: Leetcode: 65. Valid Number
+
+[[https://leetcode.com/problems/valid-number/][Problem Statement]]: Give a string, return if it is a valid number given parsing rules.
+
+* [[id:EC1C87C8-A221-4823-9EF5-BEC706B2EEA5][Brute Force]]
+
+This is a problem to test if you are capable of implementing a program with complex rules.  There is no big challenge besides carefully implementing the rules.
+
+#+begin_src python
+  def solve(s):
+      def is_digit(d):
+          return d >= "0" and d <= "9"
+
+      def is_signal(s):
+          return s == "+" or s == "-"
+
+      def all_digits(s):
+          if len(s) == 0:
+              return False
+          for d in s:
+              if not is_digit(d):
+                  return False
+          return True
+
+      def is_integer(s):
+          if len(s) == 0:
+              return False
+          return (is_signal(s[0]) and all_digits(s[1:])) or all_digits(s)
+
+      def is_decimal(s):
+          if len(s) == 0 or "." not in s:
+              return False
+          if is_signal(s[0]):
+              s = s[1:]
+          parts = s.split(".")
+          if len(parts) != 2:
+              return False
+          if len(parts[0]) == 0:
+              return all_digits(parts[1])
+          return all_digits(parts[0]) and (len(parts[1]) == 0 or all_digits(parts[1]))
+
+      s = s.lower()
+      if "e" in s:
+          parts = s.split("e")
+          if len(parts) != 2:
+              return False
+          return (is_decimal(parts[0]) or is_integer(parts[0])) and is_integer(parts[1])
+
+      return is_decimal(s) or is_integer(s)
+
+  assert solve("2")
+  assert solve("0089")
+  assert solve("-0.1")
+  assert solve("+3.14")
+  assert solve("4.")
+  assert solve("-.9")
+  assert solve("2e10")
+  assert solve("-90E3")
+  assert solve("3e+7")
+  assert solve("+6e-1")
+  assert solve("53.5e93")
+  assert solve("-123.456e789")
+
+  assert not solve("abc")
+  assert not solve("1a")
+  assert not solve("1e")
+  assert not solve("e3")
+  assert not solve("99e2.5")
+  assert not solve("--6")
+  assert not solve("-+3")
+  assert not solve("95a54e53")
+  assert not solve("0..")
+
+  class Solution:
+      def isNumber(self, s: str) -> bool:
+          # regular expression: ^([+-]?\d+|[+-]?(\d+[.]|\d+[.]\d+|[.]\d+))([eE][+-]?\d+)?$
+          return solve(s)
+#+end_src
