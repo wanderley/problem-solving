@@ -1,4 +1,4 @@
 :PROPERTIES:
 :ID:       42B21DBC-4951-4AF2-8C41-A646F5675365
 :END:
-#+TITLE: Pre-processing the input can make easier to solve the original problem
+#+TITLE: Can we pre-process the input in a way to make easy to solve the problem?
