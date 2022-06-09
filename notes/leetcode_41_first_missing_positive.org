@@ -14,10 +14,10 @@ The hint about the time complexity made me to focus on what decision I could tak
 Suppose that the array is $[5, 4, 2, 1]$.  The answer should be 1 if 1 isn't in the array.  The answer should be 2 if 2 isn't in the array and so on.  In both cases, these numbers are contained in the array.  [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  For example, suppose that the array is sorted: $[1, 2, 4, 5]$.  If there is 1 in the array, it should be in the first position, 2 should be in the second position and so on.  The first position of the array that breaks this assertion is the answer.  In this example, the number 4 is in the third position.  So, 3 is the answer that we are looking for.  We can't use =sort= since the solution must be $O(n)$ and the sort would make it $O(n\log n)$.  But that is not the only problem.  Suppose that the array is $[5, -1, 2, 1]$.  The sorted array is $[-1, 1, 2, 5]$ and the suggested solution would return 1, since -1 is sitting on the first position.  The conclusion here is that we don't really want to sort the array, but re-arrange its elements in a way that the idea works.  For the second example, we would like the array to re-arranged as follow: $[1, 2, -1, 5]$ or $[1, 2, 5, -1]$.  The position of -1 and 5 doesn't matter, but 1 should be on the first position and 2 should on the second position.  To do so, we can iterating over each number and either skip it if there is no "right" place for it in the array (e.g. -1 and 5 in the last example), or swap it with the number that sits on its position.  Let's run this process on the input $[5, -1, 2, 1]$.
 
 | Input                         | Output                        | Explanation     |
-| $[\textcircled{5}, -1, 2, 1]$ | $[\textcircled{5}, -1, 2, 1]$ | Nothing to do.  |
-| $[5, \textcircled{-1}, 2, 1]$ | $[5, \textcircled{-1}, 2, 1]$ | Nothing to do.  |
-| $[5, -1, \textcircled{2}, 1]$ | $[5, \textcircled{2}, -1, 1]$ | Swap 2 with -1. |
-| $[5, 2, -1, \textcircled{1}]$ | $[\textcircled{1}, 2, -1, 5]$ | Swap 1 with 5.  |
+| $[\underline{5}, -1, 2, 1]$ | $[\underline{5}, -1, 2, 1]$ | Nothing to do.  |
+| $[5, \underline{-1}, 2, 1]$ | $[5, \underline{-1}, 2, 1]$ | Nothing to do.  |
+| $[5, -1, \underline{2}, 1]$ | $[5, \underline{2}, -1, 1]$ | Swap 2 with -1. |
+| $[5, 2, -1, \underline{1}]$ | $[\underline{1}, 2, -1, 5]$ | Swap 1 with 5.  |
 
 
 - Time complexity: $O(n)$
