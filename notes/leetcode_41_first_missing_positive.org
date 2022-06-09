@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       27ABBE29-C35A-46C2-A7DB-B3952EFF1422
+:END:
+#+TITLE: Leetcode: 41. First Missing Positive
+
+[[https://leetcode.com/problems/first-missing-positive/][Problem Statement]]: Given an unsorted array $nums$, return the smallest missing positive integer.  The restriction is that the algorithm should have time complexity of $O(n)$ and space complexity of $O(1)$.
+
+The problem statement gives a hit about the time complexity, what made me only look to what decision I could take when processing each one of the numbers.  I started by looking for information that I could keep after processing each element.
+
+Suppose that $\text{nums}=[3, 2, 1]$.  What about if we track the intervals created after iterating over each element.  After we pass through number 3, we know that the answer is either $1..2$ or $4$.  After the number $2$, the intervals become $1..1$ and $4$.  After the number $1$, we know that the solution needs to be $4$.  The idea works for this example, but it doesn't for $\text{nums}=[5, 4, 2, 1]$.  I tried to fix this idea, but it would require extra memory to do.
+
+After the failure tentative, I started to ponder what is the relationship between the answer and the numbers on the array.  For example, the answer is $3$ if the input is $[5, 4, 2, 1]$.  Is there a way to discover this number right away?  I tried without success to find the number by looking to the sum of the numbers in the array.  For the example, the sum is $12$ and I know that $1+2+3+4+5=15$, so $15-12=3$.  Note that I was looking that I am using the sum $1+2+..+(n+1)$ to find the missing number.  The problem is that the array can have number greater or equal to $n$.  This observation led me to the right idea.
+
+Suppose that the array is $[5, 4, 2, 1]$.  The answer should be 1 if it isn't in the array.  If it is in the array, the answer should be 2 if it isn't in the array.  You see.  In both cases, these numbers are contained in the array.  How could I easily check if the missing number isn't in the array?  We can't sort the array, because the problem requires a $O(n)$ solution.  But if we could, it would look like $[1, 2, 5, 4]$.  After transferring all numbers to their right positions.  The first index $i$ that doesn't have the number $i+1$ (index is 0-based) is the answer.  How could we sort the array them?  If the number that we processing is less than or equal to 0 or it is greater than or equal to $n$, we can just skip it because there is no "right" position to put this number on.  Otherwise, we can swap the number with the number that sits on his position.  If the number that we just put on $i$ isn't in the right position, we can do the same again.  Note that, all position will be processed once and the number of swaps is bounded by the numbers in the array since we stop when the number reaches its right position.
+
+- Time complexity: $O(n)$
+- Space complexity: $O(1)$
+
+#+begin_src python
+  def solve(nums):
+      def swap(i):
+          v = nums[i]
+          if v <= 0 or v > len(nums) or v == i + 1:
+              return False
+          if nums[i] == nums[v - 1]:
+              return False
+          nums[i], nums[v - 1] = nums[v - 1], v
+          return True
+
+      for i, v in enumerate(nums):
+          while swap(i):
+              pass
+      for i, v in enumerate(nums):
+          if v != i + 1:
+              return i + 1
+      return len(nums) + 1
+
+
+  assert solve([1, 2, 0]) == 3
+  assert solve([3, 4, -1, 1]) == 2
+  assert solve([7, 8, 9, 11, 12]) == 1
+
+
+  class Solution:
+      def firstMissingPositive(self, nums: List[int]) -> int:
+          return solve(nums)
+#+end_src
