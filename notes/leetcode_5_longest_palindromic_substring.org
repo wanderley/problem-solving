@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       CC7C9391-9F1E-44D8-A9EB-51193D6F4BF6
+:END:
+#+TITLE: Leetcode: 5. Longest Palindromic Substring
+
+[[https://leetcode.com/problems/longest-palindromic-substring/][Problem Statement]]: Given a string $s$ of length $n$, return a longest palindromic substring in $s$.
+
+A naive solution consists searching for the longest palindromic substring on all possible substrings.  There are $n^2$ substrings, and it takes at most $n/2$ iterations to check if each one of them is a palindrome or not.  The total time complexity for this approach is $O(n^3)$ which is too slow given the problem's constraints.
+
+A palindromic substring can be seen as a particular interval on $s$.  A prompt that come in mind is: [[id:29DB5011-3209-4B10-BAA5-823D1ADB9F47][How could you find the optimal interval knowing a tiny part of it?]]  What tiny part of the longest palindromic substring would be useful to reconstruct it?  The position of its center!  Reconstructing a longest palindromic substring from its center is easy because we just need to check if the right side match with the left side reversed.  This process consumes $O(n)$.  We don't know such position, but we can test all of them!  There are at most $2\times n$ possible centers: $n$ if the longest palindromic substring has an odd length and other $n$ if it has an even length.  For each one of them from left to right, we can generate the longest palindromic and check if it is longer than the longest that we discovered so far.
+
+- Time complexity: $O(n^2)$
+- Space complexity: $O(1)$
+
+#+begin_src python
+  def solve(s):
+      def longest_palindrome(i, j=None):
+          if j is None:
+              j = i
+          while i >= 0 and j < len(s) and s[i] == s[j]:
+              i -= 1
+              j += 1
+
+          return s[i + 1 : j]
+
+      def pick_best(a, b):
+          return a if len(a) > len(b) else b
+
+      ans = ""
+      for i, c in enumerate(s):
+          ans = pick_best(ans, longest_palindrome(i))
+          if i + 1 < len(s):
+              ans = pick_best(ans, longest_palindrome(i, i + 1))
+      return ans
+
+
+  assert solve("babad") in ["bab", "aba"]
+  assert solve("cbbd") == "bb"
+  assert solve("") == ""
+  assert solve("abc") in ["a", "b", "c"]
+
+
+  class Solution:
+      def longestPalindrome(self, s: str) -> str:
+          return solve(s)
+#+end_src

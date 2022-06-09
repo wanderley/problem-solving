@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       29DB5011-3209-4B10-BAA5-823D1ADB9F47
+:END:
+#+TITLE: How could you find the optimal interval knowing a tiny part of it?

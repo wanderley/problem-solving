@@ -5,6 +5,9 @@
 
 - Ad-hoc
   - [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Pre-processing the input can make easier to solve the original problem]]
+- Prompts
+  - Intervals
+    - [[id:29DB5011-3209-4B10-BAA5-823D1ADB9F47][How could you find the optimal interval knowing a tiny part of it?]]
 - Data Structure
   - [[id:21C2B5E5-78D0-4A47-B69E-7B1FBA6A69A1][Array]]
   - [[id:0DE29B4D-0B7D-4B34-B370-F5D3193AA932][Matrix]]
