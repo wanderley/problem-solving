@@ -19,6 +19,15 @@ Suppose that the array is $[5, 4, 2, 1]$.  The answer should be 1 if 1 isn't in 
 | $[5, -1, \underline{2}, 1]$ | $[5, \underline{2}, -1, 1]$ | Swap 2 with -1. |
 | $[5, 2, -1, \underline{1}]$ | $[\underline{1}, 2, -1, 5]$ | Swap 1 with 5.  |
 
+Is there an edge case for this solution?  Suppose that the array is $[4, 0, 1, 2]$.  If we swap 4 and 2 and move to the next index, we would have the array as $[2, 0, 1, 4]$.  The problem here is that 2 wouldn't have a chance to be moved to its position.  So, the swap operation should be applied as many times is necessary, until the number of the source position is either one that should be skipped or the correct number.
+
+| Input                    | Output                   | Explanation    |
+| $[\underline4, 0, 1, 2]$ | $[2, 0, 1, \underline4]$ | Swap 4 with 2. |
+| $[\underline2, 0, 1, 4]$ | $[0, \underline2, 1, 4]$ | Swap 2 with 0. |
+| $[\underline0, 2, 1, 4]$ | $[\underline0, 2, 1, 4]$ | Nothing to do. |
+| $[0, 2, \underline1, 4]$ | $[\underline1, 2, 0, 4]$ | Swap 1 with 0. |
+
+The last edge case is when you swap two equal numbers: $[1, 1]$.
 
 - Time complexity: $O(n)$
 - Space complexity: $O(1)$
