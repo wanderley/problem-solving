@@ -43,7 +43,7 @@ The last edge case is when you swap two equal numbers: $[1, 1]$.
           nums[i], nums[v - 1] = nums[v - 1], v
           return True
 
-      for i, v in enumerate(nums):
+      for i in range(len(nums)):
           while swap(i):
               pass
       for i, v in enumerate(nums):
