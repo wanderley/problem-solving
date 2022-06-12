@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5
+:END:
+#+TITLE: Monotonic Stack
+
+Monotonic Stack is a stack where all elements from bottom to top are in increase or decrease other.  In a Mono-decrease stack has the smaller element on the top and the greater on the bottom.  The reverse is true for a Mono-increase stack.
+
+[[file:assets/2022-06-11_11-32-49_screenshot.png]]
+
+In the classic game Hanoi Tower, the player needs to move discs from one pin to other without putting a bigger disc on top of a smaller one.  The towers are Mono-decrease stacks.
+
+* References
+
+- [[https://liuzhenglaichn.gitbook.io/algorithm/monotonic-stack][Monotonic Stack]] by [[https://github.com/lzl124631x][Richard Liu]]

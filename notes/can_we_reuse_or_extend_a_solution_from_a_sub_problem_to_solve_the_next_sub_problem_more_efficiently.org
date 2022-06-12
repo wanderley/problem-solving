@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       26656051-E32D-42FE-9315-05ADB46A1A82
+:END:
+#+TITLE: Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?
