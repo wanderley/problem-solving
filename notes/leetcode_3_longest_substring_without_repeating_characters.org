@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID:       B316384D-956C-4E1C-9761-FE515D9B7D24
 :END:
-#+TITLE: leetcode: 3. Longest Substring Without Repeating Characters
+#+TITLE: Leetcode: 3. Longest Substring Without Repeating Characters
 
 [[https://leetcode.com/problems/substring-with-concatenation-of-all-words/][Problem Statement]]: Find the length of the longest substring without repeating characters in $s$.
 
