@@ -7,3 +7,4 @@
 - Dynamic Programming Optimizations
   - [[https://codeforces.com/blog/entry/8219?f0a28=1][indy256's Dynamic Programming Optimizations]]
   - [[https://www.youtube.com/watch?v=KX_-7AqcnEU][Colin Galen's Dynamic Programming Optimizations (Segment Tree, Convex Hull Trick)]]
+- kth-competitive-programming's [[https://github.com/kth-competitive-programming/kactl/blob/main/kactl.pdf][Catalog of algorithms]]
