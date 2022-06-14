@@ -9,3 +9,5 @@
   - [[https://www.youtube.com/watch?v=KX_-7AqcnEU][Colin Galen's Dynamic Programming Optimizations (Segment Tree, Convex Hull Trick)]]
 - kth-competitive-programming's [[https://github.com/kth-competitive-programming/kactl/blob/main/kactl.pdf][Catalog of algorithms]]
 - [[https://www.youtube.com/watch?v=RDzsrmMl48I][Colin Galen's The Black Box Method: How to Learn Hard Concepts Quickly]]
+- [[https://github.com/pllk/cphb/][Competitive Programmer's Handbook]]
+- [[https://codeforces.com/blog/entry/45223][SOS Dynamic Programming]] ([[https://ncduy0303.github.io/Competitive-Programming/Dynamic%20Programming/SOS%20DP.cpp][Template]])
