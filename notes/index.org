@@ -23,4 +23,6 @@
   - [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]]
 - Optimization
   - [[id:4A2206E8-074B-4CDB-BD5B-01DE3C901C15][Min-Max Problem]]
+- Utilities
+  - [[id:EC2FE62E-29FD-4C76-8005-050C40EA6D8A][Convert integer to array of digits]]
 - [[id:A8CF27F2-1B1E-4A5B-AB8C-75D301AF82B6][Interesting Resources]]
