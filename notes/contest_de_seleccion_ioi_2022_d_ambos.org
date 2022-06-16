@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID:       81264620-3627-4624-89BD-4679756ACED9
+:END:
+#+TITLE: Contest de seleccion IOI 2022: D. Ambos
+
+[[https://contest.yandex.ru/contest/38353/download/][Problem Statement]]: Given a string with characters =o= and =x=, return the number of substring that contains at least one of each character.
+
+Let's take $s=\texttt{oooxoxo}$ as example.  A valid interval $(0, i)$ must have $i>2$, since it is the first occurrence of an =x=.  There are $7-3 = 6$ of those intervals: $(0,3), (0,4), (0,5), (0,6)$.  So, it would be fairly easy to compute the number of interval for a given position $i$, if we knew the first index $j$ where $s[i]\ne s[j]$.  Suppose that =o= is 0 and =x= is 1.  Then $s=\texttt{oooxoxo}$ becomes $s'=0001010$.  If $s'[i]$ is 0, we want the next greater integer ([[id:E4C9A18D-FC2B-4C1D-A040-1A94C39F9F63][Problem: Next greater integer in unsorted array]]).  Otherwise, we want next smaller integer ([[id:135D43F0-78FA-43E4-821F-509439B633D1][Problem: Next smaller in unsorted array]]).  The following solution solves the problem using this idea.
+
+- Time complexity: $O(|s|)$.
+- Space complexity: $O(|s|)$.
+
+#+begin_src C++
+  #include <algorithm>
+  #include <iostream>
+  #include <set>
+  #include <string.h>
+  #include <vector>
+  #include <stack>
+  #include <assert.h>
+
+  using namespace std;
+
+  #define ll long long
+
+  vector<int> compute_next(string s, char c) {
+    vector<int> ans(s.size(), -1);
+    stack<int> st;
+
+    for (int i = 0; i < s.size(); i++) {
+      if (s[i] != c) {
+        st.push(i);
+        continue;
+      }
+      while (!st.empty()) {
+        ans[st.top()] = i;
+        st.pop();
+      }
+    }
+    return ans;
+  }
+
+
+  ll solve(int n, string s) {
+    vector<int> nx = compute_next(s, 'x');
+    vector<int> no = compute_next(s, 'o');
+
+    ll ans = 0;
+    for (int i = 0; i < n; i++) {
+      if (s[i] == 'x' && no[i] != -1) {
+        ans += n - no[i];
+      }
+      if (s[i] == 'o' && nx[i] != -1) {
+        ans += n - nx[i];
+      }
+    }
+    return ans;
+  }
+
+
+  int main() {
+    assert(compute_next("x", 'o') == (vector<int>{-1}));
+    assert(compute_next("xx", 'o') == (vector<int>{-1, -1}));
+    assert(compute_next("xo", 'o') == (vector<int>{+1, -1}));
+    assert(compute_next("ox", 'o') == (vector<int>{-1, -1}));
+    assert(compute_next("ox", 'x') == (vector<int>{+1, -1}));
+    assert(compute_next("ooxxoo", 'x') == (vector<int>{2, 2, -1, -1, -1, -1}));
+    assert(compute_next("ooxxoo", 'o') == (vector<int>{-1, -1, 4, 4, -1, -1}));
+
+    assert(solve(4, "ooxo") == 5);
+    assert(solve(5, "oxoxo") == 10);
+    assert(solve(5, "ooooo") == 0);
+    assert(solve(7, "xxoooxx") == 16);
+
+    int n;
+    string s;
+    cin >> n >> s;
+    cout << solve(n, s);
+    return 0;
+  }
+#+end_src
