@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       1EB04540-F111-49BF-B21E-1A2B468F5D14
+:END:
+#+TITLE: Gaussian elimination

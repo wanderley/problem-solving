@@ -1,0 +1,225 @@
+:PROPERTIES:
+:ID:       7542EF40-E319-4261-ABC4-F96441A46BA1
+:END:
+#+TITLE: Contest de seleccion IOI 2022: A. 3 Dıgitos
+
+
+[[https://contest.yandex.ru/contest/38353/download/][Problem Statement]]: Guess a number $x=x_{1}x_{2}x_{3}$ using at most 16 queries.  The input of a query is a number $q=y_{1}y_{2}y_3$ where $y_{1 }_{}\neq y_{2 }_{} \neq y_3$ and the return value is =OK= if the number was guessed, =-1= if you exceeded the number of guesses and $d$ ($0 \leq d \leq 3$) an integer representing the number of numbers that you guessed right (not necessarily in order).
+
+Suppose that we know the digits of $x$ ($a,b,c$), but we don't know the correct order of them.  There is no much better than trying all possible arrangements of digits to guess the number:
+
+|$abc$|
+|$acb$|
+|$bac$|
+|$bca$|
+|$cab$|
+|$cba$|
+
+As you can see there are 6 of them.  That leaves us with 10 guesses to find those digits.  Note that you can't guess $111, 222, 333, ...$ (10 queries), because the query must can't have repeated digits on it.  Other alternative is guess distinct consecutive numbers:
+
+| Query Input | Query Output |
+|         123 | $r_1$         |
+|         234 | $r_2$         |
+|         345 | $r_3$         |
+|         ... | ...          |
+|         012 | $r_10$        |
+
+What does it mean that $q(123)=r_1$?  It means that there are $r_1$ numbers correct on the query.  So, we can look on it as following.  Suppose that we have an unknown variable for each number $d_i$ which is either 0 or 1.  Then, we can think about $q(123)=r_1$ as $d_1 + d_2 + d_3 = r_1$.
+
+| $d_1 + d_2 + d_3 = r_1$   |
+| $d_2 + d_3 + d_4 = r_2$   |
+| $d_3 + d_4 + d_5 = r_3$   |
+| $...$                 |
+| $d_0 + d_1 + d_2 = r_10$  |
+
+For those queries that return 0, we can put 0 in their respective $d$ variables.  After that, we can solve the systems of linear equations using the [[id:1EB04540-F111-49BF-B21E-1A2B468F5D14][Gaussian elimination]] or a simple substitution pattern as implemented in the following code.
+
+- Time complexity: $O(10^3)=O(1)$.
+- Space complexity: $O(1)$.
+
+#+begin_src C++
+  #include <algorithm>
+  #include <iostream>
+  #include <set>
+  #include <string.h>
+  #include <vector>
+  #include <assert.h>
+
+  using namespace std;
+
+  string local_ans;
+  int    local_tentatives;
+  int    is_local = 0;
+
+  string query_local(string local_ans, string ori_nums) {
+    if (ori_nums == local_ans) {
+      return "OK";
+    }
+    if (local_tentatives == 15) {
+      return "-1";
+    }
+
+    assert(ori_nums.size() == 3);
+    assert(ori_nums[0] != ori_nums[1] &&
+           ori_nums[0] != ori_nums[2] &&
+           ori_nums[1] != ori_nums[2]);
+
+    local_tentatives++;
+
+    string cnt = "0";
+    for (int i = 0; i < ori_nums.size(); i++) {
+      for (int j = 0; j < local_ans.size(); j++) {
+        if (ori_nums[i] == local_ans[j]) {
+          cnt[0]++;
+          break;
+        }
+      }
+    }
+    return cnt;
+  }
+
+  string query(string nums) {
+    if (is_local) {
+      return query_local(local_ans, nums);
+    }
+    cout << "? " << nums << endl << flush;
+    string ans;
+    cin >> ans;
+    return ans;
+  }
+
+  string solve() {
+    int DISCARDED   = 1;
+    int MAYBE       = 2;
+    int FOUND       = 3;
+    int status[10] = {MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE};
+
+    char   queries[10][4] = {"012", "123", "234", "345", "456", "567", "678", "789", "890", "901"};
+    string answers[10];
+
+    for (int i = 0; i < 10; i++) {
+      answers[i] = query(queries[i]);
+      if (answers[i] == "OK" || answers[i] == "-1") {
+        return answers[i];
+      }
+      if (answers[i] == "0") {
+        for (int j = 0; j < 3; j++) {
+          status[queries[i][j] - '0'] = DISCARDED;
+        }
+      }
+    }
+
+    int changed = 1;
+    while (changed) {
+      changed = 0;
+      for (int i = 0; i < 10; i++) {
+        int cnt_discarded = 0;
+        int cnt_found     = 0;
+        for (int j = 0; j < 3; j++) {
+          if (status[queries[i][j] - '0'] == DISCARDED) {
+            cnt_discarded++;
+          }
+          if (status[queries[i][j] - '0'] == FOUND) {
+            cnt_found++;
+          }
+        }
+        if (answers[i] == "0") {
+          continue;
+        } else if (answers[i] == "1" && cnt_discarded == 2 && cnt_found != 1) {
+          assert(cnt_found == 0);
+          for (int j = 0; j < 3; j++) {
+            if (status[queries[i][j] - '0'] != DISCARDED) {
+              assert(status[queries[i][j] - '0'] == MAYBE);
+              status[queries[i][j] - '0'] = FOUND;
+              changed = 1;
+            }
+          }
+        } else if (answers[i] == "1" && cnt_discarded != 2 && cnt_found == 1) {
+          for (int j = 0; j < 3; j++) {
+            if (status[queries[i][j] - '0'] != FOUND) {
+              status[queries[i][j] - '0'] = DISCARDED;
+              changed = 1;
+            }
+          }
+        } else if (answers[i] == "2" && cnt_discarded == 1 && cnt_found == 1) {
+          for (int j = 0; j < 3; j++) {
+            if (status[queries[i][j] - '0'] == MAYBE) {
+              status[queries[i][j] - '0'] = FOUND;
+              changed = 1;
+            }
+          }
+        }
+      }
+    }
+
+    string candidate = "000";
+    int k = 0;
+    for (int i = 0; i < 10; i++) {
+      if (status[i] == FOUND) {
+        candidate[k++] = '0' + i;
+      }
+    }
+    assert(k == 3);
+    sort(candidate.begin(), candidate.end());
+
+    do {
+      string ans = query(candidate);
+      if (ans == "OK" || ans == "-1") {
+        return ans;
+      }
+    } while(next_permutation(candidate.begin(), candidate.end()));
+
+    assert(0);
+    return "OK";
+  }
+
+  string solve_local(string _ans) {
+    local_ans = _ans;
+    local_tentatives = 0;
+    is_local = 1;
+
+    string ans = solve();
+
+    is_local = 0;
+    return ans;
+  }
+
+  int main() {
+    assert(query_local("123", "123") == "OK");
+    assert(query_local("123", "321") == "3");
+    assert(query_local("123", "456") == "0");
+
+    assert(solve_local("789") == "OK");
+    assert(solve_local("149") == "OK");
+    assert(solve_local("248") == "OK");
+
+    string test = "000";
+    for (int i = 0; i < 10; i++) {
+      for (int j = 0; j < 10; j ++) {
+        if (i == j) continue;
+        for (int k = 0; k < 10; k ++) {
+          if (i == k || j == k) continue;
+          test[0] = '0' + i;
+          test[1] = '0' + j;
+          test[2] = '0' + k;
+          string ans = solve_local(test);
+          if (ans != "OK") {
+            cout << "Failed for " << test << " " << ans << endl;
+          }
+        }
+      }
+    }
+
+    is_local = 0;
+    int t;
+    cin >> t;
+    for (int i = 0; i < t; i++) {
+      string ans = solve();
+      if (ans == "-1") {
+        return 0;
+      }
+    }
+
+    return 0;
+  }
+#+end_src
