@@ -185,6 +185,7 @@ With $k$ being the number of different values of $P(x)$:
   #include <algorithm>
   #include <string.h>
   #include <iostream>
+  #include <assert.h>
 
   using namespace std;
 
@@ -271,7 +272,6 @@ With $k$ being the number of different values of $P(x)$:
     assert(solve(9999999999, 1) == 0);
 
     ll n, b;
-    cin >> n >> b;
     scanf("%lld %lld", &n, &b);
     to_digits(n);
     printf("%d\n", solve(n, b));
