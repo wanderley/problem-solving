@@ -1,0 +1,80 @@
+:PROPERTIES:
+:ID:       F90A288E-9896-41F8-923A-8CDFAA129D06
+:END:
+#+TITLE: Leetcode: 299. Bulls and Cows
+
+[[https://leetcode.com/problems/bulls-and-cows/][Problem Statement]]: Given two strings $s$ and $g$ of length $n$, return the number of digits where $s[i]=g[i]$ and the number of digits in $g$ that appear in $s$ but in the wrong place.
+
+Be $i$ the first position where $s[i] \neq g[i]$.  We know that $s[i]$ can be matched with some $g[j]$ where $j>i$, and $g[i]$ can be matched with some $s[j]$ where $j>i$.  So, $s[i]$ is an available digit, while $g[i]$ is a required digit.  Suppose that we have an array $f[d]=c$ where $d$ is a digit and $c>0$ if there are $c$ copies of $d$ available, and $c<0$ if $\text{abs}(c)$ copies of $d$ are required.  If $f[s[i]] < 0$, we can increment the misplaced counter since $s[i]$ is required ($s[i]$ appeared in $g[0...(i-1)]$ and wasn't matched with any $s[0...(i-1)]$).  If $f[g[i]]>0$, we can increment the misplaced counter since there is an available digit in $s[0...(i-1)]$ to match with $g[i]$.  After counting the misplaced digits, we can increment $f[s[i]]$ and decrement $f[g[i]]$.
+
+- Time complexity: $O(n)$.
+- Space complexity: $O(n)$.
+
+#+begin_src python
+  def solve(s, g):
+      assert len(s) == len(g)
+
+      bulls, cows = 0, 0
+      freq = {}
+
+      for i in range(len(s)):
+          if s[i] == g[i]:
+              bulls += 1
+          else:
+              fs = freq.get(s[i], 0)
+              fg = freq.get(g[i], 0)
+              if fs < 0:
+                  cows += 1
+              if fg > 0:
+                  cows += 1
+
+              freq[s[i]] = fs + 1
+              freq[g[i]] = fg - 1
+
+      return f"{bulls}A{cows}B"
+
+
+  assert solve("1807", "7810") == "1A3B"
+  assert solve("1123", "0111") == "1A1B"
+  assert solve("1", "1") == "1A0B"
+  assert solve("1", "0") == "0A0B"
+
+
+  class Solution:
+      def getHint(self, secret: str, guess: str) -> str:
+          return solve(secret, guess)
+#+end_src
+
+
+
+2 passes
+#+begin_src python
+  def solve(s, g):
+      assert len(s) == len(g)
+
+      bulls, cows = 0, 0
+      sd_cnt, gd_cnt = {}, {}
+
+      for i in range(len(s)):
+          if s[i] == g[i]:
+              bulls += 1
+          else:
+              sd_cnt[s[i]] = sd_cnt.get(s[i], 0) + 1
+              gd_cnt[g[i]] = gd_cnt.get(g[i], 0) + 1
+
+      for d, cnt in sd_cnt.items():
+          cows += min(cnt, gd_cnt.get(d, 0))
+
+      return f"{bulls}A{cows}B"
+
+
+  assert solve("1807", "7810") == "1A3B"
+  assert solve("1123", "0111") == "1A1B"
+  assert solve("1", "1") == "1A0B"
+  assert solve("1", "0") == "0A0B"
+
+
+  class Solution:
+      def getHint(self, secret: str, guess: str) -> str:
+          return solve(secret, guess)
+#+end_src
