@@ -1,0 +1,44 @@
+:PROPERTIES:
+:ID:       8EFD1B71-6CC7-4CEA-8DB7-307E979AF099
+:END:
+#+TITLE: Leetcode: 2156. Find Substring With Given Hash Value
+
+Be $a=123$ and $b=231$. In terms of powers of 10, we have that
+
+\begin{align*}
+a & = 1 \times 10^2 + 2 \times 10^1 + 3 \times 10^0 \\
+b & = 2 \times 10^2 + 3 \times 10^1 + 1 \times 10^0.
+\end{align*}
+
+See that $b=(a - 1 \times 10^2) \times 10 + 2 \times 10^0$.  This trick is useful in many problems.  As $a + b \mod c = (a \mod c) + (b \mod c)$ and $a \times b \mod c = ((a \mod c) \times (b \mod c)) \mod c$ ([[id:13A69495-CA30-40DC-A722-B0327FB06D2D][Modulo Operations]]), we can use this notation to compute the hash of the string from right to left ([[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]]).
+
+#+begin_src python
+  def solve(s, p, m, k, h):
+      def value(i):
+          return ord(s[i]) - ord("a") + 1
+
+      ans = None
+      window = 0
+      pk = (p**k) % m
+
+      for i in range(len(s) - 1, -1, -1):
+          window = (window * p + value(i)) % m
+          if i + k < len(s):
+              window = (window - value(i + k) * pk) % m
+          if window == h:
+              ans = i
+
+      return s[ans : ans + k]
+
+
+  assert solve("leetcode", 7, 20, 2, 0) == "ee"
+  assert solve("fbxzaad", 31, 100, 3, 32) == "fbx"
+  assert solve("xmmhdakfursinye", 96, 45, 15, 21) == "xmmhdakfursinye"
+
+
+  class Solution:
+      def subStrHash(
+          self, s: str, power: int, modulo: int, k: int, hashValue: int
+      ) -> str:
+          return solve(s, power, modulo, k, hashValue)
+#+end_src
