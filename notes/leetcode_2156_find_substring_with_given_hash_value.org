@@ -3,6 +3,8 @@
 :END:
 #+TITLE: Leetcode: 2156. Find Substring With Given Hash Value
 
+[[https://leetcode.com/problems/find-substring-with-given-hash-value/][Problem Statement]]: Given a string $s$ and integers $p, k$ and $m$, find the substring $s'$ with length $k$ where $(\text{val}(s'[0]) \times p^0 + \text{val}(s'[1]) \times p^1 \times ... \times \text{val}(s'[k-1]) \times p^{k-1}) \mod m$ is $h$.
+
 Be $a=123$ and $b=231$. In terms of powers of 10, we have that
 
 \begin{align*}
