@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID:       1B5E73D2-50A3-40C3-937E-8FE4DF3009A3
+:END:
+#+TITLE: Leetcode: 2306. Naming a Company
+
+[[https://leetcode.com/problems/naming-a-company/][Problem Statement]]: Given a list of strings $S$, find the number of valid pair of strings $a$ and $b$ where $b[0] + a[1...]$ and $a[0] + b[1...]$ are not in $S$.
+
+We are going [[id:0BB99275-7CE6-425A-8AB7-F8B60958DDE9][Counting valid pairs using Brute Force]].  Group all ideas by their first letters.  For example, the ideas $abc, acd, bab, bcd$ form the groups ${{abc, acd}, {bab, bcd}}$.  Be $A$ and $B$ two groups and $a,b$ ideas from $A$ and $B$ respectively.  The pair $(a, b)$ is invalid if $a \in B$ or $b \in A$.  When counting the number of pairs, we have to take in account the intersections of the groups.  So, the number of valid pairs formed with $A$ and $B$ is $|A \setminus (A \cap B)| \times |B \setminus (A \cap B)|$.  There are at most 26 groups (one for each letter) and size of a group is at most $5 \times 10^4 / 32 < 2 \times 10^3$.  The time complexity of the algorithm is then around $26^2 \times 2 \times 10^3 < 2 \times 10^6$ what is enough to solve given its constraints.
+
+
+#+begin_src python
+  from collections import defaultdict
+  from typing import List
+
+  def solve(ideas):
+      groups = defaultdict(lambda: set())
+      for idea in ideas:
+          groups[idea[0]].add(idea[1:])
+
+      ans = 0
+      for a in groups.values():
+          for b in groups.values():
+              common = (a & b)
+              ans += len((a - common)) * len(b - common)
+      return ans
+
+  assert solve(["coffee","donuts","time","toffee"]) == 6
+  assert solve(["lack","back"]) == 0
+  assert solve(["aa", "ba", "bc", "cc"]) == 2
+  assert solve(['jhn', 'hr', 'hhn', 'jtz']) == 2
+  assert solve(["aa", "ab", "ac", "bc"]) == 0
+
+  class Solution:
+      def distinctNames(self, ideas: List[str]) -> int:
+          return solve(ideas)
+#+end_src

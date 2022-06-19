@@ -20,6 +20,8 @@
   - [[id:3463A33B-D953-4E75-895D-0BE4AAB16813][Top-down]]
   - [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]]
   - [[id:3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2][Dynamic Programming on multiple optimizations]]
+- Brute Force
+  - [[id:0BB99275-7CE6-425A-8AB7-F8B60958DDE9][Counting valid pairs using Brute Force]]
 - Search
   - [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]]
 - String

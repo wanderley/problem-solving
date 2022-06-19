@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       0BB99275-7CE6-425A-8AB7-F8B60958DDE9
+:END:
+#+TITLE: Counting valid pairs using Brute Force
+
+* Prompts / Hints
+
+- *How can you group the values to make easy to avoid counting invalid pairs?*
+
+  - Each element should be only in one group.
+
+  - Elements of the same group should create an invalid pair.
+
+- *Do the problem's constraints allows the computation of the intersection of the groups?*
+
+  - Be $n$ the number of groups and $m$ the time to compute the intersection of two groups.  The problem's constraints should allow an solution of $O(n \times m)$.
+
+* Method
+
+1. Compute all groups
+2. Start counter equals to 0.
+3. For each pair of groups $A$ and $B$, sums to the counter $|A \setminus (A \cap B)| \times |B \setminus (A \cap B)|$.
