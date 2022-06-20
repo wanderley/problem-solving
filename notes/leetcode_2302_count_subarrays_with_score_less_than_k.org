@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID:       D1BC5C8E-02C2-48C9-B1AD-72F6F6E4D6C2
+:END:
+#+TITLE: Leetcode: 2302. Count Subarrays With Score Less Than K
+
+[[https://leetcode.com/problems/count-subarrays-with-score-less-than-k/][Problem Statement]]: Given an array of integers $a$ and an integer $k$, return the number of non-empty subarrays $a[i..j]$ such that $s(i,j)=(a[i]+a[i+1]+...+a[j]) \times (j - i + 1) < k$.
+
+Be $i$ and $j$ such $s(i,j)<k$, but $s(i, j+1) \geq k$.  As $a$ contains only positive integers, we know that $s(i,k)$ is also less than $k$ for all $i \leq k < j$, and they are all valid subarrays: $(j - i + 1)$.  [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  For $i+1$, we want to find the greatest index $j'$ such that $s(i+1, j')<k$.  To find $j'$, we can extend/shrink the subarray until the score less than $k$.  The function $s$ can be implemented efficiently using an [[id:1E82ABF5-661B-47CC-8656-26B50FE472B8][One-dimensional Prefix Sum]].
+
+[[./assets/leetcode-2302.png]]
+
+- Time complexity: $O(|a|)$.
+- Space complexity: $O(1)$.
+
+#+begin_src python
+  from collections import deque
+  from typing import List
+
+
+  def solve(nums, k):
+      n = len(nums)
+
+      pref = [0] * n
+      pref[0] = nums[0]
+      for i in range(1, n):
+          pref[i] = nums[i] + pref[i - 1]
+
+      def score(i, j):
+          size = j - i + 1
+          return (pref[j] - (0 if i == 0 else pref[i - 1])) * size
+
+      j = n - 1
+      ans = 0
+      for i in range(n - 1, -1, -1):
+          while i <= j and score(i, j) >= k:
+              j -= 1
+          if i <= j:
+              ans += j - i + 1
+
+      return ans
+
+
+  assert solve([2, 1, 4, 3, 5], 10) == 6
+  assert solve([1, 1, 1], 5) == 5
+  assert solve([3, 3], 2) == 0
+  assert solve([1, 1, 1, 1], 5) == 7
+  assert solve([5, 2, 6, 8, 9, 7], 50) == 13
+
+
+  class Solution:
+      def countSubarrays(self, nums: List[int], k: int) -> int:
+          return solve(nums, k)
+#+end_src

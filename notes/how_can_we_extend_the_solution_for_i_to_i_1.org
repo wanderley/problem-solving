@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       45B9F3C8-D007-4980-95EF-4361906245A8
+:END:
+#+TITLE: How can we extend the solution for $i$ to $i+1$?
