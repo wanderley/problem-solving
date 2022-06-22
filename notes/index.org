@@ -27,6 +27,7 @@
   - [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]]
 - String
   - [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]]
+  - [[id:E3CBBE60-D8DC-453F-9C52-0AB0359B6957][Search substring in string using brute-force]]
 - Optimization
   - [[id:4A2206E8-074B-4CDB-BD5B-01DE3C901C15][Min-Max Problem]]
 - Utilities

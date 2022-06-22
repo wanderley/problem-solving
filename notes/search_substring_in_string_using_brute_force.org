@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E3CBBE60-D8DC-453F-9C52-0AB0359B6957
+:END:
+#+TITLE: Search substring in string using brute-force

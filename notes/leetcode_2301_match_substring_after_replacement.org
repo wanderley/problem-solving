@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       566852D1-F47B-469F-953C-21739B34ABFC
+:END:
+#+TITLE: Leetcode: 2301. Match Substring After Replacement
+
+[[https://leetcode.com/problems/match-substring-after-replacement/][Problem Statement]]: Given two strings $s, p$ and a list of pairs $m$, determine if there is an index $i$ such that $s[i+j] = p[j]$ or there is $k$ where $m[k]=(p[j], s[i])$, for $0 \leq j < |p|$.
+
+We can [[id:E3CBBE60-D8DC-453F-9C52-0AB0359B6957][Search substring in string using brute-force]], which is match $p$ with all substrings $s[0...], s[1...], s[2...]$.  To match each character efficiently, we can use a hash set $m$ to store the possible substitution as pair $(o, n)$ where $o$ and $n$ are characters.  As it can be done in $O(1)$, the problem can be solved in quadratic time.
+
+- Time complexity: $O(|s| \times |p|)$.
+- Space complexity: $O(|p|)$.
+
+#+begin_src python
+  def solve(s, sub, mappings):
+      valid_pairs = set()
+      for f, t in mappings:
+          valid_pairs.add((f, t))
+
+
+      for i in range(len(s)):
+          j = 0
+          while (
+              i + j < len(s)
+              and j < len(sub)
+              and (s[i + j] == sub[j] or (sub[j], s[i + j]) in valid_pairs)
+          ):
+              j += 1
+          if j == len(sub):
+              return True
+      return False
+
+
+  assert solve("fool3e7bar", "leet", [["e", "3"], ["t", "7"], ["t", "8"]]) == True
+  assert solve("fooleetbar", "f00l", [["o", "0"]]) == False
+  assert (
+      solve(
+          "Fool33tbaR",
+          "leetd",
+          [["e", "3"], ["t", "7"], ["t", "8"], ["d", "b"], ["p", "b"]],
+      )
+      == True
+  )
+
+
+  class Solution:
+      def matchReplacement(self, s: str, sub: str, mappings: List[List[str]]) -> bool:
+          return solve(s, sub, mappings)
+#+end_src
