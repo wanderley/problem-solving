@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       9DDD900C-F3A0-497F-B818-324A86C7EE37
+:END:
+#+TITLE: Leetcode 2290. Minimum Obstacle Rmoval to Reach Corner
+
+[[https://leetcode.com/problems/minimum-obstacle-removal-to-reach-corner/][Problem Statement]]: Given an matrix $m \times n$ where $0$ represents an empty cell and $1$ represents an obstacle, determine the minimum number of obstacle to remove (or pass over) to go from $(0, 0)$ to $(m-1, n-1)$.
+
+This problem can be modeled as a graph where each cell is an vertex and two vertices are connected if they are adjacent cell (up, down, left and right).  The cost of a path $(0, 0), (y_0, x_0), (y_1, x_1), ...$ is $m[0][0] + \sum m[y_i][x_i]$.  So, we can use [[id:3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A][Dijkstra Algorithm]] to compute the best desired path.
+
+- Time complexity: $O((m \times n) \times \log (m \times n) + (m \times n))$
+- Space complexity: $O(m \times n)$
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  def solve(grid):
+      n = len(grid)
+      m = len(grid[0])
+      inf = n * m + 1
+      dist = [[inf] * m for _ in range(n)]
+
+      pq = []
+      heappush(pq, (grid[0][0], 0, 0))
+      while len(pq) > 0:
+          ud, uy, ux = heappop(pq)
+          if dist[uy][ux] != inf:
+              continue
+          dist[uy][ux] = ud
+          for dy, dx in ((+1, +0), (-1, +0), (+0, +1), (+0, -1)):
+              vy, vx = uy + dy, ux + dx
+              if vy < 0 or vy >= n or vx < 0 or vx >= m:
+                  continue
+              if dist[vy][vx] >= ud + grid[vy][vx]:
+                  heappush(pq, (ud + grid[vy][vx], vy, vx))
+
+      return dist[n - 1][m - 1]
+
+
+  assert solve([[0, 1, 1], [1, 1, 0], [1, 1, 0]]) == 2
+  assert solve([[0, 1, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 1, 0]]) == 0
+
+
+  class Solution:
+      def minimumObstacles(self, grid: List[List[int]]) -> int:
+          return solve(grid)
+#+end_src

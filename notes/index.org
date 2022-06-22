@@ -17,6 +17,8 @@
   - [[id:E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5][Monotonic Stack]]
 - [[id:DBDF96ED-7731-40F0-BC12-C6B6C29FEF42][Math]]
   - [[id:1EB04540-F111-49BF-B21E-1A2B468F5D14][Gaussian elimination]]
+- Graphs
+  - [[id:3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A][Dijkstra Algorithm]]
 - Dynamic Programming
   - [[id:3463A33B-D953-4E75-895D-0BE4AAB16813][Top-down]]
   - [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]]
