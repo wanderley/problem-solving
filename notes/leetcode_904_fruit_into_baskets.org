@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       B3FFFC66-D15C-4C42-803F-5C2C18AA21F8
+:END:
+#+TITLE: Leetcode: 904. Fruit Into Baskets
+
+[[https://leetcode.com/problems/fruit-into-baskets/][Problem Statement]]: Given an array of $n$ integers, find the largest segment with at most two different integers.
+
+Suppose that $a$ and $b$ are the two numbers of the current segment.  For simplicity, assume that the last seen number was a $b$.  If the next number is either $a$ or $b$, we can just extend the segment.  If it is a number $c$, then we have to start a new segment where $a=b$ and $c=b$.  All that we have to do is to keep $b$ as the number that appear last in the segment and a counter of how many times it appears, since we will have to use it to bootstrap the size of the new segment.
+
+- Time complexity: $O(n)$.
+- Space complexity: $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def totalFruit(self, fruits: List[int]) -> int:
+          ans = cur = cnt_b = 0
+          a = b = None
+          for c in fruits:
+              if c == a:
+                  cur += 1
+                  cnt_b = 1
+                  a, b = b, a
+              elif c == b:
+                  cur += 1
+                  cnt_b += 1
+              else:
+                  cur = cnt_b + 1
+                  cnt_b = 1
+                  a, b = b, c
+
+              ans = max(ans, cur)
+
+          return ans
+
+  assert Solution().totalFruit([1,2,1]) == 3
+  assert Solution().totalFruit([0,1,2,2]) == 3
+  assert Solution().totalFruit([1,2,3,2,2]) == 4
+  assert Solution().totalFruit([1,0,1,4,1,4,1,2,3]) == 5
+#+end_src

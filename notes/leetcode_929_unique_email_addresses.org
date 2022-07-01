@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       F001471B-549D-4D71-8666-C39F69C3931E
+:END:
+#+TITLE: Leetcode: 929. Unique Email Addresses
+
+[[https://leetcode.com/problems/fruit-into-baskets/][Problem Statement]].
+
+A normalization of the e-mails is needed to count the number of distinct e-mails.  To do so, you can first split the e-mail by ~@~ and extract local and domain part.  From the local, you take the prefix before the first ~+~ and remove all ~.~ from it.  After the normalization, you can remove the duplicates by adding all them to a set.
+
+- Time and space complexity: $O(n)$ where $n$ is the number of e-mails.
+
+#+begin_src python
+  class Solution:
+      def numUniqueEmails(self, emails: List[str]) -> int:
+          def normalize(email):
+              local, domain = email.split("@")
+              base = local.split("+")[0].replace(".", "")
+              return base + "@" + domain
+
+          return len(set(map(normalize, emails)))
+#+end_src
