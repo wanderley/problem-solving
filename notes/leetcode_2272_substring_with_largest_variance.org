@@ -1,0 +1,95 @@
+:PROPERTIES:
+:ID:       AE28A4AB-6EEF-4B03-9DEB-64CA6FC42B1F
+:END:
+#+TITLE: Leetcode: 2272. Substring With Largest Variance
+
+Quadratic
+#+begin_src python
+
+  def solve_chegado_mal_mal(s):
+      n = len(s)
+      ans = 0
+      cnt = [0] * 30
+      nums = [0] * n
+
+      for i in range(n):
+          for j in range(30):
+              cnt[j] = 0
+          for j in range(n):
+              nums[j] = 0
+
+          cur_max = 0
+          cur_min = None
+
+          for j in range(i, n):
+              c = ord(s[j]) - ord("a")
+              old_cnt = cnt[c]
+              new_cnt = old_cnt + 1
+              cnt[c] = new_cnt
+
+              cur_max = max(cur_max, new_cnt)
+
+              if new_cnt == 1:
+                  cur_min = 1
+                  nums[1] += 1
+              else:
+                  nums[old_cnt] -= 1
+                  nums[new_cnt] += 1
+                  if cur_min == old_cnt and nums[old_cnt] == 0:
+                      cur_min = new_cnt
+              ans = max(ans, cur_max - cur_min)
+      return ans
+#+end_src
+
+Linear
+#+begin_src python
+  def solve(s):
+      n = len(s)
+      letters = set(s)
+      ans = 0
+
+      for x in letters:
+          for y in letters:
+              if x == y:
+                  continue
+
+              cur = 0
+              seen_y = False
+              starts_on_y = False
+              for c in s:
+                  if c != x and c != y:
+                      continue
+
+                  if cur == -1 and c == y:
+                      cur = -1
+                      seen_y = True
+                      starts_on_y = True
+                  elif cur == 0 and c == y:
+                      if starts_on_y:
+                          cur = 0
+                          starts_on_y = False
+                      else:
+                          cur = -1
+                          starts_on_y = True
+                  elif cur > 0 and c == y and starts_on_y:
+                      starts_on_y = False
+                  else:
+                      cur += 1 if c == x else -1
+
+                  seen_y = seen_y or c == y
+                  if seen_y:
+                      ans = max(ans, cur)
+
+      return ans
+
+
+  assert solve("aababbb") == 3
+  assert solve("abcde") == 0
+  assert solve("aabbbbaa") == 3
+  assert solve("icexiahccknibwuwgi") == 3
+  assert solve("uwwuu") == 1
+
+  class Solution:
+      def largestVariance(self, s: str) -> int:
+          return solve(s)
+#+end_src
