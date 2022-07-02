@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       32919D8E-D3F6-452D-920C-91145D44350A
+:END:
+#+TITLE: Leetcode: 849. Maximize Distance to Closest Person
+
+Be $l(i)$ the distance of the next one on the left of $i$ and $r(i)$ the distance of the next one on the right of $i$.  The solution for the problem is $\max_{0 \leq i < n} \min(l(i), r(i))$.  We can compute $l$ by iterating over all position while keeping track of the position of the last one.  Note that $r$ can be computed in a similar way.
+
+- Time complexity: $O(n)$.
+- Space complexity: $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def maxDistToClosest(self, seats: List[int]) -> int:
+          INF = 10**9
+
+          def calc_dist(seats):
+              ans = []
+              last_one = None
+              for i, s in enumerate(seats):
+                  if s == 1:
+                      last_one = i
+                      ans.append(0)
+                  else:
+                      ans.append(INF if last_one is None else i - last_one)
+              return ans
+          ans = 0
+          for l, r in zip(calc_dist(seats), reversed(calc_dist(reversed(seats)))):
+              ans = max(ans, min(l, r))
+          return ans
+
+  assert Solution().maxDistToClosest([1,0,0,0,1,0,1]) == 2
+  assert Solution().maxDistToClosest([1,0,0,0]) == 3
+  assert Solution().maxDistToClosest([0,1]) == 1
+#+end_src

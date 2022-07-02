@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       014C1068-4C04-4AAD-9FB2-A26033335C34
+:END:
+#+TITLE: Practice #003
+
+- Time Spent: 41 minutes 33 seconds
+- Time Allotted: 1 hour
+- Practiced at 2022-07-02 Sat
+
+* [[id:5947D4EE-1CDA-4718-8EE9-3FE9979C986F][Leetcode: 788. Rotated Digits]]
+
+- Cons
+
+  - Rushed to code instead of verifying what makes a number valid or not.  The final code was different from the initial version, since it wasn't necessary to store the digits to check if a number after transformation was valid or not.
+
+  - Had to calm down and start from scratch when the solution started to become unnecessarily complicated.
+
+- Pros
+
+  - Thought about the solution to generate the valid numbers, but discarded it since the constraints allowed an $O(n \times \log(n))$ solution.
+
+* [[id:32919D8E-D3F6-452D-920C-91145D44350A][Leetcode: 849. Maximize Distance to Closest Person]]
+
+- Pros
+
+  - Implemented how to compute the distance to the next left one and after that saw that I could use the same algorithm to compute the distance to the next right by reverting the input.
