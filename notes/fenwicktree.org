@@ -5,7 +5,8 @@
 
 Reference: [[https://cp-algorithms.com/data_structures/fenwick.html#finding-sum-in-one-dimensional-array][Algorithms for Competitive Programming: Fenwick Tree]]
 
-* Python
+* Prefix Sum
+** Python
 
 #+begin_src python
   class FenwickTree:
@@ -38,7 +39,7 @@ Reference: [[https://cp-algorithms.com/data_structures/fenwick.html#finding-sum-
   assert f.sum(0, 8) == -1
 #+end_src
 
-* C++
+** C++
 
 #+begin_src C++
   struct FenwickTree {
@@ -73,7 +74,47 @@ Reference: [[https://cp-algorithms.com/data_structures/fenwick.html#finding-sum-
   };
 #+end_src
 
-* Problem: Count number of interval intersections
+** Problem: Count number of interval intersections
 :PROPERTIES:
 :ID:       45BF6518-3BF3-4BBC-80B2-8AEF4F386E41
 :END:
+* Min/Max
+
+#+begin_src python
+  class FenwickTreeMin:
+      def __init__(self, n):
+          self.n = n
+          self.inf = 10**9
+          self.bit = [self.inf] * n
+
+      def getmin(self, r):
+          ret = self.inf
+          while r >= 0:
+              ret = min(ret, self.bit[r])
+              r = (r & (r + 1)) - 1
+          return ret
+
+      def update(self, idx, val):
+          while idx < self.n:
+              self.bit[idx] = min(self.bit[idx], val)
+              idx = idx | (idx + 1)
+
+
+  class FenwickTreeMax:
+      def __init__(self, n):
+          self.n = n
+          self.inf = -(10**9)
+          self.bit = [self.inf] * n
+
+      def getmax(self, r):
+          ret = self.inf
+          while r >= 0:
+              ret = max(ret, self.bit[r])
+              r = (r & (r + 1)) - 1
+          return ret
+
+      def update(self, idx, val):
+          while idx < self.n:
+              self.bit[idx] = max(self.bit[idx], val)
+              idx = idx | (idx + 1)
+#+end_src
