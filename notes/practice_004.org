@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       75F7DE70-9B14-4B4C-BC59-F1C463C06547
+:END:
+#+TITLE: Practice #004
+
+- Time Spent: 20 minutes 30 seconds
+- Time Allotted: 1 hour
+- Completed: July 2, 2022 4:43 PM
+
+* [[id:0DBDF1EF-68D9-48E7-AF96-A4B1F7BB53DF][Leetcode: 344. Reverse String]]
+
+- Not much, since this is an elementary problem.
+
+* [[id:3E6C3C54-F5AD-44FE-8BDE-AC52E0D3A01E][Leetcode: 1504. Count Submatrices With All Ones]]
+
+- Retrospective
+  - Pros
+    - Found solution by first guessing the complexity ($O(n^2 \times m^2)$ won't pass, $O(n \times m^2)$ would pass) and then translating it back to the problem (e.g. I would have to fix the bottom of the rectangle and iterate over the its sides).
+  - Cons
+    - Did not follow the method to see if I could find a $O(n \times m)$ solution.

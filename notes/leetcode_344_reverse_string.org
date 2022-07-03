@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       0DBDF1EF-68D9-48E7-AF96-A4B1F7BB53DF
+:END:
+#+TITLE: Leetcode: 344. Reverse String
+
+You can solve this problem with two pointers: one starting from the begin of the array and other from the end.  Each iteration you swap the number from one side to the other until you reach the element on the middle of the array.  Time complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def reverseString(self, s: List[str]) -> None:
+          """
+          Do not return anything, modify s in-place instead.
+          """
+          i = 0
+          j = len(s) - 1
+          while i < j:
+              s[i], s[j] = s[j], s[i]
+              i += 1
+              j -= 1
+
+
+  v = ["h", "e", "l", "l", "o"]
+  Solution().reverseString(v)
+  assert v == ["o", "l", "l", "e", "h"]
+
+  v = ["H", "a", "n", "n", "a", "h"]
+  Solution().reverseString(v)
+  assert v == [
+      "h",
+      "a",
+      "n",
+      "n",
+      "a",
+      "H",
+  ]
+#+end_src
