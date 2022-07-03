@@ -1,0 +1,75 @@
+:PROPERTIES:
+:ID:       5E11A927-CA97-4250-A917-7DF934CFCB5A
+:END:
+#+TITLE: Practice #006: Leetcode
+
+- Time Spent: 32 minutes 47 seconds
+- Time Allotted: 1 hour
+- Completed: July 3, 2022 1:35 PM
+- Score: 5.99
+
+* Leetcode: 482. License Key Formatting
+:PROPERTIES:
+
+:ID:       68FE274B-E4D2-42FF-AEBE-1B378112223F
+:END:
+[[https://leetcode.com/problems/license-key-formatting/][Problem Statement]]
+
+Remove all dashes from $s$ and then from the end to the begin add char by char with the proper dash.  On the end, you just have to reverse the string.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def licenseKeyFormatting(self, s: str, k: int) -> str:
+          s = s.replace("-", "")
+          j = 0
+          ans = ""
+          for i, c in enumerate(reversed(s.upper())):
+              if c == "-":
+                  continue
+              ans += c
+              j += 1
+              if j == k and i + 1 < len(s):
+                  ans += "-"
+                  j = 0
+          return "".join(reversed(ans))
+
+  assert Solution().licenseKeyFormatting("5F3Z-2e-9-w", 4) == "5F3Z-2E9W"
+  assert Solution().licenseKeyFormatting("2-5g-3-J", 2) == "2-5G-3J"
+
+#+end_src
+
+* Leetcode: 388. Longest Absolute File Path
+:PROPERTIES:
+:ID:       F9331026-52CB-4AEC-AAA5-3C520DC03801
+:END:
+
+[[https://leetcode.com/problems/longest-absolute-file-path/][Problem Statement]]
+
+Keep a stack with the current directories and use the total length of it to compute the total length of the absolute path.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def lengthLongestPath(self, input: str) -> int:
+          ans = 0
+          prefix_len = 0
+          dirs = []
+          for w in input.split("\n"):
+              depth = w.count("\t")
+              while len(dirs) > depth:
+                  prefix_len -= dirs.pop()
+              if "." in w:
+                  ans = max(ans, prefix_len + len(w))
+              else:
+                  dirs.append(len(w) - depth)
+                  prefix_len += len(w) - depth
+          return ans
+
+
+  assert (
+      Solution().lengthLongestPath(
+          "dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"
+      )
+      == 32
+  )
+  assert Solution().lengthLongestPath("a") == 0
+#+end_src
