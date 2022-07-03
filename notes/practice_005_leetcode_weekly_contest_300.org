@@ -1,0 +1,163 @@
+:PROPERTIES:
+:ID:       4D48A680-BA63-45AA-BEAC-E66B6DA76E2D
+:END:
+#+TITLE: Practice #005: Leetcode Weekly Contest 300
+
+- Time Spent: 1 hour 25 minutes 30 seconds
+- Time Allotted: 1 hour 30 minutes
+- Completed: July 2, 2022 9:00 PM
+- Solved: 1, 2, 3
+
+* Leetcode: 2325. Decode the Message
+:PROPERTIES:
+:ID:       10D794B3-0165-4790-AB11-2657EB20B556
+:END:
+
+The solution consist on following the rules.  Keep a pointer to the next unused letter of the alphabet (starting from ~a~) and bumped it after assign to the next non-mapped letter from the key string.  After that, iterate over the message decrypting it.  Time and space complexity: $O(n+m)$ where $n$ is the size of the key and $m$ is the size of the message.
+
+#+begin_src python
+  class Solution:
+      def decodeMessage(self, key: str, message: str) -> str:
+          sub = {" ": " "}
+          next_letter = "a"
+          for c in key:
+              if c in sub:
+                  continue
+              sub[c] = next_letter
+              next_letter = chr(ord(next_letter) + 1)
+          ans = ""
+          for c in message:
+              ans += sub[c]
+          return ans
+
+
+  assert (
+      Solution().decodeMessage(
+          "the quick brown fox jumps over the lazy dog", "vkbs bs t suepuv"
+      )
+      == "this is a secret"
+  )
+  assert (
+      Solution().decodeMessage(
+          "eljuxhpwnyrdgtqkviszcfmabo", "zwx hnfx lqantp mnoeius ycgk vcnjrdb"
+      )
+      == "the five boxing wizards jump quickly"
+  )
+#+end_src
+
+* Leetcode: 2326. Spiral Matrix IV
+:PROPERTIES:
+:ID:       E14E9536-5A07-47B6-98BE-F3036E99EA96
+:END:
+
+To transverse the grid doing a spiral starting from $(0,0)$, you have to go to the left as much as possible, then go down as much as possible, then go right as much as possible and then go top as much as possible.  The definition of "as much as possible" is (1) the next position is inside the grid and it hasn't a value assigned to it.  Time and space complexity is $O(m * n)$.
+
+#+begin_src python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, val=0, next=None):
+  #         self.val = val
+  #         self.next = next
+  class Solution:
+      def spiralMatrix(self, m: int, n: int, head: Optional[ListNode]) -> List[List[int]]:
+          ans = [[-1] * n for _ in range(m)]
+          i = j = d = 0
+          dir = [[+0, +1], [+1, +0], [+0, -1], [-1, +0]]
+
+          def valid(i, j):
+              return 0 <= i < m and 0 <= j < n and ans[i][j] == -1
+
+          while head is not None and valid(i, j):
+              ans[i][j] = head.val
+              head = head.next
+              if valid(i + dir[d][0], j + dir[d][1]):
+                  i += dir[d][0]
+                  j += dir[d][1]
+              else:
+                  d = (d + 1) % 4
+                  i += dir[d][0]
+                  j += dir[d][1]
+          return ans
+#+end_src
+
+* Leetcode: 2327. Number of People Aware of a Secret
+:PROPERTIES:
+:ID:       882E88FD-021C-463C-A216-0DD7DDD6A0BC
+:END:
+
+Retrospective: My intuition was that the problem had a recurrence like $f(n)=f(n-1)+f(n-2)+...$, and I spent a long time trying to make one big recurrence to work.  I only unblocked myself when I decided to break the formula in parts that made more sense like "how can I define the number of people alive?" and "how can I define the number of people born on this day?" and so on.
+
+Be $d(n)$ and $b(n)$ the number of people that died (don't pass the secret anymore) and are born (people that heard about the secret) on the $n$-th day.  We can compute $a(n)=a(n-1)-d(n)+b(n)$ as the number of people that are alive (knows the secret) on the $n$-th day.  The number of people that died on the $n$-th is the number of people that were born $forget$ days ago: $d(n)=b(n-forget)$.  The trick part of the problem is to compute $b(n)$ which is the people that were born $n-forget+1$ days ago ($n$-th is the last day to tell the secret to someone else), $n-forget+2$, ..., $n-delay$ ($n$ is the first day that they told the secret to someone else): $b(n)=b(n-forget+1)+b(n-forget+2)+...+b(n-delay+1)$.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from functools import cache
+
+  class Solution:
+      def peopleAwareOfSecret(self, n: int, delay: int, forget: int) -> int:
+          M = 10 ** 9 + 7
+
+          @cache
+          def born(n):
+              if n == 1:
+                  return 1
+              if n < 1:
+                  return 0
+              ans = 0
+              for i in range(n - forget + 1, n - delay + 1):
+                  ans = (ans + born(i)) % M
+              return ans
+
+          def die(n):
+              return born(n - forget) % M
+
+          @cache
+          def alive(n):
+              if n == 0:
+                  return 0
+              return (alive(n - 1) - die(n) + born(n)) % M
+
+          return alive(n) % M
+
+
+  assert Solution().peopleAwareOfSecret(6, 2, 4) == 5
+  assert Solution().peopleAwareOfSecret(4, 1, 3) == 6
+#+end_src
+
+* Leetcode: 2328. Number of Increasing Paths in a Grid
+:PROPERTIES:
+:ID:       06853D2F-2827-4724-8C10-2993907099D9
+:END:
+
+Retrospective: My intuition pointed to process the cell from the smaller to the bigger values (I used a similar trick on [[id:D178FB4C-1257-41C6-A386-E7BF78FDC62A][Leetcode: 329. Longest Increasing Path in a Matrix]]).  With this, the solution was straight-forward.
+
+Be $(i, j)$ the coordinate of the cell with the greatest value on the grid.  If we knew the number of paths for all its neighbors $k$, then it is easy to compute the number of path that end on $(i, j)$: $1 + k$.  If we remove this cell from the grid, we can compute the same for the second largest cell up to the point where there is only one cell which the number of paths that end on it is 1.  From this observation we can derive the following algorithm, from cell with the smallest value to the greatest values, compute the number of path that end on each one of them.  On the end, sum the number of paths that end on each cell on the grid and you have the answer for the problem.  Time and space complexity is $O(n \times m)$ where $n$ is the number of rows of the grid and $m$ is the number of columns.
+
+#+begin_src python
+  class Solution:
+      def countPaths(self, grid: List[List[int]]) -> int:
+          MOD = 10**9 + 7
+          n = len(grid)
+          m = len(grid[0])
+          pos = []
+          for i in range(n):
+              for j in range(m):
+                  pos.append((grid[i][j], i, j))
+
+          pos = list(sorted(pos))
+          dp = [[1] * m for _ in range(n)]
+          dir = [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]
+          ans = 0
+          for _, i, j in pos:
+              for d in dir:
+                  ni = i + d[0]
+                  nj = j + d[1]
+                  if 0 <= ni < n and 0 <= nj < m and grid[ni][nj] < grid[i][j]:
+                      dp[i][j] += dp[ni][nj]
+              ans = (ans + dp[i][j]) % MOD
+
+          return ans
+
+
+  assert Solution().countPaths([[1, 1], [3, 4]]) == 8
+  assert Solution().countPaths([[1], [2]]) == 3
+#+end_src
