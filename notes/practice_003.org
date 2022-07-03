@@ -5,7 +5,7 @@
 
 - Time Spent: 41 minutes 33 seconds
 - Time Allotted: 1 hour
-- Practiced at 2022-07-02 Sat
+- Completed: July 2, 2022 1:51 PM
 
 * [[id:5947D4EE-1CDA-4718-8EE9-3FE9979C986F][Leetcode: 788. Rotated Digits]]
 

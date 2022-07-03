@@ -7,7 +7,7 @@
 
 * [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]]
 
-By the problem's constraints, we should only consider going from a cell $(i, j)$ to $(x, y)$ if the value on $(x, y)$ is adjacent to $(i, j)$ and its value is greater than the value of $(i, j)$.  In the following example, if we want to discover the biggest path that ends on 9 at $(0, 0)$, we must first find the longest paths ending on 6 $(0, 2)$ and 4 $(1, 0)$.  So, there is an order which the cells should be processed.
+By the problem's constraints, we should only consider going from a cell $(i, j)$ to $(x, y)$ if $(x, y)$ is adjacent to $(i, j)$ and its value is greater than the value of $(i, j)$.  In the following example, if we want to discover the biggest path that ends on 9 at $(0, 0)$, we must first find the longest paths ending on 6 $(0, 2)$ and 4 $(1, 0)$.  So, there is an order which the cells should be processed.
 
 | 9 | 9 | 4 |
 | 6 | 6 | 8 |
