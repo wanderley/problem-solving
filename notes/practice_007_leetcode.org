@@ -1,0 +1,124 @@
+:PROPERTIES:
+:ID:       FA29F917-34B4-44FE-AD94-DAA078CEF6BA
+:END:
+#+TITLE: Practice #007: Leetcode
+
+- Time Spent: 1 hour 14 minutes 8 seconds
+- Time Allotted: 2 hours
+- Completed: July 3, 2022 2:48 PM
+- Score: Didn't finish (solved first two problems)
+
+
+* Leetcode: 1047. Remove All Adjacent Duplicates In String
+:PROPERTIES:
+:ID:       870CFCB3-3BB6-472A-89FD-0E6EF2BCD828
+:END:
+
+[[https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/][Problem Statement]]
+
+Keep a [[id:06D27BC1-DFDC-4063-B3A9-7074FD5E13B3][stack]] with the chars on the answer.  For each new char from the input, pop the stack if it matches its top, or add it to the stack.
+
+#+begin_src python
+  class Solution:
+      def removeDuplicates(self, s: str) -> str:
+          ans = []
+          for c in s:
+              if len(ans) > 0 and ans[-1] == c:
+                  ans.pop()
+              else:
+                  ans.append(c)
+          return "".join(ans)
+
+
+  assert Solution().removeDuplicates("abbaca") == "ca"
+  assert Solution().removeDuplicates("azxxzy") == "ay"
+#+end_src
+
+* Leetcode: 1087. Brace Expansion
+:PROPERTIES:
+:ID:       EB7BD1BE-3F50-4BF9-988A-C42C50B4EC32
+:END:
+
+[[https://leetcode.com/problems/brace-expansion/][Problem Statement]]
+
+As the problem asks for all permutations, then it will be fine to generate each on of them efficiently.  Recur over each possible character building the final string, and store the built word on the end of the recursion.  Space complexity is $O(n)$ while time complexity is $O(n \times 3^{n/7})$ since max words generated will require groups with exactly 3 options:
+
+#+begin_src python
+  return [("Base", "Max Words")] + [
+      (b, b ** (50 // (b + b - 1 + 2))) for b in [2, 3, 4, 5]
+  ]
+#+end_src
+
+#+RESULTS:
+| Base | Max Words |
+|    2 |      1024 |
+|    3 |      2187 |
+|    4 |      1024 |
+|    5 |       625 |
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def expand(self, s: str) -> List[str]:
+          n = len(s)
+          ans = []
+
+          def dfs(i, cur):
+              if i == n:
+                  ans.append(cur)
+                  return
+              if s[i] == "{":
+                  j = s.index("}", i)
+                  for c in sorted(s[i + 1 : j].split(",")):
+                      dfs(j + 1, cur + c)
+              else:
+                  dfs(i + 1, cur + s[i])
+
+          dfs(0, "")
+          return ans
+
+
+  assert Solution().expand("{a,b}c{d,e}f") == ["acdf", "acef", "bcdf", "bcef"]
+  assert Solution().expand("abcd") == ["abcd"]
+#+end_src
+
+* Leetcode: 1032. Stream of Characters
+:PROPERTIES:
+:ID:       4B93CC61-13C2-4A87-BE10-E9434560FF41
+:END:
+
+[[https://leetcode.com/problems/stream-of-characters/][Problem Statement]]
+
+Retrospective:  I didn't solve this problem during the practice, but I thought about creating a trie with the words reversed.  I didn't went deep on the idea and searched for other ways to solve.  After that, I got caught on making a solution using prefix arrays for each word but with $O(n)$ for each query which resulted on time limit exceeded.
+
+The operation =query= should be efficient (faster than $O(n)$).  Construct a [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]] with the words in the dictionary reversed.  Add each char from the query to a queue and keep only the last $200$.  After that, search in the trie the current word on the stream.  Note that the word on the stream is in the reverse order what matches with the fact that our trie was created with the words reversed.  So, the search will find any word in the dictionary that is a prefix of the stream.  Time and space complexity is $O(m)$ where $m$ is the sum of the length of all words.
+
+#+begin_src python
+  from collections import deque
+
+
+  class StreamChecker:
+      def __init__(self, words: List[str]):
+          self.stream = deque(maxlen=max(map(len, words)) + 1)
+          self.trie = {}
+          for w in words:
+              node = self.trie
+              for c in reversed(w):
+                  if c not in node:
+                      node[c] = {}
+                  node = node[c]
+              node["$"] = True
+
+      def query(self, letter: str) -> bool:
+          self.stream.appendleft(letter)
+          node = self.trie
+          for c in self.stream:
+              if "$" in node:
+                  return True
+              if c not in node:
+                  return False
+              node = node[c]
+          return "$" in node
+#+end_src
