@@ -1,0 +1,149 @@
+:PROPERTIES:
+:ID:       FCA477AF-14F2-4294-9570-5D321E7C53B4
+:END:
+#+TITLE: Practice #008: Leetcode
+
+- Time Spent: 2 hours
+- Time Allotted: 2 hours
+- Completed: July 3, 2022 9:22 PM
+- Score: 3.12 (solved only the first two)
+
+
+* Leetcode: 1165. Single-Row Keyboard
+:PROPERTIES:
+:ID:       4AC01586-F394-447E-9C40-53DC2E08FD23
+:END:
+[[https://leetcode.com/problems/single-row-keyboard/][Problem Statement]]
+
+Create a map from letter to position in the keyboard and then compute the distance using it.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def calculateTime(self, keyboard: str, word: str) -> int:
+          pos = {}
+          for i, c in enumerate(keyboard):
+              pos[c] = i
+          ans = 0
+          cur = 0
+          for c in word:
+              ans += abs(pos[c] - cur)
+              cur = pos[c]
+          return ans
+
+
+  assert Solution().calculateTime("abcdefghijklmnopqrstuvwxyz", "cba") == 4
+  assert Solution().calculateTime("pqrstuvwxyzabcdefghijklmno", "leetcode") == 73
+#+end_src
+
+* Leetcode: 1161. Maximum Level Sum of a Binary Tree
+:PROPERTIES:
+:ID:       A2D2B126-9D20-4270-9680-3CA9994C7590
+:END:
+[[https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/][Problem Statement]]
+
+Do a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] keeping the sum of the number in each level.  The following implementation uses a special symbol =$= to mark the end of each level which is used to update the answer.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from collections import deque
+
+  # Definition for a binary tree node.
+  # class TreeNode:
+  #     def __init__(self, val=0, left=None, right=None):
+  #         self.val = val
+  #         self.left = left
+  #         self.right = right
+  class Solution:
+      def maxLevelSum(self, root: Optional[TreeNode]) -> int:
+          q = deque()
+          best_sum = root.val
+          best_level = 1
+
+          sum = 0
+          level = 1
+          q.append(root)
+          q.append("$")
+
+          while len(q) > 0:
+              e = q.popleft()
+              if e is None:
+                  continue
+              if e == "$":
+                  if sum > best_sum:
+                      best_sum = sum
+                      best_level = level
+                  if len(q) > 0:
+                      q.append("$")
+                      sum = 0
+                      level += 1
+                  continue
+              sum += e.val
+              if e.left is not None:
+                  q.append(e.left)
+              if e.right is not None:
+                  q.append(e.right)
+
+          return best_level
+#+end_src
+
+* Leetcode: 975. Odd Even Jump
+:PROPERTIES:
+:ID:       508859CE-E7D1-41B7-A3D9-5DCDDB7B4803
+:END:
+[[https://leetcode.com/problems/odd-even-jump/][Problem Statement]]
+
+Retrospective: Saw that the dp was trivial after knowing the next higher and lower for each position.  I wrongly tried to use a heap to keep this value, but failed.  Then, I wrote a quadratic algorithm to solve the next higher and lower subproblem, but it didn't pass on time.  I remember to tell myself "It seems that I can use a stack to compute this values".  I failed to ask myself "[[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]".
+
+We can divide this problem in three problems: (1) [[id:3AF9BB42-14CD-444D-9130-D3B0B23F89E7][Problem: Next /smallest/ greater or equal integer in unsorted array]], (2) [[id:C5F5ED6F-39FE-49C4-99AB-27E45AFE761F][Problem: Next /greatest/ smaller or equal integer in unsorted array]] and (3) count the number of good starting indices.  The first two problems are important because they solve the problem to compute the *next* odd-numbered jump and even-numbered jump respectively.  After that solved, we have to solve the following recurrence
+
+\begin{equation*}
+  f(i, t)=\begin{cases}
+    1, & \mbox{if $i = n-1$ \\
+    f(g(i), E) & \mbox{if $t = O$ and $g(i) \neq False$} \\
+    f(e(i), O) & \mbox{if $t = E$ and $e(i) \neq False$} \\
+    False & \mbox{otherwise}.
+  \end{cases}
+\end{equation*}
+
+which will be $True$ if starting from the position $i$ after doing a $t$ jump type ($E$ means even-numbered jump and $O$ odd-numbered jump), and $False$ otherwise.  The problem space is linear and take constant time to be computed if $g$ and $e$ is already solved.
+
+The time complexity for the problem is $O(n \log n)$ since $O(n)$ to compute $f$ is dominated by the times to compute $g$ and $e$ which is $O(n \log n)$.  The space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def oddEvenJumps(self, arr: List[int]) -> int:
+          n = len(arr)
+          stack = []
+          ojump = [None] * n
+          for v, i in sorted(zip(arr, range(n))):
+              while len(stack) > 0 and stack[-1] < i:
+                  ojump[stack.pop()] = i
+              stack.append(i)
+
+          stack = []
+          ejump = [None] * n
+          for v, i in sorted(zip(map(lambda v: -v, arr), range(n))):
+              while len(stack) > 0 and stack[-1] < i:
+                  ejump[stack.pop()] = i
+              stack.append(i)
+
+          dp = {(n - 1, "o"): True, (n - 1, "e"): True}
+          for i in range(n - 2, -1, -1):
+              o = ojump[i]
+              dp[(i, "e")] = False if o is None else dp[(o, "o")]
+              e = ejump[i]
+              dp[(i, "o")] = False if e is None else dp[(e, "e")]
+
+          ans = set()
+          for k in dp:
+              if k[1] == "e" and dp[k] == True:
+                  ans.add(k[0])
+          return len(ans)
+
+
+  assert Solution().oddEvenJumps([10, 13, 12, 14, 15]) == 2
+  assert Solution().oddEvenJumps([2, 3, 1, 1, 4]) == 3
+  assert Solution().oddEvenJumps([5, 1, 3, 4, 2]) == 3
+#+end_src
