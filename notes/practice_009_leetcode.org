@@ -1,0 +1,190 @@
+:PROPERTIES:
+:ID:       C713E491-8E96-4F81-9A2B-E6E00C417CE9
+:END:
+#+TITLE: Practice #009: Leetcode
+
+- Time Spent: 2 hours
+- Time Allotted: 2 hours
+- Completed: July 5, 2022 9:51 PM
+- Score: 3.12 (solved only the first two, but got the right idea for the last one)
+
+* Leetcode: 205. Isomorphic Strings
+:PROPERTIES:
+:ID:       FDCB28B6-ED3B-45D7-9794-08E1B7C4C454
+:END:
+[[https://leetcode.com/problems/isomorphic-strings/][Problem Statement]]
+
+Retrospective: I didn't spend much planing the algorithm and jumped to writing the code what ended on "Wrong Answer" verdict.  After that, I carefully planned the algorithm from scratch and got the right solution.  Takeaway: don't jump to code (even for easy problems) before planing what you are going to do.
+
+The solution consists on keeping track of the letters on $s$ associated with letters in $t$ and vice-versa while you validate $s$.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def isIsomorphic(self, s: str, t: str) -> bool:
+          st = {}
+          ts = {}
+          for a, b in zip(s, t):
+              if st.get(a, b) != b:
+                  return False
+              if ts.get(b, a) != a:
+                  return False
+              st[a] = b
+              ts[b] = a
+          return True
+
+
+  assert Solution().isIsomorphic("egg", "add") == True
+  assert Solution().isIsomorphic("foo", "bar") == False
+  assert Solution().isIsomorphic("paper", "title") == True
+#+end_src
+
+* Leetcode: 855. Exam Room
+:PROPERTIES:
+:ID:       9781A17A-2F80-4368-A98A-08F6008A7839
+:END:
+[[https://leetcode.com/problems/exam-room/][Problem Statement]]
+
+Retrospective: I didn't see the $O(n^2)$ solution which was way easier to code: you iterate over the used seats and compute their mid seats.  By the other hand, I am happy that I could focus and find the correct a data structure to solve the queries in $O(\log n)$.  Takeaway: sometimes the data-structure is a combination of multiple data-structures (e.g. set and priority queue).
+
+Be $n$ the number of queries.  To solve this problem efficiently, we have to build a data-structure that is able to insert, remove intervals and query the interval where the middle point is far as possible from its extreme points.  For the query operation, we can keep the interval in a [[id:FCBEA48C-CFF6-43C4-B430-BCD00E245D22][Priority-Queue]] which is sorted by the distance of the middle point to their extremes.  That allow us to know the seat to return on =seat= in time $O(1)$.  It takes $O(\log n)$ to insert new interval on the priority-queue, but there is no efficiently way to remove the items from anywhere in the queue.  To make this operation efficient, we keep a set of *current* intervals and use it to clean-up the queue when querying the best interval.  It is done by poping from the queue all outdated intervals until the top is an up-to-date interval (i.e. contained in the set).  The lookup operation in a set is $O(1)$, and the amortized time for finding the best interval is $O(\log n)$ due the clean-up operation.  The last trick part to solve is how to merge two intervals when a seat becomes free again.  To do that, we keep two maps: one for intervals that end on the number $p$ and one for the intervals that start on the number $p$.  With these maps, we can quickly find the interval to merge and delete then from the queue and set and later add the new one.  Space complexity is $O(n)$.  Time complexity is $O(\log n)$ for both operations =seat= and =leave=.
+
+#+begin_src python
+  from heapq import heappush, heappop
+
+  V = 0
+  S = 1
+  E = 2
+
+
+  class ExamRoom:
+      def __init__(self, n: int):
+          self.n = n
+
+          self.l = {}
+          self.r = {}
+
+          self.i = set()
+          self.pq = []
+
+          self._insert(0, n - 1)
+
+      def seat(self) -> int:
+          assert len(self.i) > 0
+
+          i = self._pop()
+          if i[S] == 0 and i[E] != 0:
+              self._insert(1, i[E])
+              return 0
+
+          if i[E] == self.n - 1 and i[S] != self.n - 1:
+              self._insert(i[S], i[E] - 1)
+              return self.n - 1
+
+          m = i[S] + (i[E] - i[S]) // 2
+          self._insert(i[S], m - 1)
+          self._insert(m + 1, i[E])
+          return m
+
+      def leave(self, p: int) -> None:
+          s = e = p
+          if self.l.get(p - 1):
+              s = self.l[p - 1][S]
+              self._delete(self.l[p - 1])
+          if self.r.get(p + 1):
+              e = self.r[p + 1][E]
+              self._delete(self.r[p + 1])
+          self._insert(s, e)
+
+      def _insert(self, s, e):
+          i = (-self._value(s, e), s, e)
+          self.l[e] = i
+          self.r[s] = i
+          self.i.add(i)
+          heappush(self.pq, i)
+
+      def _pop(self):
+          # remove outdated intervals
+          while self.pq[0] not in self.i:
+              heappop(self.pq)
+          assert len(self.pq) >= len(self.i)
+
+          i = heappop(self.pq)
+          self._delete(i)
+          return i
+
+      def _delete(self, i):
+          self.l[i[E]] = None
+          self.r[i[S]] = None
+          self.i.remove(i)
+
+      def _value(self, s, e):
+          if s == 0:
+              return e
+          if e == self.n - 1:
+              return self.n - s - 1
+          return (s + (e - s) // 2) - s
+
+
+  e = ExamRoom(10)
+  assert e.seat() == 0
+  assert e.seat() == 9
+  assert e.seat() == 4
+  assert e.seat() == 2
+  assert e.leave(4) == None
+  assert e.seat() == 5
+#+end_src
+
+* Leetcode: 394. Decode String
+:PROPERTIES:
+:ID:       4AC01B30-EC54-4B59-A49D-4660002F7925
+:END:
+[[https://leetcode.com/problems/decode-string/][Problem Statement]]
+
+The core observation on this problem is that we have to decode the pattern from bottom to up.  This can be done by keeping a [[id:06D27BC1-DFDC-4063-B3A9-7074FD5E13B3][Stack]] that contains either a number or a string which needs to be duplicated.  As the input is always valid, it is guaranteed that after a =]=, we will have a string in the top followed by a number.  Note that we suppose that a new char is always appended to the top of the stack.  Then, we duplicate the string as much is needed and add the result back to the queue.  Space complexity is $O(n)$.  Time complexity is $O(w)$ where $w \leq 10^5$ is the size of the final string.
+
+#+begin_src python
+  class Solution:
+      def decodeString(self, s: str) -> str:
+          def value(c):
+              return int(c) if c in "0123456789" else c
+
+          stack = []
+          for c in s:
+              if len(stack) == 0:
+                  assert c != "]"
+                  stack.append(value(c))
+                  continue
+
+              if c == "[":
+                  stack.append("")
+                  continue
+
+              if c == "]":
+                  assert len(stack) >= 2
+                  assert isinstance(stack[-2], int), stack
+                  assert isinstance(stack[-1], str)
+                  v = stack[-1] * stack[-2]
+                  stack.pop()
+                  stack.pop()
+                  if len(stack) > 0 and isinstance(stack[-1], str):
+                      stack[-1] = stack[-1] + v
+                  else:
+                      stack.append(v)
+                  continue
+
+              else:
+                  v = value(c)
+                  if isinstance(v, int) and isinstance(stack[-1], int):
+                      stack[-1] = stack[-1] * 10 + v
+                  elif isinstance(v, str) and isinstance(stack[-1], str):
+                      stack[-1] = stack[-1] + v
+                  else:
+                      stack.append(v)
+
+          return "".join(stack)
+
+
+  assert Solution().decodeString("3[a]2[bc]") == "aaabcbc"
+  assert Solution().decodeString("3[a2[c]]") == "accaccacc"
+  assert Solution().decodeString("2[abc]3[cd]ef") == "abcabccdcdcdef"
+#+end_src
