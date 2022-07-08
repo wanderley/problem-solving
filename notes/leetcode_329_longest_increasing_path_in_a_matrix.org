@@ -13,7 +13,7 @@ By the problem's constraints, we should only consider going from a cell $(i, j)$
 | 6 | 6 | 8 |
 | 2 | 1 | 1 |
 
-Given the cells ordered by their values, it is possible to compute the longest path ending on them by extending the longest paths that ended on their smaller neighbors (which by the order was already processed).
+[[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  Given the cells ordered by their values, it is possible to compute the longest path ending on them by extending the longest paths that ended on their smaller neighbors (which by the order was already processed).
 
 With $N$ as the number of rows and $M$ and number of columns,
 - time complexity: $O(N \times (M + log(N)))$, and
