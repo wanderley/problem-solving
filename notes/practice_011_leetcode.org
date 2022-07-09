@@ -1,0 +1,140 @@
+:PROPERTIES:
+:ID:       CD92427B-B655-4117-9EB6-12C0023271FB
+:END:
+#+TITLE: Practice #011: Leetcode
+
+- Time Spent: 36 minutes 17 seconds
+- Time Allotted: 2 hours
+- Completed: July 6, 2022 10:34 PM
+- Score: 8.12
+
+* Leetcode: 830. Positions of Large Groups
+:PROPERTIES:
+:ID:       12499642-8ED4-481F-A0D7-A6B94ACE470B
+:END:
+[[https://leetcode.com/problems/positions-of-large-groups/][Problem Statement]]
+
+Keep two pointers to mark the begin and end indexes of a string with copies of the same letter.  This will be enough to list all intervals requested by the problem.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def largeGroupPositions(self, s: str) -> List[List[int]]:
+          ans = []
+          i = 0
+          for j, c in enumerate(s):
+              if c != s[i]:
+                  if j - i >= 3:
+                      ans.append([i, j - 1])
+                  i = j
+          if len(s) - i >= 3:
+              ans.append([i, len(s) - 1])
+          return ans
+
+
+  assert Solution().largeGroupPositions("abbxxxxzzy") == [[3, 6]]
+  assert Solution().largeGroupPositions("abc") == []
+  assert Solution().largeGroupPositions("abcdddeeeeaabbbcd") == [[3, 5], [6, 9], [12, 14]]
+#+end_src
+
+* Leetcode: 894. All Possible Full Binary Trees
+:PROPERTIES:
+:ID:       D9735CA3-F93C-4BA6-996A-255034A8E3E0
+:END:
+[[https://leetcode.com/problems/all-possible-full-binary-trees/][Problem Statement]]
+
+[[id:31D0B1E0-6881-478A-8F48-160BCFD94F31][Can we divide the search-space in two parts and combine solutions from both sides to solve the original problem?]]  The answer is yes.  For $n=0$, there are zero possible trees.  For $n=1$, there is only one with one node.  For $n>1$, we can split $n=a+b-1$ and compute all possible trees with $a$ and $b$ nodes and combine them with a new root to create an unique tree with $n$ nodes.
+
+#+begin_src python
+  from functools import cache
+
+  # Definition for a binary tree node.
+  # class TreeNode:
+  #     def __init__(self, val=0, left=None, right=None):
+  #         self.val = val
+  #         self.left = left
+  #         self.right = right
+  class Solution:
+      @cache
+      def allPossibleFBT(self, n: int) -> List[Optional[TreeNode]]:
+          if n == 0:
+              return []
+          if n == 1:
+              return [TreeNode()]
+
+          ans = []
+          for l in range(1, n - 1):
+              r = n - l - 1
+              lt = self.allPossibleFBT(l)
+              if len(lt) == 0:
+                  continue
+              rt = self.allPossibleFBT(r)
+              if len(rt) == 0:
+                  continue
+              for ln in lt:
+                  for rn in rt:
+                      ans.append(TreeNode(val=0, left=ln, right=rn))
+          return ans
+#+end_src
+
+
+* Leetcode: 1463. Cherry Pickup II
+:PROPERTIES:
+:ID:       31979208-8DE3-4C35-8BE1-475897CB3624
+:END:
+[[https://leetcode.com/problems/cherry-pickup-ii/][Problem Statement]]
+
+We can describe the problem using the following recurrence: $f(i, a, b)$ is $0$ if $i == n$, otherwise it will be the cherries collected by each robot plus the best possible moves for both of them.  The problem-space has $O(n \times m^2)$ nodes and require $O(1)$ to compute each one of them.  So, the time and space complexity is $O(n \times m^2)$.
+
+#+begin_src python
+  from functools import cache
+  from typing import List
+
+
+  class Solution:
+      def cherryPickup(self, grid: List[List[int]]) -> int:
+          n = len(grid)
+          m = len(grid[0])
+
+          def neighbours(j):
+              for dj in [-1, +0, +1]:
+                  if 0 <= j + dj < m:
+                      yield j + dj
+
+          @cache
+          def dfs(i, a, b):
+              if i == n:
+                  return 0
+              if a > b:
+                  return dfs(i, b, a)
+              base = grid[i][a]
+              if a != b:
+                  base += grid[i][b]
+
+              best = None
+              for na in neighbours(a):
+                  for nb in neighbours(b):
+                      v = dfs(i + 1, na, nb)
+                      if best is None or best < v:
+                          best = v
+              return base + best
+
+          return dfs(0, 0, m - 1)
+
+
+  assert Solution().cherryPickup([[3, 1, 1], [2, 5, 1], [1, 5, 5], [2, 1, 1]]) == 24
+  assert (
+      Solution().cherryPickup(
+          [
+              [1, 0, 0, 0, 0, 0, 1],
+              [2, 0, 0, 0, 0, 3, 0],
+              [2, 0, 9, 0, 0, 0, 0],
+              [0, 3, 0, 5, 4, 0, 0],
+              [1, 0, 2, 3, 0, 0, 6],
+          ]
+      )
+      == 28
+  )
+#+end_src

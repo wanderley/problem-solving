@@ -1,0 +1,96 @@
+:PROPERTIES:
+:ID:       F84BEEB1-BFDF-43A4-8BED-E89332D15E3C
+:END:
+#+TITLE: Practice #010: Leetcode
+
+- Time Spent: 23 minutes 28 seconds
+- Time Allotted: 1 hour 30 minutes
+- Completed: July 6, 2022 10:04 PM
+- Score: 7.35
+
+* Leetcode: 989. Add to Array-Form of Integer
+:PROPERTIES:
+:ID:       13FAA06D-C35B-450D-9EA8-7A9F320AC81D
+:END:
+[[https://leetcode.com/problems/add-to-array-form-of-integer/][Problem Statement]]
+
+Simulate the add operation and make sure that you split left-most number in its digits when you are done adding.
+
+#+begin_src python
+  from typing import List
+
+  class Solution:
+      def addToArrayForm(self, num: List[int], k: int) -> List[int]:
+          for i in range(len(num) - 1, -1, -1):
+              v = num[i] + k
+              num[i] = v % 10
+              k = v // 10
+          pref = []
+          while k > 0:
+              pref.append(k % 10)
+              k = k // 10
+          return list(reversed(pref)) + num
+
+
+  assert Solution().addToArrayForm([1, 2, 0, 0], 34) == [1, 2, 3, 4]
+  assert Solution().addToArrayForm([2, 7, 4], 181) == [4, 5, 5]
+  assert Solution().addToArrayForm([2, 1, 5], 806) == [1, 0, 2, 1]
+#+end_src
+
+* Leetcode: 1314. Matrix Block Sum
+:PROPERTIES:
+:ID:       A2E67F80-1104-4549-BF6E-747F4C618296
+:END:
+[[https://leetcode.com/problems/matrix-block-sum/][Problem Statement]]
+
+[[id:02D11D2D-72DB-4E18-8843-56A90935B5EC][Can we define the problem in terms of continuous sums?]]  Be $s[i][j]$ the sum of all numbers in the sub-matrix $mat[0..i][0..j]$ inclusive.  With $s$, we can compute the sum of any rectangular sub-matrix of $mat$: sum of $mat[k..i][p..j]$ is $s[i][j]-s[k-1][j]-s[i][p-1]+s[i-1][j-1]$.  Iterate over all $(i, j)$ of $mat$ and compute the sum of the sub-matrix (squared) with center $(i, j)$ and length $2k \times 2k$.  Time and space complexity is $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+
+  class Solution:
+      def matrixBlockSum(self, mat: List[List[int]], k: int) -> List[List[int]]:
+          n = len(mat)
+          m = len(mat[0])
+          a = [[0] * m for _ in range(n)]
+
+          for i in range(n):
+              s = 0
+              for j in range(m):
+                  s += mat[i][j]
+                  a[i][j] = s
+                  if i > 0:
+                      a[i][j] += a[i - 1][j]
+
+          def sum(i, j):
+              if 0 <= i < n and 0 <= j < m:
+                  return a[i][j]
+              return 0
+
+          ans = [[0] * m for _ in range(n)]
+          for i in range(n):
+              for j in range(m):
+                  si = max(i - k, 0)
+                  sj = max(j - k, 0)
+                  ei = min(i + k, n - 1)
+                  ej = min(j + k, m - 1)
+
+                  ans[i][j] += sum(ei, ej)
+                  ans[i][j] -= sum(si - 1, ej)
+                  ans[i][j] -= sum(ei, sj - 1)
+                  ans[i][j] += sum(si - 1, sj - 1)
+
+          return ans
+
+
+  assert Solution().matrixBlockSum([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1) == [
+      [12, 21, 16],
+      [27, 45, 33],
+      [24, 39, 28],
+  ]
+  assert Solution().matrixBlockSum([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 2) == [
+      [45, 45, 45],
+      [45, 45, 45],
+      [45, 45, 45],
+  ]
+#+end_src

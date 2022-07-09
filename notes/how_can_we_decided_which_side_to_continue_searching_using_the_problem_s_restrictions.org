@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       C65814C2-1833-4599-8443-AD0F94C8AA22
+:END:
+#+TITLE: How can we decided which side to continue searching using the problem's restrictions?

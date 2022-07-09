@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       BA8FA096-1785-4100-BF9F-E1D101994F21
+:END:
+#+TITLE: Can we formulate the problem as searching the last element that satisfy a condition?

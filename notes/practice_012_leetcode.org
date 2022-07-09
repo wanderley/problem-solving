@@ -1,0 +1,126 @@
+:PROPERTIES:
+:ID:       AEB011A3-7B2B-456E-9E1F-1839AE1266FD
+:END:
+#+TITLE: Practice #012: Leetcode
+
+- Time Spent: 1 hour 18 minutes 58 seconds
+- Time Allotted: 2 hours
+- Completed: July 7, 2022 11:20 AM
+- Score: 5.82
+
+* Leetcode: 392. Is Subsequence
+:PROPERTIES:
+:ID:       FEA87FAF-B7AA-49AB-901F-44DC05D7F544
+:END:
+[[https://leetcode.com/problems/is-subsequence/][Problem Statement]]
+
+Keep a pointer $i$ for the last letter matched on $s$ while iterating on letters of $t$.  If $i=|s|$ after iterating over all letters of $t$, then $s$ is a subsequence of $t$.  Time complexity is $O(|s|)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def isSubsequence(self, s: str, t: str) -> bool:
+          i = 0
+          for c in t:
+              if i < len(s) and c == s[i]:
+                  i += 1
+          return i == len(s)
+
+
+  assert Solution().isSubsequence("abc", "ahbgdc") == True
+  assert Solution().isSubsequence("axc", "ahbgdc") == False
+#+end_src
+
+* Leetcode: 221. Maximal Square
+:PROPERTIES:
+:ID:       617C67A5-6F07-4046-9F98-111EFAD8DF39
+:END:
+[[https://leetcode.com/problems/maximal-square/][Problem Statement]]
+
+[[id:02D11D2D-72DB-4E18-8843-56A90935B5EC][Can we define the problem in terms of continuous sums?]]  We can check if a squared sub-matrix sums up to square of its sizes.  A [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] can help to find the size of the largest squared sub-matrix with all ones.  The time complexity is $O(n \times m \times \log(\max(n, m)^2))$ and space is $O(n \times m)$.  Note that this problem has a similar solution of [[id:A2E67F80-1104-4549-BF6E-747F4C618296][Leetcode: 1314. Matrix Block Sum]].
+
+#+begin_src python
+  from typing import List
+
+  class Solution:
+      def maximalSquare(self, matrix: List[List[str]]) -> int:
+          n = len(matrix)
+          m = len(matrix[0])
+          a = [[0] * m for _ in range(n)]
+
+          for i in range(n):
+              s = 0
+              for j in range(m):
+                  s += int(matrix[i][j])
+                  a[i][j] = s
+                  if i > 0:
+                      a[i][j] += a[i - 1][j]
+
+          def area(i, j):
+              if i < 0 or j < 0:
+                  return 0
+              return a[i][j]
+
+          def find_square(side):
+              square = side * side
+              for i in range(n):
+                  for j in range(m):
+                      s = area(i, j)
+                      s -= area(i - side, j)
+                      s -= area(i, j - side)
+                      s += area(i - side, j - side)
+                      if s == square:
+                          return True
+              return False
+
+          s = 0
+          e = min(n, m) * min(n, m)
+          while s + 1 < e:
+              mid = s + (e - s) // 2
+              if find_square(mid):
+                  s = mid
+              else:
+                  e = mid - 1
+          if find_square(e):
+              return e * e
+          return s * s
+
+
+  assert (
+      Solution().maximalSquare(
+          [
+              ["1", "0", "1", "0", "0"],
+              ["1", "0", "1", "1", "1"],
+              ["1", "1", "1", "1", "1"],
+              ["1", "0", "0", "1", "0"],
+          ]
+      )
+      == 4
+  )
+  assert Solution().maximalSquare([["0", "1"], ["1", "0"]]) == 1
+  assert Solution().maximalSquare([["0"]]) == 0
+#+end_src
+
+* Leetcode: 1153. String Transforms Into Another String
+:PROPERTIES:
+:ID:       B2103687-C959-49EC-BE58-1E94CEE465BA
+:END:
+[[https://leetcode.com/problems/string-transforms-into-another-string/][Problem Statement]]
+
+What is the smallest instances of the problem and how they can help you understand the rules of the problem?  It is impossible to transform $s=cc$ to $q=bd$, since the position of $c$'s in $s$ should have the same value in $q$.  It is $s=abc$ and $q=bca$, but it wouldn't be possible if all letters were used by $q$ since there is no letter to use as transition.  The time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def canConvert(self, str1: str, str2: str) -> bool:
+          if str1 == str2:
+              return True
+          m = {}
+          for a, b in zip(str1, str2):
+              if m.get(a, b) != b:
+                  return False
+              m[a] = b
+          return len(set(str2)) != 26
+
+
+  assert Solution().canConvert("aabcc", "ccdee") == True
+  assert Solution().canConvert("leetcode", "codeleet") == False
+#+end_src

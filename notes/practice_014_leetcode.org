@@ -1,0 +1,145 @@
+:PROPERTIES:
+:ID:       9590D688-4A93-41D2-B6D0-95D80C542B2F
+:END:
+#+TITLE: Practice #014: Leetcode
+
+* Leetcode: 852. Peak Index in a Mountain Array
+:PROPERTIES:
+:ID:       4364F27C-6519-4303-B60D-6A49E4672C73
+:END:
+[[https://leetcode.com/problems/peak-index-in-a-mountain-array/][Problem Statement]]
+
+Same as [[id:1B312D82-8DED-49FE-8521-F8C2B6AAB660][Leetcode: 162. Find Peak Element]].
+
+#+begin_src python
+  from typing import List
+
+  class Solution:
+      def peakIndexInMountainArray(self, arr: List[int]) -> int:
+          n = len(arr)
+          s = 0
+          e = n - 1
+          while s < e:
+              m = s + (e - s) // 2
+              if arr[m] < arr[m + 1]:
+                  s = m + 1
+              else:
+                  e = m
+          return s
+
+
+  assert Solution().peakIndexInMountainArray([0, 1, 0]) == 1
+  assert Solution().peakIndexInMountainArray([0, 2, 1, 0]) == 1
+  assert Solution().peakIndexInMountainArray([0, 10, 5, 2]) == 1
+#+end_src
+
+* Leetcode: 1095. Find in Mountain Array
+:PROPERTIES:
+:ID:       5A17CCA1-A097-4B77-B534-995CC65D10D8
+:END:
+[[https://leetcode.com/problems/find-in-mountain-array/][Problem Statement]]
+
+We can solve the problem using three [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]]es: (1) to find the peak, (2) to find the target on the left side of the peak and (3) to find the target on the right side of the peak.  Time complexity is $O(\log(n))$ and space is $O(1)$.
+
+#+begin_src python
+  # """
+  # This is MountainArray's API interface.
+  # You should not implement it, or speculate about its implementation
+  # """
+  #class MountainArray:
+  #    def get(self, index: int) -> int:
+  #    def length(self) -> int:
+
+  class Solution:
+      def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
+          n = mountain_arr.length()
+          s = 0
+          e = n - 1
+          while s < e:
+              m = s + (e - s) // 2
+              a = mountain_arr.get(m)
+              b = mountain_arr.get(m+1)
+              if a < b:
+                  s = m + 1
+              else:
+                  e = m
+          top = s
+          a = mountain_arr.get(s)
+          if target == a:
+              return s
+
+          s, e = 0, top
+          while s < e:
+              m = s + (e - s) // 2
+              a = mountain_arr.get(m)
+              if a == target:
+                  return m
+              if a > target:
+                  e = m - 1
+              else:
+                  s = m + 1
+          if 0 <= s < n and mountain_arr.get(s) == target:
+              return s
+
+          s, e = top, n - 1
+          while s < e:
+              m = s + (e - s) // 2
+              a = mountain_arr.get(m)
+              if a == target:
+                  return m
+              if a > target:
+                  s = m + 1
+              else:
+                  e = m - 1
+          if 0 <= s < n and mountain_arr.get(s) == target:
+              return s
+          return -1
+#+end_src
+
+* Leetcode: 1110. Delete Nodes And Return Forest
+:PROPERTIES:
+:ID:       C9EE12A4-3B62-48D8-B43E-05A32CEE13EB
+:END:
+[[https://leetcode.com/problems/delete-nodes-and-return-forest/][Problem Statement]]
+
+Traverse the tree keeping track of the new roots and updating links to them (ie. deleting the links).  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  # Definition for a binary tree node.
+  # class TreeNode:
+  #     def __init__(self, val=0, left=None, right=None):
+  #         self.val = val
+  #         self.left = left
+  #         self.right = right
+  class Solution:
+      def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+          if root is None:
+              return []
+
+          def should_delete(node):
+              if node is None:
+                  return False
+              if node.val in d:
+                  return True
+
+          d = set(to_delete)
+          ans = set()
+          def dfs(node, is_root):
+              if node is None:
+                  return
+
+              if is_root and not should_delete(node):
+                  ans.add(node)
+
+              dfs(node.left, node.val in d)
+              dfs(node.right, node.val in d)
+
+              if should_delete(node.left):
+                  node.left = None
+              if should_delete(node.right):
+                  node.right = None
+
+          dfs(root, root.val not in d)
+
+          return list(ans)
+#+end_src

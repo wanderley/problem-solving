@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       02D11D2D-72DB-4E18-8843-56A90935B5EC
+:END:
+#+TITLE: Can we define the problem in terms of continuous sums?

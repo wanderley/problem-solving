@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       31D0B1E0-6881-478A-8F48-160BCFD94F31
+:END:
+#+TITLE: Can we divide the search-space in two parts and combine solutions from both sides to solve the original problem?

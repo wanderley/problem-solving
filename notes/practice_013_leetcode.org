@@ -1,0 +1,119 @@
+:PROPERTIES:
+:ID:       E419A589-563E-4323-AA33-B7FDB9B978BD
+:END:
+#+TITLE: Practice #013: Leetcode
+
+- Time Spent: 50 minutes 9 seconds
+- Time Allotted: 2 hours
+- Completed: July 7, 2022 2:55 PM
+- Score: 6.51
+
+* Leetcode: 1619. Mean of Array After Removing Some Elements
+:PROPERTIES:
+:ID:       A8B99DA8-81E2-4E2F-8998-7284A18D8E01
+:END:
+[[https://leetcode.com/problems/mean-of-array-after-removing-some-elements/][Problem Statement]]
+
+Compute the number of elements to exclude, sort the array and remove them from the beginning and end and then compute the average.  Time complexity is $O(n\times\log(n))$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def trimMean(self, arr: List[int]) -> float:
+          arr = sorted(arr)
+          n = len(arr)
+          k = int(n * 0.05)
+          return sum(arr[k : n - k]) / (n - (2 * k))
+
+
+  assert (
+      Solution().trimMean([1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3])
+      == 2.00000
+  )
+  assert (
+      Solution().trimMean([6, 2, 7, 5, 1, 2, 0, 3, 10, 2, 5, 0, 5, 5, 0, 8, 7, 6, 8, 0])
+      == 4.00000
+  )
+#+end_src
+
+* Leetcode: 1605. Find Valid Matrix Given Row and Column Sums
+:PROPERTIES:
+:ID:       5888C490-14A8-4BA8-83A7-3FC9525FB557
+:END:
+[[https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/][Problem Statement]]
+
+[[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  Suppose that we know how to pick the number that goes on $(0, 0)$.  After doing so, we would have to appropriately update $rowSum$ and $colSum$ by subtracting this value from them.  Note that this is an instance of the same problem, but with less one cell to guess.  What number is that?  $\min(rowSum[0], colSum[0])$ would make one cell in $(0, 1..n)$ and $(1..m, 0)$ to be zero while keeping $\sum rowSum[i] = \sum colSum[i]$.  Time and space complexity is $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def restoreMatrix(self, r: List[int], c: List[int]) -> List[List[int]]:
+          n = len(r)
+          m = len(c)
+          a = [[0] * m for _ in range(n)]
+          for i in range(n):
+              for j in range(m):
+                  v = min(r[i], c[j])
+                  a[i][j] = v
+                  r[i] -= v
+                  c[j] -= v
+          return a
+
+
+  assert Solution().restoreMatrix([3, 8], [4, 7]) == [[3, 0], [1, 7]]
+  assert Solution().restoreMatrix([5, 7, 10], [8, 6, 8]) == [
+      [5, 0, 0],
+      [3, 4, 0],
+      [0, 2, 8],
+  ]
+#+end_src
+
+* Leetcode: 1320. Minimum Distance to Type a Word Using Two Fingers
+:PROPERTIES:
+:ID:       FACFF62B-F427-417F-B07B-0E5A9C80A0E8
+:END:
+[[https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/][Problem Statement]]
+
+We can solve this problem with [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]] (or [[id:3463A33B-D953-4E75-895D-0BE4AAB16813][Top-down]]) by representing the problem as $f(i, ay, ax, by, bx)$ which represents the minimum distance to type a word having the fingers on position $(ay, ax)$ and $(by, bx)$.  The search-space is $O(n \times 6^4)$ and they are computed in $O(1)$.  So, the time and space complexity is $O(n \times 6^4)$.
+
+#+begin_src python
+  from functools import cache
+
+
+  class Solution:
+      def minimumDistance(self, word: str) -> int:
+          n = len(word)
+
+          def coord(c):
+              v = ord(c) - ord("A")
+              return (v // 6, v % 6)
+
+          def dist(ay, ax, by, bx):
+              return abs(ay - by) + abs(ax - bx)
+
+          @cache
+          def dfs(i, ay, ax, by, bx):
+              if i == n:
+                  return 0
+              ny, nx = coord(word[i])
+              return min(
+                  dist(ny, nx, ay, ax) + dfs(i + 1, ny, nx, by, bx),
+                  dist(ny, nx, by, bx) + dfs(i + 1, ay, ax, ny, nx),
+              )
+
+          return min(
+              dfs(0, ay, ax, by, bx)
+              for ay in range(6)
+              for ax in range(6)
+              for by in range(6)
+              for bx in range(6)
+          )
+
+
+  assert Solution().minimumDistance("CAKE") == 3
+  assert Solution().minimumDistance("HAPPY") == 6
+#+end_src

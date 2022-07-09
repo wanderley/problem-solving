@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE
+:END:
+#+TITLE: Can we state the problem as result of multiple searches?
