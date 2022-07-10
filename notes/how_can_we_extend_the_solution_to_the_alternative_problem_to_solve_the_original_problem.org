@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       A668AA75-F0F2-4730-A9FA-E07CEE0C2634
+:END:
+#+TITLE: How can we extend the solution to the alternative problem to solve the original problem?

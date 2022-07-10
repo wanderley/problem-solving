@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       DD73E390-3303-40F8-9CE1-D1ED048D9588
+:END:
+#+TITLE: How can we find the solution knowing part of it?

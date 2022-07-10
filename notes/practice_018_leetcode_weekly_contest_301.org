@@ -1,0 +1,190 @@
+:PROPERTIES:
+:ID:       E04FD0FC-D466-43B1-A91E-4EFB669F39A9
+:END:
+#+TITLE: Practice #018: Leetcode Weekly Contest 301
+
+- Time Spent: 1 hour 30 minutes
+- Time Allotted: 1 hour 30 minutes
+- Completed: July 9, 2022 9:00 PM
+- Score: 1/4
+
+* Leetcode: 2335. Minimum Amount of Time to Fill Cups
+:PROPERTIES:
+:ID:       FA4B39BC-EC6C-4561-87AC-E3DC807D9928
+:END:
+[[https://leetcode.com/problems/minimum-amount-of-time-to-fill-cups/][Problem Statement]]
+
+The greedy approach is to always remove water from the cups with most water.  That way, we make sure that we make the most usage of each second.  This approach can be implemented in many ways, but I decided sort the elements after each seconds.  Time complexity is $O(\lceil\frac{\sum amount[i]}{2}\rceil)$ and space is $O(1).
+
+#+begin_src python
+  from functools import cache
+  from typing import List
+
+
+  class Solution:
+      def fillCups(self, amount: List[int]) -> int:
+          t = 0
+          amount = list(reversed(sorted(amount)))
+          while sum(amount) > 0:
+              c = 0
+              for i in range(3):
+                  if amount[i] > 0 and c < 2:
+                      amount[i] -= 1
+                      c += 1
+              if c > 0:
+                  t += 1
+              amount = list(reversed(sorted(amount)))
+          return t
+
+
+  assert Solution().fillCups([1, 4, 2]) == 4
+  assert Solution().fillCups([5, 4, 4]) == 7
+  assert Solution().fillCups([5, 0, 0]) == 5
+#+end_src
+
+* Leetcode: 2336. Smallest Number in Infinite Set
+:PROPERTIES:
+:ID:       E3747D3E-BBE8-423F-A17D-188D6878A09D
+:END:
+[[https://leetcode.com/problems/smallest-number-in-infinite-set/][Problem Statement]]
+
+We need two data-structures: a priority queue to answer the pop efficiently and a set to avoid duplicated numbers in the queue.  Time complexity is $O(\log n)$ for each operation and space complexity is $O(n)$.
+
+#+begin_src python
+  class SmallestInfiniteSet:
+
+      def __init__(self):
+          self.pq = []
+          self.nums = set()
+          for i in range(1, 1000 + 1):
+              heappush(self.pq, i)
+              self.nums.add(i)
+
+      def popSmallest(self) -> int:
+          num = heappop(self.pq)
+          self.nums.remove(num)
+          return num
+
+      def addBack(self, num: int) -> None:
+          if num not in self.nums:
+              heappush(self.pq, num)
+              self.nums.add(num)
+
+
+  # Your SmallestInfiniteSet object will be instantiated and called as such:
+  # obj = SmallestInfiniteSet()
+  # param_1 = obj.popSmallest()
+  # obj.addBack(num)
+#+end_src
+
+* Leetcode: 2337. Move Pieces to Obtain a String
+:PROPERTIES:
+:ID:       321F4140-187B-49D8-B14A-38E5C03DA25B
+:END:
+[[https://leetcode.com/problems/move-pieces-to-obtain-a-string/][Problem Statement]]
+
+Retrospective: Spent most of the time trying to find a process to move the letter around, instead of discovering the invariant that they should keep in order to be valid.
+
+[[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can you derive an invariant based on the smallest possible examples?]]  Be $i$ and $j$ indexes on $start$ and $target$ where $start[i]$ and $target[i]$ aren't ~_~, since positions with ~_~ can be ignored as they either are equal or should have a letter moved over.  If $start[i] \neq target[j]$, then we can return $False$ since they have letters in different places.  So, $start[i] = target[j]$.  If $start[i]="L"$ and $i<j$, there is no way to move "L" to the right and the strings don't match.  If $start[i]="R"$ and $j>i$, there is no way to move "R" to the left and the strings don't match.  Otherwise, it is possible to move the letters to the right direction and we can move the next index.
+
+#+begin_src python
+  class Solution:
+      def canChange(self, start: str, target: str) -> bool:
+          n = len(start)
+          i = 0
+          j = 0
+
+          while i < n and j < n:
+              while i < n and start[i] == "_":
+                  i += 1
+              while j < n and target[j] == "_":
+                  j += 1
+
+              if i == n or j == n:
+                  return i == j
+
+              if start[i] != target[j]:
+                  return False
+
+              if (i < j and start[i] == "L") or (i > j and start[i] == "R"):
+                  return False
+
+              i += 1
+              j += 1
+
+          return True
+
+
+  assert Solution().canChange("_L__R__R_", "L______RR") == True
+  assert Solution().canChange("R_L_", "__LR") == False
+  assert Solution().canChange("_R", "R_") == False
+#+end_src
+
+* Leetcode: 2338. Count the Number of Ideal Arrays
+:PROPERTIES:
+:ID:       2970DD51-E370-40A0-9284-B00BF5C66DBD
+:END:
+[[https://leetcode.com/problems/count-the-number-of-ideal-arrays/][Problem Statement]]
+
+Retrospective: I was too focus on finding the answer by iterating over the valid arrays that I didn't even consider that I could count them using a formula.
+
+[[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Count the number of arrays with distinct numbers under the same rules:
+
+#+begin_src python
+  def dfs(i, cur):
+      if i == n:
+          return 1
+      return sum(dfs(j for j in range(cur + cur, m + 1, cur)))
+#+end_src
+
+Be $m$ the maximum value that we can have in the array of length $n$.  There are $O(n \times m)$ nodes in the search-space.  It seems that the time complexity is $O(n \times m^2)$, but actually it is less than that.  When $cur=1$, there are $m$ values for $j$.  When $cur=2$, there are $m/2$ values for $j$.  When $cur=k$, there are $\lfloor m / k \rfloor$ values for $j$.  So, the number of $j$'s iterations is $m+m/2+m/3+...+1=O(m \log m)$.  Therefore, the time complexity is $O(n \times m + m \log m)$ and space is $O(n \times m)$.
+
+#+begin_src python
+  from math import floor, sqrt, log
+
+  return [("m", "sum", "$m \times \log m$")] + [
+      (k, sum(floor(k / p) for p in range(1, k + 1)), floor(k * (log(k)/log(2))))
+      for k in range(1_000, 10_000 + 1, 1_000)
+  ]
+#+end_src
+
+#+RESULTS:
+|     m |   sum | $m \times \log m$ |
+|  1000 |  7069 |         9965 |
+|  2000 | 15518 |        21931 |
+|  3000 | 24496 |        34652 |
+|  4000 | 33805 |        47863 |
+|  5000 | 43376 |        61438 |
+|  6000 | 53141 |        75304 |
+|  7000 | 63071 |        89411 |
+|  8000 | 73147 |       103726 |
+|  9000 | 83358 |       118221 |
+| 10000 | 93668 |       132877 |
+
+[[id:A668AA75-F0F2-4730-A9FA-E07CEE0C2634][How can we extend the solution to the alternative problem to solve the original problem?]]  In the previous problem, $i$ represents the number of distinct elements ending on $cur$.  If we don't add any other element, we have $\binom{n-1}{i-1}$ possible arrays (i.e. number of ways to divide $n$ consecutive elements in $i$ groups).
+
+#+begin_src python
+  from math import comb
+  from functools import cache
+
+
+  class Solution:
+      def idealArrays(self, n: int, maxValue: int) -> int:
+          M = 10**9 + 7
+
+          @cache
+          def dfs(i, cur):
+              res = comb(n - 1, i - 1)
+              if i == n:
+                  return res
+              for j in range(cur + cur, maxValue + 1, cur):
+                  res += dfs(i + 1, j)
+                  res = res % M
+              return res % M
+
+          return sum(dfs(1, cur) for cur in range(1, maxValue + 1)) % M
+
+
+  assert Solution().idealArrays(2, 5) == 10
+  assert Solution().idealArrays(5, 3) == 11
+#+end_src

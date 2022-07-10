@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       BA632D61-93B6-47AB-B11A-7E9EBE3FC71D
+:END:
+#+TITLE: Can you derive an invariant based on the smallest possible examples?

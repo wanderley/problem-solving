@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       F19C9539-EE46-41EE-8DEF-24C3076C6DC2
+:END:
+#+TITLE: Can we simplify the problem which keeping it the same?

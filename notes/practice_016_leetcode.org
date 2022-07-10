@@ -1,0 +1,155 @@
+:PROPERTIES:
+:ID:       4B4CCCA8-2D1F-47D7-A2BF-3B1EC61D31A4
+:END:
+#+TITLE: Practice #016: Leetcode
+
+* Leetcode: 279. Perfect Squares
+:PROPERTIES:
+:ID:       97EBB344-FC20-4D68-BA3C-0CCC98ED0AE3
+:END:
+[[https://leetcode.com/problems/perfect-squares/][Problem Statement]]
+
+Retrospective: The [[id:3463A33B-D953-4E75-895D-0BE4AAB16813][Top-down]] solution received time-limit and I had to code the [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].
+
+This problem is a variation of [[id:0F085C54-E45A-41E6-951B-79CFD7ECBED5][Knapsack problem]], but on this one the value is always 1 for each used item.
+
+#+begin_src python
+  class Solution:
+      def numSquares(self, n: int) -> int:
+          inf = 10**5
+          ps = []
+          for i in range(1, n + 1):
+              if i * i > n:
+                  break
+              ps.append(i * i)
+
+          dp = [inf] * (n + 1)
+          dp[0] = 0
+          for i in range(1, n + 1):
+              for s in ps:
+                  if s > i:
+                      continue
+                  dp[i] = min(dp[i], 1 + dp[i - s])
+          return dp[n]
+
+
+  assert Solution().numSquares(12) == 3
+  assert Solution().numSquares(13) == 2
+#+end_src
+
+* Leetcode: 1145. Binary Tree Coloring Game
+:PROPERTIES:
+:ID:       01560B84-8F04-44BA-8C59-E748C6937477
+:END:
+[[https://leetcode.com/problems/binary-tree-coloring-game/][Problem Statement]]
+
+For nodes in the tree, color it as blue if possible, find the path between it and each node in the path following the problem's rule.  After it is done, count the number of blue nodes (colored and not accessible by any red node) and the number of red nodes.  If there is no initial node which blue wins, return false otherwise true.  Time complexity is $O(n^2)$ and space $O(n)$.
+
+#+begin_src python
+  from functools import cache
+
+  # Definition for a binary tree node.
+  # class TreeNode:
+  #     def __init__(self, val=0, left=None, right=None):
+  #         self.val = val
+  #         self.left = left
+  #         self.right = right
+  class Solution:
+      def btreeGameWinningMove(self, root: Optional[TreeNode], n: int, x: int) -> bool:
+
+          @cache
+          def count(node):
+              if node is None:
+                  return 0
+              return 1 + count(node.left) + count(node.right)
+
+          def path(node, val):
+              if node is None:
+                  return (False, [])
+              if node.val == val:
+                  return (True, [node])
+              l = path(node.left, val)
+              if l[0]:
+                  l[1].append(node)
+                  return l
+              r = path(node.right, val)
+              if r[0]:
+                  r[1].append(node)
+                  return r
+              return (False, [])
+
+          def print_nodes(r):
+              print(list(map(lambda n: n.val, r)))
+
+          ans = False
+          _, r1 = path(root, x)
+          for y in range(1, n + 1):
+              if y == x:
+                  continue
+              _, r2 = path(root, y)
+              i = len(r1) - 1
+              j = len(r2) - 1
+              while i >= 0 and j >= 0 and r1[i] == r2[j]:
+                  i -= 1
+                  j -= 1
+              p = r1[:i+2] + list(reversed(r2[:j+1]))
+              if len(p) % 2 == 0:
+                  i = len(p) // 2 - 1
+                  j = i + 1
+              else:
+                  i = (len(p) + 1) // 2 - 1
+                  j = i + 1
+              if (p[j] in (p[i].left, p[i].right)) and n - count(p[j]) < count(p[j]):
+                  return True
+              if (p[i] in (p[j].left, p[j].right)) and count(p[i]) < n - count(p[i]):
+                  return True
+          return False
+#+end_src
+
+* Leetcode: 1066. Campus Bikes II
+:PROPERTIES:
+:ID:       B2C281BA-F491-4B31-B578-C63FB7C24754
+:END:
+[[https://leetcode.com/problems/campus-bikes-ii/][Problem Statement]]
+
+This is a classic [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].  We try to pair, one by one, all workers with all bikes while keeping track of the used bikes.  Search-space is $O(n \times 2^m)$ and time complexity is $O(m)$ with a total time complexity of $O(n \times m \times 2^m)$.
+
+#+begin_src python
+  from functools import cache
+  from typing import List
+
+
+  class Solution:
+      def assignBikes(self, workers: List[List[int]], bikes: List[List[int]]) -> int:
+          n = len(workers)
+          m = len(bikes)
+
+          def dist(a, b):
+              return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+          @cache
+          def dfs(i, vis):
+              if i == n:
+                  return 0
+              ans = None
+              for j in range(m):
+                  if (vis & (1 << j)) != 0:
+                      continue
+                  cur = dist(workers[i], bikes[j]) + dfs(i + 1, vis | (1 << j))
+                  if ans is None or ans > cur:
+                      ans = cur
+              return ans
+
+          return dfs(0, 0)
+
+
+  assert Solution().assignBikes([[0, 0], [2, 1]], [[1, 2], [3, 3]]) == 6
+  assert Solution().assignBikes([[0, 0], [1, 1], [2, 0]], [[1, 0], [2, 2], [2, 1]]) == 4
+  assert (
+      Solution().assignBikes(
+          [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]],
+          [[0, 999], [1, 999], [2, 999], [3, 999], [4, 999]],
+      )
+      == 4995
+  )
+#+end_src

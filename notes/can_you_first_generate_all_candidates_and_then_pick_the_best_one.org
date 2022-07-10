@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       638547C6-7305-4AA8-A57B-D570C1C323DD
+:END:
+#+TITLE: Can you first generate all candidates and then pick the best one?
