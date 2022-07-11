@@ -1,0 +1,119 @@
+:PROPERTIES:
+:ID:       932AB6F7-7985-445B-9BB0-9D6FB6E4E08C
+:END:
+#+TITLE: Practice #020: Leetcode
+
+- Time Spent: 1 hour 11 minutes 18 seconds
+- Time Allotted: 1 hour 30 minutes
+- Completed: July 11, 2022 10:25 AM
+- Score: 7.43
+
+* Leetcode: 657. Robot Return to Origin
+[[https://leetcode.com/problems/robot-return-to-origin/][Problem Statement]]
+
+Simulate the robot by adding or subtracting one from its axes.
+
+#+begin_src python
+  class Solution:
+      def judgeCircle(self, moves: str) -> bool:
+          y = x = 0
+          for m in moves:
+              if m == "R":
+                  x += 1
+              elif m == "L":
+                  x -= 1
+              elif m == "U":
+                  y += 1
+              elif m == "D":
+                  y -= 1
+          return y == 0 and x == 0
+
+
+  assert Solution().judgeCircle("UD") == True
+  assert Solution().judgeCircle("LL") == False
+#+end_src
+
+* Leetcode: 809. Expressive Words
+[[https://leetcode.com/problems/expressive-words/][Problem Statement]]
+
+Use [[id:06D27BC1-DFDC-4063-B3A9-7074FD5E13B3][Stack]] to find the groups and them compare them to see if they are valid.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def expressiveWords(self, s: str, words: List[str]) -> int:
+          def group(s):
+              stack = []
+              for c in s:
+                  if len(stack) == 0 or stack[-1][0] != c:
+                      stack.append([c, 1])
+                  else:
+                      stack[-1][1] += 1
+              return stack
+
+          gs = group(s)
+          ans = 0
+          for w in words:
+              gw = group(w)
+              if len(gs) != len(gw):
+                  continue
+              i = 0
+              while i < len(gs):
+                  if gs[i][0] != gw[i][0]:
+                      break
+                  if gs[i][1] < gw[i][1]:
+                      break
+                  if gw[i][1] < gs[i][1] and gs[i][1] < 3:
+                      break
+                  i += 1
+              ans += 1 if i == len(gs) else 0
+          return ans
+
+
+  assert Solution().expressiveWords("heeellooo", ["hello", "hi", "helo"]) == 1
+  assert Solution().expressiveWords("zzzzzyyyyy", ["zzyy", "zy", "zyy"]) == 3
+#+end_src
+
+* Leetcode: 947. Most Stones Removed with Same Row or Column
+[[https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/][Problem Statement]]
+
+[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Yes, the stones are vertices and two are connected if they share the same row or column.  For each connected component, we won't be able to pick one stone.  Therefore, the answer is the number of vertices minus the number of components.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def removeStones(self, stones: List[List[int]]) -> int:
+          N = len(stones)
+
+          comps = []
+          vis = [False] * N
+
+          def find(u):
+              vis[u] = True
+              ans = 1
+              for v in range(N):
+                  if not vis[v] and (
+                      stones[v][0] == stones[u][0] or stones[v][1] == stones[u][1]
+                  ):
+                      find(v)
+              return ans
+
+          ans = N
+          for i in range(N):
+              if vis[i]:
+                  continue
+              find(i)
+              ans -= 1
+          return ans
+
+
+  assert Solution().removeStones([[0, 0], [0, 1], [1, 0], [1, 2], [2, 1], [2, 2]]) == 5
+  assert Solution().removeStones([[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]]) == 3
+  assert Solution().removeStones([[0, 0]]) == 0
+#+end_src
+
+* [[id:D178FB4C-1257-41C6-A386-E7BF78FDC62A][Leetcode: 329. Longest Increasing Path in a Matrix]]

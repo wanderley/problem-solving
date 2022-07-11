@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       DA1E3A63-73BB-475E-B087-128602B13450
+:END:
+#+TITLE: Can we formulate the problem using graphs?

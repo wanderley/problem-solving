@@ -24,30 +24,22 @@ With $N$ as the number of rows and $M$ and number of columns,
 
 
   def solve(m):
-      def get_val(i, j):
-          if i < 0 or i == len(m) or j < 0 or j == len(m[0]):
-              return 0
-          return m[i][j]
+      N = len(m)
+      M = len(m[0])
 
-      def get_dist(i, j):
-          if i < 0 or i == len(m) or j < 0 or j == len(m[0]):
-              return 0
-          return dist[i][j]
+      cells = []
+      for i in range(N):
+          for j in range(M):
+              cells.append((m[i][j], i, j))
+      cells = list(sorted(cells))
 
-      cells = sorted(
-          [(i, j, cell) for i, row in enumerate(m) for j, cell in enumerate(row)],
-          key=lambda c: c[2],
-      )
-      dist = [[0 for _ in row] for row in m]
-      dir = [(+0, +1), (+0, -1), (+1, +0), (-1, +0)]
-
-      ans = 0
-      for i, j, cell in cells:
-          dist[i][j] = 1
-          for ii, jj in dir:
-              if get_val(i + ii, j + jj) < get_val(i, j):
-                  dist[i][j] = max(dist[i][j], 1 + get_dist(i + ii, j + jj))
-          ans = max(ans, dist[i][j])
+      dp = [[1] * M for _ in range(N)]
+      ans = 1
+      for v, i, j in cells:
+          for di, dj in [(+0, +1), (+0, -1), (+1, +0), (-1, +0)]:
+              if 0 <= i + di < N and 0 <= j + dj < M and m[i][j] > m[i + di][j + dj]:
+                  dp[i][j] = max(dp[i][j], 1 + dp[i + di][j + dj])
+                  ans = max(ans, dp[i][j])
       return ans
 
 
@@ -57,6 +49,6 @@ With $N$ as the number of rows and $M$ and number of columns,
 
 
   class Solution:
-      def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
-          return solve(matrix)
+      def longestIncreasingPath(self, m: List[List[int]]) -> int:
+          return solve(m)
 #+end_src
