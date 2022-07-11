@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID:       9DDD900C-F3A0-497F-B818-324A86C7EE37
 :END:
-#+TITLE: Leetcode 2290. Minimum Obstacle Rmoval to Reach Corner
+#+TITLE: Leetcode: 2290. Minimum Obstacle Rmoval to Reach Corner
 
 [[https://leetcode.com/problems/minimum-obstacle-removal-to-reach-corner/][Problem Statement]]: Given an matrix $m \times n$ where $0$ represents an empty cell and $1$ represents an obstacle, determine the minimum number of obstacle to remove (or pass over) to go from $(0, 0)$ to $(m-1, n-1)$.
 
