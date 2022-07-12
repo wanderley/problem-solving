@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       29512D97-A54D-42F9-A8C7-C3422881933B
+:END:
+#+TITLE: Can we use brute-force to solve the problem?

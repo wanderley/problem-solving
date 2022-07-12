@@ -1,0 +1,134 @@
+:PROPERTIES:
+:ID:       06D60FCD-62D1-4A83-8F8B-65068F790D75
+:END:
+#+TITLE: Practice #021: Leetcode
+
+* Leetcode: 1592. Rearrange Spaces Between Words
+[[https://leetcode.com/problems/rearrange-spaces-between-words/][Problem Statement]]
+
+Compute the number of spaces and words and reassemble them back using the proper spacing.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def reorderSpaces(self, text: str) -> str:
+          spaces = 0
+          word_start = None
+          words = []
+          for i in range(len(text)):
+              if text[i] == " ":
+                  spaces += 1
+                  if word_start is not None:
+                      words.append(text[word_start:i])
+                      word_start = None
+              elif word_start is None:
+                  word_start = i
+
+          if word_start is not None:
+              words.append(text[word_start:])
+
+          if len(words) == 1:
+              return words[0] + (" " * spaces)
+
+          mid = spaces // (len(words) - 1)
+          extra = spaces - mid * (len(words) - 1)
+          return (" " * mid).join(words) + (" " * extra)
+
+
+  assert (
+      Solution().reorderSpaces("  this   is  a sentence ") == "this   is   a   sentence"
+  )
+  assert (
+      Solution().reorderSpaces(" practice   makes   perfect")
+      == "practice   makes   perfect "
+  )
+#+end_src
+
+* Leetcode: 801. Minimum Swaps To Make Sequences Increasing
+:PROPERTIES:
+:ID:       44971F8A-80A3-44BE-A3B2-4DBA73543AC2
+:END:
+[[https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/][Problem Statement]]
+
+[[id:26656051-E32D-42FE-9315-05ADB46A1A82][Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?]]  Suppose that the array has length 1.  The solution is either keeping the number as they are or swapping them.  Now, suppose that the array has length 2.  We can swap the first element and use second unchanged or swap it too.  In short, we can define the problem from $i$ in term of the best we can do for $i+1$, since the choices for $i+1$ are independent for $i$.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minSwap(self, nums1: List[int], nums2: List[int]) -> int:
+          N = len(nums1)
+
+          nums1.append(float("inf"))
+          nums2.append(float("inf"))
+
+          pa = 0
+          pb = 0
+
+          for i in range(N - 1, -1, -1):
+              na = float("inf")
+              nb = float("inf")
+
+              if nums1[i] < nums1[i + 1] and nums2[i] < nums2[i + 1]:
+                  na = min(na, pa)
+                  nb = min(nb, 1 + pb)
+
+              if nums1[i] < nums2[i + 1] and nums2[i] < nums1[i + 1]:
+                  na = min(na, pb)
+                  nb = min(nb, 1 + pa)
+
+              pa = na
+              pb = nb
+
+          return min(pa, pb)
+
+
+  assert Solution().minSwap([1, 3, 5, 4], [1, 2, 3, 7]) == 1
+  assert Solution().minSwap([0, 3, 5, 8, 9], [2, 1, 4, 6, 9]) == 1
+#+end_src
+
+* Leetcode: 1088. Confusing Number II
+:PROPERTIES:
+:ID:       10784D03-9070-490D-9C0B-B2D969C31A1D
+:END:
+[[https://leetcode.com/problems/confusing-number-ii/][Problem Statement]]
+
+[[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The only thing to keep an eye on is the test if the number is different from its reversed version.  The code above generate all numbers, but it would be also useful to generate all numbers that start with numbers different than 0, what would allow us to generate the rotate and make the comparison in $O(1)$.  Time complexity is $O(5^n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def confusingNumberII(self, n: int) -> int:
+          digits = list(map(int, str(n)))
+          N = len(digits)
+          valid_digits = [0, 1, 6, 8, 9]
+
+          ans = 0
+
+          def dfs(i, smaller, n):
+              if i == N:
+                  r = 0
+                  k = n
+                  while k > 0:
+                      d = k % 10
+                      if d == 6:
+                          d = 9
+                      elif d == 9:
+                          d = 6
+                      r = r * 10 + d
+                      k = k // 10
+                  return 1 if n != r else 0
+
+              ans = 0
+              limit = digits[i] + 1 if not smaller else 10
+              for d in valid_digits:
+                  if not smaller and d > digits[i]:
+                      break
+                  ans += dfs(i + 1, smaller or (d < digits[i]), n * 10 + d)
+              return ans
+
+          return dfs(0, False, 0)
+
+
+  assert Solution().confusingNumberII(20) == 6
+  assert Solution().confusingNumberII(100) == 19
+#+end_src

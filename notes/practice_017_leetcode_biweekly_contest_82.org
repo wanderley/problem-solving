@@ -91,7 +91,7 @@ Retrospective: Simplify the problem by generating the possible candidates and th
 :END:
 [[https://leetcode.com/problems/minimum-sum-of-squared-difference/][Problem Statement]]
 
-[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem which keeping it the same?]]  We can substitute $nums_1$ and $nums_2$ by $a[i]=\mbox{abs}(nums_1[i], nums_2[i])$.  With that, the problem continues the same: modify any elements of $a$ by $+1$ or $-1$ at most $k=k_1+k_2$.  The key to make this process efficient is to group $a[i]$ with $a[j]$ if $a[i]=a[j]$.  To do so, we have to pick the biggest $a[i]$ and reduce it until there is no more operations left.  This can generate a new number smaller than the previous one or two numbers if we couldn't reduce them all, but we will never have more than $10^5$ numbers in the process.
+[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  We can substitute $nums_1$ and $nums_2$ by $a[i]=\mbox{abs}(nums_1[i], nums_2[i])$.  With that, the problem continues the same: modify any elements of $a$ by $+1$ or $-1$ at most $k=k_1+k_2$.  The key to make this process efficient is to group $a[i]$ with $a[j]$ if $a[i]=a[j]$.  To do so, we have to pick the biggest $a[i]$ and reduce it until there is no more operations left.  This can generate a new number smaller than the previous one or two numbers if we couldn't reduce them all, but we will never have more than $10^5$ numbers in the process.
 
 #+begin_src python
   from typing import List

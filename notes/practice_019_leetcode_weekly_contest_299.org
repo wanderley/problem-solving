@@ -64,7 +64,7 @@ The following [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]] c
 :END:
 [[https://leetcode.com/problems/maximum-score-of-spliced-array/][Problem Statement]]
 
-[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem which keeping it the same?]]  We can solve the problem of swapping a subsequence of $a$ by one in $b$ and the other way around, since they contribute independently to the final answer.  For each problem, we can compute $f(i)$ which is the maximum value that we can get by either starting swapping on $i$ or using the original values.  On the end, we have to combine $f(i)+a[0]+a[1]+...+a[i-1]$ to solve the original problem.  Time and space complexity is $O(n)$
+[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  We can solve the problem of swapping a subsequence of $a$ by one in $b$ and the other way around, since they contribute independently to the final answer.  For each problem, we can compute $f(i)$ which is the maximum value that we can get by either starting swapping on $i$ or using the original values.  On the end, we have to combine $f(i)+a[0]+a[1]+...+a[i-1]$ to solve the original problem.  Time and space complexity is $O(n)$
 
 #+begin_src python
   from functools import cache
