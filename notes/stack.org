@@ -2,3 +2,48 @@
 :ID:       06D27BC1-DFDC-4063-B3A9-7074FD5E13B3
 :END:
 #+TITLE: Stack
+
+* Max Stack
+:PROPERTIES:
+:ID:       A0500087-56D9-4D34-936F-E8E3912C4761
+:END:
+
+#+begin_src python
+  class MaxStack:
+
+      def __init__(self):
+          self.freq = {}
+          self.stack = []
+          self.pq = []
+
+      def push(self, x: int) -> None:
+          self.freq[x] = self.freq.get(x, 0) + 1
+          self.stack.append((x, self.freq[x]))
+          heappush(self.pq, (-x, -self.freq[x]))
+
+      def pop(self) -> int:
+          x, _ = self.stack.pop()
+          self.freq[x] -= 1
+          self._clean_up()
+          return x
+
+      def top(self) -> int:
+          return self.stack[-1][0]
+
+      def peekMax(self) -> int:
+          return -self.pq[0][0]
+
+      def popMax(self) -> int:
+          x, _ = heappop(self.pq)
+          x = -x
+          self.freq[x] -= 1
+          self._clean_up()
+          return x
+
+      def _clean_up(self):
+          while len(self.stack) > 0 and self.freq[self.stack[-1][0]] != self.stack[-1][1]:
+              self.stack.pop()
+
+          while len(self.pq) > 0 and self.freq[-self.pq[0][0]] != -self.pq[0][1]:
+              heappop(self.pq)
+#+end_src

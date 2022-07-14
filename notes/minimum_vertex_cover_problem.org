@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       A293CEDD-F976-4FA2-97F3-02DF918E73B1
+:END:
+#+TITLE: Minimum vertex cover problem

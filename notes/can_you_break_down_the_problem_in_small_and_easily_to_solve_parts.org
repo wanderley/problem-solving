@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       69D68202-BF1A-4D72-A0EC-DDCBAF112500
+:END:
+#+TITLE: Can you break-down the problem in small and easily to solve parts?

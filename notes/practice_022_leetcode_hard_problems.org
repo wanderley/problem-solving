@@ -1,0 +1,676 @@
+:PROPERTIES:
+:ID:       CCE8B891-5B15-4840-ACCA-7BB744804150
+:END:
+#+TITLE: Practice #022: Leetcode Hard Problems
+
+* Leetcode: 42. Trapping Rain Water
+:PROPERTIES:
+:ID:       08B1CF58-22CC-4634-B230-96D578138B73
+:WA: 1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-11 Mon 21:56]--[2022-07-11 Mon 22:41] =>  0:45
+:END:
+[[https://leetcode.com/problems/trapping-rain-water/][Problem Statement]]
+
+[[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  There is nothing to do if we have just one or two walls.  With three walls $h_1, h_2$ and $h_3$, there is no water trapped if $h_1<h_2<h_3$ or $h_1>h_2>h_3$, but there is water trapped if $h_1>h_2$ and $h_3>h_2$.  In the last case, we can compute the amount of water trapped $(\min(h_3,h_1) - h_2) \times (i_3 - i_1 - 1)$.  After that, we can remove $a_2$, add $a_3$ and continue the process with the next height.  We can use [[id:E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5][Monotonic Stack]] to keep track of the heights and solve the problem in time and space $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def trap(self, height: List[int]) -> int:
+          N = len(height)
+          stack = []
+          ans = 0
+          print()
+          for i in range(N):
+              while len(stack) > 0 and height[stack[-1]] < height[i]:
+                  j = stack.pop()
+                  if len(stack) > 0:
+                      cur = (min(height[stack[-1]], height[i]) - height[j]) * (
+                          i - stack[-1] - 1
+                      )
+                      ans += cur
+              stack.append(i)
+          return ans
+
+
+  assert Solution().trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]) == 6
+  assert Solution().trap([4, 2, 0, 3, 2, 5]) == 9
+#+end_src
+
+* Leetcode: 68. Text Justification
+:PROPERTIES:
+:ID:       7CACB161-1117-4C63-AF27-9537365BECC4
+:WA: 0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-12 Tue 10:42]--[2022-07-12 Tue 11:11] =>  0:29
+:END:
+[[https://leetcode.com/problems/text-justification/][Problem Statement]]
+
+[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can you break-down the problem in small and easily to solve parts?]]  The smaller parts are (1) split the list on the words on each line, (2) justify one line and (3) left-justify one line.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+          def justify(line):
+              if len(line) == 1:
+                  return line[0] + (" " * (maxWidth - len(line[0])))
+
+              s = sum(map(len, line))
+              ans = ""
+              g = len(line) - 1
+              e = (maxWidth - s) // g
+              x = maxWidth - s - e * g
+              for i, w in enumerate(line):
+                  if i > 0:
+                      ans += " " * e
+                      ans += " " if x > 0 else ""
+                      x -= 1
+                  ans += w
+              return ans
+
+          def align_left(line):
+              l = " ".join(line)
+              l = l + (" " * (maxWidth - len(l)))
+              return l
+
+          lines = []
+          line = []
+          line_len = 0
+          for w in words:
+              new_line_len = line_len + (1 if line_len > 0 else 0) + len(w)
+              if new_line_len > maxWidth:
+                  lines.append(line)
+                  line = []
+                  line_len = 0
+                  new_line_len = len(w)
+
+              line.append(w)
+              line_len = new_line_len
+
+          if len(line) > 0:
+              lines.append(line)
+
+          return list(map(justify, lines[0:-1])) + [align_left(lines[-1])]
+
+
+  assert Solution().fullJustify(
+      ["This", "is", "an", "example", "of", "text", "justification."], 16
+  ) == ["This    is    an", "example  of text", "justification.  "]
+  assert Solution().fullJustify(
+      ["What", "must", "be", "acknowledgment", "shall", "be"], 16
+  ) == ["What   must   be", "acknowledgment  ", "shall be        "]
+  assert Solution().fullJustify(
+      [
+          "Science",
+          "is",
+          "what",
+          "we",
+          "understand",
+          "well",
+          "enough",
+          "to",
+          "explain",
+          "to",
+          "a",
+          "computer.",
+          "Art",
+          "is",
+          "everything",
+          "else",
+          "we",
+          "do",
+      ],
+      20,
+  ) == [
+      "Science  is  what we",
+      "understand      well",
+      "enough to explain to",
+      "a  computer.  Art is",
+      "everything  else  we",
+      "do                  ",
+  ]
+#+end_src
+
+* Leetcode: 588. Design In-Memory File System
+:PROPERTIES:
+:ID:       A65AAAF2-0F96-47F8-9A90-8F40324C00D3
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-12 Tue 11:19]--[2022-07-12 Tue 12:00] =>  0:41
+:END:
+[[https://leetcode.com/problems/design-in-memory-file-system/][Problem Statement]]
+
+Use [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]] to represent the directory and file paths.  Time complexity is $O(p)$ to find a node (for ~mkdir~, ~write~ and ~read~) where $p$ is the length of the path, $O(p + P)$ for ~ls~ where the $P$ is the sum of length of all nodes in a sub-path.
+
+#+begin_src python
+  import string
+
+  class FileSystem:
+
+      def __init__(self):
+          self.root = {"directory": True, "/": {}}
+
+      def ls(self, path: str) -> List[str]:
+          node = self._get_node(path)
+          if "file" in node:
+              return [path.split("/")[-1]]
+
+          node = node["/"]
+          ans = []
+
+          def dfs(node, name):
+              if "file" in node or "directory" in node:
+                  ans.append(name)
+              for c in string.ascii_lowercase:
+                  if c in node:
+                      dfs(node[c], name + c)
+
+          dfs(node, "")
+          return ans
+
+      def mkdir(self, path: str) -> None:
+          node = self._get_node(path)
+          node["directory"] = True
+          node["/"] = {}
+
+      def addContentToFile(self, filePath: str, content: str) -> None:
+          node = self._get_node(filePath)
+          node["file"] = True
+          node["content"] = node.get("content", "") + content
+
+      def readContentFromFile(self, filePath: str) -> str:
+          return self._get_node(filePath).get("content", "")
+
+      def _get_node(self, path):
+          if path == "/":
+              return self.root
+          node = self.root
+          for c in path:
+              if c not in node:
+                  node[c] = {}
+              if c == "/":
+                  node["directory"] = True
+              node = node[c]
+          return node
+
+
+  # Your FileSystem object will be instantiated and called as such:
+  # obj = FileSystem()
+  # param_1 = obj.ls(path)
+  # obj.mkdir(path)
+  # obj.addContentToFile(filePath,content)
+  # param_4 = obj.readContentFromFile(filePath)
+#+end_src
+
+* Leetcode: 273. Integer to English Words
+:PROPERTIES:
+:ID:       D1635740-9FA0-4CE2-8DA3-6813C8752564
+:WA:       2
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-12 Tue 14:30]--[2022-07-12 Tue 15:28] =>  0:58
+:END:
+[[https://leetcode.com/problems/integer-to-english-words/][Problem Statement]]
+
+[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can you break-down the problem in small and easily to solve parts?]]  This is not a question about efficiently, but if you can organize the solution in a handleable way.
+
+#+begin_src python
+  class Solution:
+      def numberToWords(self, num: int) -> str:
+          if num == 0:
+              return "Zero"
+
+          up_to_19 = {
+              0: "Zero",
+              1: "One",
+              2: "Two",
+              3: "Three",
+              4: "Four",
+              5: "Five",
+              6: "Six",
+              7: "Seven",
+              8: "Eight",
+              9: "Nine",
+              10: "Ten",
+              11: "Eleven",
+              12: "Twelve",
+              13: "Thirteen",
+              14: "Fourteen",
+              15: "Fifteen",
+              16: "Sixteen",
+              17: "Seventeen",
+              18: "Eighteen",
+              19: "Nineteen",
+          }
+
+          ty = {
+              2: "Twenty",
+              3: "Thirty",
+              4: "Forty",
+              5: "Fifty",
+              6: "Sixty",
+              7: "Seventy",
+              8: "Eighty",
+              9: "Ninety",
+          }
+
+          def w3d(a, b, c):
+              num = a * 100 + b * 10 + c
+              ans = ""
+              if num == 0:
+                  return ""
+              elif num < 20:
+                  ans += up_to_19[num]
+              elif num < 100:
+                  ans += ty[b]
+                  res = w3d(0, 0, c)
+                  if res != "":
+                      ans += " " + res
+              else:
+                  ans += up_to_19[a] + " Hundred"
+                  res = w3d(0, b, c)
+                  if res != "":
+                      ans += " " + res
+              return ans
+
+          g = ["", " Thousand ", " Million ", " Billion "]
+          digits = list(map(int, str(num)))
+          while len(digits) % 3 != 0:
+              digits = [0] + digits
+          k = 0
+          N = len(digits)
+          ans = ""
+          for i in range(N - 3, -1, -3):
+              a = digits[i]
+              b = digits[i + 1]
+              c = digits[i + 2]
+              if a * 100 + b * 10 + c > 0:
+                  cur = w3d(a, b, c)
+                  ans = w3d(a, b, c) + g[k] + ans
+              k += 1
+
+          return ans.strip().replace("  ", " ")
+
+
+  assert Solution().numberToWords(123) == "One Hundred Twenty Three"
+  assert Solution().numberToWords(12345) == "Twelve Thousand Three Hundred Forty Five"
+  assert (
+      Solution().numberToWords(1234567)
+      == "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+  )
+#+end_src
+
+* Leetcode: 716. Max Stack
+:PROPERTIES:
+:ID:       8BC92BDE-2E5B-47AB-A3DF-FE3866E3E424
+:WA:       2
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-12 Tue 16:17]--[2022-07-12 Tue 17:03] =>  0:46
+:END:
+[[https://leetcode.com/problems/max-stack/][Problem Statement]]
+
+Retrospective: I should had think about the appropriate time to clean up the data-structures and be more careful about the problem's constraints (i.e. remove the last max when there is more than one).
+
+The source is in [[id:A0500087-56D9-4D34-936F-E8E3912C4761][Max Stack]] since it might be useful in other problems.  It was implemented with a stack to efficiently reply to ~pop~ and ~top~, a heap for ~peekMax~ and ~popMax~.  While ~top~ is $O(1)$, all other operations are $O(\log n)$.
+
+* Leetcode: 1948. Delete Duplicate Folders in System
+:PROPERTIES:
+:ID:       4488F27D-F20C-46A4-AD00-771BEBB8CCD8
+:WA:       4
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-13 Wed 10:20]--[2022-07-13 Wed 10:59] =>  0:39
+CLOCK: [2022-07-13 Wed 08:49]--[2022-07-13 Wed 08:55] =>  0:06
+CLOCK: [2022-07-12 Tue 22:00]--[2022-07-12 Tue 23:07] =>  1:07
+CLOCK: [2022-07-12 Tue 17:53]--[2022-07-12 Tue 18:30] =>  0:37
+:END:
+[[https://leetcode.com/problems/delete-duplicate-folders-in-system/][Problem Statement]]
+
+Retrospective: I found the solution, but I wasn't convinced that it would pass on the time limit.  Because of that, my first implementation tried to use perfect hash what complicated the problem and ended up not working.
+
+[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  Imagine that we can assign an *id* for each subtree where different subtrees have different numbers and equivalent subtrees have the same number.  The problem becomes filtering all subtrees with duplicated id.  For this problem, the id can be a serialization of the subtree like one generated by a pre-order traversing of the tree.  Time complexity is $O(n)$ where $n$ is the number of nodes in the tree.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def deleteDuplicateFolder(self, paths: List[List[str]]) -> List[List[str]]:
+          root = {}
+          for p in paths:
+              node = root
+              for d in p:
+                  node.setdefault(d, {})
+                  node = node[d]
+
+          groups = {}
+
+          def serialize(root):
+              ans = []
+              for node in sorted(root):
+                  ans.append((node, serialize(root[node])))
+              ans = tuple(ans)
+
+              groups.setdefault(ans, [])
+              groups[ans].append(root)
+              root["__s__"] = ans
+
+              return ans
+
+          serialize(root)
+
+          ans = []
+
+          def dfs(root, path):
+              if len(groups[root["__s__"]]) > 1 and len(root) > 1:
+                  return
+
+              ans.append(path[:])
+              for node in root:
+                  if node == "__s__":
+                      continue
+                  path.append(node)
+                  dfs(root[node], path)
+                  path.pop()
+
+          dfs(root, [])
+
+          return ans[1:]
+
+
+  assert Solution().deleteDuplicateFolder(
+      [["a"], ["c"], ["d"], ["a", "b"], ["c", "b"], ["d", "a"]]
+  ) == [["d"], ["d", "a"]]
+  assert Solution().deleteDuplicateFolder(
+      [
+          ["a"],
+          ["c"],
+          ["a", "b"],
+          ["c", "b"],
+          ["a", "b", "x"],
+          ["a", "b", "x", "y"],
+          ["w"],
+          ["w", "y"],
+      ]
+  ) == [["a"], ["a", "b"], ["c"], ["c", "b"]]
+  assert Solution().deleteDuplicateFolder([["a", "b"], ["c", "d"], ["c"], ["a"]]) == [
+      ["a"],
+      ["a", "b"],
+      ["c"],
+      ["c", "d"],
+  ]
+#+end_src
+
+* Leetcode: 23. Merge k Sorted Lists
+:PROPERTIES:
+:ID:       02D2E665-4FC5-45C7-A1BF-E7CE82E67B05
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-13 Wed 11:23]--[2022-07-13 Wed 11:36] =>  0:13
+:END:
+[[https://leetcode.com/problems/merge-k-sorted-lists/][Problem Statement]]
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]: Had to fix my code multiple times since the input and output didn't match the problem's expectations.
+
+Retrospective: Took more that I needed because I didn't pay attention to the input and output.
+
+#+begin_src python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, val=0, next=None):
+  #         self.val = val
+  #         self.next = next
+  class Solution:
+      def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+          pq = []
+          for i, l in enumerate(lists):
+              if l:
+                  heappush(pq, (l.val, i))
+
+          ans = None
+          last = None
+          while len(pq) > 0:
+              v, i = heappop(pq)
+              if ans is None:
+                  ans = lists[i]
+                  last = lists[i]
+              else:
+                  last.next = lists[i]
+                  last = lists[i]
+
+              if lists[i].next:
+                  heappush(pq, (lists[i].next.val, i))
+                  lists[i] = lists[i].next
+          return ans
+
+#+end_src
+
+* Leetcode: 1293. Shortest Path in a Grid with Obstacles Elimination
+:PROPERTIES:
+:ID:       4416AFE9-6BB7-4AF8-9F85-68BAE35D4717
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-13 Wed 11:51]--[2022-07-13 Wed 12:14] =>  0:23
+:END:
+[[https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/][Problem Statement]]
+
+- Mistake: Picked the wrong data structure:  A priority queue was unnecessary to solve the problem.
+
+[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Yes.  The problem becomes do a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] starting from node $(0, 0)$ and ending on $(n-1, m-1)$.  Time and space complexity is $O(N \times M \times K)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def shortestPath(self, grid: List[List[int]], k: int) -> int:
+          N = len(grid)
+          M = len(grid[0])
+
+          queue = []
+          vis = [[[False] * (k + 1) for _ in range(M)] for _ in range(N)]
+
+          queue.append((0, 1 if grid[0][0] == 1 else 0, 0, 0))
+          for d, c, i, j in queue:
+              if c > k:
+                  continue
+              if vis[i][j][c]:
+                  continue
+              vis[i][j][c] = True
+
+              if i == N - 1 and j == M - 1:
+                  return d
+
+              for di, dj in [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                  nd = d + 1
+                  nc = c + (1 if grid[i][j] == 1 else 0)
+                  if 0 <= di + i < N and 0 <= dj + j < M and nc <= k:
+                      queue.append((nd, nc, di + i, dj + j))
+
+          return -1
+
+
+  assert (
+      Solution().shortestPath([[0, 0, 0], [1, 1, 0], [0, 0, 0], [0, 1, 1], [0, 0, 0]], 1)
+      == 6
+  )
+  assert Solution().shortestPath([[0, 1, 1], [1, 1, 1], [1, 0, 0]], 1) == -1
+#+end_src
+
+* Leetcode: 1284. Minimum Number of Flips to Convert Binary Matrix to Zero Matrix
+:PROPERTIES:
+:ID:       76B022D8-9C12-4415-AFDD-837067EC49DD
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-13 Wed 14:04]--[2022-07-13 Wed 14:29] =>  0:25
+:END:
+[[https://leetcode.com/problems/minimum-number-of-flips-to-convert-binary-matrix-to-zero-matrix/][Problem Statement]]
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]: Missed that I could also flip cells with 0.
+
+[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Each possible configuration of the binary matrix is a node in the graph, and two node are adjacent with a flip in one will generate the other.  The problem becomes do a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] from the initial node to the node representing a zero matrix.  Time and space complexity is $O(n \times m \times 2^{n \times m})$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minFlips(self, mat: List[List[int]]) -> int:
+          N = len(mat)
+          M = len(mat[0])
+
+          def id(i, j):
+              return 1 << (i * M + j)
+
+          initial = 0
+          for i in range(N):
+              for j in range(M):
+                  if mat[i][j] == 1:
+                      initial = initial | id(i, j)
+
+          seen = set()
+          queue = [(0, initial)]
+
+          for steps, state in queue:
+              if state == 0:
+                  return steps
+              if state in seen:
+                  continue
+              seen.add(state)
+
+              for i in range(N):
+                  for j in range(M):
+                      nstate = state
+                      for di, dj in [[+0, +0], [+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                          if 0 <= di + i < N and 0 <= dj + j < M:
+                              if nstate & id(di + i, dj + j) != 0:
+                                  nstate = nstate & ~id(di + i, dj + j)
+                              else:
+                                  nstate = nstate | id(di + i, dj + j)
+                      queue.append((steps + 1, nstate))
+          return -1
+
+
+  assert Solution().minFlips([[0, 0], [0, 1]]) == 3
+  assert Solution().minFlips([[0]]) == 0
+  assert Solution().minFlips([[1, 0, 0], [1, 0, 0]]) == -1
+#+end_src
+
+* Leetcode: 2123. Minimum Operations to Remove Adjacent Ones in Matrix
+:PROPERTIES:
+:ID:       DACEB904-5675-42F2-89E7-733320BE0751
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-13 Wed 18:45]--[2022-07-13 Wed 19:14] =>  0:29
+CLOCK: [2022-07-13 Wed 17:30]--[2022-07-13 Wed 18:33] =>  1:03
+CLOCK: [2022-07-13 Wed 15:31]--[2022-07-13 Wed 16:50] =>  1:19
+:END:
+[[https://leetcode.com/problems/minimum-operations-to-remove-adjacent-ones-in-matrix/][Problem Statement]]
+
+- Mistake: Failed to recognize a classic problem in the reduced problem.
+
+[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  The 1-cells are vertices and an edge exists if two adjacent cells (left, right, top and down) are 1-cells.  This graph is a [[id:F1D5D810-3FDF-45C3-BAF1-68584BD77DB3][Bipartite Graph]] and the problem becomes finding the [[id:A293CEDD-F976-4FA2-97F3-02DF918E73B1][Minimum vertex cover problem]] which is equivalent to [[id:2BFB9CF6-4D77-4753-88E1-B4BDF9BED66B][Maximum Bipartite Matching]] in such graphs.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumOperations(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          M = len(grid[0])
+
+          def neighbours(i, j):
+              for di, dj in [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                  if 0 <= di + i < N and 0 <= dj + j < M and grid[di + i][dj + j] == 1:
+                      yield (di + i, dj + j)
+
+          mt = {}
+
+          def dfs(node, seen):
+              if node in seen:
+                  return False
+              seen.add(node)
+              for child in neighbours(*node):
+                  if child not in mt or dfs(mt[child], seen):
+                      mt[child] = node
+                      return True
+              return False
+
+          ans = 0
+          for i in range(N):
+              for j in range(M):
+                  if grid[i][j] == 1:
+                      if dfs((i, j), set()):
+                          ans += 1
+
+          return ans // 2
+
+
+  assert Solution().minimumOperations([[1, 1, 0], [0, 1, 1], [1, 1, 1]]) == 3
+  assert Solution().minimumOperations([[0, 1], [1, 0]]) == 0
+#+end_src
+
+* Leetcode: 828. Count Unique Characters of All Substrings of a Given String
+:PROPERTIES:
+:ID:       1289D944-3EE5-4270-8F29-69047B204213
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-14 Thu 09:20]--[2022-07-14 Thu 09:57] =>  0:37
+CLOCK: [2022-07-13 Wed 21:49]--[2022-07-13 Wed 21:52] =>  0:03
+CLOCK: [2022-07-13 Wed 21:30]--[2022-07-13 Wed 21:40] =>  0:10
+CLOCK: [2022-07-13 Wed 20:18]--[2022-07-13 Wed 21:21] =>  1:03
+CLOCK: [2022-07-13 Wed 19:25]--[2022-07-13 Wed 19:32] =>  0:07
+:END:
+[[https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/][Problem Statement]]
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]
+- Mistake: Bug caused by incorrect assumption
+- Mistake: High constant factor in the implementation
+
+[[id:26656051-E32D-42FE-9315-05ADB46A1A82][Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?]]  Let $f(i)=\sum_{i \leq j < n} countUniqueChars(j)$ the function that we want to compute efficiently.  Be $i$ the first index from the left to right that is duplicated, and $j$ an index where $s[i]=s[j]$ and $i<j$.  We know that $f(i+1)=1+2+3+..+(n-i-1)$ since there is no duplicates and all letters in all substrings are counted.  All substring starting on $i+1$ and ending on $i+1,i+2,..,j-1$ will count one more letter when extend to $i$.  All substring starting on $i+1$ and ending on $j, j+1, ..., n$ will not count one when extended.  So, $f(i)=f(i+1) + (j - i)$.  Now, suppose that $s[i]$ is the third occurence of $s[i]$ from left to right.  Be $k$ an index where $s[i]=s[k]$ and $j<k$.  In this case, $f(i)= f(i+1) + (j - i) - (k - j)$, since all substrings starting on $i+1$ and ending on $k$ will not contribute to the sum of count of unique chars anymore.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def uniqueLetterString(self, s: str) -> int:
+          N = len(s)
+
+          nxt = {}
+          last = {}
+          for c in set(s):
+              last[c] = N
+              nxt[N, c] = N
+
+          for i in range(N - 1, -1, -1):
+              nxt[i, s[i]] = last[s[i]]
+              last[s[i]] = i
+
+          ans = 0
+          cur = 0
+          for i in range(N - 1, -1, -1):
+              j = nxt[i, s[i]]
+              k = nxt[j, s[i]]
+              cur += (j - i) - (k - j)
+              ans += cur
+          return ans
+
+
+  assert Solution().uniqueLetterString("ABC") == 10
+  assert Solution().uniqueLetterString("ABA") == 8
+  assert Solution().uniqueLetterString("LEETCODE") == 92
+#+end_src
