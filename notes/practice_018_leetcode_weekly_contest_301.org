@@ -85,7 +85,7 @@ We need two data-structures: a priority queue to answer the pop efficiently and 
 
 Retrospective: Spent most of the time trying to find a process to move the letter around, instead of discovering the invariant that they should keep in order to be valid.
 
-[[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can you derive an invariant based on the smallest possible examples?]]  Be $i$ and $j$ indexes on $start$ and $target$ where $start[i]$ and $target[i]$ aren't ~_~, since positions with ~_~ can be ignored as they either are equal or should have a letter moved over.  If $start[i] \neq target[j]$, then we can return $False$ since they have letters in different places.  So, $start[i] = target[j]$.  If $start[i]="L"$ and $i<j$, there is no way to move "L" to the right and the strings don't match.  If $start[i]="R"$ and $j>i$, there is no way to move "R" to the left and the strings don't match.  Otherwise, it is possible to move the letters to the right direction and we can move the next index.
+[[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Be $i$ and $j$ indexes on $start$ and $target$ where $start[i]$ and $target[i]$ aren't ~_~, since positions with ~_~ can be ignored as they either are equal or should have a letter moved over.  If $start[i] \neq target[j]$, then we can return $False$ since they have letters in different places.  So, $start[i] = target[j]$.  If $start[i]="L"$ and $i<j$, there is no way to move "L" to the right and the strings don't match.  If $start[i]="R"$ and $j>i$, there is no way to move "R" to the left and the strings don't match.  Otherwise, it is possible to move the letters to the right direction and we can move the next index.
 
 #+begin_src python
   class Solution:

@@ -51,7 +51,7 @@ CLOCK: [2022-07-12 Tue 10:42]--[2022-07-12 Tue 11:11] =>  0:29
 :END:
 [[https://leetcode.com/problems/text-justification/][Problem Statement]]
 
-[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can you break-down the problem in small and easily to solve parts?]]  The smaller parts are (1) split the list on the words on each line, (2) justify one line and (3) left-justify one line.  Time and space complexity is $O(n)$.
+[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The smaller parts are (1) split the list on the words on each line, (2) justify one line and (3) left-justify one line.  Time and space complexity is $O(n)$.
 
 #+begin_src python
   from typing import List
@@ -221,7 +221,7 @@ CLOCK: [2022-07-12 Tue 14:30]--[2022-07-12 Tue 15:28] =>  0:58
 :END:
 [[https://leetcode.com/problems/integer-to-english-words/][Problem Statement]]
 
-[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can you break-down the problem in small and easily to solve parts?]]  This is not a question about efficiently, but if you can organize the solution in a handleable way.
+[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  This is not a question about efficiently, but if you can organize the solution in a handleable way.
 
 #+begin_src python
   class Solution:
@@ -684,7 +684,7 @@ CLOCK: [2022-07-14 Thu 10:45]--[2022-07-14 Thu 11:02] =>  0:17
 :END:
 [[https://leetcode.com/problems/word-ladder/][Problem Statement]]
 
-[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Words are vertices and two words that match the problem's constraints are connected by an edge.  [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can you break-down the problem in small and easily to solve parts?]]  Find the shortest path ~beginWord~ to ~endWord~ using a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]], and computing the edges in an efficient way since $O(n^2 \times 10)$ won't make the cut.  [[id:638547C6-7305-4AA8-A57B-D570C1C323DD][Can you first generate all candidates and then pick the best one?]]  For a given word, we can generate all possible transformations and create the edge with only the ones that appear in the dictionary.  This can be done in $O(n \times 250)$ since the max length is 10 and there are 25 different letter to try in each position.  Time and space complexity is $O(n)$.
+[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Words are vertices and two words that match the problem's constraints are connected by an edge.  [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Find the shortest path ~beginWord~ to ~endWord~ using a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]], and computing the edges in an efficient way since $O(n^2 \times 10)$ won't make the cut.  [[id:638547C6-7305-4AA8-A57B-D570C1C323DD][Can we first generate all candidates and then pick the best one?]]  For a given word, we can generate all possible transformations and create the edge with only the ones that appear in the dictionary.  This can be done in $O(n \times 250)$ since the max length is 10 and there are 25 different letter to try in each position.  Time and space complexity is $O(n)$.
 
 #+begin_src python
   from typing import List

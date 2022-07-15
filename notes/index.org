@@ -8,7 +8,7 @@
     - [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]
     - [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]
   - Intervals
-    - [[id:29DB5011-3209-4B10-BAA5-823D1ADB9F47][How could you find the optimal interval knowing a tiny part of it?]]
+    - [[id:29DB5011-3209-4B10-BAA5-823D1ADB9F47][How could we find the optimal interval knowing a tiny part of it?]]
 - Data Structure
   - [[id:21C2B5E5-78D0-4A47-B69E-7B1FBA6A69A1][Array]]
   - [[id:0DE29B4D-0B7D-4B34-B370-F5D3193AA932][Matrix]]

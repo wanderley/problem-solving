@@ -42,7 +42,7 @@ Traverse the full binary tree applying the rule.  Time complexity is $O(n)$ and 
 
 Retrospective: Simplify the problem by generating the possible candidates and them pick between them!
 
-[[id:638547C6-7305-4AA8-A57B-D570C1C323DD][Can you first generate all candidates and then pick the best one?]]  Generate numbers that represent either a real ticket and the possible new one.  Then, simulate the problem and keep track of the last possible candidate to pick a bus.  Time and space complexity is $O(n)$.
+[[id:638547C6-7305-4AA8-A57B-D570C1C323DD][Can we first generate all candidates and then pick the best one?]]  Generate numbers that represent either a real ticket and the possible new one.  Then, simulate the problem and keep track of the last possible candidate to pick a bus.  Time and space complexity is $O(n)$.
 
 #+begin_src python
   from typing import List
