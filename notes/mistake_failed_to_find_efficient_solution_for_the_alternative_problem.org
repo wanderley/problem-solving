@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       1AE37D0A-8E53-4F30-BBBE-114219226182
+:END:
+#+TITLE: Mistake: Failed to find efficient solution for the alternative problem

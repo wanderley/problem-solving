@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       DA951820-DBB5-4A7F-9401-DF5860EFAB8A
+:END:
+#+TITLE: Mistake: Incorrect evaluation of solution's viability

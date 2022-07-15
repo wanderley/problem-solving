@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       298CCCF3-C9A7-4FEC-BE7B-17CF0F67332C
+:END:
+#+TITLE: Mistake: Bug caused by incorrect assumption

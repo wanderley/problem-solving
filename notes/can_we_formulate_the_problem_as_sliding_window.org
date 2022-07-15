@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       46522C06-DAC3-4986-A13A-17C2ED44ADD1
+:END:
+#+TITLE: Can we formulate the problem as sliding window?

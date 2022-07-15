@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       B3BCF738-D1F0-4705-89B2-10B66DCE8977
+:END:
+#+TITLE: Mistake: Failed to recognize a classic problem in the reduced problem
