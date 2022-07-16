@@ -1226,3 +1226,105 @@ CLOCK: [2022-07-16 Sat 08:00]--[2022-07-16 Sat 08:32] =>  0:32
   ) == ["eat", "oath"]
   assert Solution().findWords([["a", "b"], ["c", "d"]], ["abcb"]) == []
 #+end_src
+
+* Leetcode: 269. Alien Dictionary
+:PROPERTIES:
+:ID:       1C9EFDE5-E454-422E-9918-2CF189F61B9D
+:WA:       3
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-16 Sat 14:56]--[2022-07-16 Sat 15:33] =>  0:37
+CLOCK: [2022-07-16 Sat 14:32]--[2022-07-16 Sat 14:51] =>  0:19
+:END:
+[[https://leetcode.com/problems/alien-dictionary/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not create edge case for all properties of the problem.
+
+[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Letters are vertices and an edge $(u,v)$ means that the letter $u$ comes before $v$ in the alphabet.  This is a [[id:ABCED065-0F63-4FFE-8FEC-2D2615196BF7][Directed Graph]], if there are cycles in this graph then there is no way to build the alphabet because $u, v_1, v_2, ..., v_k, u$ means that $u$ comes before $u$ in the alphabet what is impossible.  So, we have to check if the graph is an [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] and produce a [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]] for it.  Time complexity is $O(n)$ and space complexity is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+  class Solution:
+      def alienOrder(self, words: List[str]) -> str:
+          adj = {}
+          for w1, w2 in zip(words, words[1:]):
+              if len(w2) < len(w1) and w1.startswith(w2):
+                  return ""
+              for c1, c2 in zip(w1, w2):
+                  if c1 != c2:
+                      adj.setdefault(c1, set())
+                      adj[c1].add(c2)
+                      break
+
+          NOT_VISITED = "NOT_VISITED"
+          OPEN = "OPEN"
+          CLOSED = "CLOSED"
+
+          status = {c: NOT_VISITED for w in words for c in w}
+          ans = []
+
+          def dfs(u):
+              if status[u] == CLOSED:
+                  return True
+              if status[u] == OPEN:
+                  return False
+
+              status[u] = OPEN
+              for v in adj.get(u, []):
+                  if not dfs(v):
+                      return False
+
+              ans.append(u)
+              status[u] = CLOSED
+              return True
+
+          for c in status:
+              if status[c] == NOT_VISITED:
+                  if not dfs(c):
+                      return ""
+
+          return "".join(reversed(ans))
+
+  assert Solution().alienOrder(["wrt","wrf","er","ett","rftt"]) == "wertf"
+  assert Solution().alienOrder(["z","x"]) == "zx"
+  assert Solution().alienOrder(["z","x","z"]) == ""
+  assert Solution().alienOrder(["z","z"]) == "z"
+  assert Solution().alienOrder(["abc","ab"]) == ""
+#+end_src
+
+* Leetcode: 239. Sliding Window Maximum
+:PROPERTIES:
+:ID:       373321D0-BE83-41C2-9C7E-10C33EEAF9CF
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-16 Sat 16:34]--[2022-07-16 Sat 16:51] =>  0:17
+:END:
+[[https://leetcode.com/problems/sliding-window-maximum/][Problem Statement]]
+
+This problem is similar to [[id:798B6359-F1A6-4B42-BBA1-2120D8CD228B][Sliding Window Maximum]].
+
+#+begin_src python
+  from typing import List
+  from collections import deque
+
+
+  class Solution:
+      def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+          queue = deque()
+          ans = []
+          for i in range(0, len(nums)):
+              while len(queue) > 0 and queue[-1][0] < nums[i]:
+                  queue.pop()
+              queue.append((nums[i], i))
+              if i >= k - 1:
+                  if queue[0][1] == i - k:
+                      queue.popleft()
+                  ans.append(queue[0][0])
+
+          return ans
+
+
+  assert Solution().maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3) == [3, 3, 5, 5, 6, 7]
+  assert Solution().maxSlidingWindow([1], 1) == [1]
+#+end_src
