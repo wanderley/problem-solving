@@ -899,3 +899,78 @@ CLOCK: [2022-07-14 Thu 20:21]--[2022-07-14 Thu 20:33] =>  0:12
   ) == [20, 24]
   assert Solution().smallestRange([[1, 2, 3], [1, 2, 3], [1, 2, 3]]) == [1, 1]
 #+end_src
+
+* Leetcode: 224. Basic Calculator
+:PROPERTIES:
+:ID:       C5B34111-0588-4C40-B161-133ED4759B37
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-15 Fri 13:57]--[2022-07-15 Fri 15:12] =>  1:15
+:END:
+[[https://leetcode.com/problems/basic-calculator/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  I came up with ~-(-2)~ and forgot about ~(8)~ which is also a valid expression.
+
+The trick part is how we are going to handle the unary minus operator.  [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  It would make the problem easier if all operator were binary what would require to transform ~-2~ in ~0-2~.  There is only two cases were ~-~ is an unary operator: (1) it occurs in the beginning of the stack or (2) after an open parentheses.  While parsing, we can insert a ~0~ at the right moment and make sure that all operators are binary.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def calculate(self, s: str) -> int:
+          s = "(" + s + ")"
+
+          st = []
+          op = []
+          i = 0
+          maybe_unary = None
+
+          while i < len(s):
+              if s[i] == "(":
+                  op.append("(")
+                  maybe_unary = True
+                  i += 1
+              elif "0" <= s[i] <= "9":
+                  j = i
+                  n = 0
+                  while j < len(s) and "0" <= s[j] <= "9":
+                      n = n * 10 + ord(s[j]) - ord("0")
+                      j += 1
+                  st.append(n)
+                  maybe_unary = False
+                  i = j
+              elif s[i] == " ":
+                  i += 1
+              else:
+                  while len(op) > 0:
+                      if op[-1] == "+":
+                          b = st.pop()
+                          a = st.pop()
+                          st.append(a + b)
+                          op.pop()
+                      elif op[-1] == "-":
+                          b = st.pop()
+                          a = st.pop()
+                          st.append(a - b)
+                          op.pop()
+                      elif op[-1] == "(":
+                          if s[i] == ")":
+                              op.pop()
+                          break
+
+                  if s[i] == "-" and maybe_unary:
+                      st.append(0)
+
+                  if s[i] != ")":
+                      op.append(s[i])
+
+                  maybe_unary = False
+                  i += 1
+
+          return st[0]
+
+  assert Solution().calculate("1 + 1") == 2
+  assert Solution().calculate(" 2-1 + 2 ") == 3
+  assert Solution().calculate("(1+(4+5+2)-3)+(6+8)") == 23
+  assert Solution().calculate("-(-2)") == 2
+  assert Solution().calculate("(2)") == 2
+#+end_src
