@@ -1,0 +1,146 @@
+:PROPERTIES:
+:ID:       24049026-97CA-443C-81B0-0740036A0EB3
+:END:
+#+TITLE: Practice #023: Leetcode - Weekly Contest 302
+
+* Leetcode: 2341. Maximum Number of Pairs in Array
+:PROPERTIES:
+:ID:       54CD0C85-755E-4986-A3D3-75C36814510A
+:END:
+[[https://leetcode.com/problems/maximum-number-of-pairs-in-array/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def numberOfPairs(self, nums: List[int]) -> List[int]:
+          freq = {}
+          for n in nums:
+              freq.setdefault(n, 0)
+              freq[n] += 1
+
+          ans = 0
+          ext = 0
+          for x, v in freq.items():
+              ans += v // 2
+              ext += v % 2
+          return [ans, ext]
+
+
+  assert Solution().numberOfPairs([1, 3, 2, 1, 3, 2, 2]) == [3, 1]
+  assert Solution().numberOfPairs([1, 1]) == [1, 0]
+  assert Solution().numberOfPairs([0]) == [0, 1]
+#+end_src
+
+* Leetcode: 2342. Max Sum of a Pair With Equal Sum of Digits
+:PROPERTIES:
+:ID:       DAA71891-BC89-48B6-83B3-87BE60353ACE
+:END:
+[[https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/][Problem Statement]]
+
+[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  We can group all numbers the sum of their digits, sort each group and compute the answer.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumSum(self, nums: List[int]) -> int:
+          g = {}
+          for n in nums:
+              m = n
+              s = 0
+              while n > 0:
+                  s += n % 10
+                  n = n // 10
+              g.setdefault(s, [])
+              g[s].append(m)
+
+          ans = -1
+          for n in g:
+              g[n].sort()
+              if len(g[n]) > 1:
+                  ans = max(ans, g[n][-1] + g[n][-2])
+          return ans
+
+
+  assert Solution().maximumSum([18, 43, 36, 13, 7]) == 54
+  assert Solution().maximumSum([10, 12, 19, 14]) == -1
+#+end_src
+
+* Leetcode: 2343. Query Kth Smallest Trimmed Number
+:PROPERTIES:
+:ID:       FC017208-978B-4922-999C-8F071E341BB3
+:END:
+[[https://leetcode.com/problems/query-kth-smallest-trimmed-number/][Problem Statement]]
+
+Slice and sort the numbers to solve the problem.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def smallestTrimmedNumbers(
+          self, nums: List[str], queries: List[List[int]]
+      ) -> List[int]:
+          ans = []
+          for q in queries:
+              nnums = [(num[-q[1] :], i) for i, num in enumerate(nums)]
+              nnums.sort()
+              ans.append(nnums[q[0] - 1][1])
+          return ans
+
+
+  assert Solution().smallestTrimmedNumbers(
+      ["102", "473", "251", "814"], [[1, 1], [2, 3], [4, 2], [1, 2]]
+  ) == [2, 2, 1, 0]
+  assert Solution().smallestTrimmedNumbers(
+      ["24", "37", "96", "04"], [[2, 1], [2, 2]]
+  ) == [3, 0]
+#+end_src
+
+* Leetcode: 2344. Minimum Deletions to Make Array Divisible
+:PROPERTIES:
+:ID:       04010A64-B0A4-4534-9C54-390D06B13B8B
+:END:
+
+[[https://leetcode.com/problems/minimum-deletions-to-make-array-divisible/][Problem Statement]]
+
+[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  We don't need the array ~numsDivide~, but only the greatest divisor $g$ of all them.  After that, we have to check from the smaller to the greatest what number is divides $g$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minOperations(self, nums: List[int], numsDivide: List[int]) -> int:
+          def gcd(x, y):
+              while y:
+                  x, y = y, x % y
+              return abs(x)
+
+          g = numsDivide[0]
+          for n in numsDivide[1:]:
+              g = gcd(g, n)
+
+          freq = {}
+          for n in nums:
+              freq.setdefault(n, 0)
+              freq[n] += 1
+
+          ans = 0
+          for n, f in sorted(freq.items()):
+              c = gcd(g, n)
+              if c < n:
+                  ans += f
+              else:
+                  return ans
+
+          return -1
+
+
+  assert Solution().minOperations([2, 3, 2, 4, 3], [9, 6, 9, 3, 15]) == 2
+  assert Solution().minOperations([4, 3, 6], [8, 2, 6, 10]) == -1
+#+end_src
