@@ -1608,3 +1608,53 @@ CLOCK: [2022-07-17 Sun 22:18]--[2022-07-17 Sun 22:36] =>  0:18
 
           return ans
 #+end_src
+
+* Leetcode: 759. Employee Free Time
+:PROPERTIES:
+:ID:       976BF4D9-247A-4247-86C7-06D7B0C793FA
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-18 Mon 08:00]--[2022-07-18 Mon 08:14] =>  0:14
+CLOCK: [2022-07-18 Mon 07:48]--[2022-07-18 Mon 07:54] =>  0:06
+:END:
+[[https://leetcode.com/problems/employee-free-time/][Problem Statement]]
+
+- [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] with intervals where you used a [[id:06D27BC1-DFDC-4063-B3A9-7074FD5E13B3][Stack]] to compute the answer, and I solved a problem to create a sorted list from a list of sorted lists ([[id:02D2E665-4FC5-45C7-A1BF-E7CE82E67B05][Leetcode: 23. Merge k Sorted Lists]]).
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  We can create a list of all intervals sorted by start time.  This will help us to process all of them as they come.
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  Be $a$ an array with all intervals sorted by start time.  We know that if there is a time off, it will definitely start after $a[0].end$.  If $a[1].start > a[0].end$, then there is a time off from $(a[0].end, a[1].start)$.  If $a[1].start \leq a[0].end$, then the time off might start at $\max(a[0].end, a[1].end)$.  This property holds for all intervals.  Therefore, we can keep a variable with the last end time and use it to create a new interval if needed or update it.  Time complexity is $O(n \log m$ where $m$ is the total number of intervals, because we use a [[id:FCBEA48C-CFF6-43C4-B430-BCD00E245D22][Priority-Queue]] to get the next interval sorted by start time.  Space complexity is $O(m)$.
+
+#+begin_src python
+  """
+  # Definition for an Interval.
+  class Interval:
+      def __init__(self, start: int = None, end: int = None):
+          self.start = start
+          self.end = end
+  """
+
+  class Solution:
+      def employeeFreeTime(self, schedule: '[[Interval]]') -> '[Interval]':
+          def intervals():
+              pq = []
+              for i, s in enumerate(schedule):
+                  heappush(pq, (s[0].start, s[0].end, i, 0))
+              while len(pq) > 0:
+                  start, end, i, j = heappop(pq)
+                  yield (start, end)
+                  if j + 1 < len(schedule[i]):
+                      heappush(pq, (schedule[i][j+1].start, schedule[i][j+1].end, i, j + 1))
+
+          ans = []
+          last = None
+          for start, end in intervals():
+              if last is None:
+                  last = end
+              elif start > last:
+                  ans.append(Interval(last, start))
+                  last = end
+              else:
+                  last = max(last, end)
+          return ans
+#+end_src
