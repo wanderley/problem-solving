@@ -1658,3 +1658,139 @@ CLOCK: [2022-07-18 Mon 07:48]--[2022-07-18 Mon 07:54] =>  0:06
                   last = max(last, end)
           return ans
 #+end_src
+
+* Leetcode: 489. Robot Room Cleaner
+:PROPERTIES:
+:ID:       5A7676EA-96E2-42DE-B950-1B082F42CD92
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-19 Tue 10:37]--[2022-07-19 Tue 10:54] =>  0:17
+CLOCK: [2022-07-19 Tue 10:05]--[2022-07-19 Tue 10:25] =>  0:20
+CLOCK: [2022-07-18 Mon 09:59]--[2022-07-18 Mon 10:56] =>  0:57
+:END:
+[[https://leetcode.com/problems/robot-room-cleaner][Problem Statement]]
+
+- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]]. My first idea was to make a [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]], but spent much of the time thinking about other ways to do the search.
+
+#+begin_src python
+  # """
+  # This is the robot's control interface.
+  # You should not implement it, or speculate about its implementation
+  # """
+  #class Robot:
+  #    def move(self):
+  #        """
+  #        Returns true if the cell in front is open and robot moves into the cell.
+  #        Returns false if the cell in front is blocked and robot stays in the current cell.
+  #        :rtype bool
+  #        """
+  #
+  #    def turnLeft(self):
+  #        """
+  #        Robot will stay in the same cell after calling turnLeft/turnRight.
+  #        Each turn will be 90 degrees.
+  #        :rtype void
+  #        """
+  #
+  #    def turnRight(self):
+  #        """
+  #        Robot will stay in the same cell after calling turnLeft/turnRight.
+  #        Each turn will be 90 degrees.
+  #        :rtype void
+  #        """
+  #
+  #    def clean(self):
+  #        """
+  #        Clean the current cell.
+  #        :rtype void
+  #        """
+
+  class Solution:
+      def cleanRoom(self, robot):
+          """
+          :type robot: Robot
+          :rtype: None
+          """
+
+          DIR = [[-1, +0], [+0, -1], [+1, +0], [+0, +1]]
+
+          seen = set()
+          def dfs(i, j, d):
+              if (i, j, d) in seen:
+                  return
+              robot.clean()
+              seen.add((i, j, d))
+
+              if robot.move():
+                  dfs(i + DIR[d][0], j + DIR[d][1], d)
+                  robot.turnLeft()
+                  robot.turnLeft()
+                  robot.move()
+                  robot.turnLeft()
+                  robot.turnLeft()
+
+              for k in range(3):
+                  robot.turnLeft()
+                  dfs(i, j, (d + k + 1) % len(DIR))
+              robot.turnLeft()
+
+          dfs(0, 0, 0)
+#+end_src
+
+* Leetcode: 778. Swim in Rising Water
+:PROPERTIES:
+:ID:       290376A3-74DD-4708-BA4F-8FDA493EBB1A
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-19 Tue 15:35]--[2022-07-19 Tue 15:51] =>  0:16
+:END:
+[[https://leetcode.com/problems/swim-in-rising-water/][Problem Statement]]
+
+- [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] with increasing paths on grid and sorting the cells was useful.
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  This is a variation of [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]] and can be solved using [[id:3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A][Dijkstra Algorithm]].  Instead of adding up to compute the distance, we take the vertices with greatest value in the path so far.
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def swimInWater(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          M = len(grid[0])
+
+          seen = set()
+
+          pq = []
+          heappush(pq, (grid[0][0], 0, 0))
+
+          while len(pq) > 0:
+              t, i, j = heappop(pq)
+
+              if (i, j) in seen:
+                  continue
+              seen.add((i, j))
+
+              if i == N - 1 and j == M - 1:
+                  return t
+
+              for ni, nj in [[i, j + 1], [i, j - 1], [i + 1, j], [i - 1, j]]:
+                  if 0 <= ni < N and 0 <= nj < M and (ni, nj) not in seen:
+                      heappush(pq, (max(grid[ni][nj], t), ni, nj))
+
+
+  assert Solution().swimInWater([[0, 2], [1, 3]]) == 3
+  assert (
+      Solution().swimInWater(
+          [
+              [0, 1, 2, 3, 4],
+              [24, 23, 22, 21, 5],
+              [12, 13, 14, 15, 16],
+              [11, 17, 18, 19, 20],
+              [10, 9, 8, 7, 6],
+          ]
+      )
+      == 16
+  )
+#+end_src
