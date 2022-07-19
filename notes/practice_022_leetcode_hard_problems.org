@@ -1749,6 +1749,7 @@ CLOCK: [2022-07-19 Tue 15:35]--[2022-07-19 Tue 15:51] =>  0:16
 
 - [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] with increasing paths on grid and sorting the cells was useful.
 - [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  This is a variation of [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]] and can be solved using [[id:3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A][Dijkstra Algorithm]].  Instead of adding up to compute the distance, we take the vertices with greatest value in the path so far.
+- Time complexity is $O(n^2 \log n)$ and space is $O(n^2)$.
 
 #+begin_src python
   from typing import List
@@ -1758,25 +1759,19 @@ CLOCK: [2022-07-19 Tue 15:35]--[2022-07-19 Tue 15:51] =>  0:16
   class Solution:
       def swimInWater(self, grid: List[List[int]]) -> int:
           N = len(grid)
-          M = len(grid[0])
 
-          seen = set()
+          seen = set((grid[0][0], 0, 0))
+          pq = [(grid[0][0], 0, 0)]
 
-          pq = []
-          heappush(pq, (grid[0][0], 0, 0))
-
-          while len(pq) > 0:
+          while pq:
               t, i, j = heappop(pq)
 
-              if (i, j) in seen:
-                  continue
-              seen.add((i, j))
-
-              if i == N - 1 and j == M - 1:
+              if i == N - 1 and j == N - 1:
                   return t
 
               for ni, nj in [[i, j + 1], [i, j - 1], [i + 1, j], [i - 1, j]]:
-                  if 0 <= ni < N and 0 <= nj < M and (ni, nj) not in seen:
+                  if 0 <= ni < N and 0 <= nj < N and (ni, nj) not in seen:
+                      seen.add((ni, nj))
                       heappush(pq, (max(grid[ni][nj], t), ni, nj))
 
 
