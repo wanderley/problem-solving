@@ -2,3 +2,51 @@
 :ID:       1217FC3D-A9F9-49EC-BA5D-A68E50338DBD
 :END:
 #+TITLE: Binary-search
+
+* Find index of first greater in sorted array
+
+#+begin_src python
+  def index_of_first_greater(a, val):
+      if len(a) == 0:
+          return 0
+      start = 0
+      end = len(a) - 1
+      while start < end:
+          m = start + (end - start) // 2
+          if val < a[m]:
+              end = m
+          else:
+              start = m + 1
+      return start if val < a[start] else start + 1
+
+  assert index_of_first_greater([1, 10, 10, 20], 2) == 1
+  assert index_of_first_greater([1, 10, 10, 20], 30) == 4
+  assert index_of_first_greater([1, 10, 10, 20], 10) == 3
+  assert index_of_first_greater([], 1) == 0
+  assert index_of_first_greater([10], 10) == 1
+  assert index_of_first_greater([10], 11) == 1
+  assert index_of_first_greater([10], 1) == 0
+#+end_src
+
+* Find index of first greater or equal in sorted array
+
+#+begin_src python
+  def index_of_first_greater_or_equal(a, val):
+      start = 0
+      end = len(a)
+      while start < end:
+          m = start + (end - start) // 2
+          if val <= a[m]:
+              end = m
+          else:
+              start = m + 1
+      return start
+
+  assert index_of_first_greater_or_equal([1, 10, 10, 20], 2) == 1
+  assert index_of_first_greater_or_equal([1, 10, 10, 20], 30) == 4
+  assert index_of_first_greater_or_equal([1, 10, 10, 20], 10) == 1
+  assert index_of_first_greater_or_equal([], 1) == 0
+  assert index_of_first_greater_or_equal([10], 10) == 0
+  assert index_of_first_greater_or_equal([10], 11) == 1
+  assert index_of_first_greater_or_equal([10], 1) == 0
+#+end_src

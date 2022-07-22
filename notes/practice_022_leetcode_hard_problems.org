@@ -1789,3 +1789,237 @@ CLOCK: [2022-07-19 Tue 15:35]--[2022-07-19 Tue 15:51] =>  0:16
       == 16
   )
 #+end_src
+
+* TODO Leetcode: 843. Guess the Word
+:PROPERTIES:
+:ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-19 Tue 17:36]--[2022-07-19 Tue 18:31] =>  0:55
+CLOCK: [2022-07-19 Tue 16:09]--[2022-07-19 Tue 16:19] =>  0:10
+:END:
+[[https://leetcode.com/problems/guess-the-word/][Problem Statement]]
+
+* Leetcode: 715. Range Module
+:PROPERTIES:
+:ID:       AEBE4500-C0FA-498A-889E-17F8A1C7ECCF
+:WA:       2
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-19 Tue 21:57]--[2022-07-19 Tue 22:46] =>  0:49
+CLOCK: [2022-07-19 Tue 19:34]--[2022-07-19 Tue 19:52] =>  0:18
+CLOCK: [2022-07-19 Tue 18:32]--[2022-07-19 Tue 19:12] =>  0:40
+:END:
+[[https://leetcode.com/problems/range-module/][Problem Statement]]
+
+- [[id:00CC89B4-340B-4219-9CF4-837F558947B4][Mistake: Bug caused by debug code]]
+
+- [[id:EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C][Blackbox: This is a variation of a classic problem]]: [[id:8564CEB1-3E95-4A34-B888-0BCE6D6504B8][Lazy Segment Tree]].
+
+The solution with [[id:8564CEB1-3E95-4A34-B888-0BCE6D6504B8][Lazy Segment Tree]] has time complexity of $O(n \log m)$ where $m$ is the maximum value in the interval, and space complexity of $O(n)$:
+#+begin_src python
+  class RangeModule:
+      def __init__(self, left=1, right=10**9, full=False):
+          self.left = left
+          self.mid = left + (right - left) // 2
+          self.right = right
+          self.left_child = self.right_child = None
+          self.full = full
+
+      def addRange(self, left: int, right: int) -> None:
+          self._update(left, right - 1, True)
+
+      def removeRange(self, left: int, right: int) -> None:
+          self._update(left, right - 1, False)
+
+      def queryRange(self, left: int, right: int) -> bool:
+          return self._query(left, right - 1)
+
+      def _query(self, left: int, right: int) -> bool:
+          if self.right < left or right < self.left:
+              return True
+
+          self._extend()
+          if self.full or left <= self.left <= self.right <= right:
+              return self.full
+
+          return self.left_child._query(left, right) and self.right_child._query(
+              left, right
+          )
+
+      def _update(self, left: int, right: int, value: bool) -> None:
+          if self.right < left or right < self.left:
+              return
+          if left <= self.left <= self.right <= right:
+              self.left_child = None
+              self.right_child = None
+              self.full = value
+              return
+          self._extend()
+          self.left_child._update(left, right, value)
+          self.right_child._update(left, right, value)
+          self.full = self.left_child.full and self.right_child.full
+
+      def _extend(self) -> None:
+          if self.left_child is None and self.left < self.right:
+              m = self.left + (self.right - self.left) // 2
+              self.left_child = RangeModule(self.left, m, self.full)
+              self.right_child = RangeModule(m + 1, self.right, self.full)
+
+      def _print(self, level=0):
+          print(" " * level, self.left, self.right, self.full)
+          if self.left_child:
+              self.left_child._print(level + 1)
+              self.right_child._print(level + 1)
+
+
+  # Your RangeModule object will be instantiated and called as such:
+  # obj = RangeModule()
+  # obj.addRange(left,right)
+  # param_2 = obj.queryRange(left,right)
+  # obj.removeRange(left,right)
+#+end_src
+
+
+** TODO Write solution using array of indexes
+
+The idea is to represent intervals in an array where even number are start of intervals and odd indexes are end of intervals.
+
+#+begin_example
+  ["RangeModule","addRange","removeRange","queryRange","queryRange","queryRange"]
+  [[],[10,20],[14,16],[10,14],[13,15],[16,17]]
+  ["RangeModule","addRange","addRange","removeRange","queryRange","queryRange","removeRange","removeRange","removeRange","removeRange","removeRange","queryRange","removeRange","addRange","removeRange","addRange","queryRange","queryRange","addRange","addRange","queryRange","removeRange","queryRange","addRange","queryRange","removeRange","removeRange","addRange","addRange","removeRange","removeRange","removeRange","addRange","addRange","queryRange","queryRange","queryRange","queryRange","queryRange","removeRange","removeRange","queryRange","addRange","addRange","addRange","queryRange","addRange","addRange","removeRange","addRange","queryRange","removeRange","addRange","queryRange","addRange","addRange","addRange","queryRange","addRange","queryRange","removeRange","removeRange","removeRange","removeRange","queryRange","removeRange","queryRange","queryRange","removeRange","queryRange","addRange","addRange","queryRange","removeRange","removeRange","queryRange","addRange","removeRange","removeRange","addRange","addRange","addRange","queryRange","queryRange","addRange","queryRange","removeRange","queryRange","removeRange","addRange","queryRange"]
+  [[],[55,62],[1,29],[18,49],[6,98],[59,71],[40,45],[4,58],[57,69],[20,30],[1,40],[73,93],[32,93],[38,100],[50,64],[26,72],[8,74],[15,53],[44,85],[10,71],[54,70],[10,45],[30,66],[47,98],[1,7],[44,78],[31,49],[62,63],[49,88],[47,72],[8,50],[49,79],[31,47],[54,87],[77,78],[59,100],[8,9],[50,51],[67,93],[25,86],[8,92],[31,87],[90,95],[28,56],[10,42],[27,34],[75,81],[17,63],[78,90],[9,18],[51,74],[20,54],[35,72],[2,29],[28,41],[17,95],[73,75],[34,43],[57,96],[51,72],[21,67],[40,73],[14,26],[71,86],[34,41],[10,25],[27,68],[18,32],[30,31],[45,61],[64,66],[18,93],[13,21],[13,46],[56,99],[6,93],[25,36],[27,88],[82,83],[30,71],[31,73],[10,41],[71,72],[9,56],[22,76],[38,74],[2,77],[33,61],[74,75],[11,43],[27,75]]
+#+end_example
+
+* Leetcode: 2158. Amount of New Area Painted Each Day
+:PROPERTIES:
+:ID:       2C7437BC-7DD0-460F-91DE-E3C915DC3731
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-21 Thu 09:09]--[2022-07-21 Thu 09:14] =>  0:05
+CLOCK: [2022-07-20 Wed 22:38]--[2022-07-21 Thu 09:07] => 10:29
+:END:
+[[https://leetcode.com/problems/amount-of-new-area-painted-each-day/][Problem Statement]]
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].  Did not optimize when query an interval that was already full.
+- [[id:EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C][Blackbox: This is a variation of a classic problem]]: [[id:252C5055-2C0D-4B0E-A4BF-9507B85A179F][Segment Tree]]
+
+- [[id:37B33434-71C2-4E55-9121-5D6855D8E169][Can we formulate the problem using a segment tree?]]  Suppose we have a [[id:8564CEB1-3E95-4A34-B888-0BCE6D6504B8][Lazy Segment Tree]] covering the full range (1 to $10^5$).  The problem adding intervals to the segment tree while computing the number of new points covered.  Time complexity is $O(n \log m)$ with space $O(min(m, n))$.
+
+#+begin_src python
+  from typing import List
+
+
+  class SegTree:
+      def __init__(self, left, right, count=0):
+          self.left = left
+          self.mid = left + (right - left) // 2
+          self.right = right
+          self.count = count
+          self.left_child = self.right_child = None
+
+      def add(self, left, right):
+          if self.right < left or right < self.left:
+              return 0
+          if self.is_full() or left <= self.left <= self.right <= right:
+              self.left_child = None
+              self.right_child = None
+              self.fill()
+              return self.count
+          self._extend()
+          self.left_child.add(left, right)
+          self.right_child.add(left, right)
+          before = self.count
+          after = self.count = self.left_child.count + self.right_child.count
+          return after - before
+
+      def is_full(self):
+          return self.count == self.right - self.left + 1
+
+      def fill(self):
+          self.count = self.right - self.left + 1
+
+      def _extend(self):
+          if self.left_child is None and self.left < self.right:
+              self.left_child = SegTree(self.left, self.mid)
+              self.right_child = SegTree(self.mid + 1, self.right)
+              if self.is_full():
+                  self.left_child.fill()
+                  self.right_child.fill()
+
+      def _print(self, level=0):
+          print(" " * level, (self.left, self.right), self.count)
+          if self.left_child:
+              self.left_child._print(level + 1)
+              self.right_child._print(level + 1)
+
+
+  class Solution:
+      def amountPainted(self, paint: List[List[int]]) -> List[int]:
+          st = SegTree(0, 50_000 + 1)
+          ans = []
+          for start, end in paint:
+              ans.append(st.add(start, end - 1))
+          return ans
+
+
+  assert Solution().amountPainted([[1, 4], [4, 7], [5, 8]]) == [3, 3, 1]
+  assert Solution().amountPainted([[1, 4], [5, 8], [4, 7]]) == [3, 3, 1]
+  assert Solution().amountPainted([[1, 5], [2, 4]]) == [4, 0]
+#+end_src
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The brute-force means painting every single point and for that the answer is no.  But we can improve on the brute-force algorithm by tracking the next possible empty cell using an array $nxt$.  While processing $paint[i]$, we can set $nxt[paint[i].start]=nxt[paint[i].start+1]=..=nxt[paint[i].end-1]=paint[i].end$.  So, the next time that we reach any of those cells, we can jump directly to $nxt[paint[i].end]$.
+
+#+begin_src python
+  class Solution:
+      def amountPainted(self, paint: List[List[int]]) -> List[int]:
+          N = len(paint)
+          nxt = [None for i in range(50_001)]
+          ans = []
+          for start, end in paint:
+              cur = 0
+              while start < end:
+                  if nxt[start] is None:
+                      nxt[start] = end
+                      cur += 1
+                      start += 1
+                  else:
+                      nstart = nxt[start]
+                      nxt[start] = max(nxt[start], end)
+                      start = nstart
+              ans.append(cur)
+          return ans
+#+end_src
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  The graph starts with $m$ vertices and no edges.  We process each paint on order and create the edges $(paint[i].start, paint[i].start+1), (paint[i].start+1, paint[i].start+2), ..., (paint[i].end-1, paint[i].end)$.  While adding the edges to the graph, we keep track of the components created using [[id:23A4E36E-24D3-40F8-AA20-32C0DB1E36F6][Union-Find]].  Each component is rooted on the left-most position in the component.  So, adding an edge $(u, u+1)$, we can jump to $find(u+1)$ since it is the next available point to paint.
+
+#+begin_src python
+  class Solution:
+      def amountPainted(self, paint: List[List[int]]) -> List[int]:
+          N = len(paint)
+          p = [i for i in range(50_001)]
+          ans = []
+
+          def find(a):
+              if p[a] == a:
+                  return a
+              p[a] = find(p[a])
+              return p[a]
+
+          def union(a, b):
+              assert b > a
+              pa = find(a)
+              pb = find(b)
+              p[pa] = pb
+              return pb
+
+          for start, end in paint:
+              cur = 0
+              start = find(start)
+              while start < end:
+                  start = union(start, start + 1)
+                  cur += 1
+              ans.append(cur)
+          return ans
+#+end_src

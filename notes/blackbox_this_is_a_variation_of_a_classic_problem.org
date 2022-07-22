@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C
+:END:
+#+TITLE: Blackbox: This is a variation of a classic problem

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       37B33434-71C2-4E55-9121-5D6855D8E169
+:END:
+#+TITLE: Can we formulate the problem using a segment tree?
