@@ -4,6 +4,9 @@
 #+TITLE: Binary-search
 
 * Find index of first greater in sorted array
+:PROPERTIES:
+:ID:       5CDA0F71-AED2-47E7-9BB4-3B66EA8B85BF
+:END:
 
 #+begin_src python
   def index_of_first_greater(a, val):
@@ -29,6 +32,9 @@
 #+end_src
 
 * Find index of first greater or equal in sorted array
+:PROPERTIES:
+:ID:       854371D7-6F16-4047-9683-82281D384204
+:END:
 
 #+begin_src python
   def index_of_first_greater_or_equal(a, val):
