@@ -2324,6 +2324,61 @@ CLOCK: [2022-07-22 Fri 14:10]--[2022-07-22 Fri 15:30] =>  1:20
   assert Solution().countOfAtoms("K4(ON(SO3)2)2") == "K4N2O14S4"
   assert Solution().countOfAtoms("(A)2(B)2") == "A2B2"
 #+end_src
+* Leetcode: 839. Similar String Groups
+:PROPERTIES:
+:ID:       80E6FAE6-7CD5-4238-992B-9BF369D02E2B
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-22 Fri 16:00]--[2022-07-22 Fri 16:15] =>  0:15
+CLOCK: [2022-07-22 Fri 15:37]--[2022-07-22 Fri 15:39] =>  0:02
+:END:
+[[https://leetcode.com/problems/similar-string-groups/][Problem Statement]]
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Words are vertices and they are connected if similar.  The problem becomes finding the number of connected components in the graph using [[id:23A4E36E-24D3-40F8-AA20-32C0DB1E36F6][Union-Find]].  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def numSimilarGroups(self, strs: List[str]) -> int:
+          N = len(strs)
+          M = len(strs[0])
+          p = [i for i in range(N)]
+
+          def find(u):
+              if p[u] == u:
+                  return u
+              p[u] = find(p[u])
+              return p[u]
+
+          def union(u, v):
+              gu = find(u)
+              gv = find(v)
+              p[gu] = gv
+
+          def is_similar(i, j):
+              cnt = 0
+              for k in range(M):
+                  if cnt > 2:
+                      return False
+                  if strs[i][k] != strs[j][k]:
+                      cnt += 1
+              return cnt == 0 or cnt == 2
+
+          for i in range(N):
+              for j in range(i + 1, N):
+                  if is_similar(i, j):
+                      union(i, j)
+
+          comps = set(find(i) for i in range(N))
+          return len(comps)
+
+
+  assert Solution().numSimilarGroups(["tars", "rats", "arts", "star"]) == 2
+  assert Solution().numSimilarGroups(["omv", "ovm"]) == 1
+#+end_src
 * TODO Leetcode: 843. Guess the Word
 :PROPERTIES:
 :ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
