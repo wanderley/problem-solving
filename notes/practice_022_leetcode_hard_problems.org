@@ -2079,3 +2079,78 @@ CLOCK: [2022-07-21 Thu 18:00]--[2022-07-21 Thu 20:32] =>  2:32
   assert Solution().visiblePoints([[2, 1], [2, 2], [3, 4], [1, 1]], 90, [1, 1]) == 4
   assert Solution().visiblePoints([[1, 0], [2, 1]], 13, [1, 1]) == 1
 #+end_src
+
+* Leetcode: 552. Student Attendance Record II
+:PROPERTIES:
+:ID:       18394CF2-A8EC-41C0-8BCB-FADCCE1C9448
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-21 Thu 21:59]--[2022-07-21 Thu 23:20] =>  1:21
+:END:
+[[https://leetcode.com/problems/student-attendance-record-ii/][Problem Statement]]
+
+- [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  I found that I had to treat records with ~A~ separately, but I didn't try hard to find its formula.  Instead, I work the recurrence with ~A~, ~L~, and ~P~ which is way more complex than the first one.
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].  Python's map is slow when looking up $10^5$ elements.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Be $f(d, s)$ the number of different records ending with status $s$ on the day $d$.  Be $g(d)$ the number of different records with $d$ days.  If there is no absence, then we have at least $x=f(d, L)+f(d, P)$ different records.  For each day $i$ that we can be absent, we have $y=\max(1, f(i-1,L)+f(i-1,P)) \times \max(1, f(n - i, L) + f(n - i, P))$ possible records.  So, $g(d)=x+y$.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def checkRecord(self, n: int) -> int:
+          MOD = 10**9 + 7
+          ans = 0
+
+          L = 0
+          P = 1
+          dp = [[0, 0] for _ in range(n + 2)]
+
+          dp[0][L] = dp[0][P] = 0
+          dp[1][L] = dp[1][P] = 1
+          dp[2][L] = dp[2][P] = 2
+
+          for day in range(3, n + 1):
+              dp[day][L] = (dp[day - 2][P] + dp[day - 1][P]) % MOD
+              dp[day][P] = (dp[day - 1][L] + dp[day - 1][P]) % MOD
+
+          def a(day):
+              return (dp[day][L] + dp[day][P]) % MOD
+
+          ans = a(n)
+          for day in range(1, n + 1):
+              ans = (ans + max(a(day - 1), 1) * max(a(n - day), 1)) % MOD
+          return ans
+
+
+  assert Solution().checkRecord(2) == 8
+  assert Solution().checkRecord(1) == 3
+  assert Solution().checkRecord(10101) == 183236316
+#+end_src
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The valid suffixes for a record are $XP$, $YPL$ and $ZPLL$, where $X$, $Y$ and $Z$ are records of size $n-1, n-2$ and $n-3$ respectively.  As these suffixes are mutually exclusive, we can compute the number of different records with only ~L~ and ~P~ as $f(d)=f(d-1)+f(d-2)+f(d-3)$.  To compute $g(d)$, we use the same trick as the above solution.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def checkRecord(self, n: int) -> int:
+          MOD = 10**9 + 7
+
+          dp = [0] * (n + 10)
+          dp[0] = 1
+          dp[1] = 2
+          dp[2] = 4
+          dp[3] = 7
+
+          for day in range(4, n + 1):
+              dp[day] = (dp[day - 1] + dp[day - 2] + dp[day - 3]) % MOD
+
+          ans = dp[n]
+          for day in range(1, n + 1):
+              ans = (ans + dp[day - 1] * dp[n - day]) % MOD
+          return ans
+
+
+  assert Solution().checkRecord(2) == 8
+  assert Solution().checkRecord(1) == 3
+  assert Solution().checkRecord(10101) == 183236316
+#+end_src
