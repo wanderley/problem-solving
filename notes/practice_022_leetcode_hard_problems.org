@@ -2397,6 +2397,9 @@ This is a simulation problem where the goal is to pick the right data structures
   from heapq import heappush, heappop
 
 
+  from sortedcontainers import SortedList
+
+
   class Solution:
       def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
           available = SortedList(range(k))
@@ -2406,24 +2409,18 @@ This is a simulation problem where the goal is to pick the right data structures
           busiest_count = 0
 
           for i, start, time in zip(range(len(arrival)), arrival, load):
-              while len(cleanup) > 0 and cleanup[0][0] < start:
+              while cleanup and cleanup[0][0] < start:
                   _, server = heappop(cleanup)
                   available.add(server)
-                  counter.setdefault(server, 0)
-                  counter[server] += 1
-                  busiest_count = max(busiest_count, counter[server])
 
-              j = available.bisect_left(i % k)
-              if len(available) > 0:
+              if available:
+                  j = available.bisect_left(i % k)
                   server = available[j if j < len(available) else 0]
                   available.remove(server)
                   heappush(cleanup, (start + time - 1, server))
-
-          while len(cleanup) > 0:
-              _, server = heappop(cleanup)
-              counter.setdefault(server, 0)
-              counter[server] += 1
-              busiest_count = max(busiest_count, counter[server])
+                  counter.setdefault(server, 0)
+                  counter[server] += 1
+                  busiest_count = max(busiest_count, counter[server])
 
           return [server for server in counter if counter[server] == busiest_count]
 
