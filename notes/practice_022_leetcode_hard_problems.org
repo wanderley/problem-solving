@@ -2379,6 +2379,59 @@ CLOCK: [2022-07-22 Fri 15:37]--[2022-07-22 Fri 15:39] =>  0:02
   assert Solution().numSimilarGroups(["tars", "rats", "arts", "star"]) == 2
   assert Solution().numSimilarGroups(["omv", "ovm"]) == 1
 #+end_src
+* Leetcode: 1606. Find Servers That Handled Most Number of Requests
+:PROPERTIES:
+:ID:       D163B6CA-B6A6-4FE2-9B0E-755FF57AA2F0
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-22 Fri 16:23]--[2022-07-22 Fri 16:55] =>  0:32
+:END:
+[[https://leetcode.com/problems/find-servers-that-handled-most-number-of-requests/][Problem Statement]]
+
+This is a simulation problem where the goal is to pick the right data structures.  Time complexity is $O(n \log m)$ with space $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from sortedcontainers import SortedList
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
+          available = SortedList(range(k))
+          cleanup = []
+          counter = {}
+
+          busiest_count = 0
+
+          for i, start, time in zip(range(len(arrival)), arrival, load):
+              while len(cleanup) > 0 and cleanup[0][0] < start:
+                  _, server = heappop(cleanup)
+                  available.add(server)
+                  counter.setdefault(server, 0)
+                  counter[server] += 1
+                  busiest_count = max(busiest_count, counter[server])
+
+              j = available.bisect_left(i % k)
+              if len(available) > 0:
+                  server = available[j if j < len(available) else 0]
+                  available.remove(server)
+                  heappush(cleanup, (start + time - 1, server))
+
+          while len(cleanup) > 0:
+              _, server = heappop(cleanup)
+              counter.setdefault(server, 0)
+              counter[server] += 1
+              busiest_count = max(busiest_count, counter[server])
+
+          return [server for server in counter if counter[server] == busiest_count]
+
+
+  assert Solution().busiestServers(3, [1, 2, 3, 4, 5], [5, 2, 3, 3, 3]) == [1]
+  assert Solution().busiestServers(3, [1, 2, 3, 4], [1, 2, 1, 2]) == [0]
+  assert Solution().busiestServers(3, [1, 2, 3], [10, 12, 11]) == [0, 1, 2]
+#+end_src
 * TODO Leetcode: 843. Guess the Word
 :PROPERTIES:
 :ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
