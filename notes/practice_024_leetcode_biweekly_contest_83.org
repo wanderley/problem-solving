@@ -1,0 +1,144 @@
+:PROPERTIES:
+:ID:       9D640F90-4385-4B95-8999-7E7889FF8943
+:END:
+#+TITLE: Practice #024: Leetcode Biweekly Contest 83
+
+* Leetcode 2347. Best Poker Hand
+:PROPERTIES:
+:ID:       1DEA8923-32B6-4523-BC4A-2F15D5408891
+:END:
+[[https://leetcode.com/problems/best-poker-hand/][Problem Statement]]
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  Use the count different ranks and suits to compute the best hand.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def bestHand(self, ranks: List[int], suits: List[str]) -> str:
+          cr = {}
+          cs = {}
+          for r in ranks:
+              cr.setdefault(r, 0)
+              cr[r] += 1
+          for s in suits:
+              cs.setdefault(s, 0)
+              cs[s] += 1
+
+          if len(cs) == 1:
+              return "Flush"
+
+          if 3 in cr.values() or 4 in cr.values():
+              return "Three of a Kind"
+
+          if 2 in cr.values():
+              return "Pair"
+
+          return "High Card"
+
+
+  assert Solution().bestHand([13, 2, 3, 1, 9], ["a", "a", "a", "a", "a"]) == "Flush"
+  assert (
+      Solution().bestHand([4, 4, 2, 4, 4], ["d", "a", "a", "b", "c"]) == "Three of a Kind"
+  )
+  assert Solution().bestHand([10, 10, 2, 12, 9], ["a", "b", "c", "a", "d"]) == "Pair"
+#+end_src
+
+* Leetcode 2348. Number of Zero-Filled Subarrays
+:PROPERTIES:
+:ID:       7E98782E-5806-489B-A731-1CB8E4FB57A6
+:END:
+[[https://leetcode.com/contest/biweekly-contest-83/problems/number-of-zero-filled-subarrays/][Problem statement]]
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  While iterating over the array, keep the size of the zero-subarray ending on the current position.  Increment the array if you find a new zero and add the current size to the answer.  This works because you are increasing the number of previous subarrays in 1.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def zeroFilledSubarray(self, nums: List[int]) -> int:
+          ans = 0
+          cnt = 0
+          for n in nums:
+              if n != 0:
+                  cnt = 0
+              else:
+                  cnt += 1
+                  ans += cnt
+          return ans
+
+
+  assert Solution().zeroFilledSubarray([1, 3, 0, 0, 2, 0, 0, 4]) == 6
+  assert Solution().zeroFilledSubarray([0, 0, 0, 2, 0, 0]) == 9
+  assert Solution().zeroFilledSubarray([2, 10, 2019]) == 0
+#+end_src
+
+* Leetcode 2349. Design a Number Container System
+:PROPERTIES:
+:ID:       AA882F71-69D2-4C5C-9119-C0E01FD54306
+:END:
+[[https://leetcode.com/problems/design-a-number-container-system/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  We can answer ~find~ having the indexes for a given number in a ordered list, and ~change~ by using a map to store the value of a given position.  Time complexity is $O(\log n)$ for each operation and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+
+  class NumberContainers:
+      def __init__(self):
+          self.indexes = {}
+          self.values = {}
+
+      def change(self, index: int, number: int) -> None:
+          cur = self.values.get(index, None)
+          if cur is not None:
+              self.indexes[cur].remove(index)
+
+          self.indexes.setdefault(number, SortedList())
+          self.indexes[number].add(index)
+          self.values[index] = number
+
+      def find(self, number: int) -> int:
+          if number not in self.indexes or len(self.indexes[number]) == 0:
+              return -1
+          return self.indexes[number][0]
+
+
+  # Your NumberContainers object will be instantiated and called as such:
+  # obj = NumberContainers()
+  # obj.change(index,number)
+  # param_2 = obj.find(number)
+#+end_src
+
+* Leetcode 2350. Shortest Impossible Sequence of Rolls
+:PROPERTIES:
+:ID:       E5AB6F1B-9B2B-41A6-BEB9-200AD20AD597
+:END:
+
+- [[id:3D263A82-52AE-4C90-830D-C533ABAFFF3E][Mistake: Missing required invariants]].  I could have solved the problem if I asked myself "What property does a sequence of size 1, 2, .. have to satisfy?"
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  To have a sequence of size one, we have to find all number in the array.  Be i the smallest index where $1,2,..,k$ was found in $a[0...(i-1)]$.  We will only be able to build all sequences of size two, if we see $1,2,..,k$ in $a[i...(n-1)]$.  The problem becomes counting the number of times that the groups of $1,2,...,k$ appear in the input.  Time complexity is $O(n)$ and space is $O(k)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def shortestSequence(self, rolls: List[int], k: int) -> int:
+          cur = set()
+          cnt = 0
+          for i, r in enumerate(rolls):
+              cur.add(r)
+              if len(cur) == k:
+                  cur = set()
+                  cnt += 1
+          return cnt + 1
+
+
+  assert Solution().shortestSequence([4, 2, 1, 2, 3, 3, 2, 4, 1], 4) == 3
+  assert Solution().shortestSequence([1, 1, 2, 2], 2) == 2
+  assert Solution().shortestSequence([1, 1, 3, 2, 2, 2, 3, 3], 4) == 1
+#+end_src
