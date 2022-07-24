@@ -1,0 +1,128 @@
+:PROPERTIES:
+:ID:       36C9AF26-A8C0-4B43-B67E-E64AA04EAF71
+:END:
+#+TITLE: Practice #025: Leetcode Weekly Contest 303
+
+* Leetcode: 2351. First Letter to Appear Twice
+:PROPERTIES:
+:ID:       8FCB70BA-9E41-42CB-A40D-FD756848212B
+:END:
+[[https://leetcode.com/problems/first-letter-to-appear-twice/][Problem Statement]]
+
+#+begin_src python
+  class Solution:
+      def repeatedCharacter(self, s: str) -> str:
+          used = set()
+          for c in s:
+              if c in used:
+                  return c
+              used.add(c)
+
+
+  assert Solution().repeatedCharacter("abccbaacz") == "c"
+  assert Solution().repeatedCharacter("abcdd") == "d"
+#+end_src
+
+* Leetcode: 2352. Equal Row and Column Pairs
+:PROPERTIES:
+:ID:       71B30FD4-5A01-4C7B-8FA1-577CC13C9E37
+:END:
+[[https://leetcode.com/problems/equal-row-and-column-pairs/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def equalPairs(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          ans = 0
+          for i in range(N):
+              for j in range(N):
+                  k = 0
+                  while k < N and grid[i][k] == grid[k][j]:
+                      k += 1
+                  if k == N:
+                      ans += 1
+          return ans
+
+
+  assert Solution().equalPairs([[3, 2, 1], [1, 7, 6], [2, 7, 7]]) == 1
+  assert (
+      Solution().equalPairs([[3, 1, 2, 2], [1, 4, 4, 5], [2, 4, 2, 2], [2, 4, 2, 2]]) == 3
+  )
+#+end_src
+
+* Leetcode: 2353. Design a Food Rating System
+:PROPERTIES:
+:ID:       EA939EA4-089D-4449-9298-3589723DC3EB
+:END:
+[[https://leetcode.com/problems/design-a-food-rating-system/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  We can use a [[id:FCBEA48C-CFF6-43C4-B430-BCD00E245D22][Priority-Queue]] to manage the query for each food and use a map to store the connection between foods, cuisines and ratings.  Time complexity is $O(\log n)$ for each operation and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class FoodRatings:
+      def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
+          self.fc = {}
+          self.fr = {}
+          self.cr = {}
+          for f, c, r in zip(foods, cuisines, ratings):
+              self.fc[f] = c
+              self.fr[f] = r
+              self.cr.setdefault(c, [])
+              heappush(self.cr[c], (-r, f))
+
+      def changeRating(self, food: str, newRating: int) -> None:
+          self.fr[food] = newRating
+          heappush(self.cr[self.fc[food]], (-newRating, food))
+
+      def highestRated(self, cuisine: str) -> str:
+          while -self.cr[cuisine][0][0] != self.fr[self.cr[cuisine][0][1]]:
+              heappop(self.cr[cuisine])
+          return self.cr[cuisine][0][1]
+
+
+  # Your FoodRatings object will be instantiated and called as such:
+  # obj = FoodRatings(foods, cuisines, ratings)
+  # obj.changeRating(food,newRating)
+  # param_2 = obj.highestRated(cuisine)
+#+end_src
+
+* Leetcode: 2354. Number of Excellent Pairs
+:PROPERTIES:
+:ID:       96164799-F84C-408D-AC04-D290C49013FB
+:END:
+[[https://leetcode.com/problems/number-of-excellent-pairs/][Problem Statement]]
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Pick one number $x$.  If it has at least $k$ bits, then it can be combine with any other number in the list (inclusive with itself) to form a pair.  If $x$ has less than $k$ bits, say $k_x$, it can be combined with any number $y$ that has at least $k_y \geq k-k_x$.  The problem becomes counting the numbers per their numbers of bits.  Time complexity is $O(b^2)$ where $b$ is the number max of bits in the numbers, and space is $O(b)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def countExcellentPairs(self, nums: List[int], k: int) -> int:
+          cnt = {}
+          for n in set(nums):
+              c = 0
+              while n > 0:
+                  c += n % 2
+                  n = n // 2
+              cnt.setdefault(c, 0)
+              cnt[c] += 1
+          ans = 0
+          for ca, ba in cnt.items():
+              for cb, bb in cnt.items():
+                  if ca + cb >= k:
+                      ans += ba * bb
+          return ans
+
+
+  assert Solution().countExcellentPairs([1, 2, 3, 1], 3) == 5
+  assert Solution().countExcellentPairs([5, 1, 1], 10) == 0
+#+end_src
