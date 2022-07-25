@@ -1472,6 +1472,7 @@ CLOCK: [2022-07-17 Sun 14:54]--[2022-07-17 Sun 15:26] =>  0:32
   assert Solution().minFallingPathSum([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == 13
   assert Solution().minFallingPathSum([[7]]) == 7
 #+end_src
+
 * Leetcode: 1987. Number of Unique Good Subsequences
 :PROPERTIES:
 :ID:       A2635C55-6A7B-4295-A3B5-E1A7C8861F11
@@ -2324,6 +2325,7 @@ CLOCK: [2022-07-22 Fri 14:10]--[2022-07-22 Fri 15:30] =>  1:20
   assert Solution().countOfAtoms("K4(ON(SO3)2)2") == "K4N2O14S4"
   assert Solution().countOfAtoms("(A)2(B)2") == "A2B2"
 #+end_src
+
 * Leetcode: 839. Similar String Groups
 :PROPERTIES:
 :ID:       80E6FAE6-7CD5-4238-992B-9BF369D02E2B
@@ -2379,6 +2381,7 @@ CLOCK: [2022-07-22 Fri 15:37]--[2022-07-22 Fri 15:39] =>  0:02
   assert Solution().numSimilarGroups(["tars", "rats", "arts", "star"]) == 2
   assert Solution().numSimilarGroups(["omv", "ovm"]) == 1
 #+end_src
+
 * Leetcode: 1606. Find Servers That Handled Most Number of Requests
 :PROPERTIES:
 :ID:       D163B6CA-B6A6-4FE2-9B0E-755FF57AA2F0
@@ -2429,6 +2432,7 @@ This is a simulation problem where the goal is to pick the right data structures
   assert Solution().busiestServers(3, [1, 2, 3, 4], [1, 2, 1, 2]) == [0]
   assert Solution().busiestServers(3, [1, 2, 3], [10, 12, 11]) == [0, 1, 2]
 #+end_src
+
 * Leetcode: 1632. Rank Transform of a Matrix
 :PROPERTIES:
 :ID:       64D350AB-B82B-4923-BA81-4D55335B5BCE
@@ -2508,6 +2512,73 @@ CLOCK: [2022-07-23 Sat 07:10]--[2022-07-23 Sat 07:20] =>  0:10
       [[20, -21, 14], [-19, 4, 19], [22, -47, 24], [-19, 4, 19]]
   ) == [[4, 2, 3], [1, 3, 4], [5, 1, 6], [1, 3, 4]]
 #+end_src
+
+* Leetcode: 564. Find the Closest Palindrome
+:PROPERTIES:
+:ID:       034FC1E7-4AFB-4534-8C2D-0D3F3E8A5292
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-25 Mon 07:04]--[2022-07-25 Mon 07:55] =>  0:51
+:END:
+[[https://leetcode.com/problems/find-the-closest-palindrome/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Build a palindrome with the input number by splitting it and them combining the first part in reverse order.  The answer will be doing this but adding +1, +0 or -1 to the split part.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def nearestPalindromic(self, num: str) -> str:
+          N = len(num)
+          even = N % 2 == 0
+          l = list(num)
+
+          def same():
+              p = l[0 : N // 2]
+              if even:
+                  return "".join(p + p[::-1])
+              else:
+                  return "".join(p + [l[N // 2]] + p[::-1])
+
+          def smaller():
+              if even:
+                  p = l[0 : N // 2]
+                  n = str(int("".join(p)) - 1)
+                  return "".join(n + n[::-1])
+              else:
+                  p = l[0 : N // 2 + 1]
+                  n = str(int("".join(p)) - 1)
+                  return "".join(n + n[:-1][::-1])
+
+          def greater():
+              if even:
+                  p = l[0 : N // 2]
+                  n = str(int("".join(p)) + 1)
+                  return "".join(n + n[::-1])
+              else:
+                  p = l[0 : N // 2 + 1]
+                  n = str(int("".join(p)) + 1)
+                  return "".join(n + n[:-1][::-1])
+
+          candidates = set([str(10 ** N + 1), str(10 ** (N - 1) - 1)])
+          candidates.add(same())
+          candidates.add(smaller())
+          candidates.add(greater())
+          candidates.discard(num)
+
+          return min(*candidates, key=lambda e: (abs(int(e)-int(num)), int(e)))
+
+  assert Solution().nearestPalindromic("123") == "121"
+  assert Solution().nearestPalindromic("1") == "0"
+  assert Solution().nearestPalindromic("10") == "9"
+  assert Solution().nearestPalindromic("11") == "9"
+  assert Solution().nearestPalindromic("19") == "22"
+  assert Solution().nearestPalindromic("9") == "8"
+  assert Solution().nearestPalindromic("99") == "101"
+  assert Solution().nearestPalindromic("999") == "1001"
+  assert Solution().nearestPalindromic("100") == "99"
+  assert Solution().nearestPalindromic("1000") == "999"
+#+end_src
+
 * TODO Leetcode: 843. Guess the Word
 :PROPERTIES:
 :ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
