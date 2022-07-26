@@ -3001,3 +3001,40 @@ CLOCK: [2022-07-26 Tue 07:22]--[2022-07-26 Tue 08:04] =>  0:42
   obj.addElement(5)
   assert obj.calculateMKAverage() == 5
 #+end_src
+
+* Leetcode: 188. Best Time to Buy and Sell Stock IV
+:PROPERTIES:
+:ID:       A4D61D75-3B82-4399-8C8D-AF848075E792
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-26 Tue 11:14]--[2022-07-26 Tue 11:53] =>  0:39
+:END:
+[[https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  I was too confident my implementation and didn't test it fully.
+
+- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  Sometimes, I get away with $10^8$ at Leetcode.  So, I tried without optimization.
+
+- [[id:26656051-E32D-42FE-9315-05ADB46A1A82][Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?]]  Suppose that we always started the day with money on the pocket.  So, we have to find the best between buying today and selling in future day, since there is no point of holding it.  This can be modeled with $dp[i][k]=\max(dp[i+1][k], -prices[i] + prices[j] + dp[j + 1][k -1])$, and it will be efficiently computed if we store $best[i][k]=\max(best[i+1][k], prices[i] + 1][k - 1])$ and $dp[i][k]=\max(dp[i+1][k], -prices[i] + best[i+1][k])$.  Time and space complexity is $O(n \times k)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maxProfit(self, K: int, prices: List[int]) -> int:
+          N = len(prices)
+          dp = [[0] * (K + 1) for _ in range(N + 1)]
+          best = [[0] * (K + 1) for _ in range(N + 1)]
+          for i in range(N, -1, -1):
+              for k in range(K, -1, -1):
+                  if k == 0 or i == N:
+                      continue
+                  dp[i][k] = max(dp[i + 1][k], -prices[i] + best[i + 1][k])
+                  best[i][k] = max(best[i + 1][k], prices[i] + dp[i + 1][k - 1])
+          return dp[0][K]
+
+
+  assert Solution().maxProfit(2, [2, 4, 1]) == 2
+  assert Solution().maxProfit(2, [3, 2, 6, 5, 0, 3]) == 7
+#+end_src
