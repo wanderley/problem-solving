@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       665B7733-6D7E-4A34-8F77-7E64747CE2C9
+:END:
+#+TITLE: Longest Increasing Subsequence
+
+Given an integer array $a$, return the length of the longest strictly increasing subsequence.
+
+- Time complexity is $O(n \log n)$.
+- Space complexity is $O(k)$ where $k$ is the size of the longest strictly increasing subsequence.
+
+*Solution:* Be $s$ the longest strictly increasing subsequence in $a[0..(i-1)]$.  If $a[i]>s[-1]$, then we can extend the sequence with $a[i]$.  Be $k$ such that $seq[k-1] < a[i] \leq seq[k]$  We can assign $a[i]$ to $s[k]$ what increases the chance for us to expend the sequence with the further numbers.
+
+#+begin_src python
+  def lis(a):
+      seq = []
+      for n in a:
+          k = bisect_left(seq, n)
+          if k == len(seq):
+              seq.append(n)
+          else:
+              seq[k] = n
+      return len(seq)
+
+
+  assert lis([10, 9, 2, 5, 3, 7, 101, 18]) == 4
+  assert lis([0, 1, 0, 3, 2, 3]) == 4
+  assert lis([7, 7, 7, 7, 7, 7, 7]) == 1
+#+end_src

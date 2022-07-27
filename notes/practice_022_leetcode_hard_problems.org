@@ -3093,3 +3093,87 @@ CLOCK: [2022-07-26 Tue 13:56]--[2022-07-26 Tue 14:04] =>  0:08
       100, startFuel=10, stations=[[10, 60], [20, 30], [30, 30], [60, 40]]
   )
 #+end_src
+
+
+* Leetcode: 354. Russian Doll Envelopes
+:PROPERTIES:
+:ID:       E9A797EE-27EE-4BC1-9863-88EEF3986B6C
+:WA:       6
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-26 Tue 22:19]--[2022-07-26 Tue 23:50] =>  1:31
+CLOCK: [2022-07-26 Tue 21:34]--[2022-07-26 Tue 21:36] =>  0:02
+:END:
+[[https://leetcode.com/problems/russian-doll-envelopes/][Problem Statement]]
+
+- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  The constant factor of [[id:252C5055-2C0D-4B0E-A4BF-9507B85A179F][Segment Tree]] was too high to get an AC.
+
+- [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  I found many useful properties but couldn't put all them together (e.g. sort envelopes first by increase $h$ and then decreasing $w$).
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  Sort the envelopes by $h$ values.  Now the problem becomes finding [[id:665B7733-6D7E-4A34-8F77-7E64747CE2C9][Longest Increasing Subsequence]] on values of $w$.  To avoid creating number with same $h$, we make sure that $h$ values are increase and $w$ values with same $h$ value is in decrease order.  Time complexity is $O(n \log n)$ and space is $O(k)$ where $k$ is the size of the longest subsequence.
+
+#+begin_src python
+  from typing import List
+  from bisect import bisect_left
+
+
+  class Solution:
+      def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
+          N = len(envelopes)
+          envelopes.sort(key=lambda e: (e[1], -e[0]))
+          seq = []
+          for n, _ in envelopes:
+              k = bisect_left(seq, n)
+              if k == len(seq):
+                  seq.append(n)
+              else:
+                  seq[k] = n
+          return len(seq)
+
+
+  assert Solution().maxEnvelopes([[5, 4], [6, 4], [6, 7], [2, 3]]) == 3
+  assert Solution().maxEnvelopes([[1, 1], [1, 1], [1, 1]]) == 1
+#+end_src
+
+- [[id:37B33434-71C2-4E55-9121-5D6855D8E169][Can we formulate the problem using a segment tree?]]  Sort the envelopes by $h$ and from the last to the first.  Add them to a [[id:252C5055-2C0D-4B0E-A4BF-9507B85A179F][Segment Tree]] or [[id:2B44007C-8EC7-49DA-9A9B-0D6CF6578083][FenwickTree]] which supports getting the max value of an interval.  Time complexity is $O(n \log m)$ where $m$ is the max size of the interval, and space is $O(m)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class FenwickTreeMax:
+      def __init__(self, n):
+          self.n = n
+          self.bit = [float("-inf")] * n
+
+      def getmax(self, r):
+          ret = float("-inf")
+          while r >= 0:
+              ret = max(ret, self.bit[r])
+              r = (r & (r + 1)) - 1
+          return ret
+
+      def update(self, idx, val):
+          while idx < self.n:
+              self.bit[idx] = max(self.bit[idx], val)
+              idx = idx | (idx + 1)
+
+
+  class Solution:
+      def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
+          M = 123_456
+          best = FenwickTreeMax(M)
+
+          envelopes.sort(key=lambda e: (e[1], -e[0]))
+          ans = 0
+          for i in range(len(envelopes) - 1, -1, -1):
+              n = envelopes[i][0]
+              c = max(1, 1 + best.getmax(M - (n + 1)))
+              best.update(M - n, c)
+              ans = max(ans, c)
+          return ans
+
+
+  assert Solution().maxEnvelopes([[5, 4], [6, 4], [6, 7], [2, 3]]) == 3
+  assert Solution().maxEnvelopes([[1, 1], [1, 1], [1, 1]]) == 1
+#+end_src
