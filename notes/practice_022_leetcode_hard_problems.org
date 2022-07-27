@@ -3038,3 +3038,58 @@ CLOCK: [2022-07-26 Tue 11:14]--[2022-07-26 Tue 11:53] =>  0:39
   assert Solution().maxProfit(2, [2, 4, 1]) == 2
   assert Solution().maxProfit(2, [3, 2, 6, 5, 0, 3]) == 7
 #+end_src
+
+* Leetcode: 871. Minimum Number of Refueling Stops
+:PROPERTIES:
+:ID:       D481FE85-1B1B-4615-987F-9F006701403F
+:WA:       6
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-26 Tue 14:43]--[2022-07-26 Tue 15:40] =>  0:57
+CLOCK: [2022-07-26 Tue 13:56]--[2022-07-26 Tue 14:04] =>  0:08
+:END:
+[[https://leetcode.com/problems/minimum-number-of-refueling-stops/][Problem Statement]]
+
+- [[id:E6B9ECE9-E7F6-4273-90DB-226664B11C0A][Mistake: Did not slow down to make sure that each part of the problem was solved correctly]].  I found the recurrence with time complexity of $O(n^2 \times k)$ and didn't not carefully extract the memorization to make it $O(n \times k)$.
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Compute $m[k][i]$ which represents the minimum fuel required to go from station $i$ to $target$ stopping in other $k$ stations ahead.  If $stations[i][0] + m[k][i] <= startFuel$, then $k$ is an answer to the original problem.  The original recurrence is $m[k][i] = max(0, min_{i < j \leq n}(m[k-1][j] + stations[j][0] - stations[i][0] - stations[i][1] for j in range(i + 1, N))$ which consumes $O(n^2 \times k)$ to be computed, but the $min$ part can be extracted and answered in $O(1)$.  Therefore, the time and space complexity of the solution is $O(n \times k)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minRefuelStops(
+          self, target: int, startFuel: int, stations: List[List[int]]
+      ) -> int:
+          if target <= startFuel:
+              return 0
+          N = len(stations)
+          m = [[float("inf")] * N for _ in range(N)]
+          b = [[float("inf")] * N for _ in range(N)]
+          for k in range(N):
+              for i in range(N - 1, -1, -1):
+                  if k == 0:
+                      m[k][i] = max(0, target - stations[i][0] - stations[i][1])
+                      b[k][i] = min(
+                          b[k][i + 1] if i + 1 < N else float("inf"),
+                          m[k][i] + stations[i][0],
+                      )
+                  elif i + 1 == N:
+                      b[k][i] = float("inf")
+                  else:
+                      m[k][i] = b[k - 1][i + 1]
+                      m[k][i] += -stations[i][0] - stations[i][1]
+                      m[k][i] = max(0, m[k][i])
+                      b[k][i] = min(b[k][i + 1], m[k][i] + stations[i][0])
+                  if stations[i][0] + m[k][i] <= startFuel:
+                      return k + 1
+          return -1
+
+
+  assert Solution().minRefuelStops(1, startFuel=1, stations=[])
+  assert Solution().minRefuelStops(100, startFuel=1, stations=[[10, 100]])
+  assert Solution().minRefuelStops(
+      100, startFuel=10, stations=[[10, 60], [20, 30], [30, 30], [60, 40]]
+  )
+#+end_src

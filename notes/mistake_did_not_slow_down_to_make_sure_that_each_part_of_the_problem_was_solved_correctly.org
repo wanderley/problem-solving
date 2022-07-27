@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E6B9ECE9-E7F6-4273-90DB-226664B11C0A
+:END:
+#+TITLE: Mistake: Did not slow down to make sure that each part of the problem was solved correctly
