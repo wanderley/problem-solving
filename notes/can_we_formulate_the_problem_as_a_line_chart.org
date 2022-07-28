@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       6E896F0D-AB58-4C26-A685-8A74D775BD71
+:END:
+#+TITLE: Can we formulate the problem as a line chart?

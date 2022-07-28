@@ -3177,3 +3177,223 @@ CLOCK: [2022-07-26 Tue 21:34]--[2022-07-26 Tue 21:36] =>  0:02
   assert Solution().maxEnvelopes([[5, 4], [6, 4], [6, 7], [2, 3]]) == 3
   assert Solution().maxEnvelopes([[1, 1], [1, 1], [1, 1]]) == 1
 #+end_src
+
+* Leetcode: 282. Expression Add Operators
+:PROPERTIES:
+:ID:       FEE30A8E-D995-47E9-83FA-B79E82173863
+:WA:       2
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-27 Wed 15:18]--[2022-07-27 Wed 16:07] =>  0:49
+:END:
+[[https://leetcode.com/problems/expression-add-operators/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Didn't even try to write down edge cases.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The length of $num$ is at most 10 what means that there are 8 positions where we can decide to not put an operator or put $+,-,\times$.  So, there are $8^4$ possible expressions.  Generate all them avoiding operands with leading zero and compute their value on the end.  Time complexity is $O(4^n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def addOperators(self, num: str, target: int) -> List[str]:
+          def valid(exp):
+              value = 0
+              for e in exp.replace("-", "+-").split("+"):
+                  cur = 1
+                  for m in e.split("*"):
+                      cur *= int(m)
+                  value += cur
+              return value == target
+
+          ans = []
+
+          def bt(i, leading, exp):
+              if i == len(num):
+                  if valid(exp):
+                      ans.append(exp)
+                  return
+              for o in "*", "+", "-":
+                  bt(i + 1, num[i] == "0", exp + o + num[i])
+              if not leading:
+                  bt(i + 1, False, exp + num[i])
+
+          bt(1, num[0] == "0", num[0])
+
+          return ans
+
+
+  assert Solution().addOperators("123", 6) == ["1*2*3", "1+2+3"]
+  assert Solution().addOperators("232", 8) == ["2*3+2", "2+3*2"]
+  assert Solution().addOperators("3456237490", 9191) == []
+#+end_src
+
+* Leetcode: 76. Minimum Window Substring
+:PROPERTIES:
+:ID:       DA2BC287-CB04-444A-A245-C8235211B58A
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-27 Wed 16:18]--[2022-07-27 Wed 16:54] =>  0:36
+:END:
+[[https://leetcode.com/problems/minimum-window-substring/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]]. I tried but didn't come up with ~("a", "b")~.
+
+- [[id:46522C06-DAC3-4986-A13A-17C2ED44ADD1][Can we formulate the problem as sliding window?]]  To check if the window is valid, we count the number of letters that reached the correct frequency in the window.  It can be done by keeping a dictionary with the frequency.  Time complexity is $O(n)$ and space complexity is $O(1)$.
+
+#+begin_src python
+  from collections import defaultdict
+
+
+  class Solution:
+      def minWindow(self, s: str, t: str) -> str:
+          R = len(set(t))
+          N = len(s)
+          required = defaultdict(int)
+          for c in t:
+              required[c] += 1
+
+          freq = defaultdict(int)
+          cnt_ok = 0
+
+          start = 0
+          valid = False
+
+          ans = None
+          for end, c in enumerate(s):
+              if not valid and freq[c] == required[c] - 1:
+                  cnt_ok += 1
+                  valid = cnt_ok == R
+
+              freq[c] += 1
+              while start < N and freq[s[start]] > required[s[start]]:
+                  freq[s[start]] -= 1
+                  start += 1
+
+              if valid and (ans is None or (ans[1] - ans[0] + 1) > (end - start + 1)):
+                  ans = (start, end)
+
+          return s[ans[0] : ans[1] + 1] if ans else ""
+
+
+  assert Solution().minWindow("ADOBECODEBANC", "ABC") == "BANC"
+  assert Solution().minWindow("a", "a") == "a"
+#+end_src
+
+* Leetcode: 2147. Number of Ways to Divide a Long Corridor
+:PROPERTIES:
+:ID:       1E5CD06C-3000-446D-ADEF-843AA2F932FC
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-27 Wed 17:02]--[2022-07-27 Wed 17:25] =>  0:23
+:END:
+[[https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Missed smallest edge cases possible (i.e. one letter).
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  We can trim the plants on both extremes since no section will be created between them.
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Be $p_0, p_1, ..., p_k$ the number of plants between the first two seats and the next two and so on.  The problem becomes computing $p_0 \times p_1 \times ... \times p_k \mod 10^9 + 7$.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def numberOfWays(self, corridor: str) -> int:
+          M = 10**9 + 7
+          N = len(corridor)
+          i = 0
+          while i < N and corridor[i] == "P":
+              i += 1
+          ans = None
+          while i < N:
+              cnt = 0
+              while i < N and corridor[i] == "P":
+                  i += 1
+                  cnt += 1
+              if i == N:
+                  break
+              assert corridor[i] == "S"
+              i += 1
+              while i < N and corridor[i] == "P":
+                  i += 1
+              if i == N:
+                  return 0
+              assert corridor[i] == "S"
+              if ans is None:
+                  ans = 1
+              ans = (ans * (cnt + 1)) % M
+              i += 1
+          return 0 if ans is None else ans
+
+
+  assert Solution().numberOfWays("SSPPSPS") == 3
+  assert Solution().numberOfWays("PPSPSP") == 1
+  assert Solution().numberOfWays("S") == 0
+#+end_src
+
+* Leetcode: 135. Candy
+:PROPERTIES:
+:ID:       68E325FC-3866-4A89-B1C5-88A85559E43B
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-27 Wed 19:00]--[2022-07-27 Wed 19:26] =>  0:26
+CLOCK: [2022-07-27 Wed 17:32]--[2022-07-27 Wed 17:43] =>  0:11
+:END:
+[[https://leetcode.com/problems/candy/][Problem Statement]]
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  Sort a list of pairs $(v, i)$ in increasing order where $ratings[i]=v$.  For each child in order, assign its candy as describe in the rules.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def candy(self, r: List[int]) -> int:
+          N = len(r)
+          low = [1] * N
+
+          ans = 0
+          for v, i in sorted(zip(r, range(N))):
+              c = []
+              if i - 1 >= 0 and r[i - 1] < v:
+                  c.append(low[i - 1] + 1)
+              if i + 1 < N and r[i + 1] < v:
+                  c.append(low[i + 1] + 1)
+              if c:
+                  low[i] = max(c)
+              ans += low[i]
+
+          return ans
+
+
+  assert Solution().candy([1, 0, 2]) == 5
+  assert Solution().candy([1, 2, 2]) == 4
+#+end_src
+
+- [[id:6E896F0D-AB58-4C26-A685-8A74D775BD71][Can we formulate the problem as a line chart?]]  We want to assign $1+2+..+k$ when we see a spike and $p+(p-1)+...+1$ when we see a drop.  If a spike is followed by a drop, we want to get $max(k, p)$ for that child.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def candy(self, r: List[int]) -> int:
+          N = len(r)
+
+          cand = [1] * N
+          for i in range(1, N):
+              if r[i] > r[i - 1]:
+                  cand[i] = cand[i - 1] + 1
+
+          for i in range(N - 2, -1, -1):
+              if r[i] > r[i + 1]:
+                  cand[i] = max(cand[i], cand[i + 1] + 1)
+
+          return sum(cand)
+
+
+  assert Solution().candy([1, 0, 2]) == 5
+  assert Solution().candy([1, 2, 2]) == 4
+#+end_src
