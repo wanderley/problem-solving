@@ -3397,3 +3397,205 @@ CLOCK: [2022-07-27 Wed 17:32]--[2022-07-27 Wed 17:43] =>  0:11
   assert Solution().candy([1, 0, 2]) == 5
   assert Solution().candy([1, 2, 2]) == 4
 #+end_src
+
+* Leetcode: 332. Reconstruct Itinerary
+:PROPERTIES:
+:ID:       6B445CC7-3916-4A98-9D5C-6FA02A6B5C32
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-28 Thu 10:21]--[2022-07-28 Thu 14:08] =>  3:47
+:END:
+[[https://leetcode.com/problems/reconstruct-itinerary/][Problem Statement]]
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Find an [[id:BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9][Eulerian path in Directed Graph]].  Time and space complexity is $O(m)$ where $m$ is the number of edges in the graph.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+          adj = defaultdict(list)
+          for u, v in tickets:
+              adj[u].append(v)
+          for u in adj:
+              adj[u].sort()
+              adj[u].reverse()
+
+          st = ["JFK"]
+          ans = []
+          while st:
+              if len(adj[st[-1]]) == 0:
+                  ans.append(st.pop())
+                  continue
+              st.append(adj[st[-1]].pop())
+          return ans[::-1]
+
+
+  assert Solution().findItinerary(
+      [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+  ) == ["JFK", "MUC", "LHR", "SFO", "SJC"]
+  assert Solution().findItinerary(
+      [["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]
+  ) == ["JFK", "ATL", "JFK", "SFO", "ATL", "SFO"]
+#+end_src
+
+* Leetcode: 2188. Minimum Time to Finish the Race
+:PROPERTIES:
+:ID:       9B046900-A7C0-45C0-8592-B4538C21EBCC
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-28 Thu 14:57]--[2022-07-28 Thu 16:15] =>  1:18
+CLOCK: [2022-07-28 Thu 14:08]--[2022-07-28 Thu 14:21] =>  0:13
+:END:
+[[https://leetcode.com/problems/minimum-time-to-finish-the-race/][Problem Statement]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  If we know the tires to make 1 lap, 2 laps and so on, the problem is reduced to [[id:0F085C54-E45A-41E6-951B-79CFD7ECBED5][Knapsack problem]].  The main trick is to notice that the best tire $i$ for $k$ laps has it factor $r_i$ less than or equal to $r_j$ where $j$ is the best tire for $k-1$ consecutive laps.  Time complexity is $O(n \times m)$ with space $O(n ^ 2)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumFinishTime(
+          self, tires: List[List[int]], changeTime: int, numLaps: int
+      ) -> int:
+          N = len(tires)
+          M = numLaps
+
+          tires.sort(key=lambda t: (t[1], t[0]))
+
+          best = [(float("inf"), N - 1) for _ in range(M + 1)]
+          cand = set(range(N))
+          total = [0] * N
+          laptime = [f for f, _ in tires]
+          for l in range(1, M + 1):
+              for i in range(best[l - 1][1] + 1):
+                  if l > 1:
+                      laptime[i] *= tires[i][1]
+                  total[i] += laptime[i]
+                  if best[l][0] > total[i]:
+                      best[l] = (total[i], i)
+
+          dp = [float("inf")] * (M + 1)
+          for i in range(M + 1):
+              if i == 0:
+                  dp[i] = 0
+              else:
+                  dp[i] = best[i][0]
+                  for l in range(1, i + 1):
+                      dp[i] = min(dp[i], dp[i - l] + best[l][0] + changeTime)
+
+          return dp[M]
+
+
+  assert Solution().minimumFinishTime([[2, 3], [3, 4]], 5, 4) == 21
+  assert Solution().minimumFinishTime([[1, 10], [2, 2], [3, 4]], 6, 5) == 25
+#+end_src
+
+* Leetcode: 158. Read N Characters Given read4 II - Call Multiple Times
+:PROPERTIES:
+:ID:       C6085F95-819B-4903-B333-44C54D36D484
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-28 Thu 18:05]--[2022-07-28 Thu 18:11] =>  0:06
+:END:
+[[https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+  # The read4 API is already defined for you.
+  # def read4(buf4: List[str]) -> int:
+
+
+  class Solution:
+      def __init__(self):
+          self.buf = [" "] * 4
+          self.pos = 0
+          self.len = 0
+
+      def read(self, buf: List[str], n: int) -> int:
+          i = 0
+          while i < n:
+              if self.pos == self.len:
+                  self.buf = [" "] * 4
+                  self.pos = 0
+                  self.len = read4(self.buf)
+
+              if self.len == 0:
+                  break
+
+              buf[i] = self.buf[self.pos]
+              self.pos += 1
+              i += 1
+
+          return i
+#+end_src
+
+* TODO Leetcode: 164. Maximum Gap
+:PROPERTIES:
+:ID:       4373FA38-A210-47A9-A473-18540B1F1C96
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-28 Thu 18:44]--[2022-07-28 Thu 19:44] =>  1:00
+:END:
+[[https://leetcode.com/problems/maximum-gap/][Problem Statement]]
+
+
+* Leetcode: 924. Minimize Malware Spread
+:PROPERTIES:
+:ID:       5C0FE5FA-1048-411A-8154-59E964601A5C
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-28 Thu 21:00]
+:END:
+[[https://leetcode.com/problems/minimize-malware-spread/][Problem Statement]]
+
+- [[id:EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C][Blackbox: This is a variation of a classic problem]]: find bridges on graphs.  But it turned out that my intuition was wrong.  After reading the problem again, I noticed that we have to find the connected components instead.
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Find [[id:367C887D-3517-4AC8-8219-293AC0E77E07][Connected Components in a Graph]] and pick the one that contains only one initial vertices and has maximum size or the smaller initial vertices id.  Time complexity is $O(n^2)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minMalwareSpread(self, graph: List[List[int]], initial: List[int]) -> int:
+          N = len(graph)
+          vis = [None] * N
+          comp_size = [0] * N
+          initial = set(initial)
+
+          def dfs(u, p):
+              for v in range(N):
+                  if graph[u][v] == 1 and vis[v] is None:
+                      vis[v] = p
+                      comp_size[p] += 1
+                      dfs(v, p)
+
+          for u in initial:
+              if vis[u] is None:
+                  vis[u] = u
+                  comp_size[u] += 1
+                  dfs(u, u)
+
+          comp_initial = [0] * N
+          for u in initial:
+              comp_initial[vis[u]] += 1
+
+          ans = None
+          for u in initial:
+              improve = 0 if comp_initial[vis[u]] > 1 else comp_size[vis[u]]
+              if ans is None or ans[1] < improve or (ans[1] == improve and ans[0] > u):
+                  ans = (u, improve)
+
+          return ans[0] if ans else 0
+
+
+  assert Solution().minMalwareSpread([[1, 1, 0], [1, 1, 0], [0, 0, 1]], [0, 1]) == 0
+  assert Solution().minMalwareSpread([[1, 0, 0], [0, 1, 0], [0, 0, 1]], [0, 2]) == 0
+  assert Solution().minMalwareSpread([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [1, 2]) == 1
+#+end_src
