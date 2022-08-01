@@ -1426,7 +1426,8 @@ CLOCK: [2022-07-17 Sun 14:54]--[2022-07-17 Sun 15:26] =>  0:32
 - [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  First solution was $O(n^4)$ which was solution after manual test with $100 \times 100$ grid.
 - [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]],  where you had a fast way to pick the best result from the left and right ([[id:D00AC85C-A22C-4946-B379-812595D8387B][Leetcode: 1563. Stone Game V]]).
 
-[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The best path that ends on $(i, j)$ is either one path that ended on its left or its right.  Be $left(j)$ the minimum path that ended on any of $(i-1, 0), (i-1, 1), .., (i-1, j)$ cells, and $right(j)$ the minimum path that ended on any of $(i-1, j+1), (i-1, j+2), .., (i-1, M-1)$.  Given that, we can compute $dp[i][j]=grid[i][j]+min(left[j-1], right[j+1])$.  Time and space complexity is $O(n^2)$.
+[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem
+ in small and easily to solve parts?]]  The best path that ends on $(i, j)$ is either one path that ended on its left or its right.  Be $left(j)$ the minimum path that ended on any of $(i-1, 0), (i-1, 1), .., (i-1, j)$ cells, and $right(j)$ the minimum path that ended on any of $(i-1, j+1), (i-1, j+2), .., (i-1, M-1)$.  Given that, we can compute $dp[i][j]=grid[i][j]+min(left[j-1], right[j+1])$.  Time and space complexity is $O(n^2)$.
 
 #+begin_src python
   from typing import List
@@ -2445,14 +2446,14 @@ CLOCK: [2022-07-23 Sat 07:10]--[2022-07-23 Sat 07:20] =>  0:10
 [[https://leetcode.com/problems/rank-transform-of-a-matrix/][Problem Statement]]
 
 - [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  I considered the graph formed by rows and cols, but I didn't think about having one graph for each value in the grid.
-
+b
 - [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  My first implementation had vertices as cells and edges between cells with the same value that share the same column and/or row.  The complexity of the solution ended up to be $O((n \times m)^2)$.
 
 - [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] where you had to process the cells in increase order of values.
 
 - [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Suppose that we have all cells sorted by value.  The smaller one should have the smallest value in the input.  In order to discover the value of the cell, we have to know the max value used in its column and row (stored in two arrays).  We still have to discover what are the cells (with same value) that have to be updated at the same time.
 
-- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  For each different cell value $k$, we will create an graph $g_k$ where vertices of $g_k$ are rows and columns and there is an edge between two vertices $i$ (row) and $j$ (column) if there is $matrix[i][j]=k$.  In this graph, we can use [[id:23A4E36E-24D3-40F8-AA20-32C0DB1E36F6][Union-Find]] to find the components of the graph and therefore discovering the cells that have to be updated together.
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  For each different cell value $k$, we will create an [[id:F1D5D810-3FDF-45C3-BAF1-68584BD77DB3][Bipartite Graph]] $g_k$ where vertices of $g_k$ are rows and columns and there is an edge between two vertices $i$ (row) and $j$ (column) if there is $matrix[i][j]=k$.  In this graph, we can use [[id:23A4E36E-24D3-40F8-AA20-32C0DB1E36F6][Union-Find]] to find the components of the graph and therefore discovering the cells that have to be updated together.
 
 - Time and space complexity is $O(n \times m)$.
 
@@ -3550,7 +3551,7 @@ CLOCK: [2022-07-28 Thu 18:44]--[2022-07-28 Thu 19:44] =>  1:00
 :ID:       5C0FE5FA-1048-411A-8154-59E964601A5C
 :END:
 :LOGBOOK:
-CLOCK: [2022-07-28 Thu 21:00]
+CLOCK: [2022-07-28 Thu 21:00]--[2022-07-28 Thu 21:50] =>  0:50
 :END:
 [[https://leetcode.com/problems/minimize-malware-spread/][Problem Statement]]
 
@@ -3598,4 +3599,109 @@ CLOCK: [2022-07-28 Thu 21:00]
   assert Solution().minMalwareSpread([[1, 1, 0], [1, 1, 0], [0, 0, 1]], [0, 1]) == 0
   assert Solution().minMalwareSpread([[1, 0, 0], [0, 1, 0], [0, 0, 1]], [0, 2]) == 0
   assert Solution().minMalwareSpread([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [1, 2]) == 1
+#+end_src
+
+
+* TODO Leetcode: 1000. Minimum Cost to Merge Stones
+:PROPERTIES:
+:ID:       AFA49C8B-27B6-48CD-887F-F299006900BC
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-29 Fri 15:56]--[2022-07-29 Fri 17:00] =>  1:04
+CLOCK: [2022-07-28 Thu 21:50]--[2022-07-28 Thu 22:28] =>  0:38
+:END:
+[[https://leetcode.com/problems/minimum-cost-to-merge-stones/][Problem Statement]]
+
+* Leetcode: 132. Palindrome Partitioning II
+:PROPERTIES:
+:ID:       1BF208FD-93A0-45A6-ADDE-969A8A64D314
+:END:
+[[https://leetcode.com/problems/palindrome-partitioning-ii/][Problem Statement]]
+
+- [[id:EC7DFA39-8E96-4EF7-9297-FAEE2ABF0849][Blackbox: The dependent problem needs to be optimized]].  Noticed that I had to be able to query if $(i,j)$ is a palindrome in $O(1)$.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Build a matrix $p[i,j]$ which is $True$ if $s[i...j]$ is a palindrome and $False$ otherwise.  With that done, we can compute $dp[i]$ which is the minimum number of cuts to make $s[i...(n-1)]$ palindromes.  To do that, we pick the best $j$ where $p[i,j]=True$ and $1 + dp[j]$ is minimum.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minCut(self, s: str) -> int:
+          N = len(s)
+
+          is_palindrome = [[False] * N for _ in range(N)]
+          for k in range(N):
+              i = k
+              j = k
+              while 0 <= i and j < N and s[i] == s[j] and is_palindrome[i][j] == False:
+                  is_palindrome[i][j] = True
+                  i -= 1
+                  j += 1
+          for k in range(N - 1):
+              if s[k] != s[k + 1]:
+                  continue
+              i = k
+              j = k + 1
+              while 0 <= i and j < N and s[i] == s[j] and is_palindrome[i][j] == False:
+                  is_palindrome[i][j] = True
+                  i -= 1
+                  j += 1
+
+          dp = [float("inf")] * N
+          for i in range(N - 1, -1, -1):
+              for j in range(i, N):
+                  if not is_palindrome[i][j]:
+                      continue
+                  if j + 1 == N:
+                      dp[i] = min(dp[i], 0)
+                  else:
+                      dp[i] = min(dp[i], 1 + dp[j + 1])
+          return dp[0]
+
+
+  assert Solution().minCut("aab") == 1
+  assert Solution().minCut("a") == 0
+  assert Solution().minCut("ab") == 1
+#+end_src
+
+* Leetcode: 664. Strange Printer
+:PROPERTIES:
+:ID:       58453EDD-24BD-477E-806D-AF8F4E53D790
+:END:
+[[https://leetcode.com/problems/strange-printer/][Problem Statement]]
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  I shouldn't have try to immediately after defining the match.
+
+- [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  Swap consecutive letters with only one of them.
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The trick part of this problem is that we have to postpone as much as we can to count a print when we are dealing with $s[i] = s[k]$ and $i < k$.  To do so, we find an interval to print $s[i..k..j]$ where $s[i]=s[k]$ and we recur over $s[i..(k-1)]$ leaving the printing of $s[i..k]$ to be record when $s[i]$ is inevitably printed.  Time complexity is $O(n^3)$ and space is $O(n^2)$.
+
+#+begin_src python
+  class Solution:
+      def strangePrinter(self, s: str) -> int:
+          s = "".join([a for a, b in zip(s, s[1:] + "$") if a != b])
+          N = len(s)
+
+          dp = [[0] * N for _ in range(N)]
+          for i in range(N - 1, -1, -1):
+              for j in range(i, N):
+                  if i == j:
+                      dp[i][j] = 1
+                  elif i + 1 == j:
+                      dp[i][j] = 2
+                  else:
+                      dp[i][j] = 1 + dp[i + 1][j]
+                      for k in range(i + 1, j + 1):
+                          if s[i] == s[k]:
+                              dp[i][j] = min(
+                                  dp[i][j],
+                                  dp[i][k - 1] + (dp[k + 1][j] if k + 1 < N else 0),
+                              )
+
+          return dp[0][N - 1]
+
+
+  assert Solution().strangePrinter("aaabbb") == 2
+  assert Solution().strangePrinter("aba") == 2
 #+end_src
