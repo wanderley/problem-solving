@@ -2735,15 +2735,6 @@ CLOCK: [2022-07-26 Tue 06:08]--[2022-07-26 Tue 06:13] =>  0:05
 #+end_src
 
 - Other way to solve this problem is to implement a [[id:1A99D477-2FF8-481E-80B4-735122D0A8D7][Merge Sort]] and count the number of swaps was done.  Time complexity is $O(n \log n)$ and space is $O(n)$.
-* TODO Leetcode: 843. Guess the Word
-:PROPERTIES:
-:ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-19 Tue 17:36]--[2022-07-19 Tue 18:31] =>  0:55
-CLOCK: [2022-07-19 Tue 16:09]--[2022-07-19 Tue 16:19] =>  0:10
-:END:
-[[https://leetcode.com/problems/guess-the-word/][Problem Statement]]
 * Leetcode: 2092. Find All People With Secret
 :PROPERTIES:
 :ID:       89FA1E49-41EE-4B0D-8C76-1864049C8C54
@@ -3536,16 +3527,6 @@ CLOCK: [2022-07-28 Thu 18:05]--[2022-07-28 Thu 18:11] =>  0:06
           return i
 #+end_src
 
-* TODO Leetcode: 164. Maximum Gap
-:PROPERTIES:
-:ID:       4373FA38-A210-47A9-A473-18540B1F1C96
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-28 Thu 18:44]--[2022-07-28 Thu 19:44] =>  1:00
-:END:
-[[https://leetcode.com/problems/maximum-gap/][Problem Statement]]
-
-
 * Leetcode: 924. Minimize Malware Spread
 :PROPERTIES:
 :ID:       5C0FE5FA-1048-411A-8154-59E964601A5C
@@ -3601,16 +3582,6 @@ CLOCK: [2022-07-28 Thu 21:00]--[2022-07-28 Thu 21:50] =>  0:50
   assert Solution().minMalwareSpread([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [1, 2]) == 1
 #+end_src
 
-
-* TODO Leetcode: 1000. Minimum Cost to Merge Stones
-:PROPERTIES:
-:ID:       AFA49C8B-27B6-48CD-887F-F299006900BC
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-29 Fri 15:56]--[2022-07-29 Fri 17:00] =>  1:04
-CLOCK: [2022-07-28 Thu 21:50]--[2022-07-28 Thu 22:28] =>  0:38
-:END:
-[[https://leetcode.com/problems/minimum-cost-to-merge-stones/][Problem Statement]]
 
 * Leetcode: 132. Palindrome Partitioning II
 :PROPERTIES:
@@ -3705,3 +3676,98 @@ CLOCK: [2022-07-28 Thu 21:50]--[2022-07-28 Thu 22:28] =>  0:38
   assert Solution().strangePrinter("aaabbb") == 2
   assert Solution().strangePrinter("aba") == 2
 #+end_src
+
+* Leetcode: 943. Find the Shortest Superstring
+:PROPERTIES:
+:ID:       34806110-7C4D-47EF-A337-AA9018C3CB2E
+:WA:       1
+:END:
+[[https://leetcode.com/problems/find-the-shortest-superstring/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not test for single elements (e.g. ~["a"]~).
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  After we put the word $i$, we should put a word $j$ using the maximum of overlap possible which is the biggest suffix of $i$ that is a prefix of $j$.  With that, we have to keep increasing the answer until all words are covered.
+
+#+begin_src python
+  from typing import List
+  from functools import cache
+
+
+  class Solution:
+      def shortestSuperstring(self, words: List[str]) -> str:
+          N = len(words)
+
+          nxt = [list() for _ in range(N)]
+          for i in range(N):
+              for j in range(N):
+                  for k in range(0, len(words[i]) + 1):
+                      if words[j].startswith(words[i][k:]):
+                          nxt[i].append((j, k))
+                          break
+
+          @cache
+          def dfs(i, used):
+              if used == (1 << N) - 1:
+                  return words[i]
+
+              ans = None
+              for j, k in nxt[i]:
+                  if used & (1 << j) != 0:
+                      continue
+                  s = words[i][:k] + words[j]
+                  cur = words[i][:k] + dfs(j, used | (1 << j))
+                  if ans is None or len(ans) > len(cur):
+                      ans = cur
+
+              return ans
+
+          return min([dfs(i, 0) for i in range(N)], key=len)
+
+
+  assert (
+      Solution().shortestSuperstring(["alex", "loves", "leetcode"]) == "alexlovesleetcode"
+  )
+  assert (
+      Solution().shortestSuperstring(["catg", "ctaagt", "gcta", "ttca", "atgcatc"])
+      == "gctaagttcatgcatc"
+  )
+#+end_src
+
+* TODO Leetcode: 843. Guess the Word
+:PROPERTIES:
+:ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-19 Tue 17:36]--[2022-07-19 Tue 18:31] =>  0:55
+CLOCK: [2022-07-19 Tue 16:09]--[2022-07-19 Tue 16:19] =>  0:10
+:END:
+[[https://leetcode.com/problems/guess-the-word/][Problem Statement]]
+* TODO Leetcode: 164. Maximum Gap
+:PROPERTIES:
+:ID:       4373FA38-A210-47A9-A473-18540B1F1C96
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-28 Thu 18:44]--[2022-07-28 Thu 19:44] =>  1:00
+:END:
+[[https://leetcode.com/problems/maximum-gap/][Problem Statement]]
+
+
+* TODO Leetcode: 1000. Minimum Cost to Merge Stones
+:PROPERTIES:
+:ID:       AFA49C8B-27B6-48CD-887F-F299006900BC
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-29 Fri 15:56]--[2022-07-29 Fri 17:00] =>  1:04
+CLOCK: [2022-07-28 Thu 21:50]--[2022-07-28 Thu 22:28] =>  0:38
+:END:
+[[https://leetcode.com/problems/minimum-cost-to-merge-stones/][Problem Statement]]
+
+* TODO Leetcode: 2060. Check if an Original String Exists Given Two Encoded Strings
+:PROPERTIES:
+:ID:       FA18EDEA-910C-413D-86D3-241942EBFF92
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-01 Mon 10:41]--[2022-08-01 Mon 11:24] =>  0:43
+CLOCK: [2022-07-31 Sun 22:14]--[2022-07-31 Sun 22:52] =>  0:38
+:END:
+[[https://leetcode.com/problems/check-if-an-original-string-exists-given-two-encoded-strings/][Problem Statement]]
