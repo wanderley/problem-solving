@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       13025164-D62A-450B-AA2F-332E097F7A16
+:END:
+#+TITLE: What are the different ways to represent the search-space?

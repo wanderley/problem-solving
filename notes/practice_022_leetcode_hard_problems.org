@@ -3733,6 +3733,539 @@ CLOCK: [2022-07-28 Thu 21:00]--[2022-07-28 Thu 21:50] =>  0:50
   )
 #+end_src
 
+* Leetcode: 1359. Count All Valid Pickup and Delivery Options
+:PROPERTIES:
+:ID:       A74425B5-0ED5-4E3B-9D1B-D60D77FBB1A8
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-02 Tue 11:25]--[2022-08-02 Tue 22:11] => 10:46
+CLOCK: [2022-08-02 Tue 11:04]--[2022-08-02 Tue 11:09] =>  0:05
+:END:
+[[https://leetcode.com/problems/count-all-valid-pickup-and-delivery-options/][Problem Statement]]
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  Select the order to pick and when it will be delivered.  To delivery the rest of order, we have the solve the same problem with less one order.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def countOrders(self, n: int) -> int:
+          MOD = 10**9 + 7
+          ans = 1
+          for i in range(2, n + 1):
+              ans = ((i * (2 * i - 1) % MOD) * ans) % MOD
+          return ans
+
+
+  assert Solution().countOrders(1) == 1
+  assert Solution().countOrders(2) == 6
+  assert Solution().countOrders(3) == 90
+#+end_src
+
+* Leetcode: 2167. Minimum Time to Remove All Cars Containing Illegal Goods
+:PROPERTIES:
+:ID:       FD2C957B-FE09-4290-AAFD-2FEB3203824D
+:END:
+
+
+[[https://leetcode.com/problems/minimum-time-to-remove-all-cars-containing-illegal-goods/][Problem Statement]]
+
+- [[id:461C7633-08C5-468D-9FC3-D78154DDBD42][Mistake: Careless coding]].  Came up with the way to count but didn't stop to verify if they were covering all cases.
+
+- [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] where you had to compute $dp[i]$ using only the next $j$ that satisfy some condition.
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The answer will have an interval $(i, j)$ (could be empty) where we will pay $2$ to remove the cars.   Therefore, it score is $i-1+ones(i,j)+n-j$.  We can't iterate over all intervals, but can compute the same score if we have $f(i)$ as the minimum score to remove cars from $i$ to $n-1$.  Now the problem is $min(i + f(i))$ for $0 \leq i < n$.  Time complexity is $O(n)$ with $O(1)$ space.
+
+#+begin_src python
+  class Solution:
+      def minimumTime(self, s: str) -> int:
+          N = len(s)
+          best = 0
+          ans = float("inf")
+          j = N - 1
+          for i in range(N - 1, -1, -1):
+              if i == j:
+                  j -= 1
+                  while j >= 0 and s[j] == "0":
+                      j -= 1
+              best = min(N - i, 2 + best if s[i] == "1" else best)
+              ans = min(ans, j + 1 + best)
+          return ans
+
+
+  assert Solution().minimumTime("1100101") == 5
+  assert Solution().minimumTime("0010") == 2
+#+end_src
+
+* Leetcode: 1473. Paint House III
+:PROPERTIES:
+:ID:       6622D32E-1995-4D5E-B2F4-491BB7FB5FF5
+:END:
+[[https://leetcode.com/problems/paint-house-iii/][Problem Statement]]
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  If there is only one house, the answer is either 0 if it is painted or the cost of the cheapest color.  If there are two house, you can increase the number of neighborhoods by painting the second house in a different color than the first house, or keep the same number of neighborhoods by painting it with the same color.  Therefore, we can define the problem in terms of $h$ the current house that you are painting, $c$ the color that you want to use in this house and $t$ the number of neighborhoods that you are allowed to create.  Time and space complexity is $O(n^2 \times m)$ where $n$ is the number of houses and $m$ is the number of colors.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minCost(
+          self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int
+      ) -> int:
+          N = len(houses)
+          C = len(cost[0])
+
+          dp = [[[float("inf")] * C for _ in range(target + 1)] for _ in range(N)]
+          left = [[float("inf")] * C for _ in range(target + 1)]
+          right = [[float("inf")] * C for _ in range(target + 1)]
+          for i in range(N - 1, -1, -1):
+              if i == N - 1:
+                  if houses[i] == 0:
+                      for c in range(C):
+                          dp[i][1][c] = cost[i][c]
+                  else:
+                      dp[i][1][houses[i] - 1] = 0
+              else:
+                  for t in range(1, target + 1):
+                      if houses[i] == 0:
+                          for c in range(C):
+                              dp[i][t][c] = cost[i][c] + min(
+                                  dp[i + 1][t][c], left[t - 1][c], right[t - 1][c]
+                              )
+
+                      else:
+                          for c in range(C):
+                              if c == houses[i] - 1:
+                                  dp[i][t][c] = min(
+                                      dp[i + 1][t][c], left[t - 1][c], right[t - 1][c]
+                                  )
+
+              for t in range(1, target + 1):
+                  for c in range(C):
+                      left[t][c] = (
+                          float("inf") if c == 0 else min(left[t][c - 1], dp[i][t][c - 1])
+                      )
+                  for c in range(C - 1, -1, -1):
+                      right[t][c] = (
+                          float("inf")
+                          if c == C - 1
+                          else min(right[t][c + 1], dp[i][t][c + 1])
+                      )
+
+          ans = min(dp[0][target][c] for c in range(C))
+          return -1 if ans == float("inf") else ans
+
+
+  assert (
+      Solution().minCost(
+          [0, 0, 0, 0, 0], [[1, 10], [10, 1], [10, 1], [1, 10], [5, 1]], 5, 2, 3
+      )
+      == 9
+  )
+  assert (
+      Solution().minCost(
+          [0, 2, 1, 2, 0], [[1, 10], [10, 1], [10, 1], [1, 10], [5, 1]], 5, 2, 3
+      )
+      == 11
+  )
+  assert (
+      Solution().minCost(
+          [3, 1, 2, 3], [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]], 4, 3, 3
+      )
+      == -1
+  )
+#+end_src
+
+* Leetcode: 1723. Find Minimum Time to Finish All Jobs
+:PROPERTIES:
+:ID:       831DBDCC-2EE9-4678-9465-E0979A5C4AC1
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-02 Tue 22:11]--[2022-08-02 Tue 23:00] =>  0:49
+:END:
+[[https://leetcode.com/problems/find-minimum-time-to-finish-all-jobs/][Problem Statement]]
+
+- [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]] and got stuck on the Dynamic Programming solution.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The most important prune is to make sure that a job is assigned as the first job of a work only once.  Time complexity is $O(n^k)$ but the prunes makes the solution faster than [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumTimeRequired(self, jobs: List[int], K: int) -> int:
+          N = len(jobs)
+          jobs.sort(reverse=True)
+          load = [0] * N
+          ans = float("inf")
+
+          def bt(i, cur):
+              nonlocal ans
+              if cur >= ans:
+                  return
+              if i == N:
+                  ans = min(ans, cur)
+                  return
+              for j in range(K):
+                  load[j] += jobs[i]
+                  if load[j] < ans:
+                      bt(i + 1, max(cur, load[j]))
+                  load[j] -= jobs[i]
+                  if load[j] == 0:
+                      break
+
+          bt(0, 0)
+          return ans
+
+
+  assert Solution().minimumTimeRequired([3, 2, 3], 3) == 3
+  assert Solution().minimumTimeRequired([1, 2, 4, 7, 8], 2) == 11
+#+end_src
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The search-space is defined by $(k, S)$ where $k$ is the number of workers used so far and $S$ represents the completed jobs.  Time and space complexity is $O(k \times 2^n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumTimeRequired(self, jobs: List[int], K: int) -> int:
+          S = sum(jobs)
+          N = len(jobs)
+          M = 2**N
+
+          cost = [0] * M
+          for i in range(M):
+              for j in range(N):
+                  if i & (1 << j):
+                      cost[i] += jobs[j]
+
+          def submasks(mask):
+              submask = mask
+              while submask:
+                  yield submask
+                  submask = (submask - 1) & mask
+
+          dp = [[float("inf")] * M for _ in range(K + 1)]
+          for k in range(K, -1, -1):
+              if k == K:
+                  dp[k][M - 1] = 0
+              else:
+                  for used in range(M):
+                      allowed = (M - 1) ^ used
+                      cur = float("inf")
+                      for new in submasks(allowed):
+                          if cost[new] < cur:
+                              cur = min(cur, max(cost[new], dp[k + 1][used | new]))
+                      dp[k][used] = cur
+          return dp[0][0]
+
+
+  assert Solution().minimumTimeRequired([3, 2, 3], 3) == 3
+  assert Solution().minimumTimeRequired([1, 2, 4, 7, 8], 2) == 11
+#+end_src
+
+* Leetcode: 1240. Tiling a Rectangle with the Fewest Squares
+:PROPERTIES:
+:ID:       DE17B373-DBD7-4ADD-9CEE-7AC427FEAE6B
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-03 Wed 16:20]--[2022-08-03 Wed 19:32] =>  3:12
+:END:
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  My [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] had the current square size to paint what made the solution too complicated.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  For each cell of the rectangle, for each possible square that can have its top-left corner on that cell, fill the area and move to the next empty cell *on the same line*.   If there is no empty line in the line, continue the [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] on the next row.  Time complexity is $O(n \times m \times k^3)$ and space is $O(n \times m)$.
+
+#+begin_src python
+  class Solution:
+      def tilingRectangle(self, n: int, m: int) -> int:
+          grid = [[0] * m for _ in range(n)]
+
+          ans = n * m
+
+          def bt(i, j, cur):
+              nonlocal ans
+              if cur >= ans:
+                  return
+              if i == n:
+                  ans = min(ans, cur)
+                  return
+              while j < m and grid[i][j] > 0:
+                  j += 1
+              if j == m:
+                  bt(i + 1, 0, cur)
+                  return
+              for k in range(min(n - i, m - j), 0, -1):
+                  valid = True
+                  for ii in range(i, i + k):
+                      for jj in range(j, j + k):
+                          if grid[ii][jj] > 0:
+                              valid = False
+                          grid[ii][jj] += 1
+                  if valid:
+                      bt(i, j + k, cur + 1)
+                  for ii in range(i, i + k):
+                      for jj in range(j, j + k):
+                          grid[ii][jj] -= 1
+
+          bt(0, 0, 0)
+          return ans
+
+
+  assert Solution().tilingRectangle(2, 3) == 3
+  assert Solution().tilingRectangle(5, 8) == 5
+  assert Solution().tilingRectangle(11, 13) == 6
+#+end_src
+
+* Leetcode: 2172. Maximum AND Sum of Array
+:PROPERTIES:
+:ID:       D9866DA4-E256-431C-9568-4F34C7EB634B
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-03 Wed 19:59]--[2022-08-03 Wed 21:08] =>  1:09
+:END:
+[[https://leetcode.com/problems/maximum-and-sum-of-array/][Problem Statement]]
+
+- [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]].  I got stuck on representing only the used numbers in the bitmask.
+
+- [[id:13025164-D62A-450B-AA2F-332E097F7A16][What are the different ways to represent the search-space?]]  The first way that came to mind was $(k, s)$ where $k$ is the next slot to fill up and $s$ is the set of used numbers.  Space is $O(k \times 2^n)$ and time complexity is $O(k \times 2^n \times n^2)$.   As $k$ is *small*, the best way to represent the search-space is $(i, p, q)$ where $i$ is the number that I want to place, $p$ is a set of slots that has one position (left position) used and $q$ is a set of slots that have one position (right position) used.  Space is $O(n \times 2^k \times 2^k)$ and times complexity is $O(n^2 \times 2^k \times 2^k)$.
+
+#+begin_src python
+  from typing import List
+  from functools import cache
+
+
+  class Solution:
+      def maximumANDSum(self, nums: List[int], numSlots: int) -> int:
+          N = len(nums)
+          ans = float("-inf")
+
+          @cache
+          def dfs(i, f, s):
+              if i == N:
+                  return 0
+              ans = float("-inf")
+              for j in range(numSlots):
+                  c = nums[i] & (j + 1)
+                  if f & (1 << j) == 0:
+                      ans = max(ans, c + dfs(i + 1, f | (1 << j), s))
+                  elif s & (1 << j) == 0:
+                      ans = max(ans, c + dfs(i + 1, f, s | (1 << j)))
+              return ans
+
+          return dfs(0, 0, 0)
+
+
+  assert Solution().maximumANDSum([1, 2, 3, 4, 5, 6], 3) == 9
+  assert Solution().maximumANDSum([1, 3, 10, 4, 7, 1], 9) == 24
+#+end_src
+
+* Leetcode: 317. Shortest Distance from All Buildings
+:PROPERTIES:
+:ID:       EADAA76E-ACE0-46E4-9B58-4570CFEF0A27
+:WA:       2
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-03 Wed 21:09]--[2022-08-03 Wed 23:01] =>  1:52
+:END:
+[[https://leetcode.com/problems/shortest-distance-from-all-buildings/][Problem Statement]]
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  It would be easier to extract the [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] function.
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].  Anything close to $10^8$ needs heavy optimization in python.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Compute the distance from each house to an empty space and take the space that can be reached by all houses with the lower total distance.  Time complexity is $O(n^2 \times m^2)$ and space is $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def shortestDistance(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          M = len(grid[0])
+          dst = [[0] * M for _ in range(N)]
+          cnt = [[0] * M for _ in range(N)]
+
+          delta = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+          def bfs(si, sj):
+              vis = [[False] * M for _ in range(N)]
+              queue = [(si, sj, 0)]
+              for i, j, d in queue:
+                  dst[i][j] += d
+                  cnt[i][j] += 1
+                  for di, dj in delta:
+                      ni = di + i
+                      nj = dj + j
+                      if 0 <= ni < N and 0 <= nj < M and not vis[ni][nj]:
+                          vis[ni][nj] = True
+                          if grid[ni][nj] == 0:
+                              queue.append((ni, nj, d + 1))
+                          elif grid[ni][nj] == 1:
+                              cnt[ni][nj] += 1
+
+          houses = 0
+          for si in range(N):
+              for sj in range(M):
+                  if grid[si][sj] == 1:
+                      if cnt[si][sj] != houses:
+                          return -1
+                      houses += 1
+                      bfs(si, sj)
+
+          ans = float("inf")
+          for i in range(N):
+              for j in range(M):
+                  if grid[i][j] == 0 and cnt[i][j] == houses and ans > dst[i][j]:
+                      ans = dst[i][j]
+
+          return -1 if ans == float("inf") else ans
+
+
+  assert (
+      Solution().shortestDistance([[1, 0, 2, 0, 1], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0]])
+      == 7
+  )
+  assert Solution().shortestDistance([[1, 0]]) == 1
+  assert Solution().shortestDistance([[1]]) == -1
+#+end_src
+
+* Leetcode: 920. Number of Music Playlists
+:PROPERTIES:
+:ID:       D40521FF-7104-4205-BF6D-2D62D7784AFE
+:ORDERED:  t
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-04 Thu 10:16]--[2022-08-04 Thu 11:14] =>  0:58
+:END:
+[[https://leetcode.com/problems/number-of-music-playlists/][Problem Statement]]
+
+- [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]].  Got stuck on a recursion using $(i, r)$ the  $i$ song to play having to play $r$ required songs.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Suppose that you played $i$ songs which $j$ are unique songs.  There are two ways to select the next song: (1) you play one of $n - j$ new songs, or (2) you play one $\max(j - k, 0)$ already played songs.  Time and space complexity is $O(g \times n)$.
+
+#+begin_src python
+  class Solution:
+      def numMusicPlaylists(self, n: int, goal: int, k: int) -> int:
+          MOD = 10**9 + 7
+
+          @cache
+          def dfs(i, u):
+              if i == goal:
+                  return 1 if u == n else 0
+              return ((n - u) * dfs(i + 1, u + 1) + max(u - k, 0) * dfs(i + 1, u)) % MOD
+
+          return dfs(0, 0)
+#+end_src
+
+* Leetcode: 302. Smallest Rectangle Enclosing Black Pixels
+:PROPERTIES:
+:ID:       5E66EF96-0941-4961-8370-C640ABE434C0
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-04 Thu 16:47]
+:END:
+[[https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/][Problem Statement]]
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  Came up with a complicated heuristic instead of going with the [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]].
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  This problem is about visiting all vertices of a component and tracking its extreme points what can be done using [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]].  Time and space complexity is $O(n)$ where $n$ is the size of the component.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minArea(self, image: List[List[str]], x: int, y: int) -> int:
+          N = len(image)
+          M = len(image[0])
+          D = [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]
+
+          j1, j2 = y, y
+          i1, i2 = x, x
+
+          def dfs(i, j):
+              nonlocal i1, i2, j1, j2
+              image[i][j] = "0"
+              i1 = min(i, i1)
+              j1 = min(j, j1)
+              i2 = max(i, i2)
+              j2 = max(j, j2)
+              for di, dj in D:
+                  if 0 <= i + di < N and 0 <= j + dj < M and image[i + di][j + dj] == "1":
+                      dfs(i + di, j + dj)
+
+          dfs(x, y)
+          return (j2 - j1 + 1) * (i2 - i1 + 1)
+
+
+  assert (
+      Solution().minArea(
+          [["0", "0", "1", "0"], ["0", "1", "1", "0"], ["0", "1", "0", "0"]], 0, 2
+      )
+      == 6
+  )
+  assert Solution().minArea([["1"]], 0, 0) == 1
+#+end_src
+
+* Leetcode: 1697. Checking Existence of Edge Length Limited Paths
+:PROPERTIES:
+:ID:       598AF36B-1883-4A5F-9F07-36DC10B3B504
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-05 Fri 15:52]--[2022-08-05 Fri 16:02] =>  0:10
+:END:
+[[https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/][Problem Statement]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Find if two vertices are on the same component.  The problem asks to find a path that doesn't exceed the limit, so we build the components without exceeding the limit (i.e. add the edges) and then ask if they are part of the same component.  Time complexity is $O(n \times \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def distanceLimitedPathsExist(
+          self, N: int, edges: List[List[int]], queries: List[List[int]]
+      ) -> List[bool]:
+          E = len(edges)
+          edges.sort(key=lambda e: e[2])
+
+          p = [i for i in range(N)]
+
+          def find(u):
+              if p[u] != u:
+                  p[u] = find(p[u])
+              return p[u]
+
+          def union(u, v):
+              p[find(u)] = p[find(v)]
+
+          ans = [False] * len(queries)
+          j = 0
+          for i, (u, v, l) in sorted(enumerate(queries), key=lambda e: e[1][2]):
+              while j < E and edges[j][2] < l:
+                  union(edges[j][0], edges[j][1])
+                  j += 1
+              ans[i] = find(u) == find(v)
+
+          return ans
+
+
+  assert Solution().distanceLimitedPathsExist(
+      3, [[0, 1, 2], [1, 2, 4], [2, 0, 8], [1, 0, 16]], [[0, 1, 2], [0, 2, 5]]
+  ) == [False, True]
+  assert Solution().distanceLimitedPathsExist(
+      5, [[0, 1, 10], [1, 2, 5], [2, 3, 9], [3, 4, 13]], [[0, 4, 14], [1, 4, 13]]
+  ) == [True, False]
+#+end_src
+
 * TODO Leetcode: 843. Guess the Word
 :PROPERTIES:
 :ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
@@ -3771,3 +4304,451 @@ CLOCK: [2022-08-01 Mon 10:41]--[2022-08-01 Mon 11:24] =>  0:43
 CLOCK: [2022-07-31 Sun 22:14]--[2022-07-31 Sun 22:52] =>  0:38
 :END:
 [[https://leetcode.com/problems/check-if-an-original-string-exists-given-two-encoded-strings/][Problem Statement]]
+
+* TODO Leetcode: 420. Strong Password Checker
+:PROPERTIES:
+:ID:       315D6ADD-7DCE-4446-8A52-FBC5A0DDDABD
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-05 Fri 16:15]--[2022-08-05 Fri 19:59] =>  3:44
+:END:
+[[https://leetcode.com/problems/strong-password-checker/][Problem Statement]]
+* Leetcode: 2277. Closest Node to Path in Tree
+:PROPERTIES:
+:ID:       F0C49759-DF3D-4CFF-BB16-553FE6A89D76
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-05 Fri 19:59]--[2022-08-05 Fri 20:35] =>  0:36
+:END:
+[[https://leetcode.com/problems/closest-node-to-path-in-tree/][Problem Statement]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  For each query $(u, v, p)$, search for $v$ and $p$ starting from $u$ while keeping track of the last both that could reach both of them.  Time and space complexity for each query is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def closestNode(
+          self, n: int, edges: List[List[int]], query: List[List[int]]
+      ) -> List[int]:
+          adj = [list() for _ in range(n)]
+          for u, v in edges:
+              adj[u].append(v)
+              adj[v].append(u)
+
+          def dfs(u, p, q, seen):
+              if u == p and u == q:
+                  return [u, u]
+
+              ans = [None, None]
+              for v in adj[u]:
+                  if v not in seen:
+                      seen.add(v)
+                      rp, rq = dfs(v, p, q, seen)
+                      if rp is not None:
+                          ans[0] = rp
+                      if rq is not None:
+                          ans[1] = rq
+              if u == p:
+                  ans[0] = u
+              if u == q:
+                  ans[1] = u
+
+              if ans[0] is not None and ans[1] is not None and ans[0] != ans[1]:
+                  return [u, u]
+
+              return ans
+
+          return [dfs(u, p, q, set([u]))[0] for u, p, q in query]
+
+
+  assert Solution().closestNode(
+      7, [[0, 1], [0, 2], [0, 3], [1, 4], [2, 5], [2, 6]], [[5, 3, 4], [5, 3, 6]]
+  ) == [0, 2]
+  assert Solution().closestNode(3, [[0, 1], [1, 2]], [[0, 1, 2]]) == [1]
+  assert Solution().closestNode(3, [[0, 1], [1, 2]], [[0, 0, 0]]) == [0]
+#+end_src
+
+* Leetcode: 679. 24 Game
+:PROPERTIES:
+:ID:       1C4943CB-4776-48C0-9A79-4FACBE4A91BC
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-06 Sat 10:17]--[2022-08-06 Sat 12:28] =>  2:11
+CLOCK: [2022-08-05 Fri 20:36]--[2022-08-05 Fri 20:50] =>  0:14
+:END:
+[[https://leetcode.com/problems/24-game/][Problem Statement]]
+
+- [[id:AFD7D485-25CB-450F-B116-365FE7239669][Mistake: Bug introduced when copy-pasting code]].
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  One and two numbers are easy to solve.  For more numbers, break them down on all possible groups and recursively compute the expressions.  Time complexity is $T=O(n! \times 2^n \times 4)$ and space complexity is $O(n \times T)$.
+
+#+begin_src python
+  from typing import List
+  from itertools import permutations
+  from math import gcd
+
+  class Fraction:
+      def __init__(self, a, b):
+          if b == 0:
+              self.a = None
+              self.b = None
+          else:
+              d = gcd(a, b)
+              self.a = a // d
+              self.b = b // d
+
+      def __str__(self):
+          return f"{self.a}/{self.b}"
+
+      def __eq__(self, other):
+          return self.a == other.a and self.b == other.b
+
+      def __add__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return Fraction(self.a * other.b + other.a * self.b, self.b * other.b)
+
+      def __sub__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return Fraction(self.a * other.b - other.a * self.b, self.b * other.b)
+
+      def __mul__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return Fraction(self.a * other.a, self.b * other.b)
+
+      def __truediv__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return self * Fraction(other.b, other.a)
+
+
+  class Solution:
+      def judgePoint24(self, cards: List[int]) -> bool:
+          cards = [Fraction(c, 1) for c in cards]
+
+          def calc(c):
+              if len(c) == 1:
+                  return [c[0]]
+              if len(c) == 2:
+                  return [c[0] + c[1], c[0] - c[1], c[0] * c[1], c[0] / c[1]]
+              ans = []
+              for i in range(1, len(c)):
+                  left = calc(c[:i])
+                  right = calc(c[i:])
+                  for l in left:
+                      for r in right:
+                          ans.extend(calc([l, r]))
+              return ans
+
+          return any(Fraction(24, 1) in calc(p) for p in permutations(cards))
+
+
+  assert Solution().judgePoint24([4, 1, 8, 7]) == True
+  assert Solution().judgePoint24([1, 2, 1, 2]) == False
+#+end_src
+
+* Leetcode: 1345. Jump Game IV
+:PROPERTIES:
+:ID:       D1BAEFBE-3B69-46A2-86B3-9C8CC1695BE7
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-06 Sat 15:40]--[2022-08-06 Sat 16:20] =>  0:40
+:END:
+[[https://leetcode.com/problems/jump-game-iv/][Problem Statement]]
+
+- [[id:00CC89B4-340B-4219-9CF4-837F558947B4][Mistake: Bug caused by debug code]].
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Each element of the array is a vertex and edges are created following the rules.  The problem becomes finding the [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]] which can be done by a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] since edges have no weight.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minJumps(self, arr: List[int]) -> int:
+          adj = defaultdict(list)
+          for i, a in enumerate(arr):
+              adj[a].append(i)
+
+          N = len(arr)
+          vis = [False] * N
+
+          queue = [(0, 0)]
+          vis[0] = True
+
+          for (steps, i) in queue:
+              if i == N - 1:
+                  return steps
+              while adj[arr[i]]:
+                  j = adj[arr[i]].pop()
+                  if not vis[j]:
+                      vis[j] = True
+                      queue.append((steps + 1, j))
+              for j in i + 1, i - 1:
+                  if 0 <= j < N and not vis[j]:
+                      vis[j] = True
+                      queue.append((steps + 1, j))
+
+
+  assert Solution().minJumps([100, -23, -23, 404, 100, 23, 23, 23, 3, 404]) == 3
+  assert Solution().minJumps([7]) == 0
+  assert Solution().minJumps([7, 6, 9, 6, 9, 6, 9, 7]) == 1
+#+end_src
+
+* Leetcode: 1499. Max Value of Equation
+:PROPERTIES:
+:ID:       F8B0A786-E771-4433-B1FB-B4D2E0857E30
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-06 Sat 17:36]--[2022-08-06 Sat 18:15] =>  0:39
+:END:
+[[https://leetcode.com/problems/max-value-of-equation/][Problem Statement]]
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Be $i$ and $j$ two points where $x_j \leq x_i$, $j < i$, $x_i - x_j \leq k$.  The formula becomes $y_j + y_i + x_i - x_j = (y_j - x_j) + (y_i + x_i)$.  To maximize the formula, we have to pick the point $j$ that maximizes $y_j - x_j$ and this can be done by keeping a list of candidates sorted by this value.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+b
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:
+          pq = []
+          ans = float("-inf")
+          for p in points:
+              while pq and p[0] - pq[0][1][0] > k:
+                  heappop(pq)
+
+              if pq:
+                  cur = p[1] + pq[0][1][1] + (p[0] - pq[0][1][0])
+                  if cur > ans:
+                      ans = cur
+              heappush(pq, (p[0] - p[1], p))
+          return ans
+
+
+  assert Solution().findMaxValueOfEquation([[1, 3], [2, 0], [5, 10], [6, -10]], 1) == 4
+  assert Solution().findMaxValueOfEquation([[0, 0], [3, 0], [9, 2]], 3) == 3
+#+end_src
+
+* Leetcode: 1793. Maximum Score of a Good Subarray
+:PROPERTIES:
+:ID:       EEA7EA90-6CD6-48DE-A12B-024DE884B9F4
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-06 Sat 18:55]--[2022-08-06 Sat 20:14] =>  1:19
+:END:
+[[https://leetcode.com/problems/maximum-score-of-a-good-subarray/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The problem asks to find indexes $i$ and $j$ such that $i \leq k \leq j$, but the optimal choice can have the minimum value in $i$ or $j$.  Therefore, we can try to find the best $j$ by supposing that $i$ the is minimum one and the do the same fixing $j$.  To do so, we need a data structure (two sorted lists) that we could query $j$ in logarithm time.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from sortedcontainers import SortedList
+
+
+  class Solution:
+      def maximumScore(self, nums: List[int], k: int) -> int:
+          return max(solve(nums, k), solve(list(reversed(nums)), len(nums) - k - 1))
+
+
+  def solve(nums, k):
+      right = []
+      cur = float("+inf")
+      for i in range(k, len(nums)):
+          cur = min(cur, nums[i])
+          right.append((i, cur))
+
+      a = SortedList(right, key=lambda e: -e[1])
+      c0 = SortedList([], key=lambda e: e[1])
+      c1 = SortedList([], key=lambda e: -e[0])
+
+      ans = float("-inf")
+      cur = float("+inf")
+      for i in range(k, -1, -1):
+          cur = min(cur, nums[i])
+          while a and a[0][1] >= cur:
+              e = a.pop(0)
+              c0.add(e)
+              c1.add(e)
+          while c0 and c0[0][1] < cur:
+              e = c0.pop(0)
+              c1.discard(e)
+          if c1 and cur * (c1[0][0] - i + 1) > ans:
+              ans = cur * (c1[0][0] - i + 1)
+      return ans
+
+
+  assert Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+  assert Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+#+end_src
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumScore(self, nums: List[int], k: int) -> int:
+          return max(solve(nums, k), solve(list(reversed(nums)), len(nums) - k - 1))
+
+
+  def solve(nums, k):
+      right = []
+      cur = float("+inf")
+      for i in range(k, len(nums)):
+          cur = min(cur, nums[i])
+          if right and right[-1][1] == cur:
+              right[-1][0] = i
+          else:
+              right.append([i, cur])
+      right.sort(key=lambda e: e[1], reverse=True)
+
+      j = 0
+      ans = float("-inf")
+      cur = float("+inf")
+      for i in range(k, -1, -1):
+          cur = min(cur, nums[i])
+          while j < len(right) and right[j][1] > cur:
+              j += 1
+          if j == len(right):
+              ans = max(ans, cur * (len(nums) - i))
+          else:
+              ans = max(ans, cur * (right[j if right[j][1] == cur else j - 1][0] - i + 1))
+      return ans
+
+
+  assert Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+  assert Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+#+end_src
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Suppose the input is $3,4,5$.  If we start from $4$, we would expand the interval first to $5$ and then to $3$ to make sure that we would consider the minimum $4$ times its max range.  If the input is $5, 4, 3$, we would like to expand first to the left and then to the right.  Starting from $k$, we have only two choices to make to expand the interval: expand to the direction that maximizes the minimum value.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumScore(self, nums: List[int], k: int) -> int:
+          i = j = k
+          ans = m = nums[k]
+
+          while i > 0 or j < len(nums) - 1:
+              if i == 0:
+                  j += 1
+              elif j == len(nums) - 1:
+                  i -= 1
+              elif nums[i - 1] < nums[j + 1]:
+                  j += 1
+              else:
+                  i -= 1
+              m = min(m, nums[i], nums[j])
+              ans = max(ans, m * (j - i + 1))
+
+          return ans
+
+
+  assert Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+  assert Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+#+end_src
+
+* Leetcode: 499. The Maze III
+:PROPERTIES:
+:ID:       6529D0E0-894E-41D4-A1B3-10349326DBC3
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-06 Sat 22:32]--[2022-08-06 Sat 22:57] =>  0:25
+:END:
+[[https://leetcode.com/problems/the-maze-iii/][Problem Statement]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Find [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]] where the path is measure by the distance and then its description.  Time complexity is $O((n \times m) \times \log (n \times m))$ and space is $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def findShortestWay(
+          self, maze: List[List[int]], ball: List[int], hole: List[int]
+      ) -> str:
+          N = len(maze)
+          M = len(maze[0])
+          D = {"u": [-1, +0], "d": [+1, +0], "l": [+0, -1], "r": [+0, +1]}
+
+          def move(d, i, j):
+              ni = i + D[d][0]
+              nj = j + D[d][1]
+              if 0 <= ni < N and 0 <= nj < M and maze[ni][nj] == 0:
+                  return (ni, nj)
+              return None
+
+          pq = [(0, d, ball[0], ball[1]) for d in D]
+          seen = set(tuple(e[1:]) for e in pq)
+          while pq:
+              dist, path, i, j = heappop(pq)
+              if hole[0] == i and hole[1] == j:
+                  return path
+
+              nxt = move(path[-1], i, j)
+              if nxt and nxt not in seen:
+                  heappush(pq, (dist + 1, path, *nxt))
+                  continue
+
+              for d in "u", "d", "l", "r":
+                  if (d, i, j) not in seen:
+                      seen.add((d, i, j))
+                      heappush(pq, (dist, path + d, i, j))
+
+          return "impossible"
+
+
+  assert (
+      Solution().findShortestWay(
+          [
+              [0, 0, 0, 0, 0],
+              [1, 1, 0, 0, 1],
+              [0, 0, 0, 0, 0],
+              [0, 1, 0, 0, 1],
+              [0, 1, 0, 0, 0],
+          ],
+          [4, 3],
+          [0, 1],
+      )
+      == "lul"
+  )
+  assert (
+      Solution().findShortestWay(
+          [
+              [0, 0, 0, 0, 0],
+              [1, 1, 0, 0, 1],
+              [0, 0, 0, 0, 0],
+              [0, 1, 0, 0, 1],
+              [0, 1, 0, 0, 0],
+          ],
+          [4, 3],
+          [3, 0],
+      )
+      == "impossible"
+  )
+  assert (
+      Solution().findShortestWay(
+          [
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 1, 0, 0, 1, 0],
+              [0, 0, 0, 0, 1, 0, 0],
+              [0, 0, 0, 0, 0, 0, 1],
+          ],
+          [0, 4],
+          [3, 5],
+      )
+      == "dldr"
+  )
+#+end_src

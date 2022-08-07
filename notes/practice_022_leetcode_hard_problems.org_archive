@@ -1,0 +1,58 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/wander/repos/problem-solving/notes/practice_022_leetcode_hard_problems.org
+
+
+* Leetcode: 302. Smallest Rectangle Enclosing Black Pixels
+:PROPERTIES:
+:ID:       5E66EF96-0941-4961-8370-C640ABE434C0
+:ARCHIVE_TIME: 2022-08-04 Thu 20:20
+:ARCHIVE_FILE: ~/repos/problem-solving/notes/practice_022_leetcode_hard_problems.org
+:ARCHIVE_CATEGORY: practice_022_leetcode_hard_problems
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-04 Thu 16:47]--[2022-08-05 Fri 15:52] => 23:05
+:END:
+[[https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/][Problem Statement]]
+
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minArea(self, image: List[List[str]], x: int, y: int) -> int:
+          N = len(image)
+          M = len(image[0])
+          D = [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]
+
+          j1, j2 = y, y
+          i1, i2 = x, x
+
+          def dfs(i, j):
+              nonlocal i1, i2, j1, j2
+              image[i][j] = "0"
+              i1 = min(i, i1)
+              j1 = min(j, j1)
+              i2 = max(i, i2)
+              j2 = max(j, j2)
+              for di, dj in D:
+                  if 0 <= i + di < N and 0 <= j + dj < M and image[i + di][j + dj] == "1":
+                      dfs(i + di, j + dj)
+
+          dfs(x, y)
+          return (j2 - j1 + 1) * (i2 - i1 + 1)
+
+
+  assert (
+      Solution().minArea(
+          [["0", "0", "1", "0"], ["0", "1", "1", "0"], ["0", "1", "0", "0"]], 0, 2
+      )
+      == 6
+  )
+  assert Solution().minArea([["1"]], 0, 0) == 1
+#+end_src
+
+#+RESULTS:
+: None

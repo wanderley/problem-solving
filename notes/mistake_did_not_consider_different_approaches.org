@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       477B8042-5F3E-4814-9F0B-C49485B85A64
+:END:
+#+TITLE: Mistake: Did not consider different approaches

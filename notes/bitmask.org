@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       117D3F51-26A7-454C-8D6E-2CA3AA54771D
+:END:
+#+TITLE: Bitmask
+
+* Iterate over all submasks
+:PROPERTIES:
+:ID:       31CA3135-157D-4E49-B538-268AEA5E8325
+:END:
+
+#+begin_src python
+  def submasks(mask):
+      submask = mask
+      while submask:
+          yield submask
+          submask = (submask - 1) & mask
+#+end_src
