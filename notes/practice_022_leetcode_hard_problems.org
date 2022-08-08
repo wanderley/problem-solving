@@ -4752,3 +4752,157 @@ CLOCK: [2022-08-06 Sat 22:32]--[2022-08-06 Sat 22:57] =>  0:25
       == "dldr"
   )
 #+end_src
+
+* Leetcode: 312. Burst Balloons
+:PROPERTIES:
+:ID:       12BA5684-2AD8-4891-A53B-7E4C08A73882
+:WA:       0
+:END:
+[[https://leetcode.com/problems/burst-balloons/][Problem Statement]]
+
+- [[id:9F096D07-EED2-44C8-9538-6EB5F5DEC2BC][Can we solve the problem from end to start?]]  Instead of bursting from the first to the last balloon, we can burst from the last to the first since it is easier to know the last balloon's neighbors.  Time and space complexity is $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+  from functools import cache
+
+
+  class Solution:
+      def maxCoins(self, nums: List[int]) -> int:
+          N = len(nums)
+
+          @cache
+          def dfs(i, j):
+              if i > j:
+                  return 0
+              ans = float("-inf")
+              for k in range(i, j + 1):
+                  ans = max(
+                      ans,
+                      dfs(i, k - 1)
+                      + dfs(k + 1, j)
+                      + (nums[i - 1] if i - 1 >= 0 else 1)
+                      ,* nums[k]
+                      ,* (nums[j + 1] if j + 1 < N else 1),
+                  )
+              return ans
+
+          return dfs(0, N - 1)
+
+
+  assert Solution().maxCoins([3, 1, 5, 8]) == 167
+  assert Solution().maxCoins([1, 5]) == 10
+#+end_src
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maxCoins(self, nums: List[int]) -> int:
+          N = len(nums)
+          dp = [[0] * N for _ in range(N)]
+          for i in range(N - 1, -1, -1):
+              for j in range(i, N):
+                  for k in range(i, j + 1):
+                      dp[i][j] = max(
+                          dp[i][j],
+                          (dp[i][k - 1] if i <= k - 1 else 0)
+                          + (dp[k + 1][j] if k + 1 <= j else 0)
+                          + nums[k]
+                          ,* (nums[i - 1] if i - 1 >= 0 else 1)
+                          ,* (nums[j + 1] if j + 1 < N else 1),
+                      )
+          return dp[0][N - 1]
+
+
+  assert Solution().maxCoins([3, 1, 5, 8]) == 167
+  assert Solution().maxCoins([1, 5]) == 10
+#+end_src
+
+* Leetcode: 1187. Make Array Strictly Increasing
+:PROPERTIES:
+:ID:       4A04DBA9-A534-4E85-9672-F861988B6CEF
+:END:
+[[https://leetcode.com/problems/make-array-strictly-increasing/][Problem Statement]]
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]].
+
+- [[id:EC7DFA39-8E96-4EF7-9297-FAEE2ABF0849][Blackbox: The dependent problem needs to be optimized]].  I have to make the choice for the $i$ item in $O(1)$ or $O(\log n)$ otherwise the solution will exceed the time limit.
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  It reminds [[id:665B7733-6D7E-4A34-8F77-7E64747CE2C9][Longest Increasing Subsequence]], since we have to change the given array to become one be LIS.  For each item $i$, we should take the best of either keeping it as the original value or changing it with one of the backup numbers.  Time complexity is $O(n^2 \log n)$ and space complexity is $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+  from bisect import bisect_right
+
+
+  class Solution:
+      def makeArrayIncreasing(self, a1: List[int], a2: List[int]) -> int:
+          N = len(a1)
+          M = len(a2)
+          a1.append(float("+inf"))
+          a2.sort()
+
+          dp = [[0] * (M + 1) for _ in range(N + 1)]
+          for i in range(N - 1, -1, -1):
+              for j in range(M, -1, -1):
+                  e = 1 if j > 0 else 0
+                  a = a1[i] if j == 0 else a2[j - 1]
+                  b = (e + dp[i + 1][0]) if a < a1[i + 1] else float("+inf")
+                  k = bisect_right(a2, a)
+                  if k < len(a2):
+                      b = min(b, e + dp[i + 1][k + 1])
+                  dp[i][j] = b
+
+          ans = min(dp[0][0], dp[0][1])
+          return -1 if ans == float("inf") else ans
+
+
+  assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [1, 3, 2, 4]) == 1
+  assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [4, 3, 1]) == 2
+  assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [1, 6, 3, 3]) == -1
+#+end_src
+
+* Leetcode: 471. Encode String with Shortest Length
+:PROPERTIES:
+:ID:       8E327900-16BA-48A8-AB49-29C9C0860CF8
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-07 Sun 20:52]--[2022-08-07 Sun 21:57] =>  1:05
+:END:
+[[https://leetcode.com/problems/encode-string-with-shortest-length/][Problem Statement]]
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]].  The problem doesn't mention that we would have to encode nested strings, but I should have supposed so.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Be $s$ a string.  The final solution is either finding a substring of $s$ that can be repeated enough to reconstruct $s$ or the concatenation of $p$ and $q$ where $p+q=s$.  Time complexity is $O(n^3)$ and space complexity is $O(n^2)$.
+
+#+begin_src python
+  class Solution:
+      def encode(self, s: str) -> str:
+          N = len(s)
+
+          @cache
+          def dfs(i, j):
+              subs = s[i : j + 1]
+              best = subs
+              for k in range(i, j):
+                  npart = k - i + 1
+                  ncopy = len(subs) // npart
+                  if len(subs) % npart == 0 and s[i : k + 1] * ncopy == subs:
+                      cur = f"{ncopy}[{dfs(i, k)}]"
+                      if len(cur) < len(best):
+                          best = cur
+              for k in range(i, j):
+                  cur = dfs(i, k) + dfs(k + 1, j)
+                  if len(cur) < len(best):
+                      best = cur
+              return best
+
+          return dfs(0, N - 1)
+
+
+  assert Solution().encode("aaa") == "aaa"
+  assert Solution().encode("aaaaa") == "5[a]"
+  assert Solution().encode("aaaaaaaaaa") == "10[a]"
+#+end_src

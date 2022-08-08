@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID:       3570F7B7-3706-435D-B20E-1DE40B693867
+:WA:       0
+:END:
+#+TITLE: Leetcode: 1155. Number of Dice Rolls With Target Sum
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  This is a variant of [[id:0F085C54-E45A-41E6-951B-79CFD7ECBED5][Knapsack problem]], where we subtract the target after simulating the faces of each dice.  If there is no more dices and target is 0, then count it as 1 otherwise 0.  Time complexity is $O(n^2 \times t)$ and space complexity is $O(n \times t)$.
+
+#+begin_src python
+  from functools import cache
+
+
+  class Solution:
+      def numRollsToTarget(self, n: int, k: int, target: int) -> int:
+          MOD = 10**9 + 7
+
+          @cache
+          def dfs(i, t):
+              if i == n:
+                  return 1 if t == 0 else 0
+              ans = 0
+              for v in range(1, min(k, t) + 1):
+                  ans = (ans + dfs(i + 1, t - v)) % MOD
+              return ans
+
+          return dfs(0, target)
+
+
+  assert Solution().numRollsToTarget(1, 6, 3) == 1
+  assert Solution().numRollsToTarget(2, 6, 7) == 6
+  assert Solution().numRollsToTarget(30, 30, 500) == 222616187
+#+end_src
+
+#+begin_src python
+  class Solution:
+      def numRollsToTarget(self, n: int, k: int, target: int) -> int:
+          MOD = 10**9 + 7
+
+          dp = [[0] * (target + 1) for _ in range(n + 1)]
+          dp[n][0] = 1
+          for i in range(n - 1, -1, -1):
+              for t in range(target + 1):
+                  ans = 0
+                  for f in range(1, min(k, t) + 1):
+                      ans = (ans + dp[i + 1][t - f]) % MOD
+                  dp[i][t] = ans
+
+          return dp[0][target]
+
+
+  assert Solution().numRollsToTarget(1, 6, 3) == 1
+  assert Solution().numRollsToTarget(2, 6, 7) == 6
+  assert Solution().numRollsToTarget(30, 30, 500) == 222616187
+#+end_src
