@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E79DA5C2-ACB6-4611-AD11-090310B72BC1
+:END:
+#+TITLE: Mistake: Did not play with small examples draw invariants

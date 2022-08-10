@@ -1,4 +1,4 @@
-:PROPERTIES:
+PROPERTIES:
 :ID:       CCE8B891-5B15-4840-ACCA-7BB744804150
 :END:
 #+TITLE: Practice #022: Leetcode Hard Problems
@@ -4867,6 +4867,7 @@ CLOCK: [2022-08-06 Sat 22:32]--[2022-08-06 Sat 22:57] =>  0:25
 * Leetcode: 471. Encode String with Shortest Length
 :PROPERTIES:
 :ID:       8E327900-16BA-48A8-AB49-29C9C0860CF8
+:WA:       1
 :END:
 :LOGBOOK:
 CLOCK: [2022-08-07 Sun 20:52]--[2022-08-07 Sun 21:57] =>  1:05
@@ -4905,4 +4906,284 @@ CLOCK: [2022-08-07 Sun 20:52]--[2022-08-07 Sun 21:57] =>  1:05
   assert Solution().encode("aaa") == "aaa"
   assert Solution().encode("aaaaa") == "5[a]"
   assert Solution().encode("aaaaaaaaaa") == "10[a]"
+#+end_src
+
+* Leetcode: 1776. Car Fleet II
+:PROPERTIES:
+:ID:       8075F351-F99A-4EBD-A7A8-E928DA2F7931
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-07 Sun 22:13]--[2022-08-07 Sun 23:04] =>  0:51
+:END:
+[[https://leetcode.com/problems/car-fleet-ii/][Problem Statement]]
+
+- [[id:E79DA5C2-ACB6-4611-AD11-090310B72BC1][Mistake: Did not play with small examples draw invariants]].
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  If there is only one car, the answer is -1.  Be $a$ and $b$ two cars where $b$ comes after $a$ in the input.  If $b$ is faster than $a$, both will have answer -1.  Otherwise, $a$ will collide with $b$.  Be $c$ other car that come after $b$.  If $a$ is faster than $b$ and $c$, then $a$ will collide with $c$ iff it doesn't collide first with $b$.  Therefore, we can discard all cars that go faster than $a$ or collide with a slower car before it would collide with $a$.  These property can be implemented using a [[id:E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5][Monotonic Stack]].  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def getCollisionTimes(self, c: List[List[int]]) -> List[float]:
+          def t(a, b):
+              return (b[0] - a[0]) / (a[1] - b[1])
+
+          N = len(c)
+          ans = [-1] * N
+          st = []
+          for i in range(N - 1, -1, -1):
+              while st and (
+                  st[-1][1] >= c[i][1] or 0 < ans[st[-1][2]] <= t(c[i], st[-1])
+              ):
+                  st.pop()
+              if st:
+                  ans[i] = t(c[i], st[-1])
+              st.append((*c[i], i))
+          return ans
+
+
+  assert Solution().getCollisionTimes([[1, 2], [2, 1], [4, 3], [7, 2]]) == [
+      1.00000,
+      -1.00000,
+      3.00000,
+      -1.00000,
+  ]
+  assert Solution().getCollisionTimes([[3, 4], [5, 4], [6, 3], [9, 1]]) == [
+      2.00000,
+      1.00000,
+      1.50000,
+      -1.00000,
+  ]
+#+end_src
+
+* Leetcode: 425. Word Squares
+:PROPERTIES:
+:ID:       51F46555-F71F-4968-ACB7-B2A25634423A
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-09 Tue 14:00]--[2022-08-09 Tue 16:33] =>  2:33
+CLOCK: [2022-08-09 Tue 12:02]--[2022-08-09 Tue 12:16] =>  0:14
+:END:
+[[https://leetcode.com/problems/word-squares/][Problem Statement]]
+
+- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  Spent most of the time trying to reduce the complexity, when the problem required a [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]].
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].  First [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] wasn't optimized enough.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  Generate all possible squares while selecting the next word that match the current prefix so far.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def wordSquares(self, words: List[str]) -> List[List[str]]:
+          N = len(words)
+          M = len(words[0])
+
+          if M == 1:
+              return list(set(words))
+
+          pref = {}
+          for w in words:
+              for i in range(M):
+                  p = w[0 : i + 1]
+                  pref.setdefault(p, set())
+                  pref[p].add(w)
+
+          ans = []
+
+          def bt(i, cur):
+              if i == M:
+                  ans.append(cur[:])
+                  return
+
+              for w in pref.get("".join(v[i] for v in cur), []):
+                  cur.append(w)
+                  bt(i + 1, cur)
+                  cur.pop()
+
+          for w in words:
+              bt(1, [w])
+
+          return ans
+
+
+  assert Solution().wordSquares(["area", "lead", "wall", "lady", "ball"]) == [
+      ["ball", "area", "lead", "lady"],
+      ["wall", "area", "lead", "lady"],
+  ]
+  assert Solution().wordSquares(["abat", "baba", "atan", "atal"]) == [
+      ["baba", "abat", "baba", "atal"],
+      ["baba", "abat", "baba", "atan"],
+  ]
+#+end_src
+
+* Leetcode: 315. Count of Smaller Numbers After Self
+:PROPERTIES:
+:ID:       70A5C00E-0D5E-47DA-AB0C-68766DFED02F
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-09 Tue 16:48]--[2022-08-09 Tue 17:01] =>  0:13
+:END:
+[[https://leetcode.com/problems/count-of-smaller-numbers-after-self/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Suppose we are processing the element $i$ from right to left, if we keep element $nums[i+1,...,n-1]$ sorted, the problem becomes finding the right-most index where we could add $nums[i]$ to the sorted list while keeping it sorted.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from sortedcontainers import SortedList
+
+
+  class Solution:
+      def countSmaller(self, nums: List[int]) -> List[int]:
+          right = SortedList([])
+          N = len(nums)
+          ans = [0] * N
+          for i in range(N - 1, -1, -1):
+              j = right.bisect_left(nums[i])
+              ans[i] = j
+              right.add(nums[i])
+          return ans
+
+
+  assert Solution().countSmaller([5, 2, 6, 1]) == [2, 1, 1, 0]
+  assert Solution().countSmaller([-1]) == [0]
+  assert Solution().countSmaller([-1, -1]) == [0, 0]
+#+end_src
+
+* Leetcode: 407. Trapping Rain Water II
+:PROPERTIES:
+:ID:       8F9C5F1E-C36B-4EC1-97B5-7E1172BF89B6
+:END:
+[[https://leetcode.com/problems/trapping-rain-water-ii/][Problem Statement]]
+
+- [[id:CCCF9587-5365-4BB0-B0D3-8FC82D55E781][Mistake: Failed to recognize known problem]]: [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]].
+
+- [[id:E79DA5C2-ACB6-4611-AD11-090310B72BC1][Mistake: Did not play with small examples draw invariants]].
+
+- [[id:48E699CB-3125-47FF-AA1A-5FCCF0EF235E][Can we simulate the problem?]]  We can simulate the water raising from the border to the center of the grid.  Every time that water gets to a cell (from the lowest height to the highest height), it will trap water in neighbors that weren't visited and have smaller heights.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def trapRainWater(self, h: List[List[int]]) -> int:
+          N = len(h)
+          M = len(h[0])
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+          vis = [[False] * M for _ in range(N)]
+          pq = []
+          for i in range(N):
+              heappush(pq, (h[i][0], i, 0))
+              heappush(pq, (h[i][M - 1], i, M - 1))
+              vis[i][0] = vis[i][M - 1] = True
+          for j in range(M):
+              heappush(pq, (h[0][j], 0, j))
+              heappush(pq, (h[N - 1][j], N - 1, j))
+              vis[0][j] = vis[N - 1][j] = True
+
+          ans = 0
+          while pq:
+              cur, i, j = heappop(pq)
+              for di, dj in D:
+                  ni = i + di
+                  nj = j + dj
+                  if 0 <= ni < N and 0 <= nj < M and not vis[ni][nj]:
+                      vis[ni][nj] = True
+                      diff = max(cur - h[ni][nj], 0)
+                      ans += diff
+                      heappush(pq, (max(h[ni][nj], cur), ni, nj))
+          return ans
+
+
+  assert (
+      Solution().trapRainWater(
+          [[1, 4, 3, 1, 3, 2], [3, 2, 1, 3, 2, 4], [2, 3, 3, 2, 3, 1]]
+      )
+      == 4
+  )
+  assert (
+      Solution().trapRainWater(
+          [
+              [3, 3, 3, 3, 3],
+              [3, 2, 2, 2, 3],
+              [3, 2, 1, 2, 3],
+              [3, 2, 2, 2, 3],
+              [3, 3, 3, 3, 3],
+          ]
+      )
+      == 10
+  )
+#+end_src
+
+* Leetcode: 1579. Remove Max Number of Edges to Keep Graph Fully Traversable
+:PROPERTIES:
+:ID:       F300E2E8-34BD-4DBD-B2BC-57BC132CA2F0
+:END::LOGBOOK:
+CLOCK: [2022-08-10 Wed 07:46]--[2022-08-10 Wed 07:50] =>  0:04
+:END:
+[[https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/][Problem Statement]]
+
+- [[id:EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C][Blackbox: This is a variation of a classic problem]] to find [[id:367C887D-3517-4AC8-8219-293AC0E77E07][Connected Components in a Graph]].
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Be $G$ a graph and $T$ a tree of $G$.  Be $u$ and $v$ in $T$ where they need two edges of type 1 and 2.  If it is possible to swap these edges with one of type 3, then $|E(G)|-|E(T)|$ is not the solution since we can do better.  Therefore, we can first add all edges of type 3 and then handle the ones with type 1 and type 2.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maxNumEdgesToRemove(self, n: int, edges: List[List[int]]) -> int:
+          p = {}
+
+          def find(u):
+              if u not in p:
+                  p[u] = u
+              if p[u] != u:
+                  p[u] = find(p[u])
+              return p[u]
+
+          def union(u, v):
+              p[find(u)] = find(v)
+
+          added = 0
+          for t, u, v in sorted(edges, key=lambda e: e[0], reverse=True):
+              if t == 3:
+                  if find(u) != find(v):
+                      union(u, v)
+                      union(~u, ~v)
+                      added += 1
+              elif t == 2:
+                  if find(~u) != find(~v):
+                      union(~u, ~v)
+                      added += 1
+              else:
+                  if find(u) != find(v):
+                      union(u, v)
+                      added += 1
+
+          valid = (
+              len({find(u) for u in range(1, n + 1)})
+              == len({find(~u) for u in range(1, n + 1)})
+              == 1
+          )
+          return -1 if not valid else len(edges) - added
+
+
+  assert (
+      Solution().maxNumEdgesToRemove(
+          4, [[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]]
+      )
+      == 2
+  )
+  assert (
+      Solution().maxNumEdgesToRemove(4, [[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]]) == 0
+  )
+  assert Solution().maxNumEdgesToRemove(4, [[3, 2, 3], [1, 1, 2], [2, 3, 4]]) == -1
 #+end_src
