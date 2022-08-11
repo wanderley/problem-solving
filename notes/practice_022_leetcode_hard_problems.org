@@ -5187,3 +5187,131 @@ CLOCK: [2022-08-10 Wed 07:46]--[2022-08-10 Wed 07:50] =>  0:04
   )
   assert Solution().maxNumEdgesToRemove(4, [[3, 2, 3], [1, 1, 2], [2, 3, 4]]) == -1
 #+end_src
+
+* Leetcode: 753. Cracking the Safe
+:PROPERTIES:
+:ID:       3C17BB0E-EE14-4666-9A49-EB536ECCAE79
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-10 Wed 10:57]--[2022-08-10 Wed 11:07] =>  0:10
+:END:
+[[https://leetcode.com/problems/cracking-the-safe/][Problem Statement]]
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Find the smallest string which contains all possible string with $n$ digits where each digit is between $0$ and $k-1$.  I don't know how to prove (even though I saw a relationship with [[id:BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9][Eulerian path in Directed Graph]]), it is always possible to create such string where each new digit covers a new possible string.  Therefore, we can try all possibilities with a basic prune (i.e. stop if the current answer is greater than the best one so far).  Time complexity is $O(X \times k)$ where $X$ is the size of the final string.  Space complexity is $O(X)$.
+
+#+begin_src python
+  class Solution:
+      def crackSafe(self, n: int, k: int) -> str:
+          M = k**n
+          ans = None
+
+          def bt(cur, words):
+              nonlocal ans
+              if len(words) == M:
+                  ans = cur
+                  return
+              if ans is not None:
+                  return
+              for d in range(k):
+                  new = cur + str(d)
+                  word = new[-n:]
+                  if word not in words:
+                      if len(word) == n:
+                          words.add(word)
+                      bt(new, words)
+                      if len(word) == n:
+                          words.discard(word)
+
+          bt("", set())
+          return ans
+
+
+  assert Solution().crackSafe(1, 2) == "10"
+  assert Solution().crackSafe(2, 2) == "01100"
+#+end_src
+
+- A solution with [[id:BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9][Eulerian path in Directed Graph]] is possible using [[https://en.wikipedia.org/wiki/De_Bruijn_sequence#Example_using_de_Bruijn_graph][Bruijin graph]], where vertices are prefix of size $n-1$ and edges are label with $k$ digits to form the next word.  Time and space complexity are $O(k^n)$.
+
+#+begin_src python
+  class Solution:
+      def crackSafe(self, n: int, k: int) -> str:
+          st = ["0" * n]
+          seen = set(st)
+
+          def adj(u):
+              for i in range(k):
+                  v = (u + str(i))[-n:]
+                  if v not in seen:
+                      return v
+              return None
+
+          words = []
+          while st:
+              u = adj(st[-1])
+              if u is None:
+                  words.append(st.pop())
+                  continue
+              seen.add(u)
+              st.append(u)
+          words.reverse()
+
+          res = words[0]
+          for w in words[1:]:
+              res += w[-1]
+          return res
+
+
+  assert Solution().crackSafe(1, 2) == "10"
+  assert Solution().crackSafe(2, 2) == "01100"
+#+end_src
+
+* Leetcode: 1074. Number of Submatrices That Sum to Target
+:PROPERTIES:
+:ID:       9AFB1A71-6DE7-40CB-94DB-701ED409AAA1
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-10 Wed 19:29]--[2022-08-10 Wed 22:39] =>  3:10
+:END:
+[[https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/][Problem Statement]]
+
+- [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  I saw the transformation but couldn't see the linear solution for it.
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Given an array of numbers and a target $t$, find the number of subarrays which sum is equal to $t$.  Be $p[i]=\sum_{0 \leq j \leq i}a[j]$.  The number of valid subarrays ending on $i$ is the number of times that $p[i]-target$ appeared in $p[0..(i-1)]$ plus 1 if $p[i]=t$.  We can transform the 2D problem in the 1D by keeping an accumulated sum for each column and creating the array of numbers after fixing two rows $i0$ and $i0$.  Time complexity is $O(n^2 \times m)$ and space complexity is $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+  from collections import defaultdict
+
+
+  class Solution:
+      def numSubmatrixSumTarget(self, m: List[List[int]], target: int) -> int:
+          N = len(m)
+          M = len(m[0])
+
+          csum = [[0] * M for _ in range(N)]
+          for i in range(N):
+              for j in range(M):
+                  csum[i][j] = m[i][j]
+                  if i > 0:
+                      csum[i][j] += csum[i - 1][j]
+          ans = 0
+          for i0 in range(N):
+              for i1 in range(i0, N):
+                  freq = defaultdict(int)
+                  cur = 0
+                  for j in range(M):
+                      cur += csum[i1][j]
+                      if i0 > 0:
+                          cur -= csum[i0 - 1][j]
+                      ans += freq[cur - target]
+                      if cur == target:
+                          ans += 1
+                      freq[cur] += 1
+          return ans
+
+
+  assert Solution().numSubmatrixSumTarget([[0, 1, 0], [1, 1, 1], [0, 1, 0]], 0) == 4
+  assert Solution().numSubmatrixSumTarget([[1, -1], [-1, 1]], 0) == 5
+  assert Solution().numSubmatrixSumTarget([[904]], 0) == 0
+#+end_src
