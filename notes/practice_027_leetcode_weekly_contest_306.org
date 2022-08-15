@@ -1,0 +1,151 @@
+:PROPERTIES:
+:ID:       E2E0A0AC-6377-4BFE-ADE9-08E76B693197
+:END:
+#+TITLE: Practice #027: Leetcode Weekly Contest 306
+
+* Leetcode: 2373. Largest Local Values in a Matrix
+:PROPERTIES:
+:ID:       B921DBCA-448A-4B94-80A1-D97D80F12A26
+:WA:       0
+:END:
+[[https://leetcode.com/problems/largest-local-values-in-a-matrix/][Problem Statement]]
+
+#+Begin_src python
+  from typing import List
+
+
+  class Solution:
+      def largestLocal(self, grid: List[List[int]]) -> List[List[int]]:
+          N = len(grid)
+          ans = [[None] * (N - 2) for _ in range(N - 2)]
+          for i in range(N - 2):
+              for j in range(N - 2):
+                  ans[i][j] = max(
+                      grid[ii][jj]
+                      for ii in range(i, i + 3)
+                      for jj in range(j, j + 3)
+                  )
+          return ans
+
+
+  assert Solution().largestLocal(
+      [[9, 9, 8, 1], [5, 6, 2, 6], [8, 2, 6, 4], [6, 2, 2, 2]]
+  ) == [[9, 9], [8, 6]]
+  assert Solution().largestLocal(
+      [
+          [1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1],
+          [1, 1, 2, 1, 1],
+          [1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1],
+      ]
+  ) == [[2, 2, 2], [2, 2, 2], [2, 2, 2]]
+#+end_src
+
+* Leetcode: 2374. Node With Highest Edge Score
+:PROPERTIES:
+:ID:       6D478248-EFA7-48E3-8FEB-2605C54317CA
+:WA:       0
+:END:
+[[https://leetcode.com/problems/node-with-highest-edge-score/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def edgeScore(self, edges: List[int]) -> int:
+          s = [0] * len(edges)
+          m = None
+          for i, u in enumerate(edges):
+              s[u] += i
+              if m is None or s[m] < s[u] or (s[m] == s[u] and u < m):
+                  m = u
+          return m
+
+  assert Solution().edgeScore([1, 0, 0, 0, 0, 7, 7, 5]) == 7
+  assert Solution().edgeScore([2, 0, 0, 2]) == 0
+#+end_src
+
+* Leetcode: 2375. Construct Smallest Number From DI String
+:PROPERTIES:
+:ID:       CB9E79EE-39BF-4499-828D-292C18579CAF
+:WA:       0
+:END:
+[[https://leetcode.com/problems/node-with-highest-edge-score/][Problem Statement]]
+
+#+begin_src python
+  class Solution:
+      def smallestNumber(self, pattern: str) -> str:
+          def dfs(i, cur):
+              if i == len(pattern) + 1:
+                  return cur
+
+              for j in range(1, 10):
+                  c = chr(ord("0") + j)
+                  if c in cur:
+                      continue
+                  if i > 0 and pattern[i - 1] == "I" and cur[-1] >= c:
+                      continue
+                  if i > 0 and pattern[i - 1] == "D" and cur[-1] <= c:
+                      continue
+                  new = cur + c
+                  r = dfs(i + 1, new)
+                  if r is not None:
+                      return r
+
+              return None
+
+          return dfs(0, "")
+
+
+  assert Solution().smallestNumber("IIIDIDDD") == "123549876"
+  assert Solution().smallestNumber("DDD") == "4321"
+#+end_src
+
+* Leetcode: 2376. Count Special Integers
+:PROPERTIES:
+:ID:       6DB1137F-EB9E-4BE3-9F7E-922E19992D21
+:WA:       1
+:END:
+[[https://leetcode.com/problems/count-special-integers/][Problem Statement]]
+
+- [[id:461C7633-08C5-468D-9FC3-D78154DDBD42][Mistake: Careless coding]].
+
+- [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] with [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]].
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  You can generate all numbers and memorize their prefix to speed up the process.  Space complexity is $O(n \times 2^d)$ and time complexity is $O(n \times 2^d \times d)$.
+
+#+begin_src python
+  from functools import cache
+
+
+  class Solution:
+      def countSpecialNumbers(self, n: int) -> int:
+          digits = list(map(int, str(n)))
+          N = len(digits)
+
+          @cache
+          def dfs(i, smaller, first, used):
+              if i == N:
+                  return 1 if not first else 0
+              ans = 0
+              for d in range(10):
+                  if not smaller and d > digits[i]:
+                      continue
+                  if used & (1 << d) != 0:
+                      continue
+                  if d == 0 and first:
+                      nused = used
+                  else:
+                      nused = used | (1 << d)
+                  ans += dfs(i + 1, smaller or d < digits[i], first and d == 0, nused)
+              return ans
+
+          return dfs(0, False, True, 0)
+
+
+  assert Solution().countSpecialNumbers(20) == 19
+  assert Solution().countSpecialNumbers(5) == 5
+  assert Solution().countSpecialNumbers(135) == 110
+#+end_src

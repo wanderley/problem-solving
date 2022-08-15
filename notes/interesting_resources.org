@@ -20,3 +20,9 @@
 * Interview
 
 - [[https://leetcode.com/discuss/general-discussion/239136/coding-interview-the-game-plan][Coding Interview: The Game Plan]]
+
+* How to practice
+
+- [[https://codeforces.com/blog/entry/98806?locale=en][How to practice Competitive Programming By Um_nik]].  Give unbounded time for solving problems and focus on those that are slightly above your level.
+
+- [[https://codeforces.com/blog/entry/91114][My opinion on how to practice competitive programming By Radewoosh]].  Make competitive programming part of your life and practice whenever you can.
