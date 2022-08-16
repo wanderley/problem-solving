@@ -5713,3 +5713,113 @@ CLOCK: [2022-08-14 Sun 16:53]--[2022-08-14 Sun 17:14] =>  0:21
   assert Solution().kInversePairs(3, 0) == 1
   assert Solution().kInversePairs(3, 1) == 2
 #+end_src
+
+* Leetcode: 410. Split Array Largest Sum
+:PROPERTIES:
+:ID:       DCE97282-1089-4514-9A97-A8E6E049446D
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-15 Mon 16:47]--[2022-08-15 Mon 17:44] =>  0:57
+:END:
+[[https://leetcode.com/problems/split-array-largest-sum/][Problem Statement]]
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Given a candidate answer, check if it is possible to partition the array in at most $m$ parts.  If so, the candidate is valid, otherwise you have to increase it.  The optimal answer can be found using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \log \sum a[i])$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def splitArray(self, nums: List[int], M: int) -> int:
+          N = len(nums)
+          s = max(nums)
+          e = sum(nums)
+
+          def valid(m):
+              cnt = i = cur = 0
+              while i < N:
+                  if cur + nums[i] <= m:
+                      cur += nums[i]
+                  else:
+                      cur = nums[i]
+                      cnt += 1
+                  i += 1
+              return cnt < M
+
+          while s < e:
+              m = s + (e - s) // 2
+              if valid(m):
+                  e = m
+              else:
+                  s = m + 1
+          return s
+#+end_src
+
+* Leetcode: 2127. Maximum Employees to Be Invited to a Meeting
+:PROPERTIES:
+:ID:       A8FC07FD-26E9-4FAA-830B-E64720170D17
+:WA:       7
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-15 Mon 21:51]--[2022-08-15 Mon 23:03] =>  1:12
+CLOCK: [2022-08-15 Mon 18:01]--[2022-08-15 Mon 18:28] =>  0:27
+:END:
+[[https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Failed to recognize that the solution is either a cycle of a sum of paths.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Clearly, one possible solution is to find the [[id:0E6E671A-F49C-4962-ABE0-7F5AAD6ACC05][Longest Cycle in a Directed Graph]].  Otherwise, we can seat groups of people that where their favorite chain ends on two people that would like to seat besides each other.  Time complexity is $O(n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from collections import defaultdict
+
+
+  class Solution:
+      def maximumInvitations(self, e: List[int]) -> int:
+          N = len(e)
+
+          re = defaultdict(list)
+          for u, v in enumerate(e):
+              if e[v] != u:
+                  re[v].append(u)
+
+          def find_longest_path(u, seen):
+              if longest_path[u] is not None:
+                  return longest_path[u]
+              seen.add(u)
+              ans = 1
+              for v in re[u]:
+                  ans = max(ans, 1 + find_longest_path(v, seen))
+              longest_path[u] = ans
+              return ans
+
+          longest_path = [None] * N
+          ans = 0
+          seen = set()
+          for u, v in enumerate(e):
+              if e[v] == u and u < v:
+                  ans += find_longest_path(u, seen) + find_longest_path(v, seen)
+
+          found_at = [None] * N
+
+          def find_longest_cycle(u, k, seen):
+              seen.add(u)
+              found_at[u] = k
+              v = e[u]
+              if v in seen:
+                  ans = ((k + 1) - found_at[v]) if found_at[v] is not None else 0
+              else:
+                  ans = find_longest_cycle(v, k + 1, seen)
+              found_at[u] = None
+              return ans
+
+          seen = set()
+          for u in range(N):
+              if u not in seen:
+                  ans = max(ans, find_longest_cycle(u, 0, seen))
+          return ans
+
+
+  assert Solution().maximumInvitations([2, 2, 1, 2]) == 3
+  assert Solution().maximumInvitations([1, 2, 0]) == 3
+  assert Solution().maximumInvitations([3, 0, 1, 4, 1]) == 4
+#+end_src

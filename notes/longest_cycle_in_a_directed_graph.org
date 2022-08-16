@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       0E6E671A-F49C-4962-ABE0-7F5AAD6ACC05
+:END:
+#+TITLE: Longest Cycle in a Directed Graph
