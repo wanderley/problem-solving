@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       E968596C-7C08-47C0-835D-7D1480CF48BA
+:END:
+#+TITLE: Leetcode
+
+* Utilities
+
+** Remove easier problems from a list of problems
+
+#+begin_src javascript
+  function getClassNameForDifficulty(difficulty) {
+    switch (difficulty) {
+    case "hard":
+      return "label-danger";
+    case "medium":
+      return "label-warning";
+    case "easy":
+      return "label-success";
+    }
+  }
+
+  function removeElements(className) {
+    while ((elems = document.getElementsByClassName(className)).length > 0) {
+      for (i = 0; i < elems.length; i++) {
+        try {
+          elems[i].parentNode.parentNode.remove()
+        } catch(ex) {}
+      }
+    }
+  }
+
+  function removeProblemsByDifficulty(difficulty) {
+    removeElements(getClassNameForDifficulty(difficulty));
+  }
+
+  function removeDone() {
+    removeElements("fa-check");
+  }
+
+  removeProblemsByDifficulty("medium");
+  removeProblemsByDifficulty("easy");
+  removeDone();
+#+end_src
