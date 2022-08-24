@@ -1,0 +1,139 @@
+:PROPERTIES:
+:ID:       963690AB-AAD7-462D-A996-E48F05F7A97A
+:END:
+#+TITLE: Practice #029: Leetcode Weekly Contest 307
+
+* Leetcode: 2383. Minimum Hours of Training to Win a Competition
+:PROPERTIES:
+:ID:       F1597781-2446-4F87-8DA8-29E737341BE3
+:END:
+[[https://leetcode.com/problems/minimum-hours-of-training-to-win-a-competition/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minNumberOfHours(
+          self,
+          initialEnergy: int,
+          initialExperience: int,
+          energy: List[int],
+          experience: List[int],
+      ) -> int:
+          ans = 0
+          cur_e = initialEnergy
+          cur_x = initialExperience
+          for e, x in zip(energy, experience):
+              if cur_e <= e:
+                  ans += (e + 1) - cur_e
+                  cur_e = e + 1
+              if cur_x <= x:
+                  ans += (x + 1) - cur_x
+                  cur_x = x + 1
+              cur_e -= e
+              cur_x += x
+          return ans
+
+
+  assert Solution().minNumberOfHours(5, 3, [1, 4, 3, 2], [2, 6, 3, 1]) == 8
+  assert Solution().minNumberOfHours(2, 4, [1], [3]) == 0
+#+end_src
+
+* Leetcode: 2384. Largest Palindromic Number
+:PROPERTIES:
+:ID:       659199A5-43EE-45B7-A5D0-113F52943A3E
+:END:
+[[https://leetcode.com/problems/largest-palindromic-number/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  If there are pairs of 9 in the input, we definitely want to build "99...99".  From 9 to 0, build the string with as many pairs as possible and pick the greatest number that has an odd number of occurrence to be the middle one.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from collections import Counter
+
+
+  class Solution:
+      def largestPalindromic(self, num: str) -> str:
+          c = Counter(num)
+
+          ans = ""
+          for d in "9876543210":
+              if d == "0" and len(ans) == 0:
+                  continue
+              ans += d * (c[d] // 2)
+              c[d] -= (c[d] // 2) * 2
+
+          for d in "9876543210":
+              if c[d]:
+                  return ans + d + "".join(reversed(ans))
+
+          return ans + "".join(reversed(ans))
+
+
+  assert Solution().largestPalindromic("444947137") == "7449447"
+  assert Solution().largestPalindromic("00009") == "9"
+#+end_src
+
+* Leetcode: 2385. Amount of Time for Binary Tree to Be Infected
+:PROPERTIES:
+:ID:       77AF26F1-AE46-4A7E-B873-8FFFE3E6E7DD
+:END:
+[[https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/][Problem Statement]]
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Find the longest path in a tree given a root.  First, build the adjacent list for each vertex and then use [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]] to find the longest path.  Time complexity is $O(n)$ and space complexity is $O(d)$ where $d$ is the longest path in the tree.
+
+#+begin_src python
+  class Solution:
+      def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:
+          adj = defaultdict(list)
+          start_node = None
+
+          def build_adj(root, parent=None):
+              if root is None:
+                  return
+              if root.val == start:
+                  start_node = root
+
+              if parent:
+                  adj[parent.val].append(root.val)
+                  adj[root.val].append(parent.val)
+              build_adj(root.left, root)
+              build_adj(root.right, root)
+
+          build_adj(root)
+
+          def dfs(u, parent):
+              ans = 1
+              for v in adj[u]:
+                  if v != parent:
+                      ans = max(ans, 1 + dfs(v, u))
+              return ans
+
+          return dfs(start, None) - 1
+#+end_src
+
+* Leetcode: 2386. Find the K-Sum of an Array
+:PROPERTIES:
+:ID:       715D2F41-E67E-4EA5-A772-E21CD823F902
+:END:
+[[https://leetcode.com/contest/weekly-contest-307/problems/find-the-k-sum-of-an-array/][Problem Statement]]
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  After computing the last number, we can compute the first k-th sums and use it to compute the k-th largest one.  Time complexity is $O(n + (\log n + log k))$ and space complexity is $O(k)$.
+
+#+begin_src python
+  class Solution:
+      def kSum(self, nums: List[int], k: int) -> int:
+          maxs = sum(n for n in nums if n > 0)
+          s = [0]
+          for n in sorted(abs(n) for n in nums):
+              a = [-n + x for x in s if len(s) < k or -(-n + x) < -s[0]]
+              if not a:
+                  break
+              for y in a:
+                  heappush(s, y)
+                  if len(s) > k:
+                      heappop(s)
+          for i in range(len(s)): s[i] = -s[i]
+          s.sort()
+          return maxs - s[k-1]
+#+end_src

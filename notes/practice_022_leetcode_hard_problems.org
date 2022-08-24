@@ -24,11 +24,10 @@ CLOCK: [2022-07-11 Mon 21:56]--[2022-07-11 Mon 22:41] =>  0:45
           N = len(height)
           stack = []
           ans = 0
-          print()
           for i in range(N):
-              while len(stack) > 0 and height[stack[-1]] < height[i]:
+              while stack and height[stack[-1]] < height[i]:
                   j = stack.pop()
-                  if len(stack) > 0:
+                  if stack:
                       cur = (min(height[stack[-1]], height[i]) - height[j]) * (
                           i - stack[-1] - 1
                       )
@@ -4322,6 +4321,14 @@ CLOCK: [2022-08-11 Thu 17:04]--[2022-08-11 Thu 17:10] =>  0:06
 :END:
 [[https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/][Problem Statement]]
 
+* TODO Leetcode: 164. Maximum Gap
+:PROPERTIES:
+:ID:       3756983D-D07B-444A-93DD-3C837F7C47E0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-17 Wed 16:20]--[2022-08-17 Wed 16:56] =>  0:36
+:END:
+[[https://leetcode.com/problems/maximum-gap/][Problem Statement]]
 * Leetcode: 2277. Closest Node to Path in Tree
 :PROPERTIES:
 :ID:       F0C49759-DF3D-4CFF-BB16-553FE6A89D76
@@ -5823,3 +5830,346 @@ CLOCK: [2022-08-15 Mon 18:01]--[2022-08-15 Mon 18:28] =>  0:27
   assert Solution().maximumInvitations([1, 2, 0]) == 3
   assert Solution().maximumInvitations([3, 0, 1, 4, 1]) == 4
 #+end_src
+
+* Leetcode: 2276. Count Integers in Intervals
+:PROPERTIES:
+:ID:       D45A803A-CFE4-4F03-9597-C8D879A2808F
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-16 Tue 09:38]--[2022-08-16 Tue 10:39] =>  1:01
+:END:
+[[https://leetcode.com/problems/count-integers-in-intervals/][Problem Statement]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  We can model as adding and counting intervals of 1 in a [[id:8564CEB1-3E95-4A34-B888-0BCE6D6504B8][Lazy Segment Tree]].  The trick to pass the time constraint is to also implement lazy propagation (i.e. only create the children when necessary).
+
+#+begin_src python
+  class SegTree:
+      def __init__(self, start, end):
+          self.start = start
+          self.end = end
+          self.left = None
+          self.right = None
+          self.value = 0
+          self.pending = None
+
+      def update(self, start, end, force=False):
+          if self.start > end or self.end < start:
+              return
+          if self.value == self.end - self.start + 1:
+              return
+          if start <= self.start and self.end <= end:
+              self.left = None
+              self.right = None
+              self.value = self.end - self.start + 1
+              return
+          if not force and self.pending is None and self.value == 0:
+              self.pending = (start, end)
+              self.value = min(self.end, end) - max(self.start, start) + 1
+              return
+          self._extend()
+          self.left.update(start, end)
+          self.right.update(start, end)
+          self.value = self.left.value + self.right.value
+
+      def _extend(self):
+          if self.pending:
+              start, end = self.pending
+              self.pending = None
+              self.value = 0
+              self.update(start, end, True)
+          if self.left is None:
+              m = self.start + (self.end - self.start) // 2
+              self.left = SegTree(self.start, m)
+              self.right = SegTree(m + 1, self.end)
+
+      def print(self, level=0):
+          print(" " * level, (self.start, self.end), self.value, self.pending)
+          if self.left:
+              self.left.print(level + 1)
+              self.right.print(level + 1)
+
+  class CountIntervals:
+
+      def __init__(self):
+          self.st = SegTree(0, 10**9)
+
+      def add(self, left: int, right: int) -> None:
+          self.st.update(left, right)
+
+      def count(self) -> int:
+          return self.st.value
+#+end_src
+
+- We can use a sorted interval list to solve the problem in $O(n \log n)$ where $n$ is the number of queries.
+
+#+begin_src python
+  class CountIntervals:
+      def __init__(self):
+          self.segs = []
+          self.value = 0
+
+      def add(self, left: int, right: int) -> None:
+          i = bisect_left(self.segs, left, key=lambda e: e[0])
+          j = i = i - (1 if i > 0 and self.segs[i - 1][1] >= left else 0)
+          while j < len(self.segs) and self.segs[j][0] <= right:
+              self.value -= self.segs[j][1] - self.segs[j][0] + 1
+              left = min(left, self.segs[j][0])
+              right = max(right, self.segs[j][1])
+              j += 1
+          self.value += right - left + 1
+          self.segs[i:j] = [(left, right)]
+
+      def count(self) -> int:
+          return self.value
+#+end_src
+
+* Leetcode: 403. Frog Jump
+:PROPERTIES:
+:ID:       D30D5EAC-2501-47F1-BDF2-A3BA98951FA2
+:ORDERED:  t
+:WA:       1
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-16 Tue 21:20]--[2022-08-16 Tue 21:59] =>  0:39
+CLOCK: [2022-08-16 Tue 17:31]--[2022-08-16 Tue 17:41] =>  0:10
+:END:
+[[https://leetcode.com/problems/frog-jump/][Problem Statement]]
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]] and tried to solve using a wrong DP approach.
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Stones are vertices and two stones are connected if the frog can jump between them.  The problem becomes search a path from the start position to the end using a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]].  Time and space complexity are $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def canCross(self, stones: List[int]) -> bool:
+          N = len(stones)
+          S = {stones[i]: i for i in range(N)}
+          seen = set()
+          queue = [(0, 1)]
+          for i, k in queue:
+              if i == N - 1:
+                  return True
+              for d in [-1, 0, +1] if i > 0 else [0]:
+                  v = stones[i] + k + d
+                  if v not in S:
+                      continue
+                  j = S[v]
+                  if (j, k + d) not in seen:
+                      seen.add((j, k + d))
+                      queue.append((j, k + d))
+          return False
+#+end_src
+
+* Leetcode: 2366. Minimum Replacements to Sort the Array
+:PROPERTIES:
+:ID:       40231B7B-1556-4748-BAE5-7717D708A22B
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-17 Wed 13:45]--[2022-08-17 Wed 14:30] =>  0:45
+CLOCK: [2022-08-17 Wed 11:19]--[2022-08-17 Wed 11:44] =>  0:25
+CLOCK: [2022-08-17 Wed 10:12]--[2022-08-17 Wed 10:39] =>  0:27
+CLOCK: [2022-08-17 Wed 10:01]--[2022-08-17 Wed 10:03] =>  0:02
+:END:
+[[https://leetcode.com/problems/minimum-replacements-to-sort-the-array/][Problem Statement]]
+
+- [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  I should have spent more times thinking on ways to find a close formula.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  We will never split the last number of the array.  For the other numbers, we want to split them close as possible to the current bound.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumReplacement(self, nums: List[int]) -> int:
+          N = len(nums)
+          ans = 0
+          cur = nums[-1]
+
+          for i in range(N - 2, -1, -1):
+              if nums[i] <= cur:
+                  cur = nums[i]
+              elif cur == 1:
+                  ans += nums[i] - 1
+              else:
+                  j = (nums[i] + cur - 1) // cur
+                  ans += j - 1
+                  cur = nums[i] // j
+          return ans
+
+
+  assert Solution().minimumReplacement([3, 9, 3]) == 2
+  assert Solution().minimumReplacement([1, 2, 3, 4, 5]) == 0
+#+end_src
+
+* Leetcode: 980. Unique Paths III
+:PROPERTIES:
+:ID:       156CC856-397B-45C2-B267-9BA94B7FBE11
+:WA:       0
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-17 Wed 16:04]--[2022-08-17 Wed 16:16] =>  0:12
+:END:
+[[https://leetcode.com/problems/unique-paths-iii/][Problem Statement]]
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  We can't but it is possible memorize all possible states of current position and all visited ones.  Time complexity is $O(2^k \times k)$ where $k$ is $n \times m \leq 20$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def uniquePathsIII(self, g: List[List[int]]) -> int:
+          N = len(g)
+          M = len(g[0])
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+          ALL = 0
+
+          def b(i, j):
+              return 1 << (i * M + j)
+
+          for i in range(N):
+              for j in range(M):
+                  if g[i][j] == 1:
+                      si = i
+                      sj = j
+                  if g[i][j] == 2:
+                      ei = i
+                      ej = j
+                  if g[i][j] != -1:
+                      ALL = ALL | b(i, j)
+
+          def dfs(i, j, vis):
+              if i == ei and j == ej:
+                  return 1 if vis == ALL else 0
+              ans = 0
+              for di, dj in D:
+                  ni = di + i
+                  nj = dj + j
+                  if (
+                      0 <= ni < N
+                      and 0 <= nj < M
+                      and g[ni][nj] != -1
+                      and vis & b(ni, nj) == 0
+                  ):
+                      ans += dfs(ni, nj, vis | b(ni, nj))
+              return ans
+
+          return dfs(si, sj, b(si, sj))
+
+
+  assert Solution().uniquePathsIII([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, -1]]) == 2
+  assert Solution().uniquePathsIII([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 2]]) == 4
+  assert Solution().uniquePathsIII([[0, 1], [2, 0]]) == 0
+#+end_src
+
+* Leetcode: 1255. Maximum Score Words Formed by Letters
+:PROPERTIES:
+:ID:       F23B931A-C19B-41AD-B281-1D57457ABE4C
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-21 Sun 21:30]--[2022-08-21 Sun 21:40] =>  0:10
+:END:
+[[https://leetcode.com/problems/maximum-score-words-formed-by-letters/][Problem Statement]]
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  Generate all sets and take the one with maximum score.  Time complexity is $O(2^n \times n)$ and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from collections import Counter
+
+
+  class Solution:
+      def maxScoreWords(
+          self, words: List[str], letters: List[str], score: List[int]
+      ) -> int:
+          N = len(words)
+
+          allowed = Counter(letters)
+
+          def value(selection):
+              required = Counter([])
+              for i in range(N):
+                  if selection & (1 << i):
+                      required.update(words[i])
+              ans = 0
+              for k, v in required.items():
+                  if allowed[k] < required[k]:
+                      return float("-inf")
+                  ans += required[k] * score[ord(k) - ord("a")]
+              return ans
+
+          return max(value(selection) for selection in range(2**N))
+
+
+  assert (
+      Solution().maxScoreWords(
+          ["dog", "cat", "dad", "good"],
+          ["a", "a", "c", "d", "d", "d", "g", "o", "o"],
+          [1, 0, 9, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      )
+      == 23
+  )
+  assert (
+      Solution().maxScoreWords(
+          ["xxxz", "ax", "bx", "cx"],
+          ["z", "a", "b", "c", "x", "x", "x"],
+          [4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 10],
+      )
+      == 27
+  )
+  assert (
+      Solution().maxScoreWords(
+          ["leetcode"],
+          ["l", "e", "t", "c", "o", "d"],
+          [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+      )
+      == 0
+  )
+#+end_src
+
+* Leetcode: 1220. Count Vowels Permutation
+:PROPERTIES:
+:ID:       F572456D-0405-4799-85B5-C56D78EAC3F7
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-21 Sun 21:43]--[2022-08-21 Sun 21:52] =>  0:09
+:END:
+[[https://leetcode.com/problems/count-vowels-permutation/][Problem Statement]]
+
+#+begin_src python
+  from collections import defaultdict
+
+
+  class Solution:
+      def countVowelPermutation(self, n: int) -> int:
+          adj = {"a": "e", "e": "ai", "i": "aeou", "o": "iu", "u": "a"}
+          cur = nxt = defaultdict(lambda: 1)
+          for i in range(n - 2, -1, -1):
+              cur = defaultdict(int)
+              for u in "aeiou":
+                  cnt = 0
+                  for v in adj[u]:
+                      cnt = (cnt + nxt[v]) % 1_000_000_007
+                  cur[u] = cnt
+              nxt = cur
+          return sum(cur[u] for u in "aeiou") % 1_000_000_007
+
+
+  assert Solution().countVowelPermutation(1) == 5
+  assert Solution().countVowelPermutation(2) == 10
+  assert Solution().countVowelPermutation(5) == 68
+#+end_src
+
+* Leetcode: 992. Subarrays with K Different Integers
+:PROPERTIES:
+:ID:       0D0909E1-3EBE-4278-9BD4-E88BA2F4ACD7
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-21 Sun 21:55]--[2022-08-21 Sun 22:04] =>  0:09
+:END:
+[[https://leetcode.com/problems/subarrays-with-k-different-integers/][Problem Statement]]

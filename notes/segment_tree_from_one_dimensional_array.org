@@ -72,6 +72,7 @@
 :PROPERTIES:
 :ID:       8564CEB1-3E95-4A34-B888-0BCE6D6504B8
 :END:
+
 * Lazy Max Segment Tree
 
 #+begin_src python

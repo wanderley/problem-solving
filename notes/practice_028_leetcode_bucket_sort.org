@@ -1,0 +1,206 @@
+:PROPERTIES:
+:ID:       C25A5FC1-2AB1-4D4F-A648-60845B1C4BA4
+:ROAM_REF: https://leetcode.com/tag/bucket-sort/
+:END:
+#+TITLE: Practice #028: Leetcode - Bucket Sort
+
+* Leetcode: 220. Contains Duplicate III
+:PROPERTIES:
+:ID:       1D44E920-A696-4B9E-815B-383D706D6715
+:WA:       4
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-18 Thu 07:44]--[2022-08-18 Thu 08:31] =>  0:47
+:END:
+[[https://leetcode.com/problems/contains-duplicate-iii/][Problem Statement]]
+
+- [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  Thought that I would need linear time to check values in the adjacent buckets, but it is not the case because each bucket has at most one element.
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  If the last $k$ elements are sorted and we want to add a new element.  We first remove the $i-k-1$ element from our data structure inspired on [[id:B2345736-5C27-421B-BDDC-F247687A2B0E][Bucket Sort]], and then we ask "is there a element x in the data structure where $nums[i]-x \leq t$ or $x - nums[i] \leq t?".  To answer this question, our data structure can keep the numbers in buckets of size $t$ (e.g. $[0..t], [t+1...2*t+2], ...$).  Time complexity is $O(n)$ and space is $O(k)$.
+
+#+begin_src python
+  class Solution:
+      def containsNearbyAlmostDuplicate(self, nums: List[int], k: int, t: int) -> bool:
+          N = len(nums)
+          minv = min(nums)
+          groups = {}
+
+          def key(i):
+              return (nums[i] - minv) // (t + 1)
+
+          for i, n in enumerate(nums):
+              if len(groups) == k + 1:
+                  del groups[key(i - k - 1)]
+              j = key(i)
+              if j in groups:
+                  return True
+              if j - 1 in groups and (n - groups[j - 1]) <= t:
+                  return True
+              if j + 1 in groups and (groups[j + 1] - n) <= t:
+                  return True
+              groups[j] = n
+
+          return False
+#+end_src
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  If the last $k$ elements are sorted (using [[id:B2345736-5C27-421B-BDDC-F247687A2B0E][Bucket Sort]]) and we want to add a new element.  Instead of storing the numbers in bucket as in the previous item, we can keep a list of sorted numbers and check the previous greater and next smaller numbers to see if they are $t$ from the current number.  Time complexity is $O(n \log k)$ and space is $O(k)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+  class Solution:
+      def containsNearbyAlmostDuplicate(self, nums: List[int], k: int, t: int) -> bool:
+          N = len(nums)
+          l = SortedList()
+
+          for i in range(N):
+              if len(l) == k + 1:
+                  l.remove(nums[i - k - 1])
+              if nums[i] in l:
+                  return True
+              if len(l) > 0:
+                  j = l.bisect_left(nums[i])
+                  left = l[j] if j < len(l) and l[j] <= nums[i] else l[j - 1]
+                  if abs(left - nums[i]) <= t:
+                      return True
+                  j = l.bisect_right(nums[i])
+                  right = l[j] if j < len(l) else l[j - 1]
+                  if abs(right - nums[i]) <= t:
+                      return True
+
+              l.add(nums[i])
+          return False
+#+end_src
+
+* Leetcode: 347. Top K Frequent Elements
+:PROPERTIES:
+:ID:       12E124DF-A6CD-4130-B10A-DF9CEA5D23BC
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-20 Sat 15:56]--[2022-08-20 Sat 16:17] =>  0:21
+:END:
+[[https://leetcode.com/problems/top-k-frequent-elements/][Problem Statement]]
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Suppose that we have all numbers sorted by their frequency.  The problem becomes getting the $k$ largest one.  As any number can appear at most $n$ times, we can sort them using [[id:B2345736-5C27-421B-BDDC-F247687A2B0E][Bucket Sort]] in linear time.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from collections import Counter
+
+
+  class Solution:
+      def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+          N = len(nums)
+
+          c = Counter(nums)
+          f = [[] for _ in range(N + 1)]
+          for n, i in c.items():
+              f[i].append(n)
+
+          ans = []
+          for i in range(N, -1, -1):
+              if len(ans) == k:
+                  break
+              ans.extend(f[i][: k - len(ans)])
+          return ans
+
+
+  assert Solution().topKFrequent([1, 1, 1, 2, 2, 3], 2) == [1, 2]
+  assert Solution().topKFrequent([1], 1) == [1]
+#+end_src
+
+* Leetcode: 451. Sort Characters By Frequency
+:PROPERTIES:
+:ID:       DF695B84-518D-4B74-822E-E9F0E694367C
+:END:
+[[https://leetcode.com/problems/sort-characters-by-frequency/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Sort all letters in bucket ([[id:B2345736-5C27-421B-BDDC-F247687A2B0E][Bucket Sort]]) by frequency and them build the answer using the buckets.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from collections import Counter
+
+
+  class Solution:
+      def frequencySort(self, s: str) -> str:
+          N = len(s)
+          cnt = Counter(s)
+          f = [[] for _ in range(N + 1)]
+          for k, v in cnt.items():
+              f[v].append(k)
+          ans = ""
+          for v in range(N, -1, -1):
+              for x in f[v]:
+                  ans += x * v
+          return ans
+
+
+  assert Solution().frequencySort("tree") == "eetr"
+  assert Solution().frequencySort("cccaaa") == "cccaaa"
+  assert Solution().frequencySort("Aabb") == "bbAa"
+#+end_src
+
+* Leetcode: 692. Top K Frequent Words
+:PROPERTIES:
+:ID:       418986A7-BC93-4172-9E6C-508A30DAE263
+:END:
+[[https://leetcode.com/problems/top-k-frequent-words/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Sort all words by frequency using [[id:B2345736-5C27-421B-BDDC-F247687A2B0E][Bucket Sort]] and then build the answer using the buckets.  Time complexity is $O(n \times log b)$ where $b$ is the size of bigger bucket, and space complexity is $O(n)$.
+
+#+begin_src python
+  from collections import Counter
+  from typing import List
+
+
+  class Solution:
+      def topKFrequent(self, words: List[str], K: int) -> List[str]:
+          N = len(words)
+          c = Counter(words)
+          f = [[] for _ in range(N + 1)]
+          for k, v in c.items():
+              f[v].append(k)
+          ans = []
+          for i in range(N, -1, -1):
+              if len(ans) == K:
+                  break
+              ans.extend(sorted(f[i])[: K - len(ans)])
+          return ans
+
+
+  assert Solution().topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2) == [
+      "i",
+      "love",
+  ]
+  assert Solution().topKFrequent(
+      ["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4
+  ) == ["the", "is", "sunny", "day"]
+#+end_src
+
+* Leetcode: 912. Sort an Array
+:PROPERTIES:
+:ID:       6780F114-B869-49C5-BE91-19016B5D0BB8
+:END:
+[[https://leetcode.com/problems/sort-an-array/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def sortArray(self, nums: List[int]) -> List[int]:
+          N = len(nums)
+          M = 50_000 * 2
+          c = [0 for _ in range(M + 1)]
+          for n in nums:
+              c[n + 50_000] += 1
+          ans = []
+          for i in range(0, M + 1):
+              for _ in range(c[i]):
+                  ans.append(i - 50_000)
+          return ans
+
+
+  assert Solution().sortArray([5, 2, 3, 1]) == [1, 2, 3, 5]
+  assert Solution().sortArray([5, 1, 1, 2, 0, 0]) == [0, 0, 1, 1, 2, 5]
+#+end_src
