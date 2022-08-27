@@ -2892,6 +2892,68 @@ CLOCK: [2022-07-26 Tue 07:22]--[2022-07-26 Tue 08:04] =>  0:42
   assert obj.calculateMKAverage() == 5
 #+end_src
 
+#+begin_src python
+  class FenwickTree:
+      def __init__(self, n):
+          self.n = n
+          self.bit = [0] * n
+
+      def sum(self, r, l=None):
+          if l is not None:
+              return self.sum(l) - self.sum(r - 1)
+          ret = 0
+          while r >= 0:
+              ret += self.bit[r]
+              r = (r & (r + 1)) - 1
+          return ret
+
+      def add(self, idx, delta):
+          while idx < self.n:
+              self.bit[idx] += delta
+              idx = idx | (idx + 1)
+
+
+  class MKAverage:
+      def __init__(self, m: int, k: int):
+          self.m = m
+          self.k = k
+          self.r = m - 2 * k
+          self.c = FenwickTree(10**5 + 1)
+          self.n = FenwickTree(10**5 + 1)
+          self.stream = deque()
+
+      def addElement(self, num: int) -> None:
+          if len(self.stream) == self.m:
+              x = self.stream.popleft()
+              self.c.add(x, -1)
+              self.n.add(x, -x)
+          self.stream.append(num)
+          self.c.add(num, +1)
+          self.n.add(num, +num)
+
+      def index(self, v):
+          s = 1
+          e = 10**5
+          while s < e:
+              m = s + (e - s) // 2
+              if self.c.sum(m) >= v:
+                  e = m
+              else:
+                  s = m + 1
+          return s
+
+      def calculateMKAverage(self) -> int:
+          if len(self.stream) < self.m:
+              return -1
+
+          s = self.index(self.k)
+          e = self.index(self.m - self.k)
+          ans = self.n.sum(e) - self.n.sum(s)
+          ans += s * max(0, self.c.sum(s) - self.k)
+          ans -= e * max(0, self.c.sum(e) - (self.m - self.k))
+          return floor(ans / self.r)
+#+end_src
+
 - We can replace the sorted list and [[id:2B44007C-8EC7-49DA-9A9B-0D6CF6578083][FenwickTree]] by implementing a [[id:252C5055-2C0D-4B0E-A4BF-9507B85A179F][Segment Tree]] that keeps the sum and a count for each node.  Time complexity is $O(\log M)$ for all operations and space is $O(M)$ where $M$ is the number of distinct numbers allowed.
 
 #+begin_src python
@@ -2991,6 +3053,61 @@ CLOCK: [2022-07-26 Tue 07:22]--[2022-07-26 Tue 08:04] =>  0:42
   obj.addElement(5)
   obj.addElement(5)
   assert obj.calculateMKAverage() == 5
+#+end_src
+
+- [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  Keep tree lists $left, mid$ and $right$ with the last $m$ elements from the stream.  After receiving a list, first remove one if it exceeds the limit and then update the lists to respect its sizes from left to right.  Time complexity is $O(n \log n)$ and space complexity is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+  class MKAverage:
+
+      def __init__(self, m: int, k: int):
+          self.m = m
+          self.k = k
+          self.r = m - 2 * k
+          self.left = SortedList()
+          self.right = SortedList()
+          self.mid = SortedList()
+          self.sum = 0
+          self.nums = deque()
+
+      def addElement(self, num: int) -> None:
+          if len(self.nums) == self.m:
+              self.popleft()
+          self.nums.append(num)
+          self.left.add(num)
+          if len(self.left) > self.k:
+              x = self.left.pop(-1)
+              self.mid.add(x)
+              self.sum += x
+          if len(self.mid) > self.r:
+              x = self.mid.pop(-1)
+              self.right.add(x)
+              self.sum -= x
+
+      def popleft(self) -> None:
+          num = self.nums.popleft()
+          if num in self.left:
+              self.left.remove(num)
+          elif num in self.mid:
+              self.mid.remove(num)
+              self.sum -= num
+          else:
+              self.right.remove(num)
+          if len(self.left) < self.k:
+              x = self.mid.pop(0)
+              self.left.add(x)
+              self.sum -= x
+          if len(self.mid) < self.r:
+              x = self.right.pop(0)
+              self.mid.add(x)
+              self.sum += x
+
+      def calculateMKAverage(self) -> int:
+          if len(self.nums) < self.m:
+              return -1
+          return floor(self.sum / len(self.mid))
 #+end_src
 
 * Leetcode: 188. Best Time to Buy and Sell Stock IV
@@ -4924,6 +5041,33 @@ CLOCK: [2022-08-07 Sun 20:52]--[2022-08-07 Sun 21:57] =>  1:05
   assert Solution().encode("aaaaaaaaaa") == "10[a]"
 #+end_src
 
+#+begin_src python
+  class Solution:
+      def encode(self, s: str) -> str:
+          N = len(s)
+
+          @cache
+          def dfs(i, j):
+              if i == j:
+                  return s[i]
+              if i > j:
+                  return ""
+              ans = s[i : j + 1]
+              p = (ans + ans).find(ans, 1)
+              k = len(ans) // p
+              if k > 1:
+                  x = f"{k}[{dfs(i, i + p-1)}]"
+                  if len(x) < len(ans):
+                      ans = x
+              for k in range(i, j):
+                  x = dfs(i, k) + dfs(k + 1, j)
+                  if len(x) < len(ans):
+                      ans = x
+              return ans
+
+          return dfs(0, N - 1)
+#+end_src
+
 * Leetcode: 1776. Car Fleet II
 :PROPERTIES:
 :ID:       8075F351-F99A-4EBD-A7A8-E928DA2F7931
@@ -6168,8 +6312,41 @@ CLOCK: [2022-08-21 Sun 21:43]--[2022-08-21 Sun 21:52] =>  0:09
 * Leetcode: 992. Subarrays with K Different Integers
 :PROPERTIES:
 :ID:       0D0909E1-3EBE-4278-9BD4-E88BA2F4ACD7
+:ORDERED:  t
 :END:
 :LOGBOOK:
+CLOCK: [2022-08-26 Fri 20:39]--[2022-08-26 Fri 20:51] =>  0:12
+CLOCK: [2022-08-26 Fri 18:21]--[2022-08-26 Fri 19:07] =>  0:46
 CLOCK: [2022-08-21 Sun 21:55]--[2022-08-21 Sun 22:04] =>  0:09
 :END:
 [[https://leetcode.com/problems/subarrays-with-k-different-integers/][Problem Statement]]
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Compute $c(x)$ which is the number of arrays with at most $x$ distinct elements.  The answer for the original problem is $c(k) - c(k-1)$.  Time and space complexity is $O(N)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def subarraysWithKDistinct(self, nums: List[int], k: int) -> int:
+          N = len(nums)
+
+          def calc(k):
+              c = [0] * (N + 1)
+              j = d = ans = 0
+              for i in range(N):
+                  c[nums[i]] += 1
+                  d += 1 if c[nums[i]] == 1 else 0
+                  while d > k:
+                      c[nums[j]] -= 1
+                      d -= 1 if c[nums[j]] == 0 else 0
+                      j += 1
+                  ans += i - j + 1
+              return ans
+
+          return calc(k) - calc(k - 1)
+
+
+  assert Solution().subarraysWithKDistinct([1, 2, 1, 2, 3], 2) == 7
+  assert Solution().subarraysWithKDistinct([1, 2, 1, 3, 4], 3) == 3
+#+end_src
