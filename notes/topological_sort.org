@@ -2,3 +2,38 @@
 :ID:       80122A2F-3B84-48B1-B10D-6ACEE4373298
 :END:
 #+TITLE: Topological Sort
+
+* Python
+
+#+begin_src python
+  def topological_sort(self, graph):
+      NOT_VISITED = 1
+      OPEN = 2
+      CLOSED = 4
+
+      status = {u: NOT_VISITED for u in graph}
+      ans = []
+
+      def dfs(u):
+          if status[u] == CLOSED:
+              return True
+          if status[u] == OPEN:
+              return False
+
+          status[u] = OPEN
+          for v in graph.get(u, []):
+              if not dfs(v):
+                  return False
+
+          ans.append(u)
+          status[u] = CLOSED
+          return True
+
+      for c in status:
+          if status[c] == NOT_VISITED:
+              if not dfs(c):
+                  return False
+
+      ans.reverse()
+      return ans
+#+end_src

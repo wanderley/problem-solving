@@ -4465,35 +4465,25 @@ CLOCK: [2022-08-05 Fri 19:59]--[2022-08-05 Fri 20:35] =>  0:36
       def closestNode(
           self, n: int, edges: List[List[int]], query: List[List[int]]
       ) -> List[int]:
-          adj = [list() for _ in range(n)]
+          A = defaultdict(list)
           for u, v in edges:
-              adj[u].append(v)
-              adj[v].append(u)
+              A[u].append(v)
+              A[v].append(u)
 
-          def dfs(u, p, q, seen):
-              if u == p and u == q:
-                  return [u, u]
+          def dfs(root, parent, e1, e2):
+              if root == e1 or root == e2:
+                  return root
+              found = []
+              for u in A[root]:
+                  if u != parent:
+                      v = dfs(u, root, e1, e2)
+                      if v is not None:
+                          found.append(v)
+              if found:
+                  return found[0] if len(found) == 1 else root
+              return None
 
-              ans = [None, None]
-              for v in adj[u]:
-                  if v not in seen:
-                      seen.add(v)
-                      rp, rq = dfs(v, p, q, seen)
-                      if rp is not None:
-                          ans[0] = rp
-                      if rq is not None:
-                          ans[1] = rq
-              if u == p:
-                  ans[0] = u
-              if u == q:
-                  ans[1] = u
-
-              if ans[0] is not None and ans[1] is not None and ans[0] != ans[1]:
-                  return [u, u]
-
-              return ans
-
-          return [dfs(u, p, q, set([u]))[0] for u, p, q in query]
+          return [dfs(q, None, u, v) for u, v, q in query]
 
 
   assert Solution().closestNode(
