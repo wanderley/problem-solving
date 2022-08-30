@@ -3524,21 +3524,20 @@ CLOCK: [2022-07-28 Thu 10:21]--[2022-07-28 Thu 14:08] =>  3:47
 
   class Solution:
       def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-          adj = defaultdict(list)
+          A = {u: [] for u in set(u for t in tickets for u in t)}
           for u, v in tickets:
-              adj[u].append(v)
-          for u in adj:
-              adj[u].sort()
-              adj[u].reverse()
-
+              A[u].append(v)
+          for u in A:
+              A[u].sort(reverse=True)
           st = ["JFK"]
           ans = []
           while st:
-              if len(adj[st[-1]]) == 0:
+              if not A[st[-1]]:
                   ans.append(st.pop())
-                  continue
-              st.append(adj[st[-1]].pop())
-          return ans[::-1]
+              else:
+                  st.append(A[st[-1]].pop())
+          ans.reverse()
+          return ans
 
 
   assert Solution().findItinerary(
@@ -4180,6 +4179,30 @@ CLOCK: [2022-08-03 Wed 19:59]--[2022-08-03 Wed 21:08] =>  1:09
   assert Solution().maximumANDSum([1, 3, 10, 4, 7, 1], 9) == 24
 #+end_src
 
+#+begin_src python
+  class Solution:
+      def maximumANDSum(self, nums: List[int], numSlots: int) -> int:
+          N = len(nums)
+
+          @cache
+          def dfs(i, used):
+              if i == N:
+                  return 0
+
+              ans = 0
+              cur = used
+              b = 1
+              for k in range(1, numSlots + 1):
+                  slot = cur % 3
+                  cur = cur // 3
+                  if slot < 2:
+                      ans = max(ans, (nums[i] & k) + dfs(i + 1, used + b))
+                  b = b * 3
+              return ans
+
+          return dfs(0, 0)
+#+end_src
+
 * Leetcode: 317. Shortest Distance from All Buildings
 :PROPERTIES:
 :ID:       EADAA76E-ACE0-46E4-9B58-4570CFEF0A27
@@ -4382,7 +4405,7 @@ CLOCK: [2022-08-05 Fri 15:52]--[2022-08-05 Fri 16:02] =>  0:10
   ) == [True, False]
 #+end_src
 
-* TODO Leetcode: 843. Guess the Word
+* Leetcode: 843. Guess the Word
 :PROPERTIES:
 :ID:       559F0C7E-8D58-4212-B2C0-BB3DEDCD9D94
 :END:
@@ -4391,6 +4414,45 @@ CLOCK: [2022-07-19 Tue 17:36]--[2022-07-19 Tue 18:31] =>  0:55
 CLOCK: [2022-07-19 Tue 16:09]--[2022-07-19 Tue 16:19] =>  0:10
 :END:
 [[https://leetcode.com/problems/guess-the-word/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  There are two important parts of the problem: (1) filter words after a guess and (2) pick the best guess.  For the first, we have to filter all words which the number of matches is different than the number of matches from the last guess (the secret will have to match these letters any way).  The more problematic guess is the one that returns 0.  In this situation, we want to remove the maximum number of words as possible.  To do that, we take the word that contains the most frequent letter per position.  If it returns 0, then you are guaranteed to remove as much words as possible.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+  # """
+  # This is Master's API interface.
+  # You should not implement it, or speculate about its implementation
+  # """
+  # class Master:
+  #     def guess(self, word: str) -> int:
+
+
+  class Solution:
+      def findSecretWord(self, wordlist: List[str], master: "Master") -> None:
+          N = len(wordlist[0])
+
+          f = [Counter(w[i] for w in wordlist) for i in range(6)]
+          wordlist.sort(reverse=True, key=lambda w: sum(f[i][c] for i, c in enumerate(w)))
+
+          @cache
+          def guess(s1, s2):
+              ans = 0
+              for a, b in zip(s1, s2):
+                  ans += 1 if a == b else 0
+              return ans
+
+          value = 0
+          for _ in range(30):
+              if not wordlist or value == N:
+                  break
+              candidate = wordlist[0]
+              value = master.guess(candidate)
+              wordlist = [
+                  w for w in wordlist if w != candidate and guess(candidate, w) == value
+              ]
+#+end_src
+
 * TODO Leetcode: 164. Maximum Gap
 :PROPERTIES:
 :ID:       4373FA38-A210-47A9-A473-18540B1F1C96
@@ -4429,7 +4491,7 @@ CLOCK: [2022-07-31 Sun 22:14]--[2022-07-31 Sun 22:52] =>  0:38
 CLOCK: [2022-08-05 Fri 16:15]--[2022-08-05 Fri 19:59] =>  3:44
 :END:
 [[https://leetcode.com/problems/strong-password-checker/][Problem Statement]]
-* TODO Leetcode: 1263. Minimum Moves to Move a Box to Their Target Location
+* Leetcode: 1263. Minimum Moves to Move a Box to Their Target Location
 :PROPERTIES:
 :ID:       C39E37E2-B683-4651-AC6A-D9342F8A832E
 :END:
@@ -4437,6 +4499,97 @@ CLOCK: [2022-08-05 Fri 16:15]--[2022-08-05 Fri 19:59] =>  3:44
 CLOCK: [2022-08-11 Thu 17:04]--[2022-08-11 Thu 17:10] =>  0:06
 :END:
 [[https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/][Problem Statement]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]] [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]].  Time complexity is $O(n \times m \times \log(n \times m))$ and space $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minPushBox(self, grid: List[List[str]]) -> int:
+          N = len(grid)
+          M = len(grid[0])
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+          S = B = T = None
+          for i in range(N):
+              for j in range(M):
+                  if grid[i][j] == "S":
+                      S = (i, j)
+                  elif grid[i][j] == "B":
+                      B = (i, j)
+                  elif grid[i][j] == "T":
+                      T = (i, j)
+
+          seen = set()
+          pq = [(0, S, B)]
+          while pq:
+              pushes, s, b = heappop(pq)
+              if b == T:
+                  return pushes
+              for di, dj in D:
+                  nsi, nsj = s[0] + di, s[1] + dj
+                  ns = (nsi, nsj)
+                  if 0 <= nsi < N and 0 <= nsj < M and grid[nsi][nsj] != "#":
+                      if ns == b:
+                          nbi, nbj = b[0] + di, b[1] + dj
+                          nb = (nbi, nbj)
+                          if (
+                              0 <= nbi < N
+                              and 0 <= nbj < M
+                              and grid[nbi][nbj] != "#"
+                              and (ns, nb) not in seen
+                          ):
+                              seen.add((ns, nb))
+                              heappush(pq, (pushes + 1, ns, nb))
+                      elif (ns, b) not in seen:
+                          seen.add((ns, b))
+                          heappush(pq, (pushes, ns, b))
+
+          return -1
+
+
+  assert (
+      Solution().minPushBox(
+          [
+              ["#", "#", "#", "#", "#", "#"],
+              ["#", "T", "#", "#", "#", "#"],
+              ["#", ".", ".", "B", ".", "#"],
+              ["#", ".", "#", "#", ".", "#"],
+              ["#", ".", ".", ".", "S", "#"],
+              ["#", "#", "#", "#", "#", "#"],
+          ]
+      )
+      == 3
+  )
+  assert (
+      Solution().minPushBox(
+          [
+              ["#", "#", "#", "#", "#", "#"],
+              ["#", "T", "#", "#", "#", "#"],
+              ["#", ".", ".", "B", ".", "#"],
+              ["#", "#", "#", "#", ".", "#"],
+              ["#", ".", ".", ".", "S", "#"],
+              ["#", "#", "#", "#", "#", "#"],
+          ]
+      )
+      == -1
+  )
+  assert (
+      Solution().minPushBox(
+          [
+              ["#", "#", "#", "#", "#", "#"],
+              ["#", "T", ".", ".", "#", "#"],
+              ["#", ".", "#", "B", ".", "#"],
+              ["#", ".", ".", ".", ".", "#"],
+              ["#", ".", ".", ".", "S", "#"],
+              ["#", "#", "#", "#", "#", "#"],
+          ]
+      )
+      == 5
+  )
+#+end_src
 
 * TODO Leetcode: 164. Maximum Gap
 :PROPERTIES:
@@ -6339,4 +6492,81 @@ CLOCK: [2022-08-21 Sun 21:55]--[2022-08-21 Sun 22:04] =>  0:09
 
   assert Solution().subarraysWithKDistinct([1, 2, 1, 2, 3], 2) == 7
   assert Solution().subarraysWithKDistinct([1, 2, 1, 3, 4], 3) == 3
+#+end_src
+
+* Leetcode: 827. Making A Large Island
+:PROPERTIES:
+:ID:       5F39F428-D713-4C70-942A-37F0C4C18635
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-28 Sun 20:32]--[2022-08-28 Sun 20:43] =>  0:11
+:END:
+[[https://leetcode.com/problems/making-a-large-island/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not test for world without any island.
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Island cells are vertices and they are connected if they are 4-directional neighbor.  The problem becomes finding all connected component and then testing which 0-cell would create the largest component.  Time and space complexity are $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+  from collections import defaultdict
+
+
+  class Solution:
+      def largestIsland(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+          counter = defaultdict(int)
+
+          def dfs(i, j, key):
+              counter[key] += 1
+              grid[i][j] = key
+              for di, dj in D:
+                  ni = i + di
+                  nj = j + dj
+                  if 0 <= ni < N and 0 <= nj < N and grid[ni][nj] == 1:
+                      dfs(ni, nj, key)
+
+          cur = 2
+          for i in range(N):
+              for j in range(N):
+                  if grid[i][j] == 1:
+                      dfs(i, j, cur)
+                      cur += 1
+
+          ans = max(counter.values()) if counter else 0
+          for i in range(N):
+              for j in range(N):
+                  if grid[i][j] == 0:
+                      candidates = set()
+                      for di, dj in D:
+                          ni = i + di
+                          nj = j + dj
+                          if 0 <= ni < N and 0 <= nj < N and grid[ni][nj] != 0:
+                              candidates.add(grid[ni][nj])
+                      cur = 1
+                      for c in candidates:
+                          cur += counter[c]
+                      if cur > ans:
+                          ans = cur
+          return ans
+
+
+  assert Solution().largestIsland([[1, 0], [0, 1]]) == 3
+  assert Solution().largestIsland([[1, 1], [1, 0]]) == 4
+  assert Solution().largestIsland([[1, 1], [1, 1]]) == 4
+#+end_src
+
+* Leetcode: 1363. Largest Multiple of Three
+:PROPERTIES:
+:ID:       DF825BC2-F0B1-4706-B80A-3C2809816307
+:WA:       2
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-28 Sun 21:13]--[2022-08-28 Sun 21:44] =>  0:31
+CLOCK: [2022-08-28 Sun 20:48]--[2022-08-28 Sun 21:06] =>  0:18
+:END:
+[[https://leetcode.com/problems/largest-multiple-of-three/][Problem Statement]]
+
+#+begin_src python
 #+end_src
