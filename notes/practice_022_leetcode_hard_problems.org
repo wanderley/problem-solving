@@ -225,10 +225,7 @@ CLOCK: [2022-07-12 Tue 14:30]--[2022-07-12 Tue 15:28] =>  0:58
 #+begin_src python
   class Solution:
       def numberToWords(self, num: int) -> str:
-          if num == 0:
-              return "Zero"
-
-          up_to_19 = {
+          ntw = {
               0: "Zero",
               1: "One",
               2: "Two",
@@ -249,55 +246,38 @@ CLOCK: [2022-07-12 Tue 14:30]--[2022-07-12 Tue 15:28] =>  0:58
               17: "Seventeen",
               18: "Eighteen",
               19: "Nineteen",
+              20: "Twenty",
+              30: "Thirty",
+              40: "Forty",
+              50: "Fifty",
+              60: "Sixty",
+              70: "Seventy",
+              80: "Eighty",
+              90: "Ninety",
           }
 
-          ty = {
-              2: "Twenty",
-              3: "Thirty",
-              4: "Forty",
-              5: "Fifty",
-              6: "Sixty",
-              7: "Seventy",
-              8: "Eighty",
-              9: "Ninety",
-          }
+          if num in ntw:
+              return ntw[num]
 
-          def w3d(a, b, c):
-              num = a * 100 + b * 10 + c
-              ans = ""
-              if num == 0:
-                  return ""
-              elif num < 20:
-                  ans += up_to_19[num]
-              elif num < 100:
-                  ans += ty[b]
-                  res = w3d(0, 0, c)
-                  if res != "":
-                      ans += " " + res
+          def convert(n):
+              if n == 0:
+                  return []
+              if n in ntw:
+                  return [ntw[n]]
+              if n >= 100:
+                  return [ntw[n // 100], "Hundred"] + convert(n % 100)
               else:
-                  ans += up_to_19[a] + " Hundred"
-                  res = w3d(0, b, c)
-                  if res != "":
-                      ans += " " + res
-              return ans
+                  return [ntw[n - (n % 10)]] + convert(n % 10)
 
-          g = ["", " Thousand ", " Million ", " Billion "]
-          digits = list(map(int, str(num)))
-          while len(digits) % 3 != 0:
-              digits = [0] + digits
-          k = 0
-          N = len(digits)
-          ans = ""
-          for i in range(N - 3, -1, -3):
-              a = digits[i]
-              b = digits[i + 1]
-              c = digits[i + 2]
-              if a * 100 + b * 10 + c > 0:
-                  cur = w3d(a, b, c)
-                  ans = w3d(a, b, c) + g[k] + ans
-              k += 1
-
-          return ans.strip().replace("  ", " ")
+          e = [["Billion"], ["Million"], ["Thousand"], []]
+          ans = []
+          while num > 0:
+              cur = num % 1000
+              suf = e.pop()
+              if cur > 0:
+                  ans = convert(cur) + suf + ans
+              num = num // 1000
+          return " ".join(ans)
 
 
   assert Solution().numberToWords(123) == "One Hundred Twenty Three"
@@ -6729,3 +6709,12 @@ CLOCK: [2022-08-29 Mon 22:18]--[2022-08-29 Mon 22:52] =>  0:34
   )
   assert Solution().jobScheduling([1, 1, 1], [2, 3, 4], [5, 6, 4]) == 6
 #+end_src
+
+* Leetcode: 2281. Sum of Total Strength of Wizards
+:PROPERTIES:
+:ID:       AB50C209-FD17-43D6-B381-D0BBB65D794A
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-02 Fri 21:34]--[2022-09-02 Fri 22:10] =>  0:36
+:END:
+[[https://leetcode.com/problems/sum-of-total-strength-of-wizards/][Problem Statement]]

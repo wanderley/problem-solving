@@ -1,0 +1,122 @@
+:PROPERTIES:
+:ID:       0C82183F-2AD0-4351-814A-845A327C1640
+:END:
+#+TITLE: Practice #031: Leetcode Biweekly Contest 86
+
+* Leetcode: 2395. Find Subarrays With Equal Sum
+[[https://leetcode.com/problems/find-subarrays-with-equal-sum/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def findSubarrays(self, nums: List[int]) -> bool:
+          c = {}
+          for i in range(len(nums) - 1):
+              s = nums[i] + nums[i + 1]
+              c.setdefault(s, 0)
+              c[s] += 1
+              if c[s] >= 2:
+                  return True
+          return False
+#+end_src
+
+* Leetcode: 2396. Strictly Palindromic Number
+[[https://leetcode.com/problems/strictly-palindromic-number/][Problem Statement]]
+
+#+begin_src python
+  class Solution:
+      def isStrictlyPalindromic(self, n: int) -> bool:
+          def isp(x):
+              i = 0
+              j = len(x) - 1
+              while i < j:
+                  if x[i] != x[j]:
+                      return False
+                  i += 1
+                  j -= 1
+              return False
+
+          def convert(n, b):
+              if n < b:
+                  return [n]
+
+              ans = []
+              while n > 0:
+                  ans.append(n % b)
+                  n = n // b
+
+              ans.reverse()
+              return ans
+
+          ans = True
+          for b in range(2, n - 1):
+              ans = ans and isp(convert(n, b))
+
+          return ans
+#+end_src
+
+* Leetcode: 2397. Maximum Rows Covered by Columns
+[[https://leetcode.com/problems/maximum-rows-covered-by-columns/][Problem Statement]]
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumRows(self, mat: List[List[int]], cols: int) -> int:
+          N = len(mat)
+          M = len(mat[0])
+
+          ans = float("-inf")
+          for s in range(2**M):
+              if sum(1 if (s & (1 << k)) != 0 else 0 for k in range(M)) != cols:
+                  continue
+              cur = 0
+              for i in range(N):
+                  ok = True
+                  for j in range(M):
+                      if mat[i][j] == 1 and (s & (1 << j)) == 0:
+                          ok = False
+                  if ok:
+                      cur += 1
+              ans = max(ans, cur)
+
+          return ans
+#+end_src
+
+* Leetcode: 2398. Maximum Number of Robots Within Budget
+[[https://leetcode.com/problems/maximum-number-of-robots-within-budget/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  We can use a sorted list to query the max element in the interval and [[id:6C76A007-72FB-4495-904F-CC3407193847][Prefix Sum]] to compute the sum.  With this info, we can use a [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]] to go over all valid intervals and find the bigger one.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+  from typing import List
+
+
+  class Solution:
+      def maximumRobots(
+          self, chargeTimes: List[int], runningCosts: List[int], budget: int
+      ) -> int:
+          N = len(chargeTimes)
+          ans = 0
+          start = 0
+
+          pref = list(accumulate(runningCosts))
+          maxq = SortedList([])
+
+          def cost():
+              sumv = pref[end] - (pref[start - 1] if start - 1 >= 0 else 0)
+              return maxq[-1] + (end - start + 1) * sumv
+
+          for end in range(N):
+              maxq.add(chargeTimes[end])
+              while maxq and cost() > budget:
+                  maxq.remove(chargeTimes[start])
+                  start += 1
+              if maxq:
+                  ans = max(ans, end - start + 1)
+          return ans
+#+end_src
