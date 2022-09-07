@@ -4420,53 +4420,21 @@ CLOCK: [2022-08-04 Thu 16:47]
           N = len(image)
           M = len(image[0])
 
-          def line(i):
-              return image[i]
+          def first(lo, hi, chk):
+              while lo < hi:
+                  m = lo + (hi - lo) // 2
+                  if chk(m):
+                      hi = m
+                  else:
+                      lo = m + 1
+              return lo if chk(lo) else lo + 1
 
-          def column(j):
-              return [image[i][j] for i in range(N)]
+          l = first(0, y, lambda j: any(image[i][j] == "1" for i in range(N)))
+          r = first(y, M - 1, lambda j: all(image[i][j] == "0" for i in range(N)))
+          u = first(0, x, lambda i: "1" in image[i])
+          d = first(x, N - 1, lambda i: "1" not in image[i])
 
-          s = 0
-          e = x
-          while s < e:
-              m = s + (e - s) // 2
-              if "1" in line(m):
-                  e = m
-              else:
-                  s = m + 1
-          mini = s
-
-          s = x
-          e = N - 1
-          while s + 1 < e:
-              m = s + (e - s) // 2
-              if "1" in line(m):
-                  s = m
-              else:
-                  e = m - 1
-          maxi = s + 1 if s + 1 < N and "1" in image[s + 1] else s
-
-          s = y
-          e = M - 1
-          while s + 1 < e:
-              m = s + (e - s) // 2
-              if "1" in column(m):
-                  s = m
-              else:
-                  e = m - 1
-          maxj = s + 1 if s + 1 < M and "1" in column(s + 1) else s
-
-          s = 0
-          e = y
-          while s < e:
-              m = s + (e - s) // 2
-              if "1" in column(m):
-                  e = m
-              else:
-                  s = m + 1
-          minj = s
-
-          return (maxi - mini + 1) * (maxj - minj + 1)
+          return (l - r) * (u - d)
 
 
   assert (
