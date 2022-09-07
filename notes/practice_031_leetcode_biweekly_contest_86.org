@@ -71,15 +71,11 @@
 
           ans = float("-inf")
           for s in range(2**M):
-              if sum(1 if (s & (1 << k)) != 0 else 0 for k in range(M)) != cols:
+              if s.bit_count() != cols:
                   continue
               cur = 0
               for i in range(N):
-                  ok = True
-                  for j in range(M):
-                      if mat[i][j] == 1 and (s & (1 << j)) == 0:
-                          ok = False
-                  if ok:
+                  if all(mat[i][j] == 0 or s & (1 << j) for j in range(M)):
                       cur += 1
               ans = max(ans, cur)
 

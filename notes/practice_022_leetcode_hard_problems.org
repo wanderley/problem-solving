@@ -954,6 +954,37 @@ The trick part is how we are going to handle the unary minus operator.  [[id:F19
   assert Solution().calculate("(2)") == 2
 #+end_src
 
+#+begin_src python
+  class Solution:
+      def calculate(self, s: str) -> int:
+          s = "(" + s + ")"
+          N = len(s)
+
+          def dfs(i, left, right, sign):
+              if i == N:
+                  return left + sign * right
+
+              if s[i] == " ":
+                  return dfs(i + 1, left, right, sign)
+
+              if s[i].isdigit():
+                  j = i
+                  while j < N and s[j].isdigit():
+                      j += 1
+                  return dfs(j, left, int(s[i:j]), sign)
+
+              if s[i] in "+-":
+                  return dfs(i + 1, left + sign * right, 0, +1 if s[i] == "+" else -1)
+
+              if s[i] == "(":
+                  ni, right = dfs(i + 1, 0, 0, +1)
+                  return dfs(ni, left + sign * right, 0, +1)
+
+              return i + 1, left + sign * right
+
+          return dfs(0, 0, 0, +1)
+#+end_src
+
 * Leetcode: 631. Design Excel Sum Formula
 :PROPERTIES:
 :ID:       182C19E0-01FA-46DF-9F15-1BD4BD7C02CA
@@ -4376,9 +4407,9 @@ CLOCK: [2022-08-04 Thu 16:47]
 :END:
 [[https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/][Problem Statement]]
 
-- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  Came up with a complicated heuristic instead of going with the [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]].
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]. Missed the restriction of the time complexity.
 
-- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  This problem is about visiting all vertices of a component and tracking its extreme points what can be done using [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]].  Time and space complexity is $O(n)$ where $n$ is the size of the component.
+- [[id:3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE][Can we state the problem as result of multiple searches?]]  Do a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the first and last row and column.  Time complexity is $O(n \log n + m \log m)$ and space is $O(1)$.
 
 #+begin_src python
   from typing import List
@@ -4388,24 +4419,54 @@ CLOCK: [2022-08-04 Thu 16:47]
       def minArea(self, image: List[List[str]], x: int, y: int) -> int:
           N = len(image)
           M = len(image[0])
-          D = [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]
 
-          j1, j2 = y, y
-          i1, i2 = x, x
+          def line(i):
+              return image[i]
 
-          def dfs(i, j):
-              nonlocal i1, i2, j1, j2
-              image[i][j] = "0"
-              i1 = min(i, i1)
-              j1 = min(j, j1)
-              i2 = max(i, i2)
-              j2 = max(j, j2)
-              for di, dj in D:
-                  if 0 <= i + di < N and 0 <= j + dj < M and image[i + di][j + dj] == "1":
-                      dfs(i + di, j + dj)
+          def column(j):
+              return [image[i][j] for i in range(N)]
 
-          dfs(x, y)
-          return (j2 - j1 + 1) * (i2 - i1 + 1)
+          s = 0
+          e = x
+          while s < e:
+              m = s + (e - s) // 2
+              if "1" in line(m):
+                  e = m
+              else:
+                  s = m + 1
+          mini = s
+
+          s = x
+          e = N - 1
+          while s + 1 < e:
+              m = s + (e - s) // 2
+              if "1" in line(m):
+                  s = m
+              else:
+                  e = m - 1
+          maxi = s + 1 if s + 1 < N and "1" in image[s + 1] else s
+
+          s = y
+          e = M - 1
+          while s + 1 < e:
+              m = s + (e - s) // 2
+              if "1" in column(m):
+                  s = m
+              else:
+                  e = m - 1
+          maxj = s + 1 if s + 1 < M and "1" in column(s + 1) else s
+
+          s = 0
+          e = y
+          while s < e:
+              m = s + (e - s) // 2
+              if "1" in column(m):
+                  e = m
+              else:
+                  s = m + 1
+          minj = s
+
+          return (maxi - mini + 1) * (maxj - minj + 1)
 
 
   assert (
@@ -4537,7 +4598,7 @@ CLOCK: [2022-07-28 Thu 21:50]--[2022-07-28 Thu 22:28] =>  0:38
 :END:
 [[https://leetcode.com/problems/minimum-cost-to-merge-stones/][Problem Statement]]
 
-* TODO Leetcode: 2060. Check if an Original String Exists Given Two Encoded Strings
+* Leetcode: 2060. Check if an Original String Exists Given Two Encoded Strings
 :PROPERTIES:
 :ID:       FA18EDEA-910C-413D-86D3-241942EBFF92
 :END:
@@ -4546,6 +4607,45 @@ CLOCK: [2022-08-01 Mon 10:41]--[2022-08-01 Mon 11:24] =>  0:43
 CLOCK: [2022-07-31 Sun 22:14]--[2022-07-31 Sun 22:52] =>  0:38
 :END:
 [[https://leetcode.com/problems/check-if-an-original-string-exists-given-two-encoded-strings/][Problem Statement]]
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not check for ~ab~ and ~aN~ where ~N~ is any number.
+
+- [[id:AF523FD7-71A3-44F0-B9F2-E288B8A6EB6D][Mistake: Wrong time complexity]].  Thought that the problem was [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] and missed that I could  memoize the params to speed up the solution.
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The search space is defined by $(i, w1, j, w2)$ where $i$ and $j$ are the next position to be processed on $s1$ and $s2$ respectively after $w1$ and $w2$ wild chars are processed.  Space complexity is then $O(n^2)$ with big constant of since $w1 \times w2 \leq 999^2$.  With the search space defined, the rest is make sure that all transitions are covered.  Time complexity is $O(n^2)$.
+
+#+begin_src python
+  class Solution:
+      def possiblyEquals(self, s1: str, s2: str) -> bool:
+          N = len(s1)
+          M = len(s2)
+
+          @cache
+          def dfs(i, w1, j, w2):
+              if w1 > 0 and w2 > 0:
+                  return dfs(i, w1 - min(w1, w2), j, w2 - min(w1, w2))
+              if w1 > 0 and j < M and s2[j].isalpha():
+                  return dfs(i, w1 - 1, j + 1, 0)
+              if w2 > 0 and i < N and s1[i].isalpha():
+                  return dfs(i + 1, 0, j, w2 - 1)
+              if w1 == 0:
+                  for k in range(i, min(i + 3, N)):
+                      if s1[i:k+1].isdigit():
+                          if dfs(k+1, int(s1[i:k+1]), j, w2):
+                              return True
+              if w2 == 0:
+                  for k in range(j, min(j + 3, M)):
+                      if s2[j:k+1].isdigit():
+                          if dfs(i, w1, k+1, int(s2[j:k+1])):
+                              return True
+              if i == N or j == M:
+                  return i == N and j == M and w1 == 0 and w2 == 0
+              if s1[i].isalpha() and s2[j].isalpha():
+                  return dfs(i + 1, 0, j + 1, 0) if s1[i] == s2[j] else False
+              return False
+
+          return dfs(0, 0, 0, 0)
+#+end_src
 
 * TODO Leetcode: 420. Strong Password Checker
 :PROPERTIES:
@@ -6710,7 +6810,7 @@ CLOCK: [2022-08-29 Mon 22:18]--[2022-08-29 Mon 22:52] =>  0:34
   assert Solution().jobScheduling([1, 1, 1], [2, 3, 4], [5, 6, 4]) == 6
 #+end_src
 
-* Leetcode: 2281. Sum of Total Strength of Wizards
+* TODO Leetcode: 2281. Sum of Total Strength of Wizards
 :PROPERTIES:
 :ID:       AB50C209-FD17-43D6-B381-D0BBB65D794A
 :END:
