@@ -6826,3 +6826,106 @@ CLOCK: [2022-09-07 Wed 12:35]--[2022-09-07 Wed 12:50] =>  0:15
 
           return [w for i, w in enumerate(words) if dfs(i, 0, 0)]
 #+end_src
+
+* Leetcode: 2262. Total Appeal of A String
+:PROPERTIES:
+:ID:       4A0AE191-1DFF-4AA4-91F8-B1E9148600A7
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-07 Wed 14:05]--[2022-09-07 Wed 14:35] =>  0:30
+:END:
+[[https://leetcode.com/problems/total-appeal-of-a-string/][Problem Statement]]
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Count the number of substring that $s[i]$ is the first appearance of $s[i]$ on it.  For strings starting on $i$, it will appear on $N - i$ of those.  It will appear in the mid of $(i - prev[s[i]]) \times (N - i - 1)$ where $prev[s[i]]$ is the last occurrence of $s[i]$ on $0..(i-1)$.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def appealSum(self, s: str) -> int:
+          N = len(s)
+          last = defaultdict(lambda: -1)
+          prev = [-1] * N
+          for i in range(N):
+              prev[i] = last[s[i]]
+              last[s[i]] = i
+          ans = 0
+          for i in range(N):
+              ans += (N - i) * (i - prev[i])
+          return ans
+#+end_src
+
+* Leetcode: 2193. Minimum Number of Moves to Make Palindrome
+:PROPERTIES:
+:ID:       A99E2331-016F-4B16-BF2F-4B275E957030
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-07 Wed 14:35]--[2022-09-07 Wed 16:13] =>  1:38
+:END:
+[[https://leetcode.com/problems/minimum-number-of-moves-to-make-palindrome/][Problem Statement]]
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  Tried to search through all possible sub-problems and didn't consider (couldn't prove) that the greedy approach work.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  If the first and last char match, we can discard them.  Otherwise, we should fix the end that requires the less amount of swaps.  Time complexity is $O(n^2)$ and space is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def minMovesToMakePalindrome(self, s: str) -> int:
+          def normalize(s):
+              i = 0
+              j = len(s) - 1
+              while i < j:
+                  if s[i] != s[j]:
+                      return s[i : j + 1]
+                  i += 1
+                  j -= 1
+              return ""
+
+          ans = 0
+          s = normalize(s)
+          while s:
+              i = s.find(s[-1])
+              j = s.rfind(s[0])
+              if i < len(s) - j - 1:
+                  ans += i
+                  s = normalize(s[-1] + s[:i] + s[i + 1 :])
+              else:
+                  ans += len(s) - j - 1
+                  s = normalize(s[:j] + s[j + 1 :] + s[0])
+          return ans
+#+end_src
+
+* Leetcode: 2102. Sequentially Ordinal Rank Tracker
+:PROPERTIES:
+:ID:       CBD5B33F-E1BF-4DD2-9125-FD95FB0FF870
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-07 Wed 16:18]--[2022-09-07 Wed 16:24] =>  0:06
+:END:
+
+
+[[https://leetcode.com/problems/sequentially-ordinal-rank-tracker/][Problem Statement]]
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  Keep the input sorted by score and name.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+
+  class SORTracker:
+      def __init__(self):
+          self.loc = SortedList()
+          self.q = 0
+
+      def add(self, name: str, score: int) -> None:
+          self.loc.add((-score, name))
+
+      def get(self) -> str:
+          ans = self.loc[self.q][1]
+          self.q += 1
+          return ans
+
+
+  # Your SORTracker object will be instantiated and called as such:
+  # obj = SORTracker()
+  # obj.add(name,score)
+  # param_2 = obj.get()
+#+end_src
