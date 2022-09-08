@@ -6929,3 +6929,87 @@ CLOCK: [2022-09-07 Wed 16:18]--[2022-09-07 Wed 16:24] =>  0:06
   # obj.add(name,score)
   # param_2 = obj.get()
 #+end_src
+
+* Leetcode: 1597. Build Binary Expression Tree From Infix Expression
+:PROPERTIES:
+:ID:       8FD02C5E-F7EB-4ED1-94CF-4BD1CEAE5D0A
+:END:
+[[https://leetcode.com/problems/build-binary-expression-tree-from-infix-expression/][Problem Statement]]
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Convert the expression from infix to posfix and then generate the binary expression tree using the posfix form.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  # Definition for a binary tree node.
+  # class Node(object):
+  #     def __init__(self, val=" ", left=None, right=None):
+  #         self.val = val
+  #         self.left = left
+  #         self.right = right
+  class Solution:
+      def expTree(self, s: str) -> "Node":
+          s = "(" + s + ")"
+          precedence = {"+": 1, "-": 1, "*": 2, "/": 2}
+          posfix = []
+          st = []
+          for c in s:
+              if c.isdigit():
+                  posfix.append(c)
+              elif c == "(":
+                  st.append(c)
+              elif c == ")":
+                  while st and st[-1] != "(":
+                      posfix.append(st.pop())
+                  st.pop()
+              else:
+                  while st and st[-1] != "(" and precedence[c] <= precedence[st[-1]]:
+                      posfix.append(st.pop())
+                  st.append(c)
+          ans = []
+          for c in posfix:
+              if c.isdigit():
+                  ans.append(Node(c))
+              else:
+                  right = ans.pop()
+                  left = ans.pop()
+                  ans.append(Node(c, left, right))
+          return ans[0]
+#+end_src
+
+* Leetcode: 140. Word Break II
+:PROPERTIES:
+:ID:       0A372973-D6BE-4795-8AB5-19CEB73163C6
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-07 Wed 21:08]--[2022-09-07 Wed 21:13] =>  0:05
+:END:
+[[https://leetcode.com/problems/word-break-ii/][Problem Statement]]
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  Generate all possible answers using a [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]] to optimize the search for the current word.  Time and space complexity are $2^n$.
+
+#+begin_src python
+  class Solution:
+      def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+          ans = []
+
+          root = {}
+          for w in wordDict:
+              node = root
+              for c in w:
+                  node.setdefault(c, {})
+                  node = node[c]
+              node["$"] = w
+
+          def bt(i, cur):
+              nonlocal ans
+              if i == len(s):
+                  ans.append(cur)
+              node = root
+              while i < len(s) and s[i] in node:
+                  node = node[s[i]]
+                  i += 1
+                  if "$" in node:
+                      bt(i, cur + (" " if cur else "") + node["$"])
+
+          bt(0, "")
+          return ans
+#+end_src
