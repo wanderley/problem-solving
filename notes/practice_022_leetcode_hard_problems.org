@@ -7013,3 +7013,38 @@ CLOCK: [2022-09-07 Wed 21:08]--[2022-09-07 Wed 21:13] =>  0:05
           bt(0, "")
           return ans
 #+end_src
+
+* Leetcode: 719. Find K-th Smallest Pair Distance
+:PROPERTIES:
+:ID:       A3246CDA-D036-425C-B42D-D6B4E7105BE2
+:END:
+[[https://leetcode.com/problems/find-k-th-smallest-pair-distance/][Problem Statement]]
+
+- [[id:3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE][Can we state the problem as result of multiple searches?]]  Use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the value of the k-th smallest pair distance.  To verify if the value $a$ is a valid answer, count the number of pairs starting on $i$: $j - i - 1$ where $nums[j] < nums[i] + a$.  The value for $j$ can be found using a second [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \log n \log m)$ where $m=max(nums) - min(nums)$.  Space complexity is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def smallestDistancePair(self, nums: List[int], k: int) -> int:
+          N = len(nums)
+          nums.sort()
+
+          def check(delta):
+              cur = 0
+              for i in range(N):
+                  j = bisect_right(nums, nums[i] + delta, lo=i)
+                  cur += j - i - 1
+              return cur >= k
+
+          lo = 0
+          hi = nums[-1] - nums[0]
+          while lo < hi:
+              mid = lo + (hi - lo) // 2
+              if check(mid):
+                  hi = mid
+              else:
+                  lo = mid + 1
+          return lo
+#+end_src
