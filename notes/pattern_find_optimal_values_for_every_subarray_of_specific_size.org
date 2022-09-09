@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       07D31904-E85B-4566-A2CD-9013AAA800C0
+:END:
+#+TITLE: Pattern: Find optimal values for every subarray of specific size

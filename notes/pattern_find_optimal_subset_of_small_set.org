@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       FEEE596A-DFF4-4B02-8995-1BCF70A76410
+:END:
+#+TITLE: Pattern: Find optimal subset of small set

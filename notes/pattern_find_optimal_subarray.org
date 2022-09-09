@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       C715BAE2-002C-4F72-B5FC-5E727F0BA19E
+:END:
+#+TITLE: Pattern: Find optimal subarray

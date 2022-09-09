@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       49FB2683-60E5-4B10-B2B7-1D0B951EA1E0
+:END:
+#+TITLE: Pattern: Build graph online

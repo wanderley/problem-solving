@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       693ED7C4-4F2D-4AD1-8326-AB6C2D6D9BE6
+:END:
+#+TITLE: Pattern: Find optimal component in graph

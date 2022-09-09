@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       05007800-BCCC-415E-A4D3-7B69ABC73588
+:END:
+#+TITLE: Pattern: Search for closest number of some kind

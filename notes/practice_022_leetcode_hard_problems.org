@@ -1312,7 +1312,7 @@ CLOCK: [2022-07-16 Sat 16:34]--[2022-07-16 Sat 16:51] =>  0:17
 :END:
 [[https://leetcode.com/problems/sliding-window-maximum/][Problem Statement]]
 
-This problem is similar to [[id:798B6359-F1A6-4B42-BBA1-2120D8CD228B][Sliding Window Maximum]].
+- [[id:07D31904-E85B-4566-A2CD-9013AAA800C0][Pattern: Find optimal values for every subarray of specific size]].  This problem is similar to [[id:798B6359-F1A6-4B42-BBA1-2120D8CD228B][Sliding Window Maximum]].  Time and space complexity are $O(n)$.
 
 #+begin_src python
   from typing import List
@@ -1321,17 +1321,16 @@ This problem is similar to [[id:798B6359-F1A6-4B42-BBA1-2120D8CD228B][Sliding Wi
 
   class Solution:
       def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-          queue = deque()
+          q = deque()
           ans = []
-          for i in range(0, len(nums)):
-              while len(queue) > 0 and queue[-1][0] < nums[i]:
-                  queue.pop()
-              queue.append((nums[i], i))
-              if i >= k - 1:
-                  if queue[0][1] == i - k:
-                      queue.popleft()
-                  ans.append(queue[0][0])
-
+          for i in range(len(nums)):
+              while q and i - q[0] >= k:
+                  q.popleft()
+              while q and nums[q[-1]] <= nums[i]:
+                  q.pop()
+              q.append(i)
+              if i + 1 >= k:
+                  ans.append(nums[q[0]])
           return ans
 
 
@@ -2534,6 +2533,8 @@ CLOCK: [2022-07-25 Mon 07:04]--[2022-07-25 Mon 07:55] =>  0:51
 :END:
 [[https://leetcode.com/problems/find-the-closest-palindrome/][Problem Statement]]
 
+- [[id:05007800-BCCC-415E-A4D3-7B69ABC73588][Pattern: Search for closest number of some kind]].  Generate all closest palindromes and pick the optimal one: closest palindrome with less digits is "999...", with more digits "100..001" and others can be generate by summing or subtracting one from the middle digits.
+
 - [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Build a palindrome with the input number by splitting it and them combining the first part in reverse order.  The answer will be doing this but adding +1, +0 or -1 to the split part.  Time and space complexity is $O(n)$.
 
 #+begin_src python
@@ -2795,20 +2796,18 @@ CLOCK: [2022-07-26 Tue 06:24]--[2022-07-26 Tue 07:03] =>  0:39
 
 - [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  I computed the connections to person ~0~, by looking to the edges that starts on person ~0~ component.  The problem is that it will become $O(n^2)$ in the worst case and not $O(m)$.
 
+- [[id:49FB2683-60E5-4B10-B2B7-1D0B951EA1E0][Pattern: Build graph online]].  For each meeting time, we add all edges using [[id:23A4E36E-24D3-40F8-AA20-32C0DB1E36F6][Union-Find]] from the meetings to the graph and after that we remove all those edges which its vertices aren't connected to the vertex 0.
+
 - [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  We are going to build the solution by time.  Group all meetings by their times.  From the earlier to the later meeting, connect the vertices (people) that met at that time.  On the end, reset the connected components other the one that has people ~0~ on it.  Time complexity is $O(m)$ and space is $O(n)$.
 
 #+begin_src python
   from typing import List
-  from itertools import groupby
 
 
   class Solution:
       def findAllPeople(
           self, n: int, meetings: List[List[int]], firstPerson: int
       ) -> List[int]:
-          key = lambda m: m[2]
-          meetings.sort(key=key)
-
           p = [i for i in range(n)]
 
           def find(u):
@@ -2817,23 +2816,25 @@ CLOCK: [2022-07-26 Tue 06:24]--[2022-07-26 Tue 07:03] =>  0:39
               return p[u]
 
           def union(u, v):
-              p[find(u)] = find(v)
+              p[find(u)] = p[find(v)]
 
           union(0, firstPerson)
 
-          for _, g in groupby(meetings, key=key):
-              seen = set()
-              for u, v, _ in g:
+          m = {t: [] for _, _, t in meetings}
+          for u, v, t in meetings:
+              m[t].append((u, v))
+
+          for t in sorted(m):
+              vs = set()
+              for u, v in m[t]:
                   union(u, v)
-                  seen.add(u)
-                  seen.add(v)
-              p0 = find(0)
-              for u in seen:
-                  if find(u) != p0:
+                  vs.add(u)
+                  vs.add(v)
+              for u in vs:
+                  if find(u) != find(0):
                       p[u] = u
 
-          p0 = find(0)
-          return [u for u in range(n) if find(u) == p0]
+          return [u for u in range(n) if find(u) == find(0)]
 
 
   assert Solution().findAllPeople(6, [[1, 2, 5], [2, 3, 8], [1, 5, 10]], 1) == [
@@ -3748,6 +3749,8 @@ CLOCK: [2022-07-28 Thu 21:00]--[2022-07-28 Thu 21:50] =>  0:50
 
 - [[id:EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C][Blackbox: This is a variation of a classic problem]]: find bridges on graphs.  But it turned out that my intuition was wrong.  After reading the problem again, I noticed that we have to find the connected components instead.
 
+- [[id:693ED7C4-4F2D-4AD1-8326-AB6C2D6D9BE6][Pattern: Find optimal component in graph]].  The answer is the component using [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]] or [[id:23A4E36E-24D3-40F8-AA20-32C0DB1E36F6][Union-Find]] with maximum number of vertices that doesn't not contain other initial vertex, otherwise it is the initial vertex with smallest index.  Time complexity is $O(n^2)$ with space $O(n)$.
+
 - [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Find [[id:367C887D-3517-4AC8-8219-293AC0E77E07][Connected Components in a Graph]] and pick the one that contains only one initial vertices and has maximum size or the smaller initial vertices id.  Time complexity is $O(n^2)$ and space is $O(n)$.
 
 #+begin_src python
@@ -3792,6 +3795,42 @@ CLOCK: [2022-07-28 Thu 21:00]--[2022-07-28 Thu 21:50] =>  0:50
   assert Solution().minMalwareSpread([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [1, 2]) == 1
 #+end_src
 
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minMalwareSpread(self, graph: List[List[int]], initial: List[int]) -> int:
+          N = len(graph)
+          initial.sort()
+
+          p = [i for i in range(N)]
+
+          def find(u):
+              if p[u] != u:
+                  p[u] = find(p[u])
+              return p[u]
+
+          def union(u, v):
+              p[find(u)] = p[find(v)]
+
+          ans = None
+          for u in range(N):
+              for v in range(u + 1, N):
+                  if graph[u][v]:
+                      union(u, v)
+
+          s = [0] * N
+          for u in range(N):
+              s[find(u)] += 1
+
+          ans = None
+          for u in initial:
+              if all(p[find(u)] != p[find(v)] for v in initial if u != v):
+                  if ans is None or s[find(ans)] < s[find(u)]:
+                      ans = u
+          return ans if ans is not None else initial[0]
+#+end_src
 
 * Leetcode: 132. Palindrome Partitioning II
 :PROPERTIES:
@@ -4096,6 +4135,8 @@ CLOCK: [2022-08-02 Tue 22:11]--[2022-08-02 Tue 23:00] =>  0:49
 [[https://leetcode.com/problems/find-minimum-time-to-finish-all-jobs/][Problem Statement]]
 
 - [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]] and got stuck on the Dynamic Programming solution.
+
+- [[id:FEEE596A-DFF4-4B02-8995-1BCF70A76410][Pattern: Find optimal subset of small set]].  Use [[id:EC1C87C8-A221-4823-9EF5-BEC706B2EEA5][Brute Force]] to assign each job to a worker and prune the search with the current maximum working time for the updated job.
 
 - [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The most important prune is to make sure that a job is assigned as the first job of a work only once.  Time complexity is $O(n^k)$ but the prunes makes the solution faster than [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].
 
@@ -7090,4 +7131,124 @@ CLOCK: [2022-09-08 Thu 16:52]--[2022-09-08 Thu 19:00] =>  2:08
               else:
                   lo = mid + 1
           return check(lo - 1)
+#+end_src
+
+* Leetcode: 2355. Maximum Number of Books You Can Take
+:PROPERTIES:
+:ID:       CBBD1815-6ACA-4763-A3C8-C3D1E0CD6EDC
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-08 Thu 19:07]--[2022-09-08 Thu 19:49] =>  0:42
+:END:
+[[https://leetcode.com/problems/maximum-number-of-books-you-can-take/][Problem Statement]]
+
+- [[id:C715BAE2-002C-4F72-B5FC-5E727F0BA19E][Pattern: Find optimal subarray]].  Use a [[id:E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5][Monotonic Stack]] to support the construction of the optimal subarrays ending on each index of the array.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumBooks(self, books: List[int]) -> int:
+          st = []
+          best = [0] * len(books)
+          pa = lambda n: (n * (n + 1)) // 2
+          ans = 0
+          for i, b in enumerate(books):
+              while st and books[st[-1]] >= b - (i - st[-1]):
+                  st.pop()
+              if not st:
+                  best[i] = pa(b) if b <= i else pa(b) - pa(b - i - 1)
+              else:
+                  best[i] = pa(b) if b <= i - st[-1] else pa(b) - pa(b - (i - st[-1]))
+                  best[i] += best[st[-1]]
+              if best[i] > ans:
+                  ans = best[i]
+                  tmp = i
+              st.append(i)
+          return ans
+#+end_src
+
+* Leetcode 295. Find Median from Data Stream
+:PROPERTIES:
+:ID:       7BC815C9-C3E6-4AD2-8FE1-C6B8226BDA43
+:END:
+[[https://leetcode.com/problems/find-median-from-data-stream/][Problem Statement]]
+
+- [[id:A18543C4-83BC-40F1-A243-B85FD935FAC0][Pattern: Answer query on sorted data]].  Keep a sorted list of the numbers and compute the median using it.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+
+  class MedianFinder:
+      def __init__(self):
+          self.s = SortedList()
+
+      def addNum(self, num: int) -> None:
+          self.s.add(num)
+
+      def findMedian(self) -> float:
+          N = len(self.s)
+          if N % 2 == 0:
+              return (self.s[N // 2] + self.s[N // 2 - 1]) / 2
+          return self.s[N // 2]
+
+
+  # Your MedianFinder object will be instantiated and called as such:
+  # obj = MedianFinder()
+  # obj.addNum(num)
+  # param_2 = obj.findMedian()
+#+end_src
+
+* Leetcode: 126. Word Ladder II
+:PROPERTIES:
+:ID:       6E5AC9EE-CFB9-4DBE-8753-E1E9F798D935
+:END:
+[[https://leetcode.com/problems/word-ladder-ii/][Problem Statement]]
+
+- [[id:189F5E87-F560-4397-A3E3-AAD465EEBCFB][Pattern: Find all shortest path between two vertices in a graph]].  Find the min distance between destination and all other vertices using a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]], then generate all shortest path using the acyclic path created by the first search using [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]].  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def findLadders(
+          self, beginWord: str, endWord: str, wordList: List[str]
+      ) -> List[List[str]]:
+          def is_adj(u, v):
+              return sum(1 for a, b in zip(u, v) if a != b) == 1
+
+          A = {w: [] for w in wordList + [beginWord, endWord]}
+          for u in wordList + [endWord]:
+              for v in wordList + [beginWord]:
+                  if u != v and is_adj(u, v):
+                      A[u].append(v)
+
+          dist = {w: None for w in A}
+          dist[endWord] = 0
+          queue = [endWord]
+          for u in queue:
+              for v in A[u]:
+                  if dist[v] is None:
+                      dist[v] = dist[u] + 1
+                      queue.append(v)
+
+          ans = []
+          for u in wordList:
+              if u != beginWord and u not in A[beginWord] and is_adj(u, beginWord):
+                  A[beginWord].append(u)
+
+          @cache
+          def dfs(u):
+              if dist[u] == 0:
+                  return [[u]]
+              ans = []
+              for v in A[u]:
+                  if dist[v] == dist[u] - 1:
+                      ans.extend([u] + p for p in dfs(v))
+              return ans
+
+          return dfs(beginWord)
 #+end_src
