@@ -6,12 +6,29 @@
 * Python
 
 #+begin_src python
-  def topological_sort(self, graph):
+  def topological_sort(edges):
+      indegree = {u: 0 for u in edges}
+      for u in edges:
+          for v in edges[u]:
+              indegree[v] += 1
+      queue = [u for u in edges if indegree[u] == 0]
+      ans = []
+      for u in queue:
+          ans.append(u)
+          for v in edges[u]:
+              indegree[v] -= 1
+              if indegree[v] == 0:
+                  queue.append(v)
+      return ans if len(ans) == len(edges) else None
+#+end_src
+
+#+begin_src python
+  def topological_sort(self, edges):
       NOT_VISITED = 1
       OPEN = 2
       CLOSED = 4
 
-      status = {u: NOT_VISITED for u in graph}
+      status = {u: NOT_VISITED for u in edges}
       ans = []
 
       def dfs(u):
@@ -21,7 +38,7 @@
               return False
 
           status[u] = OPEN
-          for v in graph.get(u, []):
+          for v in edges.get(u, []):
               if not dfs(v):
                   return False
 

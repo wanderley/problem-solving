@@ -7048,3 +7048,46 @@ CLOCK: [2022-09-07 Wed 21:08]--[2022-09-07 Wed 21:13] =>  0:05
                   lo = mid + 1
           return lo
 #+end_src
+
+* Leetcode: 1044. Longest Duplicate Substring
+:PROPERTIES:
+:ID:       6FC3B96C-A739-4A99-BAC4-B33039471D43
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-08 Thu 16:52]--[2022-09-08 Thu 19:00] =>  2:08
+:END:
+[[https://leetcode.com/problems/longest-duplicate-substring/][Problem Statement]]
+
+- [[id:BA8FA096-1785-4100-BF9F-E1D101994F21][Can we formulate the problem as searching the last element that satisfy a condition?]]  We want to find the max (or last) $k$ such that there are two equal substrings of $s$ of length $k$.  To find $k$, we can use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] and to check if there are such substrings we can use [[id:85E6E394-A1B3-4DE0-835C-CCE7D2830150][Rabin-Karp Algorithm for string matching]].  Time complexity is $O(n \log n)$ and space $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def longestDupSubstring(self, s: str) -> str:
+          n = [ord(c) - ord("a") for c in s]
+
+          def check(k):
+              P = 31
+              MOD = 2**64 - 1
+              Pk = (P**k) % MOD
+              h = 0
+              for i in range(k):
+                  h = (h * P + n[i]) % MOD
+              seen = {h: [0]}
+              for i in range(k, len(s)):
+                  h = (h * P + n[i] - n[i - k] * Pk) % MOD
+                  for j in seen.setdefault(h, []):
+                      if s[j : j + k] == s[i - k + 1 : i + 1]:
+                          return s[i - k + 1 : i + 1]
+                  seen[h].append(i - k + 1)
+              return None
+
+          lo = 0
+          hi = len(s)
+          while lo < hi:
+              mid = lo + (hi - lo) // 2
+              if check(mid) is None:
+                  hi = mid
+              else:
+                  lo = mid + 1
+          return check(lo - 1)
+#+end_src

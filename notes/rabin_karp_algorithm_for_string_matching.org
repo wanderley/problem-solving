@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       85E6E394-A1B3-4DE0-835C-CCE7D2830150
+:END:
+#+TITLE: Rabin-Karp Algorithm for string matching
