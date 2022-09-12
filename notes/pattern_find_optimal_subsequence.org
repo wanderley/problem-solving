@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       74F32EE1-D1C9-4EC8-A447-9F87FB5E1D28
+:END:
+#+TITLE: Pattern: Find optimal subsequence

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       117736F8-6CF6-435F-9043-18B8D22EDDE9
+:END:
+#+TITLE: Pattern: Answer queries on online directed acyclic graph

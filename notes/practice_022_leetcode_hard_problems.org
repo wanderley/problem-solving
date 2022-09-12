@@ -621,7 +621,9 @@ CLOCK: [2022-07-13 Wed 19:25]--[2022-07-13 Wed 19:32] =>  0:07
 - [[id:298CCCF3-C9A7-4FEC-BE7B-17CF0F67332C][Mistake: Bug caused by incorrect assumption]]
 - [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]]
 
-[[id:26656051-E32D-42FE-9315-05ADB46A1A82][Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?]]  Let $f(i)=\sum_{i \leq j < n} countUniqueChars(j)$ the function that we want to compute efficiently.  Be $i$ the first index from the left to right that is duplicated, and $j$ an index where $s[i]=s[j]$ and $i<j$.  We know that $f(i+1)=1+2+3+..+(n-i-1)$ since there is no duplicates and all letters in all substrings are counted.  All substring starting on $i+1$ and ending on $i+1,i+2,..,j-1$ will count one more letter when extend to $i$.  All substring starting on $i+1$ and ending on $j, j+1, ..., n$ will not count one when extended.  So, $f(i)=f(i+1) + (j - i)$.  Now, suppose that $s[i]$ is the third occurence of $s[i]$ from left to right.  Be $k$ an index where $s[i]=s[k]$ and $j<k$.  In this case, $f(i)= f(i+1) + (j - i) - (k - j)$, since all substrings starting on $i+1$ and ending on $k$ will not contribute to the sum of count of unique chars anymore.  Time and space complexity is $O(n)$.
+- [[id:21114DEC-E1B0-4B45-8A7C-E4DA93BB9474][Pattern: Compute value for all subsequences of an array]].
+
+- [[id:26656051-E32D-42FE-9315-05ADB46A1A82][Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?]]  Let $f(i)=\sum_{i \leq j < n} countUniqueChars(j)$ the function that we want to compute efficiently.  Be $i$ the first index from the left to right that is duplicated, and $j$ an index where $s[i]=s[j]$ and $i<j$.  We know that $f(i+1)=1+2+3+..+(n-i-1)$ since there is no duplicates and all letters in all substrings are counted.  All substring starting on $i+1$ and ending on $i+1,i+2,..,j-1$ will count one more letter when extend to $i$.  All substring starting on $i+1$ and ending on $j, j+1, ..., n$ will not count one when extended.  So, $f(i)=f(i+1) + (j - i)$.  Now, suppose that $s[i]$ is the third occurence of $s[i]$ from left to right.  Be $k$ an index where $s[i]=s[k]$ and $j<k$.  In this case, $f(i)= f(i+1) + (j - i) - (k - j)$, since all substrings starting on $i+1$ and ending on $k$ will not contribute to the sum of count of unique chars anymore.  Time and space complexity is $O(n)$.
 
 #+begin_src python
   class Solution:
@@ -1000,7 +1002,9 @@ CLOCK: [2022-07-15 Fri 18:15]--[2022-07-15 Fri 18:39] =>  0:24
 
 - [[id:3D263A82-52AE-4C90-830D-C533ABAFFF3E][Mistake: Missing required invariants]].  The cache has to be invalidate after ~set~ and ~sum~, but I forgot the last one.
 
-[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Cells are edges on the graph.  Fixed-value cells don't have any outgoing edges while formula-cells have edges to all cells that need to be summed.  As there is no cicle on the formulas, the graph is an [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] what allows us to recursively compute the formulas values using cache to avoid repeating computation.  Time complexity of ~get~ and ~sum~ is $O(r^2 \times c^2)$ since there at most $(n \times (n-1))/2$ edges on a [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] with $n$ edges.  As there are $r \times c$ vertices in the graph, the search-space is at most $O(r \times c)$ with $O(r \times c)$ the value of each formula.  Space complexity is $O(r \times c)$.
+- [[id:117736F8-6CF6-435F-9043-18B8D22EDDE9][Pattern: Answer queries on online directed acyclic graph]].  Invalidate a cache for queries every time that the graph changes.
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Cells are edges on the graph.  Fixed-value cells don't have any outgoing edges while formula-cells have edges to all cells that need to be summed.  As there is no cicle on the formulas, the graph is an [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] what allows us to recursively compute the formulas values using cache to avoid repeating computation.  Time complexity of ~get~ and ~sum~ is $O(r^2 \times c^2)$ since there at most $(n \times (n-1))/2$ edges on a [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] with $n$ edges.  As there are $r \times c$ vertices in the graph, the search-space is at most $O(r \times c)$ with $O(r \times c)$ the value of each formula.  Space complexity is $O(r \times c)$.
 
 #+begin_src python
   from typing import List
@@ -3210,6 +3214,8 @@ CLOCK: [2022-07-26 Tue 13:56]--[2022-07-26 Tue 14:04] =>  0:08
 
 - [[id:E6B9ECE9-E7F6-4273-90DB-226664B11C0A][Mistake: Did not slow down to make sure that each part of the problem was solved correctly]].  I found the recurrence with time complexity of $O(n^2 \times k)$ and didn't not carefully extract the memorization to make it $O(n \times k)$.
 
+- [[id:A32AAFD2-5569-4417-8085-04005F85A435][Pattern: Find shortest path on directed acyclic graph]].
+
 - [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Compute $m[k][i]$ which represents the minimum fuel required to go from station $i$ to $target$ stopping in other $k$ stations ahead.  If $stations[i][0] + m[k][i] <= startFuel$, then $k$ is an answer to the original problem.  The original recurrence is $m[k][i] = max(0, min_{i < j \leq n}(m[k-1][j] + stations[j][0] - stations[i][0] - stations[i][1] for j in range(i + 1, N))$ which consumes $O(n^2 \times k)$ to be computed, but the $min$ part can be extracted and answered in $O(1)$.  Therefore, the time and space complexity of the solution is $O(n \times k)$.
 
 #+begin_src python
@@ -3935,6 +3941,8 @@ CLOCK: [2022-07-28 Thu 21:00]--[2022-07-28 Thu 21:50] =>  0:50
 
 - [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not test for single elements (e.g. ~["a"]~).
 
+- [[id:FEEE596A-DFF4-4B02-8995-1BCF70A76410][Pattern: Find optimal subset of small set]].
+
 - [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  After we put the word $i$, we should put a word $j$ using the maximum of overlap possible which is the biggest suffix of $i$ that is a prefix of $j$.  With that, we have to keep increasing the answer until all words are covered.
 
 #+begin_src python
@@ -4136,7 +4144,7 @@ CLOCK: [2022-08-02 Tue 22:11]--[2022-08-02 Tue 23:00] =>  0:49
 
 - [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]] and got stuck on the Dynamic Programming solution.
 
-- [[id:FEEE596A-DFF4-4B02-8995-1BCF70A76410][Pattern: Find optimal subset of small set]].  Use [[id:EC1C87C8-A221-4823-9EF5-BEC706B2EEA5][Brute Force]] to assign each job to a worker and prune the search with the current maximum working time for the updated job.
+- [[id:FEEE596A-DFF4-4B02-8995-1BCF70A76410][Pattern: Find optimal subset of small set]].  Use [[id:EC1C87C8-A221-4823-9EF5-BEC706B2EEA5][Brute Force]] to assign each job to a worker and prune the search with the current maximum working time for the updated job.  To make the search faster, sort the input in decreasing order.
 
 - [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The most important prune is to make sure that a job is assigned as the first job of a work only once.  Time complexity is $O(n^k)$ but the prunes makes the solution faster than [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].
 
@@ -4497,6 +4505,8 @@ CLOCK: [2022-08-05 Fri 15:52]--[2022-08-05 Fri 16:02] =>  0:10
 :END:
 [[https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/][Problem Statement]]
 
+- [[id:117736F8-6CF6-435F-9043-18B8D22EDDE9][Pattern: Answer queries on online graph]].
+
 - [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Find if two vertices are on the same component.  The problem asks to find a path that doesn't exceed the limit, so we build the components without exceeding the limit (i.e. add the edges) and then ask if they are part of the same component.  Time complexity is $O(n \times \log n)$ and space is $O(n)$.
 
 #+begin_src python
@@ -4548,6 +4558,8 @@ CLOCK: [2022-07-19 Tue 17:36]--[2022-07-19 Tue 18:31] =>  0:55
 CLOCK: [2022-07-19 Tue 16:09]--[2022-07-19 Tue 16:19] =>  0:10
 :END:
 [[https://leetcode.com/problems/guess-the-word/][Problem Statement]]
+
+- [[id:716E3863-6B6F-4F6F-86ED-72820E061E11][Pattern: Remove max number of candidates every turn]].
 
 - [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  There are two important parts of the problem: (1) filter words after a guess and (2) pick the best guess.  For the first, we have to filter all words which the number of matches is different than the number of matches from the last guess (the secret will have to match these letters any way).  The more problematic guess is the one that returns 0.  In this situation, we want to remove the maximum number of words as possible.  To do that, we take the word that contains the most frequent letter per position.  If it returns 0, then you are guaranteed to remove as much words as possible.  Time and space complexity are $O(n)$.
 
@@ -4672,6 +4684,8 @@ CLOCK: [2022-08-05 Fri 16:15]--[2022-08-05 Fri 19:59] =>  3:44
 CLOCK: [2022-08-11 Thu 17:04]--[2022-08-11 Thu 17:10] =>  0:06
 :END:
 [[https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/][Problem Statement]]
+
+- [[id:189F5E87-F560-4397-A3E3-AAD465EEBCFB][Pattern: Find shortest path between two vertices in a graph]].
 
 - [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]] [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]].  Time complexity is $O(n \times m \times \log(n \times m))$ and space $O(n \times m)$.
 
@@ -5271,6 +5285,8 @@ CLOCK: [2022-08-06 Sat 22:32]--[2022-08-06 Sat 22:57] =>  0:25
 
 - [[id:EC7DFA39-8E96-4EF7-9297-FAEE2ABF0849][Blackbox: The dependent problem needs to be optimized]].  I have to make the choice for the $i$ item in $O(1)$ or $O(\log n)$ otherwise the solution will exceed the time limit.
 
+- [[id:74F32EE1-D1C9-4EC8-A447-9F87FB5E1D28][Pattern: Find optimal subsequence]].
+
 - [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  It reminds [[id:665B7733-6D7E-4A34-8F77-7E64747CE2C9][Longest Increasing Subsequence]], since we have to change the given array to become one be LIS.  For each item $i$, we should take the best of either keeping it as the original value or changing it with one of the backup numbers.  Time complexity is $O(n^2 \log n)$ and space complexity is $O(n^2)$.
 
 #+begin_src python
@@ -5498,6 +5514,8 @@ CLOCK: [2022-08-09 Tue 12:02]--[2022-08-09 Tue 12:16] =>  0:14
 CLOCK: [2022-08-09 Tue 16:48]--[2022-08-09 Tue 17:01] =>  0:13
 :END:
 [[https://leetcode.com/problems/count-of-smaller-numbers-after-self/][Problem Statement]]
+
+- [[id:A18543C4-83BC-40F1-A243-B85FD935FAC0][Pattern: Answer query on sorted data]].
 
 - [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Suppose we are processing the element $i$ from right to left, if we keep element $nums[i+1,...,n-1]$ sorted, the problem becomes finding the right-most index where we could add $nums[i]$ to the sorted list while keeping it sorted.  Time complexity is $O(n \log n)$ and space is $O(n)$.
 
@@ -7252,3 +7270,206 @@ CLOCK: [2022-09-08 Thu 19:07]--[2022-09-08 Thu 19:49] =>  0:42
 
           return dfs(beginWord)
 #+end_src
+
+* Leetcode: 297. Serialize and Deserialize Binary Tree
+:PROPERTIES:
+:ID:       44A53F90-1DA0-49FF-AE5B-FAB32D273DA0
+:END:
+[[https://leetcode.com/problems/serialize-and-deserialize-binary-tree/][Problem Statement]]
+
+- [[id:768F4C3F-EEAA-429B-886F-0435CEC7DACD][Pattern: Traverse paths on tree]].
+
+#+begin_src python
+  # Definition for a binary tree node.
+  # class TreeNode(object):
+  #     def __init__(self, x):
+  #         self.val = x
+  #         self.left = None
+  #         self.right = None
+
+
+  class Codec:
+      def serialize(self, root):
+          def dfs(node):
+              if node is None:
+                  return "None"
+              return f"{node.val},{dfs(node.left)},{dfs(node.right)}"
+
+          return dfs(root)
+
+      def deserialize(self, data):
+          vals = [None if v == "None" else int(v) for v in data.split(",")]
+
+          def dfs(i):
+              if vals[i] is None:
+                  return i + 1, None
+              u = vals[i]
+              j, left = dfs(i + 1)
+              j, right = dfs(j)
+              return j, TreeNode(u, left, right)
+
+          return dfs(0)[1]
+
+
+  # Your Codec object will be instantiated and called as such:
+  # ser = Codec()
+  # deser = Codec()
+  # ans = deser.deserialize(ser.serialize(root))
+#+end_src
+
+* Leetcode: 1335. Minimum Difficulty of a Job Schedule
+:PROPERTIES:
+:ID:       32FD4A66-C156-49EB-A3A3-A411D13B27EF
+:END:
+[[https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/][Problem Statement]]
+
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  Split the jobs in all possible partitions respecting the number of days.  The base case is when there is only one day which should be the max of all remaining jobs.  Time complexity is $O(n^2 \times d)$ and space is $O(n \times d)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minDifficulty(self, job: List[int], d: int) -> int:
+          N = len(job)
+
+          @cache
+          def dfs(i, d):
+              if d == 1:
+                  return max(job[i:])
+              best = float("inf")
+              maxv = float("-inf")
+              for j in range(i, N - d + 1):
+                  maxv = max(maxv, job[j])
+                  if maxv < best:
+                      best = min(best, maxv + dfs(j + 1, d - 1))
+              return best
+
+          return -1 if dfs(0, d) == float("inf") else dfs(0, d)
+#+end_src
+
+  - Alternative solution.  As the priority of each job is small, we can use it as parameter of the search and delay the computation of the cost of day to when we make a transition to the next one.  Time complexity is $O(n \times m \times d)$ and space is $O(n \times m \times d)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minDifficulty(self, job: List[int], d: int) -> int:
+          N = len(job)
+
+          @cache
+          def dfs(i, cur, d):
+              if i == N:
+                  return cur if d == 0 else float("inf")
+              return min(
+                  dfs(i + 1, max(cur, job[i]), d), max(cur, job[i]) + dfs(i + 1, 0, d - 1)
+              )
+
+          return -1 if dfs(0, 0, d) == float("inf") else dfs(0, 0, d)
+#+end_src
+
+* Leetcode: 2163. Minimum Difference in Sums After Removal of Elements
+:PROPERTIES:
+:ID:       81BAA14E-FAEA-4535-80A5-5B1DDC784D0C
+:END:
+[[https://leetcode.com/problems/minimum-difference-in-sums-after-removal-of-elements/][Problem Statement]]
+
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  Partition the given array in two subarrays $ln=a[0..i]$ and $rn=a[(i+1)..(n-1)]$ such that $\sum l[i] - \sum r[j]$ is the smallest possible after removing elements from $l$ and $r$ to make them have exactly $n$ elements.  Due the optimization function, we want to remove the greatest elements from $l$ and the smaller elements from $r$ to make both have exactly $n$ elements.  To solve the problem, we can first compute $l(i)$ and $r(i)$ which is the best left and right sum ending on $i$.  This can be done by keeping two sorted list while processing the indexes from the left to right and right to left respectively.  Time complexity is $O(n \log n)$ with space is $O(n)$.
+
+#+begin_src python
+  from heapq import heappush, heappop
+  from typing import List
+
+
+  class Solution:
+      def minimumDifference(self, nums: List[int]) -> int:
+          N = len(nums)
+          M = N // 3
+
+          left = []
+          left_sum = 0
+          dpl = [float("inf")] * N
+          for i in range(2 * M):
+              left_sum += nums[i]
+              heappush(left, -nums[i])
+              if len(left) > M:
+                  left_sum -= -heappop(left)
+              if i >= M - 1:
+                  dpl[i] = left_sum
+
+          right = []
+          right_sum = 0
+          ans = float("inf")
+          for i in range(N - 1, M - 1, -1):
+              right_sum += nums[i]
+              heappush(right, nums[i])
+              if len(right) > M:
+                  right_sum -= heappop(right)
+              if N - i >= M - 1:
+                  ans = min(ans, dpl[i - 1] - right_sum)
+
+          return ans
+#+end_src
+
+* Leetcode: 891. Sum of Subsequence Widths
+:PROPERTIES:
+:ID:       76692296-A2EF-495E-B1B0-1FBD9A36A503
+:END:
+[[https://leetcode.com/problems/sum-of-subsequence-widths/][Problem Statement]]
+
+- [[id:21114DEC-E1B0-4B45-8A7C-E4DA93BB9474][Pattern: Compute value for all subsequences of an array]].  Sort the array and compute how many time each element appear as the minimum and maximum in all subsequences.  Time complexity is $O(n)$ with space $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def sumSubseqWidths(self, nums: List[int]) -> int:
+          N = len(nums)
+          MOD = 10**9 + 7
+          nums.sort()
+
+          mins = 0
+          maxs = 0
+          p = 1
+          for i in range(N):
+              mins = (mins + nums[N - i - 1] * p) % MOD
+              maxs = (maxs + nums[i] * p) % MOD
+              p = (p * 2) % MOD
+
+          return (maxs - mins + MOD) % MOD
+#+end_src
+
+* Leetcode: 1649. Create Sorted Array through Instructions
+:PROPERTIES:
+:ID:       0CFF764C-9853-45BC-AD44-F258116A94AB
+:END:
+[[https://leetcode.com/problems/create-sorted-array-through-instructions/][Problem Statement]]
+
+- [[id:A18543C4-83BC-40F1-A243-B85FD935FAC0][Pattern: Answer query on sorted data]].  For each instructions, keep the previous instructions sorted and use [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to compute the number of strictly less and greater.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+  from typing import List
+
+
+  class Solution:
+      def createSortedArray(self, instructions: List[int]) -> int:
+          MOD = 10**9 + 7
+          N = len(instructions)
+          s = SortedList()
+          ans = 0
+          for i in instructions:
+              l = s.bisect_left(i)
+              r = len(s) - s.bisect_left(i + 1)
+              ans = (ans + min(l, r)) % MOD
+              s.add(i)
+          return ans
+#+end_src
+
+* TODO Leetcode: 2040. Kth Smallest Product of Two Sorted Arrays
+:PROPERTIES:
+:ID:       BFAE0AE5-BB2C-4AE8-BCF3-FF4D9FB28315
+:END:
+[[https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/][Problem Statement]]

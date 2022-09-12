@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       21114DEC-E1B0-4B45-8A7C-E4DA93BB9474
+:END:
+#+TITLE: Pattern: Compute value for all subsequences of an array

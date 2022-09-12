@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       A32AAFD2-5569-4417-8085-04005F85A435
+:END:
+#+TITLE: Pattern: Find shortest path on directed acyclic graph

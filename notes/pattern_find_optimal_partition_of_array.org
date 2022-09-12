@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       4060A2EA-09E8-4E05-922D-8340AAF60F44
+:END:
+#+TITLE: Pattern: Find optimal partition of array

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       768F4C3F-EEAA-429B-886F-0435CEC7DACD
+:END:
+#+TITLE: Pattern: Traverse paths on tree
