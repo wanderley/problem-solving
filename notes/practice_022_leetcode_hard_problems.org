@@ -1077,9 +1077,12 @@ CLOCK: [2022-07-15 Fri 22:53]--[2022-07-15 Fri 23:37] =>  0:44
 [[https://leetcode.com/problems/bus-routes/][Problem Statement]]
 
 - [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]]. Did not think about ~source = target~ case.
+
 - [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  Thought that [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] alternating between bus and stop would pass in the time limit.
 
-[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Stops are vertices and they are connected if there is a route that connect them.  Create a map from stops to routes and them perform a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] starting on ~source~.  Time and space complexity is $O(n \times m)$.
+- [[id:A32AAFD2-5569-4417-8085-04005F85A435][Pattern: Find shortest path on a graph]].
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Stops are vertices and they are connected if there is a route that connect them.  Create a map from stops to routes and them perform a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] starting on ~source~.  Time and space complexity is $O(n \times m)$.
 
 Solution building the Build adjacency matrix:
 #+begin_src python
@@ -4030,6 +4033,8 @@ CLOCK: [2022-08-02 Tue 11:04]--[2022-08-02 Tue 11:09] =>  0:05
 
 - [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] where you had to compute $dp[i]$ using only the next $j$ that satisfy some condition.
 
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  Find $i$ where $s[0..i-1]$ will require $i$ operations plus the best of spending $N-i$ operation to clear the left side or $2+best(i+1)$.
+
 - [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The answer will have an interval $(i, j)$ (could be empty) where we will pay $2$ to remove the cars.   Therefore, it score is $i-1+ones(i,j)+n-j$.  We can't iterate over all intervals, but can compute the same score if we have $f(i)$ as the minimum score to remove cars from $i$ to $n-1$.  Now the problem is $min(i + f(i))$ for $0 \leq i < n$.  Time complexity is $O(n)$ with $O(1)$ space.
 
 #+begin_src python
@@ -4599,17 +4604,7 @@ CLOCK: [2022-07-19 Tue 16:09]--[2022-07-19 Tue 16:19] =>  0:10
               ]
 #+end_src
 
-* TODO Leetcode: 164. Maximum Gap
-:PROPERTIES:
-:ID:       4373FA38-A210-47A9-A473-18540B1F1C96
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-28 Thu 18:44]--[2022-07-28 Thu 19:44] =>  1:00
-CLOCK: [2022-08-17 Wed 16:20]--[2022-08-17 Wed 16:56] =>  0:36
-:END:
-[[https://leetcode.com/problems/maximum-gap/][Problem Statement]]
-
-* TODO Leetcode: 1000. Minimum Cost to Merge Stones
+* Leetcode: 1000. Minimum Cost to Merge Stones
 :PROPERTIES:
 :ID:       AFA49C8B-27B6-48CD-887F-F299006900BC
 :END:
@@ -4618,6 +4613,43 @@ CLOCK: [2022-07-29 Fri 15:56]--[2022-07-29 Fri 17:00] =>  1:04
 CLOCK: [2022-07-28 Thu 21:50]--[2022-07-28 Thu 22:28] =>  0:38
 :END:
 [[https://leetcode.com/problems/minimum-cost-to-merge-stones/][Problem Statement]]
+
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  If the input has only one number, the answer is 0.  If there are less than $K$ numbers, the answer is -1.  If there are exactly $K$ numbers, the answer is $sum(stones)$.  Otherwise, we have to first find optimal partition of the array in exactly $K$ parts and them merge them.  Time complexity is $O(n^4)$ and space is $O(n^3)$.
+
+#+begin_src python
+  class Solution:
+      def mergeStones(self, stones: List[int], K: int) -> int:
+          N = len(stones)
+
+          @cache
+          def g(i, j, k):
+              n = j - i + 1
+              if k == 1:
+                  return f(i, j)
+              assert k > 0
+              ans = float("inf")
+              for p in range(i, j):
+                  if p == i:
+                      ans = min(ans, g(p + 1, j, k - 1))
+                  else:
+                      ans = min(ans, f(i, p) + g(p + 1, j, k - 1))
+              return ans
+
+
+          @cache
+          def f(i, j):
+              n = j - i + 1
+              if n == 1:
+                  return 0
+              if n < K:
+                  return float("inf")
+              if n == K:
+                  return sum(stones[i:j+1])
+              return sum(stones[i:j+1]) + g(i, j, K)
+
+          ans = f(0, N - 1)
+          return -1 if ans == float("inf") else ans
+#+end_src
 
 * Leetcode: 2060. Check if an Original String Exists Given Two Encoded Strings
 :PROPERTIES:
@@ -4668,14 +4700,6 @@ CLOCK: [2022-07-31 Sun 22:14]--[2022-07-31 Sun 22:52] =>  0:38
           return dfs(0, 0, 0, 0)
 #+end_src
 
-* TODO Leetcode: 420. Strong Password Checker
-:PROPERTIES:
-:ID:       315D6ADD-7DCE-4446-8A52-FBC5A0DDDABD
-:END:
-:LOGBOOK:
-CLOCK: [2022-08-05 Fri 16:15]--[2022-08-05 Fri 19:59] =>  3:44
-:END:
-[[https://leetcode.com/problems/strong-password-checker/][Problem Statement]]
 * Leetcode: 1263. Minimum Moves to Move a Box to Their Target Location
 :PROPERTIES:
 :ID:       C39E37E2-B683-4651-AC6A-D9342F8A832E
@@ -6837,15 +6861,6 @@ CLOCK: [2022-08-29 Mon 22:18]--[2022-08-29 Mon 22:52] =>  0:34
   assert Solution().jobScheduling([1, 1, 1], [2, 3, 4], [5, 6, 4]) == 6
 #+end_src
 
-* TODO Leetcode: 2281. Sum of Total Strength of Wizards
-:PROPERTIES:
-:ID:       AB50C209-FD17-43D6-B381-D0BBB65D794A
-:END:
-:LOGBOOK:
-CLOCK: [2022-09-02 Fri 21:34]--[2022-09-02 Fri 22:10] =>  0:36
-:END:
-[[https://leetcode.com/problems/sum-of-total-strength-of-wizards/][Problem Statement]]
-
 * Leetcode: 472. Concatenated Words
 :PROPERTIES:
 :ID:       F2FBF2DB-B25A-415F-A69A-0DA0F5D8CCA4
@@ -7468,8 +7483,195 @@ CLOCK: [2022-09-08 Thu 19:07]--[2022-09-08 Thu 19:49] =>  0:42
           return ans
 #+end_src
 
+* Leetcode: 2412. Minimum Money Required Before Transactions
+:PROPERTIES:
+:ID:       757146C9-849B-4641-8535-8063527CD910
+:END:
+[[https://leetcode.com/problems/minimum-money-required-before-transactions/][Problem Statement]]
+
+- [[id:F431A436-0E2F-42F4-9EB9-13A82272F944][Pattern: Find optimal arrangement]].  After find the optimal arrangement for the transactions, the problem becomes finding the smallest value that satisfy it with a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  All values with negative net comes first.  And number with the same net should have the ones with higher cost first, so it forces more money to be used early on.
+
+#+begin_src python
+  from functools import cmp_to_key
+
+  class Solution:
+      def minimumMoney(self, transactions: List[List[int]]) -> int:
+          def is_positive(a):
+              return a[0] < a[1]
+          def compare(a, b):
+              if is_positive(a) and is_positive(b):
+                  return b[0] - a[0]
+              if is_positive(a):
+                  return +1
+              if is_positive(b):
+                  return -1
+              if a[1] != b[1]:
+                  return a[1] - b[1]
+              return b[0] - a[0]
+
+          def check(money):
+              for cost, cash in transactions:
+                  if money < cost:
+                      return False
+                  money = money - cost + cash
+              return money >= 0
+
+          transactions.sort(key=cmp_to_key(compare))
+          lo = 0
+          ans = hi = sum(c for c, _ in transactions)
+
+          while lo < hi:
+              mid = lo + (hi - lo) // 2
+              if check(mid):
+                  hi = mid
+                  ans = mid
+              else:
+                  lo = mid + 1
+
+          return ans
+#+end_src
+
+* Leetcode: 2421. Number of Good Paths
+:PROPERTIES:
+:ID:       31753F53-F676-4087-87EB-C62A0A1F2E8A
+:END:
+[[https://leetcode.com/problems/number-of-good-paths/][Problem Statement]]
+
+- [[id:49FB2683-60E5-4B10-B2B7-1D0B951EA1E0][Pattern: Build graph online]].  Count path while building a forest using smaller to bigger edges.  For example, only edges where both vertices are less than $x$, then $x+1$ and so on.  Time complexity is $O(n \log n)$ since we have to sort the edges.
+
+#+begin_src python
+  class Solution:
+      def numberOfGoodPaths(self, vals: List[int], edges: List[List[int]]) -> int:
+          N = len(vals)
+          p = [u for u in range(N)]
+          s = [Counter([vals[u]]) for u in range(N)]
+          c = [1 for u in range(N)]
+
+          gmax = lambda e: max(vals[e[0]], vals[e[1]])
+          gmin = lambda e: min(vals[e[0]], vals[e[1]])
+
+          edges.sort(key=lambda e: (gmax(e), gmin(e)))
+
+          def find(u):
+              if p[u] != u:
+                  p[u] = find(p[u])
+              return p[u]
+
+          def union(u, v):
+              pu = find(u)
+              pv = find(v)
+              if pu != pv:
+                  m = max(vals[u], vals[v])
+                  s[pv][m] += s[pu][m]
+                  # c[pv] += c[pu]
+                  p[pu] = p[pv]
+
+          ans = N
+          for u, v in edges:
+              if vals[u] < vals[v]:
+                  u, v = v, u
+              pu = find(u)
+              pv = find(v)
+              ans += s[pu][vals[u]] * s[pv][vals[u]]
+              union(u, v)
+          return ans
+#+end_src
+* Leetcode: 2426. Number of Pairs Satisfying Inequality
+:PROPERTIES:
+:ID:       57A20654-72E3-4AB4-BFB6-9355C72A7EDB
+:END:
+[[https://leetcode.com/problems/number-of-pairs-satisfying-inequality/][Problem Statement]]
+
+- [[id:B0C2170B-0DDA-4E0C-B03A-998F29ABDF97][Pattern: Compute values for all pair in array]].  [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  The condition can be stated as $n_1[i]-n_2[i]-diff \leq n_1[j]-n_2[j]$.  [[id:3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE][Can we state the problem as result of multiple searches?]]  For each position $i$, we search for the smallest $j$ that satisfy the condition.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+  from typing import List
+
+  class Solution:
+      def numberOfPairs(self, nums1: List[int], nums2: List[int], diff: int) -> int:
+          N = len(nums1)
+          s = SortedList()
+          ans = 0
+          for i in range(N - 1, -1, -1):
+              ans += len(s) - s.bisect_left(nums1[i] - nums2[i] - diff)
+              s.add(nums1[i] - nums2[i])
+          return ans
+#+end_src
+
+* TODO Leetcode: 164. Maximum Gap
+:PROPERTIES:
+:ID:       4373FA38-A210-47A9-A473-18540B1F1C96
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-28 Thu 18:44]--[2022-07-28 Thu 19:44] =>  1:00
+CLOCK: [2022-08-17 Wed 16:20]--[2022-08-17 Wed 16:56] =>  0:36
+:END:
+[[https://leetcode.com/problems/maximum-gap/][Problem Statement]]
+*
+
+* TODO Leetcode: 420. Strong Password Checker
+:PROPERTIES:
+:ID:       315D6ADD-7DCE-4446-8A52-FBC5A0DDDABD
+:END:
+:LOGBOOK:
+CLOCK: [2022-08-05 Fri 16:15]--[2022-08-05 Fri 19:59] =>  3:44
+:END:
+[[https://leetcode.com/problems/strong-password-checker/][Problem Statement]]
+* TODO Leetcode: 2281. Sum of Total Strength of Wizards
+
+:PROPERTIES:
+:ID:       AB50C209-FD17-43D6-B381-D0BBB65D794A
+:END:
+:LOGBOOK:
+CLOCK: [2022-09-02 Fri 21:34]--[2022-09-02 Fri 22:10] =>  0:36
+:END:
+[[https://leetcode.com/problems/sum-of-total-strength-of-wizards/][Problem Statement]]
+
 * TODO Leetcode: 2040. Kth Smallest Product of Two Sorted Arrays
 :PROPERTIES:
 :ID:       BFAE0AE5-BB2C-4AE8-BCF3-FF4D9FB28315
 :END:
 [[https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/][Problem Statement]]
+
+* TODO Leetcode: 936. Stamping The Sequence
+:PROPERTIES:
+:ID:       E72BB44D-A272-4C09-A2B1-395832D25C0D
+:END:
+[[https://leetcode.com/problems/stamping-the-sequence/][Problem Statement]]
+
+* TODO Leetcode: 321. Create Maximum Number
+:PROPERTIES:
+:ID:       87B85E35-58B8-4C98-87B6-BC566F3BA1CB
+:END:
+[[https://leetcode.com/problems/create-maximum-number/][Problem Statement]]
+
+* TODO Leetcode: 446. Arithmetic Slices II - Subsequence
+:PROPERTIES:
+:ID:       EF47C38C-B43A-4AC4-9B2F-187FCB82EB2E
+:END:
+[[https://leetcode.com/problems/arithmetic-slices-ii-subsequence/][Problem Statement]]
+
+* TODO Leetcode: 968. Binary Tree Cameras
+:PROPERTIES:
+:ID:       4A30F200-B4AB-49E9-B683-7B2DD75034A8
+:END:
+[[https://leetcode.com/problems/binary-tree-cameras/][Problem Statement]]
+
+* TODO Leetcode: 1307. Verbal Arithmetic Puzzle
+:PROPERTIES:
+:ID:       FA891D88-DDBC-4E76-A28B-149A664B7FB0
+:END:
+[[https://leetcode.com/problems/verbal-arithmetic-puzzle/][
+Problem Statement]]
+
+* TODO Leetcode: 2430. Maximum Deletions on a String
+:PROPERTIES:
+:ID:       7A815C8A-A301-4178-8234-40373AD9C4A1
+:END:
+[[https://leetcode.com/problems/maximum-deletions-on-a-string/][Problem Statement]]
+
+- Resources to study:
+  - https://en.wikipedia.org/wiki/Rolling_hash
+  - https://www.geeksforgeeks.org/string-hashing-using-polynomial-rolling-hash-function/
+  - https://github.com/tatyam-prime/kyopro_library/blob/master/RollingHash.cpp

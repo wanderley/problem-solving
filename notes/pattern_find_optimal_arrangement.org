@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       F431A436-0E2F-42F4-9EB9-13A82272F944
+:END:
+#+TITLE: Pattern: Find optimal arrangement

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       B0C2170B-0DDA-4E0C-B03A-998F29ABDF97
+:END:
+#+TITLE: Pattern: Compute values for all pair in array
