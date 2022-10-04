@@ -4456,9 +4456,6 @@ CLOCK: [2022-08-04 Thu 10:16]--[2022-08-04 Thu 11:14] =>  0:58
 :ID:       5E66EF96-0941-4961-8370-C640ABE434C0
 :WA:       1
 :END:
-:LOGBOOK:
-CLOCK: [2022-08-04 Thu 16:47]
-:END:
 [[https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/][Problem Statement]]
 
 - [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]. Missed the restriction of the time complexity.
@@ -7672,6 +7669,7 @@ Problem Statement]]
 [[https://leetcode.com/problems/maximum-deletions-on-a-string/][Problem Statement]]
 
 - Resources to study:
+  - https://www.geeksforgeeks.org/longest-common-substring-dp-29/
   - https://en.wikipedia.org/wiki/Rolling_hash
   - https://www.geeksforgeeks.org/string-hashing-using-polynomial-rolling-hash-function/
   - https://github.com/tatyam-prime/kyopro_library/blob/master/RollingHash.cpp
