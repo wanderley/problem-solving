@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       3283AA3B-67CD-4F8E-960E-442AAE3FD7DC
+:END:
+#+TITLE: Pattern: Find shortest path between two vertices in a graph

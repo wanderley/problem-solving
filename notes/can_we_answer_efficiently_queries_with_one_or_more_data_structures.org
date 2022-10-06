@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       6DEEDEC1-DF98-4030-9730-54CCBC23385C
+:END:
+#+TITLE: Can we answer efficiently queries with one or more data-structures?

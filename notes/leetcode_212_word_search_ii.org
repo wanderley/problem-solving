@@ -1,0 +1,76 @@
+:PROPERTIES:
+:ID:       61355872-3E7E-4DFB-A470-0C0395CF9E5E
+:WA:       2
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-16 Sat 13:28]--[2022-07-16 Sat 13:31] =>  0:03
+CLOCK: [2022-07-16 Sat 12:22]--[2022-07-16 Sat 12:26] =>  0:04
+CLOCK: [2022-07-16 Sat 09:54]--[2022-07-16 Sat 10:02] =>  0:08
+CLOCK: [2022-07-16 Sat 08:00]--[2022-07-16 Sat 08:32] =>  0:32
+:END:
+#+TITLE: Leetcode: 212. Word Search II
+#+LEETCODE_LEVEL: Hard
+#+ROAM_REFS: https://leetcode.com/problems/word-search-ii/
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446093921
+
+[[https://leetcode.com/problems/word-search-ii/][Problem Statement]]
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].  Did not implement any prune to the backtracking.
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  The problem requires backtracking the board to find words.  Instead of look up the words on a list, we create a [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]] with all words on the dictionary and backtrack while we traverse the tree.  Words found are removed from the tree to avoid finding the same word over and over again.  Time complexity is $O(4 \times 10 \times n^2), and space complexity is $O(\sum|word[i]|)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+          N = len(board)
+          M = len(board[0])
+
+          root = {}
+          for w in words:
+              node = root
+              for c in w:
+                  node.setdefault(c, {})
+                  node = node[c]
+              node["$"] = w
+
+          ans = set()
+
+          def dfs(i, j, node):
+              if node.get("$"):
+                  ans.add(node["$"])
+                  del node["$"]
+
+              c = board[i][j]
+              board[i][j] = "*"
+              for di, dj in [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                  ni = di + i
+                  nj = dj + j
+                  if 0 <= ni < N and 0 <= nj < M and board[ni][nj] in node:
+                      dfs(ni, nj, node[board[ni][nj]])
+                      if len(node[board[ni][nj]]) == 0:
+                          del node[board[ni][nj]]
+              board[i][j] = c
+
+          for i in range(N):
+              for j in range(M):
+                  if board[i][j] in root:
+                      dfs(i, j, root[board[i][j]])
+
+          return list(ans)
+
+
+  assert Solution().findWords(
+      [
+          ["o", "a", "a", "n"],
+          ["e", "t", "a", "e"],
+          ["i", "h", "k", "r"],
+          ["i", "f", "l", "v"],
+      ],
+      ["oath", "pea", "eat", "rain"],
+  ) == ["eat", "oath"]
+  assert Solution().findWords([["a", "b"], ["c", "d"]], ["abcb"]) == []
+#+end_src

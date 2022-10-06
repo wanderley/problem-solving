@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       BC81A358-FBCC-43AA-9928-E9778A107869
+:END:
+#+TITLE: Pattern: Small constraints could allow a brute-force solution

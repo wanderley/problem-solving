@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E9AE0EFB-E12B-4AAB-82A5-6D9902F4741F
+:END:
+#+TITLE: Pattern: Find minimum vertex cover in a bipartite graph

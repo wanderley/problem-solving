@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       C65F99DB-3808-4E4F-9952-FBB343E9AB9F
+:END:
+#+TITLE: Bipartite Minimum Vertex Cover
+
+* Resources
+
+- [[https://web.archive.org/web/20221006011349/https://tryalgo.org/en/matching/2016/08/05/konig/][TryAlgo: Bipartite minimum vertex cover]]

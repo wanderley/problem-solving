@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID:       DACEB904-5675-42F2-89E7-733320BE0751
+:END:
+#+TITLE: Leetcode: 2123. Minimum Operations to Remove Adjacent Ones in Matrix
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446062245
+#+ROAM_REFS: https://leetcode.com/problems/minimum-operations-to-remove-adjacent-ones-in-matrix/
+#+LEETCODE_LEVEL: Hard
+
+* Understand the problem
+
+Find the minimum number of 1-cells in the grid to switch such that no other two horizontal or vertical 1-cells are adjacent.  Suppose that the grid (i.e [[id:2AC58B7A-4948-4E84-AA80-020E985D36E0][2D Matrix]]) is colored like a chess board.  Two 1-cells can be connected only if they are in square with distinct colors.  So cells can be divided in two groups where there is no connections between cells on the same group.  Modeling as a graph problem, we can construct a graph $G=(U, V, E)$, where $U$ are the cells on white squares (i.e $i \mod 2 = j \mod 2$ where $(i, j)$ is the coordinate of the cell), and $V$ are the cells on black squares.  And the problem becomes [[id:E9AE0EFB-E12B-4AAB-82A5-6D9902F4741F][Pattern: Find minimum vertex cover in a bipartite graph]].
+
+** Useful prompts
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]
+
+* Devise a plan
+
+Represent the given grid as a graph and execute the algorithm to find [[id:C65F99DB-3808-4E4F-9952-FBB343E9AB9F][Bipartite Minimum Vertex Cover]].
+
+** Carry out the plan
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumOperations(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          M = len(grid[0])
+
+          def neighbours(i, j):
+              for di, dj in [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                  if 0 <= di + i < N and 0 <= dj + j < M and grid[di + i][dj + j] == 1:
+                      yield (di + i, dj + j)
+
+          mt = {}
+
+          def dfs(node, seen):
+              if node in seen:
+                  return False
+              seen.add(node)
+              for child in neighbours(*node):
+                  if child not in mt or dfs(mt[child], seen):
+                      mt[child] = node
+                      return True
+              return False
+
+          ans = 0
+          for i in range(N):
+              for j in range(M):
+                  if grid[i][j] == 1:
+                      if dfs((i, j), set()):
+                          ans += 1
+
+          return ans // 2
+
+
+  assert Solution().minimumOperations([[1, 1, 0], [0, 1, 1], [1, 1, 1]]) == 3
+  assert Solution().minimumOperations([[0, 1], [1, 0]]) == 0
+#+end_src
+
+* Common mistakes
+
+- [[id:B3BCF738-D1F0-4705-89B2-10B66DCE8977][Mistake: Failed to recognize a classic problem in the reduced problem]].

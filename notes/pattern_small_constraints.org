@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       C767BE5B-4E2C-44F9-8410-F4E920DCFCBC
+:END:
+#+TITLE: Pattern: Small constraints
