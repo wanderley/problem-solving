@@ -1,0 +1,109 @@
+:PROPERTIES:
+:ID:       1C9EFDE5-E454-422E-9918-2CF189F61B9D
+:END:
+#+TITLE: Leetcode: 269. Alien Dictionary
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446096530
+#+ROAM_REFS: https://leetcode.com/problems/alien-dictionary/
+
+* Understand the problem
+
+Given a sequence of words sorted lexicographically using unknown alphabetic order, return the alphabet's letters sorted in respect to the alphabet's rule.
+
+** Useful prompts
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]
+
+* Devise a plan
+
+Modeling as a graph problem, letters are vertices and an edge $(u,v)$ means that the letter $u$ comes before $v$ in the unknown alphabet.  If there are cycles in this graph then there is no way to build (discover) the alphabet because $u, v_1, v_2, ..., v_k, u$ means that $u$ comes before $u$ what is impossible.  Therefore, this is a [[id:ABCED065-0F63-4FFE-8FEC-2D2615196BF7][Directed Graph]].  The problem become [[id:38C2A4B4-E65F-4507-A1C6-0F2AF200DA69][Pattern: Find topological order of vertices in a graph]].  Time complexity is $O(n)$ and space complexity is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def alienOrder(self, words: List[str]) -> str:
+          A = {c: [] for w in words for c in w}
+          for a, b in zip(words, words[1:]):
+              if a == b:
+                  continue
+              if a.startswith(b):
+                  return ""
+              i = 0
+              while i < len(a) and i < len(b) and a[i] == b[i]:
+                  i += 1
+              if i < len(a) and i < len(b):
+                  A[a[i]].append(b[i])
+          deg = {c: 0 for c in A}
+          for u in A:
+              for v in A[u]:
+                  deg[v] += 1
+          queue = [u for u in A if deg[u] == 0]
+          ans = []
+          for u in queue:
+              ans.append(u)
+              for v in A[u]:
+                  deg[v] -= 1
+                  if deg[v] == 0:
+                      queue.append(v)
+          if len(ans) != len(A):
+              return ""
+          return "".join(ans)
+#+end_src
+
+#+begin_src python
+  from typing import List
+
+  class Solution:
+      def alienOrder(self, words: List[str]) -> str:
+          adj = {}
+          for w1, w2 in zip(words, words[1:]):
+              if len(w2) < len(w1) and w1.startswith(w2):
+                  return ""
+              for c1, c2 in zip(w1, w2):
+                  if c1 != c2:
+                      adj.setdefault(c1, set())
+                      adj[c1].add(c2)
+                      break
+
+          NOT_VISITED = "NOT_VISITED"
+          OPEN = "OPEN"
+          CLOSED = "CLOSED"
+
+          status = {c: NOT_VISITED for w in words for c in w}
+          ans = []
+
+          def dfs(u):
+              if status[u] == CLOSED:
+                  return True
+              if status[u] == OPEN:
+                  return False
+
+              status[u] = OPEN
+              for v in adj.get(u, []):
+                  if not dfs(v):
+                      return False
+
+              ans.append(u)
+              status[u] = CLOSED
+              return True
+
+          for c in status:
+              if status[c] == NOT_VISITED:
+                  if not dfs(c):
+                      return ""
+
+          return "".join(reversed(ans))
+
+  assert Solution().alienOrder(["wrt","wrf","er","ett","rftt"]) == "wertf"
+  assert Solution().alienOrder(["z","x"]) == "zx"
+  assert Solution().alienOrder(["z","x","z"]) == ""
+  assert Solution().alienOrder(["z","z"]) == "z"
+  assert Solution().alienOrder(["abc","ab"]) == ""
+#+end_src
+
+* Common mistakes
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]]: $abc,ab$.

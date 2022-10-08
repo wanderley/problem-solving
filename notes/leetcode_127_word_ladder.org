@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID:       6EB17048-DA8B-443F-A28A-630DF77246B6
+:END:
+#+TITLE: Leetcode: 127. Word Ladder
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446068367
+#+ROAM_REFS: [[https://leetcode.com/problems/word-ladder/]]
+
+* Understand the problem
+
+[[id:3283AA3B-67CD-4F8E-960E-442AAE3FD7DC][Pattern: Find shortest path between two vertices in a graph]] where vertices are words and two words are adjacent if they differ only by one letter.
+
+** Useful prompts
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]
+
+* Devise a plan
+
+This is a classic example of [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]].  The only thing to look out is how to efficiently generate the edges of the graph.  By inspecting the constraints, you will find that we can generate the next word and then check if it is an vertex in the graph.  Time complexity is $O(n^2)$ and space is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  from typing import List
+  import string
+
+
+  class Solution:
+      def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+          D = set(wordList)
+          C = {c for w in wordList + [beginWord] for c in w}
+          queue = [(0, beginWord)]
+          seen = set()
+          for steps, u in queue:
+              if u == endWord:
+                  return steps + 1
+              for i in range(len(u)):
+                  for c in C:
+                      if c == u[i]:
+                          continue
+                      v = u[:i] + c + u[i + 1 :]
+                      if v not in seen and v in D:
+                          seen.add(v)
+                          queue.append((steps + 1, v))
+          return 0
+
+
+  assert (
+      Solution().ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"])
+      == 5
+  )
+  assert Solution().ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log"]) == 0
+#+end_src

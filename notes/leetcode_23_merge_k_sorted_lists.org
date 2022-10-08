@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID:       02D2E665-4FC5-45C7-A1BF-E7CE82E67B05
+:END:
+#+TITLE: Leetcode: 23. Merge k Sorted Lists
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446049715
+#+ROAM_REFS: https://leetcode.com/problems/merge-k-sorted-lists
+
+* Understand the problem
+
+Given an array of sorted linked lists, return a linked list that contains all elements sorted.
+
+** Useful prompts
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]
+
+* Devise a plan
+
+Use a sorted list to store the head of each list, pick the smallest one and add to the end of the answer.  If the list has a next element, add it back to the sorted list.  Time complexity is $O(n \log n)$ and space is $O(1)$.
+
+** Carry out the plan
+
+#+begin_src python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, val=0, next=None):
+  #         self.val = val
+  #         self.next = next
+  class Solution:
+      def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+          pq = []
+          for i, l in enumerate(lists):
+              if l:
+                  heappush(pq, (l.val, i))
+          head = None
+          tail = None
+          while pq:
+              _, i = heappop(pq)
+              if head is None:
+                  head = tail = lists[i]
+              else:
+                  tail.next = tail = lists[i]
+              lists[i] = lists[i].next
+              if lists[i]:
+                  heappush(pq, (lists[i].val, i))
+          return head
+#+end_src
+
+* Common mistakes
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]: Had to fix my code multiple times since the input and output didn't match the problem's expectations.

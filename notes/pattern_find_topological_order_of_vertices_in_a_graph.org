@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       38C2A4B4-E65F-4507-A1C6-0F2AF200DA69
+:END:
+#+TITLE: Pattern: Find topological order of vertices in a graph

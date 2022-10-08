@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       6DFC6B45-0302-44F2-AC2B-842531C4639B
+:END:
+#+TITLE: Pattern: Find optimal path in a tree

@@ -1,0 +1,65 @@
+:PROPERTIES:
+:ID:       598AF36B-1883-4A5F-9F07-36DC10B3B504
+:END:
+#+TITLE: Leetcode: 1697. Checking Existence of Edge Length Limited Paths
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446240015
+#+ROAM_REFS: [[https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/]]
+
+* Understand the problem
+
+For each query $(u, v, l)$, return $True$ if there is a path between $u$ and $v$ where all edges in the path has cost less than $l$.
+
+** Useful prompts
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]
+
+* Devise a plan
+
+The naive solution is to build a graph for each query and test if there is required path.  The issue with the naive solution is that we compute parts of the graph over and over again.  For [[id:117736F8-6CF6-435F-9043-18B8D22EDDE9][Pattern: Answer queries on online graph]], we can usually rearrange the queries in a way that the computation of one query can be reused by the next one.  In this case, we can process the queries from the smallest limit to the greatest one.  For each query in order, we add to the graph all edges (using [[id:23A4E36E-24D3-40F8-AA20-32C0DB1E36F6][Union-Find]]) that doesn't exceed the limit.  When there is no more edges to add, we answer the query.  Time complexity is $O(n \times \log n)$ and space is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def distanceLimitedPathsExist(
+          self, N: int, edges: List[List[int]], queries: List[List[int]]
+      ) -> List[bool]:
+          E = len(edges)
+          edges.sort(key=lambda e: e[2])
+
+          p = [i for i in range(N)]
+
+          def find(u):
+              if p[u] != u:
+                  p[u] = find(p[u])
+              return p[u]
+
+          def union(u, v):
+              p[find(u)] = p[find(v)]
+
+          ans = [False] * len(queries)
+          j = 0
+          for i, (u, v, l) in sorted(enumerate(queries), key=lambda e: e[1][2]):
+              while j < E and edges[j][2] < l:
+                  union(edges[j][0], edges[j][1])
+                  j += 1
+              ans[i] = find(u) == find(v)
+
+          return ans
+
+
+  assert Solution().distanceLimitedPathsExist(
+      3, [[0, 1, 2], [1, 2, 4], [2, 0, 8], [1, 0, 16]], [[0, 1, 2], [0, 2, 5]]
+  ) == [False, True]
+  assert Solution().distanceLimitedPathsExist(
+      5, [[0, 1, 10], [1, 2, 5], [2, 3, 9], [3, 4, 13]], [[0, 4, 14], [1, 4, 13]]
+  ) == [True, False]
+#+end_src
