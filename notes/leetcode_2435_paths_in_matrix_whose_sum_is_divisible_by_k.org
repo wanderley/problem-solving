@@ -1,0 +1,44 @@
+:PROPERTIES:
+:ID:       0876D154-2C61-4066-92AE-F04C2DDE76CE
+:ROAM_REFS: https://leetcode.com/problems/paths-in-matrix-whose-sum-is-divisible-by-k/
+:END:
+#+TITLE: Leetcode: 2435. Paths in Matrix Whose Sum Is Divisible by K
+#+ROAM_REFS: https://leetcode.com/problems/paths-in-matrix-whose-sum-is-divisible-by-k/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665292550127
+
+* Understand the problem
+
+Count the number of paths from $(0,0)$ to $(n-1,m-1)$ (on  [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]]) where the path goes down-right and has sum module $k$.
+
+** Useful prompots
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]
+
+* Devise a plan
+
+Modeling as a graph problem, a cell connected to the one directly to the left and top.  So, this is an [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] and we can compute the number of paths using [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].  For each cell and each $0 \leq x < k$, store the number of paths that reached that cell such that sum of the paths is $x$ module $k$.  Time complexity is $O(n \times m \times k)$ and space is $O(n \times m \times k)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def numberOfPaths(self, grid: List[List[int]], k: int) -> int:
+          MOD = 10**9 + 7
+          N = len(grid)
+          M = len(grid[0])
+          dp = [[Counter() for _ in range(M)] for _ in range(N)]
+          dp[0][0] = Counter([grid[0][0] % k])
+          for i in range(N):
+              for j in range(M):
+                  if i == 0 and j == 0:
+                      continue
+                  t = Counter() if i == 0 else dp[i - 1][j]
+                  l = Counter() if j == 0 else dp[i][j - 1]
+                  for x, c in (t + l).items():
+                      dp[i][j][(x + grid[i][j]) % k] = (
+                          dp[i][j][(x + grid[i][j]) % k] + c
+                      ) % MOD
+          return dp[N - 1][M - 1][0]
+#+end_src

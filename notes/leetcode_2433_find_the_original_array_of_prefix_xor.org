@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       7731522E-9C98-4A96-ABA3-98D55667F1E4
+:ROAM_REFS: https://leetcode.com/problems/find-the-original-array-of-prefix-xor/
+:END:
+#+TITLE: Leetcode: 2433. Find The Original Array of Prefix Xor
+#+ROAM_REFS: https://leetcode.com/problems/find-the-original-array-of-prefix-xor/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665293722719
+
+* Understand the problem
+
+Given an array $p$, find an array $a$ given that $p_0=a_0$, $p_1=a_0 \oplus a_1$ and so on.
+
+** Useful prompts
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]
+
+* Devise a plan
+
+Since $p_i = p_{i-1} \oplus a_i$, then $a_i=p_{i-1} \oplus p_i$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def hardestWorker(self, n: int, logs: List[List[int]]) -> int:
+          ans = (logs[0][0], logs[0][1])
+          for i in range(1, len(logs)):
+              cur = logs[i][1] - logs[i - 1][1]
+              if cur > ans[1] or cur == ans[1] and logs[i][0] < ans[0]:
+                  ans = (logs[i][0], cur)
+          return ans[0]
+#+end_src

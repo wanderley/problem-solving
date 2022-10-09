@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       7080ABD2-7A06-46C5-98AA-CE8CBC762107
+:ROAM_REFS: https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/
+:END:
+#+TITLE: Leetcode: 2434. Using a Robot to Print the Lexicographically Smallest String
+#+ROAM_REFS: https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665293033403
+
+* Understand the problem
+
+[[id:F431A436-0E2F-42F4-9EB9-13A82272F944][Pattern: Find optimal arrangement]] where you can do two operations: (1) remove first char from the input and add to a stack, (2) remove char from stack and put on the answer.  Find the smallest string that can be formed using these rules.
+
+** Useful prompts
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]
+
+* Devise a plan
+
+For each char in the input, add it to the answer if there is no char on the right (rest of the string) that comes first than it.  Otherwise, drop all chars from the current stack to the answer while they are smaller than the smaller char to the right.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+
+  class Solution:
+      def robotWithString(self, s: str) -> str:
+          rest = SortedList(list(s))
+          st = []
+          ans = []
+          for c in s:
+              while st and st[-1] <= rest[0]:
+                  ans.append(st.pop())
+              if c == rest[0]:
+                  ans.append(c)
+                  rest.pop(0)
+              else:
+                  st.append(c)
+                  rest.remove(c)
+          while st:
+              ans.append(st.pop())
+          return "".join(ans)
+#+end_src
