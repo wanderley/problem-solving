@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       C22502E9-D2E4-4874-BE0A-27E52B1E6499
+:END:
+#+TITLE: Building the solution as you process the input

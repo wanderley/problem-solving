@@ -4,11 +4,11 @@
 #+TITLE: Leetcode: 124. Binary Tree Maximum Path Sum
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1661446115465
-#+ROAM_REFS: [[https://leetcode.com/problems/binary-tree-maximum-path-sum/]]
+#+ROAM_REFS: https://leetcode.com/problems/binary-tree-maximum-path-sum/
 
 * Understand the Problem
 
-[[id:6DFC6B45-0302-44F2-AC2B-842531C4639B][Pattern: Find optimal path in a tree]].  The optimal path is the path with the maximum sum.
+Find the maximum path (sum of vertex values) in a tree.
 
 ** Useful prompts
 
@@ -20,7 +20,7 @@
 
 * Devise a plan
 
-Be $u$ a node in the tree.  Find the maximum path starting from the left $l$ and from the right $r$ of $u$.  The maximum path starting from $u$ is either $val(u)$, $val(u)+l$ or $val(u)+r$.  To compute the final answer, we still have to consider $u$ as the root of the maximum path: $val(u)+l+r$.  Time complexity is $O(n)$ and space complexity is $O(depth)$.
+[[id:6DFC6B45-0302-44F2-AC2B-842531C4639B][Pattern: Find optimal path in a tree]] by [[id:C22502E9-D2E4-4874-BE0A-27E52B1E6499][Building the solution as you process the input]].  Be $u$ a node in the tree.  Find the maximum path starting from the left $l$ and from the right $r$ of $u$.  The maximum path starting from $u$ is either $val(u)$, $val(u)+l$ or $val(u)+r$.  To compute the final answer, we still have to consider $u$ as the root of the maximum path: $val(u)+l+r$.  Time complexity is $O(n)$ and space complexity is $O(depth)$.
 
 ** Carry out the plan
 
@@ -33,28 +33,17 @@ Be $u$ a node in the tree.  Find the maximum path starting from the left $l$ and
   #         self.right = right
   class Solution:
       def maxPathSum(self, root: Optional[TreeNode]) -> int:
-          ans = float("-inf")
-
-          def dfs(node):
-              nonlocal ans
-
-              if node is None:
-                  return 0
-
-              lans = dfs(node.left) if node.left else float("-inf")
-              rans = dfs(node.right) if node.right else float("-inf")
-              cur = max(
-                  node.val,
-                  node.val + lans,
-                  node.val + rans,
+          def dfs(u):
+              if u is None:
+                  return (0, float("-inf"))
+              al, ar = dfs(u.left)
+              bl, br = dfs(u.right)
+              return (
+                  max(al, bl, 0) + u.val,
+                  max(ar, br, max(al, 0) + u.val + max(bl, 0)),
               )
-              ans = max(ans, cur, node.val + lans + rans)
 
-              return cur
-
-          dfs(root)
-
-          return ans
+          return max(dfs(root))
 #+end_src
 
 * Common mistakes

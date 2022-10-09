@@ -4,7 +4,7 @@
 #+TITLE: Leetcode: 127. Word Ladder
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1661446068367
-#+ROAM_REFS: [[https://leetcode.com/problems/word-ladder/]]
+#+ROAM_REFS: https://leetcode.com/problems/word-ladder/
 
 * Understand the problem
 
