@@ -1091,28 +1091,21 @@ CLOCK: [2022-07-18 Mon 07:48]--[2022-07-18 Mon 07:54] =>  0:06
           self.end = end
   """
 
-  class Solution:
-      def employeeFreeTime(self, schedule: '[[Interval]]') -> '[Interval]':
-          def intervals():
-              pq = []
-              for i, s in enumerate(schedule):
-                  heappush(pq, (s[0].start, s[0].end, i, 0))
-              while len(pq) > 0:
-                  start, end, i, j = heappop(pq)
-                  yield (start, end)
-                  if j + 1 < len(schedule[i]):
-                      heappush(pq, (schedule[i][j+1].start, schedule[i][j+1].end, i, j + 1))
 
+  class Solution:
+      def employeeFreeTime(self, schedule: "[[Interval]]") -> "[Interval]":
           ans = []
+          start = end = None
           last = None
-          for start, end in intervals():
-              if last is None:
-                  last = end
-              elif start > last:
-                  ans.append(Interval(last, start))
-                  last = end
+          for i in heapq.merge(*schedule, key=lambda i: (i.start, i.end)):
+              if start is None:
+                  start, end = i.start, i.end
+                  continue
+              if i.start <= end:
+                  end = max(end, i.end)
               else:
-                  last = max(last, end)
+                  ans.append(Interval(end, i.start))
+                  start, end = i.start, i.end
           return ans
 #+end_src
 
@@ -4725,6 +4718,29 @@ CLOCK: [2022-08-06 Sat 22:32]--[2022-08-06 Sat 22:57] =>  0:25
   assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [1, 3, 2, 4]) == 1
   assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [4, 3, 1]) == 2
   assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [1, 6, 3, 3]) == -1
+#+end_src
+
+#+begin_src python
+  class Solution:
+      def makeArrayIncreasing(self, a1: List[int], a2: List[int]) -> int:
+          a2.append(float("inf"))
+          a2.sort()
+          N = len(a1)
+          M = len(a2)
+
+          @cache
+          def dfs(i, last):
+              if last == float("inf"):
+                  return float("inf")
+              if i == N:
+                  return 0
+              return min(
+                  dfs(i + 1, a1[i]) if a1[i] > last else float("inf"),
+                  1 + dfs(i + 1, a2[bisect_right(a2, last)]),
+              )
+
+          ans = dfs(0, float("-inf"))
+          return -1 if ans == float("inf") else ans
 #+end_src
 
 * Leetcode: 471. Encode String with Shortest Length

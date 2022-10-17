@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       B39B7723-9DCB-4C18-BE7D-51086F1F2A81
+:END:
+#+TITLE: Pattern: Search & Validate

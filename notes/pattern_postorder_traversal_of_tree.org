@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       D6AFDCD1-B93D-4F4F-9AA6-B2A540BFAA42
+:END:
+#+TITLE: Pattern: Postorder traversal of tree

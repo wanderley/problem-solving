@@ -24,21 +24,21 @@ Given array $a$ with $n$ integers, return an array $r$ where $r[i]=j$ is the sma
 
 
   def next_greater(a):
-        ans = [-1] * len(a)
-        stack = deque(maxlen=len(a))
-        for i, x in enumerate(a):
-              while len(stack) > 0 and a[stack[-1]] < x:
-                    ans[stack[-1]] = i
-                    stack.pop()
-              stack.append(i)
-        return ans
+      ans = [-1] * len(a)
+      stack = deque(maxlen=len(a))
+      for i, x in enumerate(a):
+          while len(stack) > 0 and a[stack[-1]] < x:
+              ans[stack[-1]] = i
+              stack.pop()
+          stack.append(i)
+      return ans
 
 
   assert next_greater([1]) == [-1]
-  assert next_greater([1, 2, 3]) == [ 1,  2, -1]
-  assert next_greater([1, 3, 2]) == [ 1, -1, -1]
+  assert next_greater([1, 2, 3]) == [1, 2, -1]
+  assert next_greater([1, 3, 2]) == [1, -1, -1]
   assert next_greater([3, 2, 1]) == [-1, -1, -1]
-  assert next_greater([3, 1, 2]) == [-1,  2, -1]
+  assert next_greater([3, 1, 2]) == [-1, 2, -1]
 #+end_src
 
 * Problem: Next smaller in unsorted array

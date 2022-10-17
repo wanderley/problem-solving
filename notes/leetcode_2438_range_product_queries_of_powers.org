@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       365C4007-8F91-4E65-9841-35FFDCADC59F
+:ROAM_REFS: https://leetcode.com/problems/range-product-queries-of-powers/
+:END:
+#+TITLE: Leetcode: 2438. Range Product Queries of Powers
+#+ROAM_REFS: https://leetcode.com/problems/range-product-queries-of-powers/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665945614810
+
+* Understand the problem
+
+Given an integer $n$ and queries $q=(l,r)$, return for each query the product of $p[l:r]$ where $p$ are the powers of $2$ in non-decreasing order that compose $n$.
+
+** Useful prompts
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]
+
+* Devise a plan
+
+Compute all powers of 2 in $n$ and for each query use [[id:EC1C87C8-A221-4823-9EF5-BEC706B2EEA5][Brute Force]] to compute the answer by multiplying all required powers of 2.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+          MOD = 10**9 + 7
+          p = []
+          c = 1
+          while c <= n:
+              if n & c != 0:
+                  p.append(c)
+              c *= 2
+
+          ans = []
+          for start, end in queries:
+              cur = p[start] % MOD
+              for j in range(start + 1, end + 1):
+                  cur = (cur * p[j]) % MOD
+              ans.append(cur)
+          return ans
+#+end_src

@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID:       5E8DA23C-8E03-4E03-BC71-23D675EB84BD
+:ROAM_REFS: https://leetcode.com/problems/create-components-with-same-value/
+:END:
+#+TITLE: Leetcode: 2440. Create Components With Same Value
+#+ROAM_REFS: https://leetcode.com/problems/create-components-with-same-value/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665976027948
+
+* Understand the problem
+
+Split an tree in a forest with maximum number of trees where each component has the same weight.
+
+** Useful prompts
+
+- [[id:60DEC3A8-810C-41E3-96E3-98145F4AAC3F][Can we state the problem as a searching problem?]]
+
+* Devise a plan
+
+We are going to use [[id:B39B7723-9DCB-4C18-BE7D-51086F1F2A81][Pattern: Search & Validate]].  Be $S=\sum a[i]$.  There are $N+1$ possible weights $0, S/1, S/2, ..., S/N$.  For each one of them $x$ from $S/N$ to $0$, break the tree in forest where each tree has weight $x$.  Compute [[id:D6AFDCD1-B93D-4F4F-9AA6-B2A540BFAA42][Pattern: Postorder traversal of tree]] and for each vertex on this order, merge it with it's parent if the weight is less than $x$, continue to the next one if the weight is exactly $x$ and stop the search if the weight exceeds $x$.  Time complexity is $O(n ^ 2)$ and space is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def componentValue(self, nums: List[int], edges: List[List[int]]) -> int:
+          N = len(nums)
+
+          A = [set() for _ in range(N)]
+          for u, v in edges:
+              A[u].add(v)
+              A[v].add(u)
+          parent = [None] * N
+          queue = [u for u in range(N) if len(A[u]) == 1]
+          T = []
+          for u in queue:
+              T.append(u)
+              for v in A[u]:
+                  parent[u] = v
+                  A[v].discard(u)
+                  if len(A[v]) == 1:
+                      queue.append(v)
+
+          def valid(x):
+              ac = nums[::]
+              for u in T:
+                  if ac[u] > x:
+                      return False
+                  if ac[u] == x:
+                      continue
+                  if ac[u] < x:
+                      if parent[u] is None:
+                          return False
+                      else:
+                          ac[parent[u]] += ac[u]
+              return True
+
+          S = sum(nums)
+          for x in range(N, 0, -1):
+              if S % x == 0 and valid(S / x):
+                  return x - 1
+          return 0
+#+end_src

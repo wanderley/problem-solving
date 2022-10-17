@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       7FC79F68-F28B-43BC-8752-7189C59F2070
+:ROAM_REFS: https://leetcode.com/problems/number-of-valid-clock-times/
+:END:
+#+TITLE: Leetcode: 2437. Number of Valid Clock Times
+#+ROAM_REFS: https://leetcode.com/problems/number-of-valid-clock-times/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665944907583
+
+* Understand the problem
+
+Count the number of valid time string by filling out the position with ~?~.
+
+** Useful prompts
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]
+
+* Devise a plan
+
+In this problem, the [[id:BC81A358-FBCC-43AA-9928-E9778A107869][Pattern: Small constraints could allow a brute-force solution]].  For each unknown position, we try to fill with numbers from 0 to 9.  On the end, we count 1 if the time is valid or 0 otherwise.  Time complexity is $O(9^4)=O(1)$ and space is $O(1)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def countTime(self, time: str) -> int:
+          if "?" not in time:
+              return int(0 <= int(time[:2]) <= 23 and 0 <= int(time[3:]) <= 59)
+          i = time.find("?")
+          ans = 0
+          for d in range(ord("0"), ord("9") + 1):
+              ans += self.countTime(time[:i] + chr(d) + time[i + 1 :])
+          return ans
+#+end_src

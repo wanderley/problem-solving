@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       60DEC3A8-810C-41E3-96E3-98145F4AAC3F
+:END:
+#+TITLE: Can we state the problem as a searching problem?
