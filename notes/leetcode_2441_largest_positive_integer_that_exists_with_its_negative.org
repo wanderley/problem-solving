@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID:       56BA62F9-3E76-4018-BB41-0AF7E3DEC995
+:ROAM_REFS: https://leetcode.com/problems/largest-positive-integer-that-exists-with-its-negative/
+:END:
+#+TITLE: Leetcode: 2441. Largest Positive Integer That Exists With Its Negative
+#+ROAM_REFS: https://leetcode.com/problems/largest-positive-integer-that-exists-with-its-negative/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665976901400
+
+* Understand the problem
+
+Given an array $a$, find the largest integer $k$ such that $-k$ is also in $a$.
+
+** Useful prompts
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]
+
+* Devise a plan
+
+Use a ~set~ to store numbers of $a$ and for each one $x$ from the largest to the smaller, check if $-x$ is also in the set.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def findMaxK(self, nums: List[int]) -> int:
+          seen = set(nums)
+          for n in sorted(nums, reverse=True):
+              if -n in seen:
+                  return n
+          return -1
+#+end_src

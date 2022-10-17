@@ -1,0 +1,44 @@
+:PROPERTIES:
+:ID:       DDFC4CD6-9BA9-4C42-AA52-0912F6C57834
+:ROAM_REFS: https://leetcode.com/problems/count-subarrays-with-fixed-bounds/
+:END:
+#+TITLE: Leetcode: 2444. Count Subarrays With Fixed Bounds
+#+ROAM_REFS: https://leetcode.com/problems/count-subarrays-with-fixed-bounds/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1665978045335
+
+* Understand the problem
+
+Given an array $a$ and numbers $minK$ and $maxK$, return the number of subarrays $s$ where $min(s)=minK$ and $max(s)=maxK$.
+
+** Useful prompts
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]
+
+* Devise a plan
+
+If $a[i] < minK$ or $a[i] > maxK$, then no subarray that contains $a[i]$ should be counted.  So, we can split the given array in subarray that contains only elements between $minK$ and $maxK$.   For now on, we suppose that $a$ only contains elements from $minK$ to $maxK$.  [[id:C9DC4E36-0C33-4279-BC4E-8F6CEA6CA34D][Pattern: Count subarrays starting/ending in a position]].  For each position $i$, we find the smallest index $j$ where $a[i..j]$ contains at least one value $minK$ and one value $maxK$.  The number of subarrays starting on $i$ is going to be $|a|-j$.  Time complexity and space $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
+          ans = 0
+          for t, g in groupby(nums, key=lambda n: minK <= n <= maxK):
+              if not t:
+                  continue
+              group = list(g)
+              lastMin = -1
+              lastMax = -1
+              for i in range(len(group) - 1, -1, -1):
+                  if group[i] == minK:
+                      lastMin = i
+                  if group[i] == maxK:
+                      lastMax = i
+                  if lastMin != -1 and lastMax != -1:
+                      j = max(lastMin, lastMax)
+                      ans += len(group) - j
+          return ans
+#+end_src

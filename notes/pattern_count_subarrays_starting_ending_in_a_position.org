@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       C9DC4E36-0C33-4279-BC4E-8F6CEA6CA34D
+:END:
+#+TITLE: Pattern: Count subarrays starting/ending in a position

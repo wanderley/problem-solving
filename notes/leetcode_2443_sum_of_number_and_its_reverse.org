@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       11E38F31-7249-4EFC-A066-5FC37EE61898
+:ROAM_REFS: https://leetcode.com/problems/sum-of-number-and-its-reverse/
+:END:
+#+TITLE: Leetcode: 2443. Sum of Number and Its Reverse
+#+ROAM_REFS: https://leetcode.com/problems/sum-of-number-and-its-reverse/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+
+* Understand the problem
+
+Given an integer $num$, return $True$ if there is a non-negative integer $x$ such that $x+r(x)=num$ where $r(x)$ is the integer generate by reverting the digits of $x$.
+
+** Useful prompts
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]
+
+* Devise a plan
+
+There are only $num$ possible numbers.  Iterate over all them and return $True$ if one satisfy the condition.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def sumOfNumberAndReverse(self, num: int) -> bool:
+          for i in range(num + 1):
+              if i + int(str(i)[::-1]) == num:
+                  return True
+          return False
+#+end_src
