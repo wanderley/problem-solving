@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       F00F7839-7590-45EA-B4FD-68A78A6CBC91
+:ROAM_REFS: https://leetcode.com/problems/number-of-subarrays-with-gcd-equal-to-k/
+:END:
+#+TITLE: Leetcode: 2447. Number of Subarrays With GCD Equal to K
+#+ROAM_REFS: https://leetcode.com/problems/number-of-subarrays-with-gcd-equal-to-k/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1666546346174
+
+* Understand the problem
+
+Given an array of integers $a$ and an integer $k$, find all subarrays $a[i..j]$ where $gcd(a[i], a[i+1], ..., a[j])=k$.
+
+* Devise a plan
+
+[[id:BC81A358-FBCC-43AA-9928-E9778A107869][Pattern: Small constraints could allow a brute-force solution]], so iterate over all subarrays and compute GCD.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def subarrayGCD(self, nums: List[int], k: int) -> int:
+          N = len(nums)
+          ans = 0
+          for i in range(N):
+              if nums[i] == k:
+                  ans += 1
+              cur = nums[i]
+              for j in range(i + 1, N):
+                  cur = math.gcd(cur, nums[j])
+                  if cur == k:
+                      ans += 1
+          return ans
+#+end_src

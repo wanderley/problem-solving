@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       A5502E19-E66F-42EA-80F2-90FE3AD536EC
+:ROAM_REFS: https://leetcode.com/problems/minimum-number-of-operations-to-make-arrays-similar/
+:END:
+#+TITLE: Leetcode: 2449. Minimum Number of Operations to Make Arrays Similar
+#+ROAM_REFS: https://leetcode.com/problems/minimum-number-of-operations-to-make-arrays-similar/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1666549660995
+
+* Understand the problem
+
+Given two integer arrays $a$ and $t$.  Transform $a$ in $t$ by performing any number of times and operation: pick $i$ and $j$ and do $a[i] += 2$ and $a[j] -= 2$.
+
+** Useful prompts
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]
+
+* Devise a plan
+
+There are two important properties on this problem:
+
+1. You can't change the parity of a number in $a$, and
+2. The smallest number in $a$ should become the smallest number in $t$.
+
+You can prove (2) by contradiction and (1) comes from the property of the operation.  Given these properties, split even from odd numbers of $a$ and $t$ and sort them in non-decreasing order ([[id:A18543C4-83BC-40F1-A243-B85FD935FAC0][Pattern: Answer query on sorted data]]).  For each in $a_even[i]$ count the number of operations necessary to transform it on $t_even[i]$.  You will have count it twice since removing two from one number means that you put on in other.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+** Carry out a plan
+
+#+begin_src python
+  class Solution:
+      def makeSimilar(self, nums: List[int], target: List[int]) -> int:
+          N = len(nums)
+          nums.sort()
+          target.sort()
+          if nums == target:
+              return 0
+          ei = [n for n in nums if n % 2 == 0]
+          oi = [n for n in nums if n % 2 == 1]
+          et = [n for n in target if n % 2 == 0]
+          ot = [n for n in target if n % 2 == 1]
+
+          ans = 0
+          for i in range(len(ei)):
+              ans += abs(ei[i] - et[i]) // 2
+          for i in range(len(oi)):
+              ans += abs(oi[i] - ot[i]) // 2
+          return ans // 2
+#+end_src

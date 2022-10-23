@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       BC212CA5-139C-4A31-8BF4-57FDA3BD03FD
+:ROAM_REFS: https://leetcode.com/problems/determine-if-two-events-have-conflict/
+:END:
+#+TITLE: Leetcode: 2446. Determine if Two Events Have Conflict
+#+ROAM_REFS: https://leetcode.com/problems/determine-if-two-events-have-conflict/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1666501721957
+
+* Understand the problem
+
+Determine if two segments intersect.
+
+* Devise a plan
+
+If two segments intersect, then they have a point $x$ in common which $s_1[0] \leq x s_1[1]$ and $s_2[0] \leq x s_2[1]$.  Therefore, $\max(s_1[0], s_2[0]) \leq x$ and $x \leq \min(s_1[1], s_2[1])$.  To answer the question, we can just check if $\max(s_1[0], s_2[0]) \leq \min(s_1[1], s_2[1])$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def haveConflict(self, event1: List[str], event2: List[str]) -> bool:
+          return max(event1[0], event2[0]) <= min(event1[1], event2[1])
+#+end_src

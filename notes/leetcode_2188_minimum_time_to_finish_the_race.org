@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       1CA22F66-4C52-4696-BA19-D27B0805BE04
+:ROAM_REFS: https://leetcode.com/problems/minimum-time-to-finish-the-race/
+:END:
+#+TITLE: Leetcode: 2188. Minimum Time to Finish the Race
+#+ROAM_REFS: https://leetcode.com/problems/minimum-time-to-finish-the-race/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1666413741679
+
+* Understand the problem
+
+Given an array representing tires where $tires[i] = [f_i, r_i]$, a cost to change tires and number of laps in the race.  The time $t$ for the tire $i$ to make j-th lap is $t(i, j) = t(i, j - 1) + f_i \times r_i^j$.  Determine the minimum times to finish the race.
+
+* Devise a plan
+
+- [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  As the cost of change tires is at most $10^5$, we don't need to use a tire for more than 17 laps at most since $r_i^17 \geq 2^17 \geq 10^5$.
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Suppose that we have $b[i]$ equal to the minimum time to make $i$ laps with the same tire.  Now, the problem is reduced to [[id:0F085C54-E45A-41E6-951B-79CFD7ECBED5][Knapsack problem]].  Time complexity is $O(n \times m)$ with space $O(n ^ 2)$.
+
+** Carry out the solution
+
+#+begin_src python
+  class Solution:
+      def minimumFinishTime(
+          self, tires: List[List[int]], changeTime: int, numLaps: int
+      ) -> int:
+          N = len(tires)
+          M = min(numLaps + 1, 17)
+          best = [float("inf")] * M
+          for i in range(N):
+              cur = 0
+              f, r = tires[i]
+              p = 1
+              for j in range(1, M):
+                  cur += f * p
+                  p *= r
+                  best[j] = min(best[j], cur)
+                  if cur > changeTime + f:
+                      break
+
+          @cache
+          def dfs(i):
+              if i == numLaps:
+                  return 0
+              ans = float("inf")
+              for j in range(1, min(M, numLaps - i + 1)):
+                  ans = min(ans, changeTime + best[j] + dfs(i + j))
+              return ans
+
+          return dfs(0) - changeTime
+#+end_src

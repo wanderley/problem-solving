@@ -3085,60 +3085,6 @@ CLOCK: [2022-07-28 Thu 10:21]--[2022-07-28 Thu 14:08] =>  3:47
   ) == ["JFK", "ATL", "JFK", "SFO", "ATL", "SFO"]
 #+end_src
 
-* Leetcode: 2188. Minimum Time to Finish the Race
-:PROPERTIES:
-:ID:       9B046900-A7C0-45C0-8592-B4538C21EBCC
-:WA:       0
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-28 Thu 14:57]--[2022-07-28 Thu 16:15] =>  1:18
-CLOCK: [2022-07-28 Thu 14:08]--[2022-07-28 Thu 14:21] =>  0:13
-:END:
-[[https://leetcode.com/problems/minimum-time-to-finish-the-race/][Problem Statement]]
-
-- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  If we know the tires to make 1 lap, 2 laps and so on, the problem is reduced to [[id:0F085C54-E45A-41E6-951B-79CFD7ECBED5][Knapsack problem]].  The main trick is to notice that the best tire $i$ for $k$ laps has it factor $r_i$ less than or equal to $r_j$ where $j$ is the best tire for $k-1$ consecutive laps.  Time complexity is $O(n \times m)$ with space $O(n ^ 2)$.
-
-#+begin_src python
-  from typing import List
-
-
-  class Solution:
-      def minimumFinishTime(
-          self, tires: List[List[int]], changeTime: int, numLaps: int
-      ) -> int:
-          N = len(tires)
-          M = numLaps
-
-          tires.sort(key=lambda t: (t[1], t[0]))
-
-          best = [(float("inf"), N - 1) for _ in range(M + 1)]
-          cand = set(range(N))
-          total = [0] * N
-          laptime = [f for f, _ in tires]
-          for l in range(1, M + 1):
-              for i in range(best[l - 1][1] + 1):
-                  if l > 1:
-                      laptime[i] *= tires[i][1]
-                  total[i] += laptime[i]
-                  if best[l][0] > total[i]:
-                      best[l] = (total[i], i)
-
-          dp = [float("inf")] * (M + 1)
-          for i in range(M + 1):
-              if i == 0:
-                  dp[i] = 0
-              else:
-                  dp[i] = best[i][0]
-                  for l in range(1, i + 1):
-                      dp[i] = min(dp[i], dp[i - l] + best[l][0] + changeTime)
-
-          return dp[M]
-
-
-  assert Solution().minimumFinishTime([[2, 3], [3, 4]], 5, 4) == 21
-  assert Solution().minimumFinishTime([[1, 10], [2, 2], [3, 4]], 6, 5) == 25
-#+end_src
-
 * Leetcode: 158. Read N Characters Given read4 II - Call Multiple Times
 :PROPERTIES:
 :ID:       C6085F95-819B-4903-B333-44C54D36D484

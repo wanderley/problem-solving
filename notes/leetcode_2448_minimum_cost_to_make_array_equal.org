@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:       C207EEE7-EEC1-4DB1-96B7-40BBB629BAFB
+:ROAM_REFS: https://leetcode.com/problems/minimum-cost-to-make-array-equal/
+:END:
+#+TITLE: Leetcode: 2448. Minimum Cost to Make Array Equal
+#+ROAM_REFS: https://leetcode.com/problems/minimum-cost-to-make-array-equal/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1666549088998
+
+* Understand the problem
+
+Given an array of integers $a$ and an array of costs $c$, find the minimum total cost of making all numbers in $a$ equal.  The cost function is $f(c)=abs(a[i]-x) \times c[i]$.
+
+** Useful prompts
+
+- [[id:60DEC3A8-810C-41E3-96E3-98145F4AAC3F][Can we state the problem as a searching problem?]]
+
+* Devise a plan
+
+[[id:B39B7723-9DCB-4C18-BE7D-51086F1F2A81][Pattern: Search & Validate]] to find the optimal value $x$ using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Note that if $f(x)=f(x+1)=f(x-1)$, then all elements in $a$ are already equal and the solution is 0.  Other important fact about this problem is that $f$ is a convex function and has a shape like a parabola.  Be $x'$ a guess.  If $f(x') < f(x' + 1)$, then we know that the optimal value is on the left, and it is on the right if $f(x') > f(x' + 1)$.  Time complexity is $O(n \log \max(a))$ and space is $O(1)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def minCost(self, nums: List[int], cost: List[int]) -> int:
+          N = len(nums)
+
+          def calc(k):
+              cur = 0
+              for i in range(N):
+                  cur += abs(nums[i] - k) * cost[i]
+              return cur
+
+          start = min(nums)
+          end = max(nums) + 1
+          ans = None
+          while start <= end:
+              mid = start + (end - start) // 2
+              a = calc(mid)
+              b = calc(mid + 1)
+              if a > b:
+                  ans = mid + 1
+                  start = mid + 1
+              elif a <= b:
+                  ans = mid
+                  end = mid - 1
+          return calc(ans)
+#+end_src
