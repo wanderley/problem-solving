@@ -1,0 +1,41 @@
+:PROPERTIES:
+:ID:       CF56864C-6595-4F1F-BD61-11EA0E109E16
+:ROAM_REFS: https://leetcode.com/problems/reconstruct-itinerary/
+:END:
+#+TITLE: Leetcode: 332. Reconstruct Itinerary
+#+ROAM_REFS: https://leetcode.com/problems/reconstruct-itinerary/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446198216
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Find an [[id:BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9][Eulerian path in Directed Graph]].  Time and space complexity is $O(m)$ where $m$ is the number of edges in the graph.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+          A = {u: [] for u in set(u for t in tickets for u in t)}
+          for u, v in tickets:
+              A[u].append(v)
+          for u in A:
+              A[u].sort(reverse=True)
+          st = ["JFK"]
+          ans = []
+          while st:
+              if not A[st[-1]]:
+                  ans.append(st.pop())
+              else:
+                  st.append(A[st[-1]].pop())
+          ans.reverse()
+          return ans
+
+
+  assert Solution().findItinerary(
+      [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+  ) == ["JFK", "MUC", "LHR", "SFO", "SJC"]
+  assert Solution().findItinerary(
+      [["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]
+  ) == ["JFK", "ATL", "JFK", "SFO", "ATL", "SFO"]
+#+end_src

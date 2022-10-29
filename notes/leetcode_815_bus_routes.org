@@ -1,0 +1,105 @@
+:PROPERTIES:
+:ID:       8DF52760-04BC-4B15-95C1-96C5BD441FCC
+:ROAM_REFS: https://leetcode.com/problems/bus-routes/
+:END:
+#+TITLE: Leetcode: 815. Bus Routes
+#+ROAM_REFS: https://leetcode.com/problems/bus-routes/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446091197
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]]. Did not think about ~source = target~ case.
+
+- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  Thought that [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] alternating between bus and stop would pass in the time limit.
+
+- [[id:A32AAFD2-5569-4417-8085-04005F85A435][Pattern: Find shortest path on a graph]].
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Stops are vertices and they are connected if there is a route that connect them.  Create a map from stops to routes and them perform a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] starting on ~source~.  Time and space complexity is $O(n \times m)$.
+
+Solution building the Build adjacency matrix:
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def numBusesToDestination(
+          self, routes: List[List[int]], source: int, target: int
+      ) -> int:
+          if source == target:
+              return 0
+
+          stops = {}
+          for bus, r in enumerate(routes):
+              for stop in r:
+                  stops.setdefault(stop, [])
+                  stops[stop].append(bus)
+
+          vis = [False] * len(routes)
+          adj = [set() for _ in range(len(routes))]
+          for _, bus in stops.items():
+              for i in range(len(bus)):
+                  for j in range(i + 1, len(bus)):
+                      adj[bus[i]].add(bus[j])
+                      adj[bus[j]].add(bus[i])
+
+          queue = [(b, 1) for b in stops.get(source, [])]
+          for u, steps in queue:
+              if target in routes[u]:
+                  return steps
+              if vis[u]:
+                  continue
+              vis[u] = True
+              for v in adj[u]:
+                  if not vis[v]:
+                      queue.append((v, steps + 1))
+          return -1
+
+
+  assert Solution().numBusesToDestination([[1, 2, 7], [3, 6, 7]], 1, 6) == 2
+  assert (
+      Solution().numBusesToDestination(
+          [[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], 15, 12
+      )
+      == -1
+  )
+#+end_src
+
+Without building the adjacency matrix:
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def numBusesToDestination(
+          self, routes: List[List[int]], source: int, target: int
+      ) -> int:
+          if source == target:
+              return 0
+
+          stops = {}
+          for bus, r in enumerate(routes):
+              for stop in r:
+                  stops.setdefault(stop, [])
+                  stops[stop].append(bus)
+
+          vis = [False] * len(routes)
+          queue = [(source, 0)]
+          for u, steps in queue:
+              if u == target:
+                  return steps
+              for bus in stops.get(u, []):
+                  if not vis[bus]:
+                      vis[bus] = True
+                      for v in routes[bus]:
+                          queue.append((v, steps + 1))
+          return -1
+
+
+  assert Solution().numBusesToDestination([[1, 2, 7], [3, 6, 7]], 1, 6) == 2
+  assert (
+      Solution().numBusesToDestination(
+          [[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], 15, 12
+      )
+      == -1
+  )
+#+end_src

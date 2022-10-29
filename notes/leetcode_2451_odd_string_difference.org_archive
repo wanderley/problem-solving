@@ -1,0 +1,24 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/wander/repos/problem-solving/notes/leetcode_2451_odd_string_difference.org
+
+
+* Carry out the plan
+:PROPERTIES:
+:ARCHIVE_TIME: 2022-10-29 Sat 13:28
+:ARCHIVE_FILE: ~/repos/problem-solving/notes/leetcode_2451_odd_string_difference.org
+:ARCHIVE_OLPATH: Devise a plan
+:ARCHIVE_CATEGORY: leetcode_2451_odd_string_difference
+:END:
+
+#+begin_src python
+  class Solution:
+      def oddString(self, words: List[str]) -> str:
+          g = defaultdict(list)
+          for w in words:
+              g[tuple(ord(b) - ord(a) for a, b in zip(w, w[1:]))].append(w)
+          for v in g.values():
+              if len(v) == 1:
+                  return v[0]
+#+end_src

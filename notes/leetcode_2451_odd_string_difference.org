@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       11013E86-C946-43E6-B311-86C353F927CC
+:ROAM_REFS: https://leetcode.com/problems/odd-string-difference/
+:END:
+#+TITLE: Leetcode: 2451. Odd String Difference
+#+ROAM_REFS: https://leetcode.com/problems/odd-string-difference/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667075311878
+
+* Understand the problem
+
+Find unique element in an array.
+
+* Devise a plan
+
+Group elements by their transformation and return the one that is unique.  Time and space complexity are $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def oddString(self, words: List[str]) -> str:
+          g = defaultdict(list)
+          for w in words:
+              g[tuple(ord(b) - ord(a) for a, b in zip(w, w[1:]))].append(w)
+          for v in g.values():
+              if len(v) == 1:
+                  return v[0]
+#+end_src

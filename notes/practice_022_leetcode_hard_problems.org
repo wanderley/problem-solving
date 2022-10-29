@@ -3,43 +3,6 @@ PROPERTIES:
 :END:
 #+TITLE: Practice #022: Leetcode Hard Problems
 
-* Leetcode: 42. Trapping Rain Water
-:PROPERTIES:
-:ID:       08B1CF58-22CC-4634-B230-96D578138B73
-:WA: 1
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-11 Mon 21:56]--[2022-07-11 Mon 22:41] =>  0:45
-:END:
-[[https://leetcode.com/problems/trapping-rain-water/][Problem Statement]]
-
-[[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  There is nothing to do if we have just one or two walls.  With three walls $h_1, h_2$ and $h_3$, there is no water trapped if $h_1<h_2<h_3$ or $h_1>h_2>h_3$, but there is water trapped if $h_1>h_2$ and $h_3>h_2$.  In the last case, we can compute the amount of water trapped $(\min(h_3,h_1) - h_2) \times (i_3 - i_1 - 1)$.  After that, we can remove $a_2$, add $a_3$ and continue the process with the next height.  We can use [[id:E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5][Monotonic Stack]] to keep track of the heights and solve the problem in time and space $O(n)$.
-
-#+begin_src python
-  from typing import List
-
-
-  class Solution:
-      def trap(self, height: List[int]) -> int:
-          N = len(height)
-          stack = []
-          ans = 0
-          for i in range(N):
-              while stack and height[stack[-1]] < height[i]:
-                  j = stack.pop()
-                  if stack:
-                      cur = (min(height[stack[-1]], height[i]) - height[j]) * (
-                          i - stack[-1] - 1
-                      )
-                      ans += cur
-              stack.append(i)
-          return ans
-
-
-  assert Solution().trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]) == 6
-  assert Solution().trap([4, 2, 0, 3, 2, 5]) == 9
-#+end_src
-
 * Leetcode: 68. Text Justification
 :PROPERTIES:
 :ID:       7CACB161-1117-4C63-AF27-9537365BECC4
@@ -778,113 +741,6 @@ CLOCK: [2022-07-15 Fri 18:15]--[2022-07-15 Fri 18:39] =>  0:24
   # param_2 = obj.get(row,column)
   # param_3 = obj.sum(row,column,numbers)
 #+end_src
-
-* Leetcode: 815. Bus Routes
-:PROPERTIES:
-:ID:       28344F2B-F9AE-430E-A621-350AC5DE4933
-:WA:       2
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-15 Fri 22:53]--[2022-07-15 Fri 23:37] =>  0:44
-:END:
-[[https://leetcode.com/problems/bus-routes/][Problem Statement]]
-
-- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]]. Did not think about ~source = target~ case.
-
-- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  Thought that [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] alternating between bus and stop would pass in the time limit.
-
-- [[id:A32AAFD2-5569-4417-8085-04005F85A435][Pattern: Find shortest path on a graph]].
-
-- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Stops are vertices and they are connected if there is a route that connect them.  Create a map from stops to routes and them perform a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] starting on ~source~.  Time and space complexity is $O(n \times m)$.
-
-Solution building the Build adjacency matrix:
-#+begin_src python
-  from typing import List
-
-
-  class Solution:
-      def numBusesToDestination(
-          self, routes: List[List[int]], source: int, target: int
-      ) -> int:
-          if source == target:
-              return 0
-
-          stops = {}
-          for bus, r in enumerate(routes):
-              for stop in r:
-                  stops.setdefault(stop, [])
-                  stops[stop].append(bus)
-
-          vis = [False] * len(routes)
-          adj = [set() for _ in range(len(routes))]
-          for _, bus in stops.items():
-              for i in range(len(bus)):
-                  for j in range(i + 1, len(bus)):
-                      adj[bus[i]].add(bus[j])
-                      adj[bus[j]].add(bus[i])
-
-          queue = [(b, 1) for b in stops.get(source, [])]
-          for u, steps in queue:
-              if target in routes[u]:
-                  return steps
-              if vis[u]:
-                  continue
-              vis[u] = True
-              for v in adj[u]:
-                  if not vis[v]:
-                      queue.append((v, steps + 1))
-          return -1
-
-
-  assert Solution().numBusesToDestination([[1, 2, 7], [3, 6, 7]], 1, 6) == 2
-  assert (
-      Solution().numBusesToDestination(
-          [[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], 15, 12
-      )
-      == -1
-  )
-#+end_src
-
-Without building the adjacency matrix:
-#+begin_src python
-  from typing import List
-
-
-  class Solution:
-      def numBusesToDestination(
-          self, routes: List[List[int]], source: int, target: int
-      ) -> int:
-          if source == target:
-              return 0
-
-          stops = {}
-          for bus, r in enumerate(routes):
-              for stop in r:
-                  stops.setdefault(stop, [])
-                  stops[stop].append(bus)
-
-          vis = [False] * len(routes)
-          queue = [(source, 0)]
-          for u, steps in queue:
-              if u == target:
-                  return steps
-              for bus in stops.get(u, []):
-                  if not vis[bus]:
-                      vis[bus] = True
-                      for v in routes[bus]:
-                          queue.append((v, steps + 1))
-          return -1
-
-
-  assert Solution().numBusesToDestination([[1, 2, 7], [3, 6, 7]], 1, 6) == 2
-  assert (
-      Solution().numBusesToDestination(
-          [[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], 15, 12
-      )
-      == -1
-  )
-#+end_src
-
 
 * Leetcode: 239. Sliding Window Maximum
 :PROPERTIES:
@@ -3041,48 +2897,6 @@ CLOCK: [2022-07-27 Wed 17:32]--[2022-07-27 Wed 17:43] =>  0:11
 
   assert Solution().candy([1, 0, 2]) == 5
   assert Solution().candy([1, 2, 2]) == 4
-#+end_src
-
-* Leetcode: 332. Reconstruct Itinerary
-:PROPERTIES:
-:ID:       6B445CC7-3916-4A98-9D5C-6FA02A6B5C32
-:WA:       0
-:END:
-:LOGBOOK:
-CLOCK: [2022-07-28 Thu 10:21]--[2022-07-28 Thu 14:08] =>  3:47
-:END:
-[[https://leetcode.com/problems/reconstruct-itinerary/][Problem Statement]]
-
-- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Find an [[id:BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9][Eulerian path in Directed Graph]].  Time and space complexity is $O(m)$ where $m$ is the number of edges in the graph.
-
-#+begin_src python
-  from typing import List
-
-
-  class Solution:
-      def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-          A = {u: [] for u in set(u for t in tickets for u in t)}
-          for u, v in tickets:
-              A[u].append(v)
-          for u in A:
-              A[u].sort(reverse=True)
-          st = ["JFK"]
-          ans = []
-          while st:
-              if not A[st[-1]]:
-                  ans.append(st.pop())
-              else:
-                  st.append(A[st[-1]].pop())
-          ans.reverse()
-          return ans
-
-
-  assert Solution().findItinerary(
-      [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
-  ) == ["JFK", "MUC", "LHR", "SFO", "SJC"]
-  assert Solution().findItinerary(
-      [["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]
-  ) == ["JFK", "ATL", "JFK", "SFO", "ATL", "SFO"]
 #+end_src
 
 * Leetcode: 158. Read N Characters Given read4 II - Call Multiple Times

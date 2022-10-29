@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       8BB7F857-6BCC-44AC-975B-7136D79295C3
+:END:
+#+TITLE: Equivalence group

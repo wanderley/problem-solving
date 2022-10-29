@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       67DFB269-E825-4DA1-AD64-D5A371BF800A
+:ROAM_REFS: https://leetcode.com/problems/destroy-sequential-targets/
+:END:
+#+TITLE: Leetcode: 2453. Destroy Sequential Targets
+#+ROAM_REFS: https://leetcode.com/problems/destroy-sequential-targets/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667077495112
+
+* Understand the problem
+
+Find smallest element in [[id:8BB7F857-6BCC-44AC-975B-7136D79295C3][Equivalence group]].
+
+* Devise a plan
+
+Compute all equivalence groups.  Return the smallest element on the group with greatest cardinality.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def destroyTargets(self, nums: List[int], space: int) -> int:
+          freq = defaultdict(list)
+          for n in nums:
+              freq[n % space].append(n)
+          maxf = max(map(len, freq.values()))
+          return min(min(freq[k]) for k in freq if len(freq[k]) == maxf)
+#+end_src

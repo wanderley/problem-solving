@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/sum-of-number-and-its-reverse/
 #+LEETCODE_LEVEL: Medium
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1666839450803
 
 * Understand the problem
 

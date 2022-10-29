@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       BA241D87-8034-4EB2-B5DA-6B278FC872E1
+:ROAM_REFS: https://leetcode.com/problems/next-greater-element-iv/
+:END:
+#+TITLE: Leetcode: 2454. Next Greater Element IV
+#+ROAM_REFS: https://leetcode.com/problems/next-greater-element-iv/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667078878681
+
+* Understand the problem
+
+Given an array of non-negative integers, find for each integer in the array the second greatest element to its right.
+
+** Useful prompts
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]
+- [[id:50666722-6010-4D80-8283-6DE83E32EB33][Have you solved a similar problem?]] [[id:E4C9A18D-FC2B-4C1D-A040-1A94C39F9F63][Problem: Next greater integer in unsorted array]].
+
+* Derive a plan
+
+Let's keep two sorted containers $a$ and $b$.  Elements on $a$ didn't see a greater element to the left, and elements on $b$ saw one element greater than them to their left.  For each element $i$ in the array (left to right), we remove from $b$ all elements that are smaller than $i$ since $i$ is the second greatest element to their left; after that we transfer elements from $a$ to $b$ that are smaller than $i$.  Finally, we add $i$ to $a$ and continue the process.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+
+  class Solution:
+      def secondGreaterElement(self, nums: List[int]) -> List[int]:
+          N = len(nums)
+          a = SortedList([], key=lambda i: nums[i])
+          b = SortedList([], key=lambda i: nums[i])
+          ans = [-1] * N
+          a.add(0)
+          for i in range(1, N):
+              while b and nums[b[0]] < nums[i]:
+                  ans[b.pop(0)] = nums[i]
+
+              while a and nums[a[0]] < nums[i]:
+                  b.add(a.pop(0))
+
+              a.add(i)
+
+          return ans
+#+end_src

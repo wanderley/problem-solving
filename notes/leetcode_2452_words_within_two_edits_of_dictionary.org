@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       79BD7A07-03F3-48C0-82E9-E0AFA0041B03
+:ROAM_REFS: https://leetcode.com/problems/words-within-two-edits-of-dictionary/
+:END:
+#+TITLE: Leetcode: 2452. Words Within Two Edits of Dictionary
+#+ROAM_REFS: https://leetcode.com/problems/words-within-two-edits-of-dictionary/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667076656683
+
+* Understand the problem
+
+Given a dictionary and queries, return a subarray of queries which each query $q$ appear in the dictionary if edit distance (only change) at most 2.
+
+* Devise a plan
+
+[[id:BC81A358-FBCC-43AA-9928-E9778A107869][Pattern: Small constraints could allow a brute-force solution]].  For each query, compute the edit distance to all words in the dictionary and add it to the output if the distance is at most 2.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def twoEditWords(self, queries: List[str], dictionary: List[str]) -> List[str]:
+          return [
+              q
+              for q in queries
+              if any(sum(a != b for a, b in zip(q, d)) <= 2 for d in dictionary)
+          ]
+#+end_src
