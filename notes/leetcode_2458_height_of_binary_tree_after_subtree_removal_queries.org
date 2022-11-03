@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       7FAAE287-CB39-4A47-B001-28F26E25DEF2
+:ROAM_REFS: https://leetcode.com/problems/height-of-binary-tree-after-subtree-removal-queries/
+:END:
+#+TITLE: Leetcode: 2458. Height of Binary Tree After Subtree Removal Queries
+#+ROAM_REFS: https://leetcode.com/problems/height-of-binary-tree-after-subtree-removal-queries/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667199654779
+
+*Not solved!*

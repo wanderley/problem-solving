@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       9F4BA66C-EBB7-4804-A89C-45964666B8FE
+:ROAM_REFS: https://leetcode.com/problems/average-value-of-even-numbers-that-are-divisible-by-three/
+:END:
+#+TITLE: Leetcode: 2455. Average Value of Even Numbers That Are Divisible by Three
+#+ROAM_REFS: https://leetcode.com/problems/average-value-of-even-numbers-that-are-divisible-by-three/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667192172552
+
+* Understand the problem
+
+Find the median of numbers divisible by 2 and 3.
+
+* Devise the plan
+
+Filter numbers divisible by 6 and compute their average.  Time and space complexity is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def averageValue(self, nums: List[int]) -> int:
+          xs = [n for n in nums if n % 2 == 0 and n % 3 == 0]
+          if not xs:
+              return 0
+          return floor(sum(xs) / len(xs))
+#+end_src

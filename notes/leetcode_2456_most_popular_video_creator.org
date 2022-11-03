@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       CC85A4B9-4100-47D8-9409-3A8E975D6A38
+:ROAM_REFS: https://leetcode.com/problems/most-popular-video-creator/
+:END:
+#+TITLE: Leetcode: 2456. Most Popular Video Creator
+#+ROAM_REFS: https://leetcode.com/problems/most-popular-video-creator/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667195933032
+
+* Understand the problem
+
+Find the creators with max total views and their respective creation most viewed.  Views of a single creation don't aggregate if they appear multiple times in the report.
+
+* Devise a plan
+
+[[id:48E699CB-3125-47FF-AA1A-5FCCF0EF235E][Can we simulate the problem?]] Yes! Compute the popularity while keeping track of the creation most viewed.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def mostPopularCreator(
+          self, creators: List[str], ids: List[str], views: List[int]
+      ) -> List[List[str]]:
+          popularity = Counter()
+          total_views = defaultdict(Counter)
+          for c, i, v in zip(creators, ids, views):
+              popularity[c] += v
+              total_views[c][i] = max(total_views[c][i], v)
+          maxp = max(popularity.values())
+          ans = []
+          for c in popularity:
+              if popularity[c] < maxp:
+                  continue
+              maxv = max(total_views[c].values())
+              ans.append([c, min(i for i, v in total_views[c].items() if v == maxv)])
+          return ans
+#+end_src
