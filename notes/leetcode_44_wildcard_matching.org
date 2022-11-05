@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID:       EBE07F73-A239-43B3-99B5-68093088BF59
+:ROAM_REFS: https://leetcode.com/problems/wildcard-matching/
+:END:
+#+TITLE: Leetcode: 44. Wildcard Matching
+#+ROAM_REFS: https://leetcode.com/problems/wildcard-matching/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  I solved a problem like this before and again I forgot to test
+  ~s="", p="*"~ and ~s="a..", p="*a..."~.
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  We should compute $dp[i][j]$ which means that $s[i..(n-1)]$ matches $p[j..(m-1)]$.  If the [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]] isn't clear at first, write the recursive function and them translate it to an iterative algorithm.  Time and space complexity is $O(n \times m)$.
+
+#+begin_src python
+  class Solution:
+      def isMatch(self, s: str, p: str) -> bool:
+          s += "$"
+          p += "$"
+          N = len(s)
+          M = len(p)
+
+          dp = [[False] * (M + 1) for _ in range(N + 1)]
+          for i in range(N, -1, -1):
+              for j in range(M, -1, -1):
+                  if i == N and j == M:
+                      dp[i][j] = True
+                  elif i == N or j == M:
+                      dp[i][j] = False
+                  elif p[j] == "?":
+                      dp[i][j] = dp[i + 1][j + 1]
+                  elif s[i] == p[j]:
+                      dp[i][j] = dp[i + 1][j + 1]
+                  elif p[j] == "*":
+                      dp[i][j] = dp[i][j + 1] or dp[i + 1][j] or dp[i + 1][j + 1]
+                  else:
+                      dp[i][j] = False
+
+          return dp[0][0]
+
+
+  assert Solution().isMatch("aa", "a") == False
+  assert Solution().isMatch("aa", "*") == True
+  assert Solution().isMatch("cb", "?a") == False
+#+end_src

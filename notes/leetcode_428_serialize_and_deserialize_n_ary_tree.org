@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID:       F4530F5F-A000-436E-9611-E38E8259B3A3
+:ROAM_REFS: https://leetcode.com/problems/serialize-and-deserialize-n-ary-tree/
+:END:
+#+TITLE: Leetcode: 428. Serialize and Deserialize N-ary Tree
+#+ROAM_REFS: https://leetcode.com/problems/serialize-and-deserialize-n-ary-tree/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+#+begin_src python
+  """
+  # Definition for a Node.
+  class Node(object):
+      def __init__(self, val=None, children=None):
+          self.val = val
+          self.children = children
+  """
+
+  class Codec:
+      def serialize(self, root: 'Node') -> str:
+          """Encodes a tree to a single string.
+
+          :type root: Node
+          :rtype: str
+          """
+          if not root:
+              return ""
+          ans = []
+          def dfs(u):
+              ans.append(str(u.val))
+              for v in u.children:
+                  dfs(v)
+              ans.append("null")
+
+          dfs(root)
+          return ",".join(ans)
+
+
+      def deserialize(self, data: str) -> 'Node':
+          """Decodes your encoded data to tree.
+
+          :type data: str
+          :rtype: Node
+          """
+          if not data:
+              return None
+          values = data.split(",")
+          root = Node(int(values[0]), [])
+          st = [root]
+          for val in values[1:]:
+              if val == "null":
+                  st.pop()
+              else:
+                  node = Node(val=int(val), children=[])
+                  st[-1].children.append(node)
+                  st.append(node)
+          return root
+
+  # Your Codec object will be instantiated and called as such:
+  # codec = Codec()
+  # codec.deserialize(codec.serialize(root))
+#+end_src

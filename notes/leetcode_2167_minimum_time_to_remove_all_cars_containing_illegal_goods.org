@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       921536E9-9551-4BA2-8D26-78777BE2B732
+:ROAM_REFS: https://leetcode.com/problems/minimum-time-to-remove-all-cars-containing-illegal-goods/
+:END:
+#+TITLE: Leetcode: 2167. Minimum Time to Remove All Cars Containing Illegal Goods
+#+ROAM_REFS: https://leetcode.com/problems/minimum-time-to-remove-all-cars-containing-illegal-goods/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:461C7633-08C5-468D-9FC3-D78154DDBD42][Mistake: Careless coding]].  Came up with the way to count but didn't stop to verify if they were covering all cases.
+
+- [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] where you had to compute $dp[i]$ using only the next $j$ that satisfy some condition.
+
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  Find $i$ where $s[0..i-1]$ will require $i$ operations plus the best of spending $N-i$ operation to clear the left side or $2+best(i+1)$.
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The answer will have an interval $(i, j)$ (could be empty) where we will pay $2$ to remove the cars.   Therefore, it score is $i-1+ones(i,j)+n-j$.  We can't iterate over all intervals, but can compute the same score if we have $f(i)$ as the minimum score to remove cars from $i$ to $n-1$.  Now the problem is $min(i + f(i))$ for $0 \leq i < n$.  Time complexity is $O(n)$ with $O(1)$ space.
+
+#+begin_src python
+  class Solution:
+      def minimumTime(self, s: str) -> int:
+          N = len(s)
+          best = 0
+          ans = float("inf")
+          j = N - 1
+          for i in range(N - 1, -1, -1):
+              if i == j:
+                  j -= 1
+                  while j >= 0 and s[j] == "0":
+                      j -= 1
+              best = min(N - i, 2 + best if s[i] == "1" else best)
+              ans = min(ans, j + 1 + best)
+          return ans
+
+
+  assert Solution().minimumTime("1100101") == 5
+  assert Solution().minimumTime("0010") == 2
+#+end_src

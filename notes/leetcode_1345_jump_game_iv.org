@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       21F884F1-552B-4DF0-9C2F-BA306069C8F0
+:ROAM_REFS: https://leetcode.com/problems/jump-game-iv/
+:END:
+#+TITLE: Leetcode: 1345. Jump Game IV
+#+ROAM_REFS: https://leetcode.com/problems/jump-game-iv/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:00CC89B4-340B-4219-9CF4-837F558947B4][Mistake: Bug caused by debug code]].
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Each element of the array is a vertex and edges are created following the rules.  The problem becomes finding the [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]] which can be done by a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] since edges have no weight.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minJumps(self, arr: List[int]) -> int:
+          adj = defaultdict(list)
+          for i, a in enumerate(arr):
+              adj[a].append(i)
+
+          N = len(arr)
+          vis = [False] * N
+
+          queue = [(0, 0)]
+          vis[0] = True
+
+          for (steps, i) in queue:
+              if i == N - 1:
+                  return steps
+              while adj[arr[i]]:
+                  j = adj[arr[i]].pop()
+                  if not vis[j]:
+                      vis[j] = True
+                      queue.append((steps + 1, j))
+              for j in i + 1, i - 1:
+                  if 0 <= j < N and not vis[j]:
+                      vis[j] = True
+                      queue.append((steps + 1, j))
+
+
+  assert Solution().minJumps([100, -23, -23, 404, 100, 23, 23, 23, 3, 404]) == 3
+  assert Solution().minJumps([7]) == 0
+  assert Solution().minJumps([7, 6, 9, 6, 9, 6, 9, 7]) == 1
+#+end_src

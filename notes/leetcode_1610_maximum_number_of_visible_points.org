@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID:       CE7B491B-6E16-4F6B-B0A2-82DE41C4DE21
+:ROAM_REFS: https://leetcode.com/problems/maximum-number-of-visible-points/
+:END:
+#+TITLE: Leetcode: 1610. Maximum Number of Visible Points
+#+ROAM_REFS: https://leetcode.com/problems/maximum-number-of-visible-points/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+[[id:46522C06-DAC3-4986-A13A-17C2ED44ADD1][Can we formulate the problem as sliding window?]]  Create the window with the first points that don't exceed the given angle and after that insert point by point removing ones from the beginning while the window is invalid.  The trick is that you have to replicate the points because this is a circular sliding window problem.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  def sub_points(pa, pb):
+      return [pa[0] - pb[0], pa[1] - pb[1]]
+
+
+  def angle_in_radians(p):
+      return atan2(p[1], p[0])
+
+
+  class Solution:
+      def visiblePoints(
+          self, points: List[List[int]], angle: int, location: List[int]
+      ) -> int:
+          _points, points = points, [
+              sub_points(p, location) for p in points if p != location
+          ]
+          points.sort(key=angle_in_radians)
+          rads = [angle_in_radians(p) for p in points] + [
+              angle_in_radians(p) + 2 * pi for p in points
+          ]
+
+          N = len(rads)
+          R = radians(angle)
+          extra = len(_points) - len(points)
+          ans = 0
+
+          start = 0
+          end = 0
+          while end < N:
+              while rads[end] - rads[start] > R:
+                  start += 1
+              ans = max(ans, end - start + 1)
+              end += 1
+
+          return ans + extra
+
+
+  assert Solution().visiblePoints([[2, 1], [2, 2], [3, 3]], 90, [1, 1]) == 3
+  assert Solution().visiblePoints([[2, 1], [2, 2], [3, 4], [1, 1]], 90, [1, 1]) == 4
+  assert Solution().visiblePoints([[1, 0], [2, 1]], 13, [1, 1]) == 1
+#+end_src

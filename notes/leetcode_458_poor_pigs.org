@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       905F887F-4FD1-4AD9-9D35-8E3B31025DC4
+:ROAM_REFS: https://leetcode.com/problems/poor-pigs/
+:END:
+#+TITLE: Leetcode: 458. Poor Pigs
+#+ROAM_REFS: https://leetcode.com/problems/poor-pigs/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:3C649CC4-0609-4686-96C3-5F774F9C0292][Mistake: Failed to consider different strategies to solve the problem]].  I was stuck on trying to compute the minimum number of tries given a number of pigs and buckets.
+
+- [[id:3C649CC4-0609-4686-96C3-5F774F9C0292][Mistake: Failed to consider different strategies to solve the problem]].  I saw that two pigs with one could cover at most $2^x$ buckets, but failed to see how to extend this the second, third and so on tries.
+
+- [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  Given that $x$ pigs and one try, we know that they can find the solution for at most $2^x$ buckets.  This is so because each bucket has an unique id in the base 2.  To represent the next try, we have to increase the base.  So, all buckets will have an unique id which means that an unique combination of pigs die maps to only one bucket.  Time complexity is $O(\log_b n)$ where $n$ is the number of buckets and $b$ is the number of tries.  Space complexity is $O(1)$.
+
+#+begin_src python
+  from math import comb
+
+
+  class Solution:
+      def poorPigs(self, buckets: int, minutesToDie: int, minutesToTest: int) -> int:
+          digits = ceil(minutesToTest / minutesToDie + 1)
+          cur = 1
+          ans = 0
+          while cur < buckets:
+              cur *= digits
+              ans += 1
+          return ans
+
+
+  assert Solution().poorPigs(1000, 15, 60) == 5
+  assert Solution().poorPigs(4, 15, 15) == 2
+  assert Solution().poorPigs(4, 15, 30) == 2
+#+end_src

@@ -1,0 +1,101 @@
+:PROPERTIES:
+:ID:       AC590DEE-AD67-4E0B-B0C5-39A0DEC8B7C6
+:ROAM_REFS: https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/
+:END:
+#+TITLE: Leetcode: 1263. Minimum Moves to Move a Box to Their Target Location
+#+ROAM_REFS: https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:189F5E87-F560-4397-A3E3-AAD465EEBCFB][Pattern: Find shortest path between two vertices in a graph]].
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]] [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]].  Time complexity is $O(n \times m \times \log(n \times m))$ and space $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minPushBox(self, grid: List[List[str]]) -> int:
+          N = len(grid)
+          M = len(grid[0])
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+          S = B = T = None
+          for i in range(N):
+              for j in range(M):
+                  if grid[i][j] == "S":
+                      S = (i, j)
+                  elif grid[i][j] == "B":
+                      B = (i, j)
+                  elif grid[i][j] == "T":
+                      T = (i, j)
+
+          seen = set()
+          pq = [(0, S, B)]
+          while pq:
+              pushes, s, b = heappop(pq)
+              if b == T:
+                  return pushes
+              for di, dj in D:
+                  nsi, nsj = s[0] + di, s[1] + dj
+                  ns = (nsi, nsj)
+                  if 0 <= nsi < N and 0 <= nsj < M and grid[nsi][nsj] != "#":
+                      if ns == b:
+                          nbi, nbj = b[0] + di, b[1] + dj
+                          nb = (nbi, nbj)
+                          if (
+                              0 <= nbi < N
+                              and 0 <= nbj < M
+                              and grid[nbi][nbj] != "#"
+                              and (ns, nb) not in seen
+                          ):
+                              seen.add((ns, nb))
+                              heappush(pq, (pushes + 1, ns, nb))
+                      elif (ns, b) not in seen:
+                          seen.add((ns, b))
+                          heappush(pq, (pushes, ns, b))
+
+          return -1
+
+
+  assert (
+      Solution().minPushBox(
+          [
+              ["#", "#", "#", "#", "#", "#"],
+              ["#", "T", "#", "#", "#", "#"],
+              ["#", ".", ".", "B", ".", "#"],
+              ["#", ".", "#", "#", ".", "#"],
+              ["#", ".", ".", ".", "S", "#"],
+              ["#", "#", "#", "#", "#", "#"],
+          ]
+      )
+      == 3
+  )
+  assert (
+      Solution().minPushBox(
+          [
+              ["#", "#", "#", "#", "#", "#"],
+              ["#", "T", "#", "#", "#", "#"],
+              ["#", ".", ".", "B", ".", "#"],
+              ["#", "#", "#", "#", ".", "#"],
+              ["#", ".", ".", ".", "S", "#"],
+              ["#", "#", "#", "#", "#", "#"],
+          ]
+      )
+      == -1
+  )
+  assert (
+      Solution().minPushBox(
+          [
+              ["#", "#", "#", "#", "#", "#"],
+              ["#", "T", ".", ".", "#", "#"],
+              ["#", ".", "#", "B", ".", "#"],
+              ["#", ".", ".", ".", ".", "#"],
+              ["#", ".", ".", ".", "S", "#"],
+              ["#", "#", "#", "#", "#", "#"],
+          ]
+      )
+      == 5
+  )
+#+end_src

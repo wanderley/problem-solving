@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       75733D45-EB74-4461-A991-5839F0004DEF
+:ROAM_REFS: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
+:END:
+#+TITLE: Leetcode: 828. Count Unique Characters of All Substrings of a Given String
+#+ROAM_REFS: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]
+- [[id:298CCCF3-C9A7-4FEC-BE7B-17CF0F67332C][Mistake: Bug caused by incorrect assumption]]
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]]
+
+- [[id:21114DEC-E1B0-4B45-8A7C-E4DA93BB9474][Pattern: Compute value for all subsequences of an array]].
+
+- [[id:26656051-E32D-42FE-9315-05ADB46A1A82][Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?]]  Let $f(i)=\sum_{i \leq j < n} countUniqueChars(j)$ the function that we want to compute efficiently.  Be $i$ the first index from the left to right that is duplicated, and $j$ an index where $s[i]=s[j]$ and $i<j$.  We know that $f(i+1)=1+2+3+..+(n-i-1)$ since there is no duplicates and all letters in all substrings are counted.  All substring starting on $i+1$ and ending on $i+1,i+2,..,j-1$ will count one more letter when extend to $i$.  All substring starting on $i+1$ and ending on $j, j+1, ..., n$ will not count one when extended.  So, $f(i)=f(i+1) + (j - i)$.  Now, suppose that $s[i]$ is the third occurence of $s[i]$ from left to right.  Be $k$ an index where $s[i]=s[k]$ and $j<k$.  In this case, $f(i)= f(i+1) + (j - i) - (k - j)$, since all substrings starting on $i+1$ and ending on $k$ will not contribute to the sum of count of unique chars anymore.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def uniqueLetterString(self, s: str) -> int:
+          N = len(s)
+
+          nxt = {}
+          last = {}
+          for c in set(s):
+              last[c] = N
+              nxt[N, c] = N
+
+          for i in range(N - 1, -1, -1):
+              nxt[i, s[i]] = last[s[i]]
+              last[s[i]] = i
+
+          ans = 0
+          cur = 0
+          for i in range(N - 1, -1, -1):
+              j = nxt[i, s[i]]
+              k = nxt[j, s[i]]
+              cur += (j - i) - (k - j)
+              ans += cur
+          return ans
+
+
+  assert Solution().uniqueLetterString("ABC") == 10
+  assert Solution().uniqueLetterString("ABA") == 8
+  assert Solution().uniqueLetterString("LEETCODE") == 92
+#+end_src

@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID:       FDC290BD-FBC4-46FC-8CD2-D9C37911D609
+:ROAM_REFS: https://leetcode.com/problems/24-game/
+:END:
+#+TITLE: Leetcode: 679. 24 Game
+#+ROAM_REFS: https://leetcode.com/problems/24-game/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:AFD7D485-25CB-450F-B116-365FE7239669][Mistake: Bug introduced when copy-pasting code]].
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  One and two numbers are easy to solve.  For more numbers, break them down on all possible groups and recursively compute the expressions.  Time complexity is $T=O(n! \times 2^n \times 4)$ and space complexity is $O(n \times T)$.
+
+#+begin_src python
+  from typing import List
+  from itertools import permutations
+  from math import gcd
+
+  class Fraction:
+      def __init__(self, a, b):
+          if b == 0:
+              self.a = None
+              self.b = None
+          else:
+              d = gcd(a, b)
+              self.a = a // d
+              self.b = b // d
+
+      def __str__(self):
+          return f"{self.a}/{self.b}"
+
+      def __eq__(self, other):
+          return self.a == other.a and self.b == other.b
+
+      def __add__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return Fraction(self.a * other.b + other.a * self.b, self.b * other.b)
+
+      def __sub__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return Fraction(self.a * other.b - other.a * self.b, self.b * other.b)
+
+      def __mul__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return Fraction(self.a * other.a, self.b * other.b)
+
+      def __truediv__(self, other):
+          if self.a is None or other.a is None:
+              return self
+          return self * Fraction(other.b, other.a)
+
+
+  class Solution:
+      def judgePoint24(self, cards: List[int]) -> bool:
+          cards = [Fraction(c, 1) for c in cards]
+
+          def calc(c):
+              if len(c) == 1:
+                  return [c[0]]
+              if len(c) == 2:
+                  return [c[0] + c[1], c[0] - c[1], c[0] * c[1], c[0] / c[1]]
+              ans = []
+              for i in range(1, len(c)):
+                  left = calc(c[:i])
+                  right = calc(c[i:])
+                  for l in left:
+                      for r in right:
+                          ans.extend(calc([l, r]))
+              return ans
+
+          return any(Fraction(24, 1) in calc(p) for p in permutations(cards))
+
+
+  assert Solution().judgePoint24([4, 1, 8, 7]) == True
+  assert Solution().judgePoint24([1, 2, 1, 2]) == False
+#+end_src

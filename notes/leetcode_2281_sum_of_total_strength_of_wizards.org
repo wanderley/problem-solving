@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       7452A2DD-4CAC-4766-AAE3-EE5C7FF54183
+:ROAM_REFS: https://leetcode.com/problems/sum-of-total-strength-of-wizards/
+:END:
+#+TITLE: Leetcode: 2281. Sum of Total Strength of Wizards
+#+ROAM_REFS: https://leetcode.com/problems/sum-of-total-strength-of-wizards/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!

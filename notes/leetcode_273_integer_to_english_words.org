@@ -1,0 +1,75 @@
+:PROPERTIES:
+:ID:       B2F490EE-2E3A-49C3-898B-30BCD8D78F29
+:END:
+#+TITLE: Leetcode: 273. Integer to English Words
+#+ROAM_REFS: https://leetcode.com/problems/integer-to-english-words/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  This is not a question about efficiently, but if you can organize the solution in a handleable way.
+
+#+begin_src python
+  class Solution:
+      def numberToWords(self, num: int) -> str:
+          ntw = {
+              0: "Zero",
+              1: "One",
+              2: "Two",
+              3: "Three",
+              4: "Four",
+              5: "Five",
+              6: "Six",
+              7: "Seven",
+              8: "Eight",
+              9: "Nine",
+              10: "Ten",
+              11: "Eleven",
+              12: "Twelve",
+              13: "Thirteen",
+              14: "Fourteen",
+              15: "Fifteen",
+              16: "Sixteen",
+              17: "Seventeen",
+              18: "Eighteen",
+              19: "Nineteen",
+              20: "Twenty",
+              30: "Thirty",
+              40: "Forty",
+              50: "Fifty",
+              60: "Sixty",
+              70: "Seventy",
+              80: "Eighty",
+              90: "Ninety",
+          }
+
+          if num in ntw:
+              return ntw[num]
+
+          def convert(n):
+              if n == 0:
+                  return []
+              if n in ntw:
+                  return [ntw[n]]
+              if n >= 100:
+                  return [ntw[n // 100], "Hundred"] + convert(n % 100)
+              else:
+                  return [ntw[n - (n % 10)]] + convert(n % 10)
+
+          e = [["Billion"], ["Million"], ["Thousand"], []]
+          ans = []
+          while num > 0:
+              cur = num % 1000
+              suf = e.pop()
+              if cur > 0:
+                  ans = convert(cur) + suf + ans
+              num = num // 1000
+          return " ".join(ans)
+
+
+  assert Solution().numberToWords(123) == "One Hundred Twenty Three"
+  assert Solution().numberToWords(12345) == "Twelve Thousand Three Hundred Forty Five"
+  assert (
+      Solution().numberToWords(1234567)
+      == "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+  )
+#+end_src

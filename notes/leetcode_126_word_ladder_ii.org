@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID:       63D782C3-55D7-4CA2-9549-964496C4E861
+:ROAM_REFS: https://leetcode.com/problems/word-ladder-ii/
+:END:
+#+TITLE: Leetcode: 126. Word Ladder II
+#+ROAM_REFS: https://leetcode.com/problems/word-ladder-ii/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:189F5E87-F560-4397-A3E3-AAD465EEBCFB][Pattern: Find all shortest path between two vertices in a graph]].  Find the min distance between destination and all other vertices using a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]], then generate all shortest path using the acyclic path created by the first search using [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]].  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def findLadders(
+          self, beginWord: str, endWord: str, wordList: List[str]
+      ) -> List[List[str]]:
+          def is_adj(u, v):
+              return sum(1 for a, b in zip(u, v) if a != b) == 1
+
+          A = {w: [] for w in wordList + [beginWord, endWord]}
+          for u in wordList + [endWord]:
+              for v in wordList + [beginWord]:
+                  if u != v and is_adj(u, v):
+                      A[u].append(v)
+
+          dist = {w: None for w in A}
+          dist[endWord] = 0
+          queue = [endWord]
+          for u in queue:
+              for v in A[u]:
+                  if dist[v] is None:
+                      dist[v] = dist[u] + 1
+                      queue.append(v)
+
+          ans = []
+          for u in wordList:
+              if u != beginWord and u not in A[beginWord] and is_adj(u, beginWord):
+                  A[beginWord].append(u)
+
+          @cache
+          def dfs(u):
+              if dist[u] == 0:
+                  return [[u]]
+              ans = []
+              for v in A[u]:
+                  if dist[v] == dist[u] - 1:
+                      ans.extend([u] + p for p in dfs(v))
+              return ans
+
+          return dfs(beginWord)
+#+end_src

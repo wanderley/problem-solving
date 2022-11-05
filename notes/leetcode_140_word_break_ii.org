@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       9CF17CD6-DEC2-4935-8167-CA51A19528DB
+:ROAM_REFS: https://leetcode.com/problems/word-break-ii/
+:END:
+#+TITLE: Leetcode: 140. Word Break II
+#+ROAM_REFS: https://leetcode.com/problems/word-break-ii/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  Generate all possible answers using a [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]] to optimize the search for the current word.  Time and space complexity are $2^n$.
+
+#+begin_src python
+  class Solution:
+      def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+          ans = []
+
+          root = {}
+          for w in wordDict:
+              node = root
+              for c in w:
+                  node.setdefault(c, {})
+                  node = node[c]
+              node["$"] = w
+
+          def bt(i, cur):
+              nonlocal ans
+              if i == len(s):
+                  ans.append(cur)
+              node = root
+              while i < len(s) and s[i] in node:
+                  node = node[s[i]]
+                  i += 1
+                  if "$" in node:
+                      bt(i, cur + (" " if cur else "") + node["$"])
+
+          bt(0, "")
+          return ans
+#+end_src

@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       DB018D2E-AD01-465C-B72A-E53F23652822
+:ROAM_REFS: https://leetcode.com/problems/split-array-largest-sum/
+:END:
+#+TITLE: Leetcode: 410. Split Array Largest Sum
+#+ROAM_REFS: https://leetcode.com/problems/split-array-largest-sum/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Given a candidate answer, check if it is possible to partition the array in at most $m$ parts.  If so, the candidate is valid, otherwise you have to increase it.  The optimal answer can be found using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \log \sum a[i])$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def splitArray(self, nums: List[int], M: int) -> int:
+          N = len(nums)
+          s = max(nums)
+          e = sum(nums)
+
+          def valid(m):
+              cnt = i = cur = 0
+              while i < N:
+                  if cur + nums[i] <= m:
+                      cur += nums[i]
+                  else:
+                      cur = nums[i]
+                      cnt += 1
+                  i += 1
+              return cnt < M
+
+          while s < e:
+              m = s + (e - s) // 2
+              if valid(m):
+                  e = m
+              else:
+                  s = m + 1
+          return s
+#+end_src

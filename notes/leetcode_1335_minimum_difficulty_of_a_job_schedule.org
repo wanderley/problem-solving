@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID:       11217C4D-0756-4761-A65E-382A497154AB
+:ROAM_REFS: https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/
+:END:
+#+TITLE: Leetcode: 1335. Minimum Difficulty of a Job Schedule
+#+ROAM_REFS: https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  Split the jobs in all possible partitions respecting the number of days.  The base case is when there is only one day which should be the max of all remaining jobs.  Time complexity is $O(n^2 \times d)$ and space is $O(n \times d)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minDifficulty(self, job: List[int], d: int) -> int:
+          N = len(job)
+
+          @cache
+          def dfs(i, d):
+              if d == 1:
+                  return max(job[i:])
+              best = float("inf")
+              maxv = float("-inf")
+              for j in range(i, N - d + 1):
+                  maxv = max(maxv, job[j])
+                  if maxv < best:
+                      best = min(best, maxv + dfs(j + 1, d - 1))
+              return best
+
+          return -1 if dfs(0, d) == float("inf") else dfs(0, d)
+#+end_src
+
+  - Alternative solution.  As the priority of each job is small, we can use it as parameter of the search and delay the computation of the cost of day to when we make a transition to the next one.  Time complexity is $O(n \times m \times d)$ and space is $O(n \times m \times d)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minDifficulty(self, job: List[int], d: int) -> int:
+          N = len(job)
+
+          @cache
+          def dfs(i, cur, d):
+              if i == N:
+                  return cur if d == 0 else float("inf")
+              return min(
+                  dfs(i + 1, max(cur, job[i]), d), max(cur, job[i]) + dfs(i + 1, 0, d - 1)
+              )
+
+          return -1 if dfs(0, 0, d) == float("inf") else dfs(0, 0, d)
+#+end_src

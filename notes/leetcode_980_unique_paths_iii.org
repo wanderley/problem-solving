@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID:       0FD635B3-9F1B-4E45-AC30-BED059BAEF09
+:ROAM_REFS: https://leetcode.com/problems/unique-paths-iii/
+:END:
+#+TITLE: Leetcode: 980. Unique Paths III
+#+ROAM_REFS: https://leetcode.com/problems/unique-paths-iii/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  We can't but it is possible memorize all possible states of current position and all visited ones.  Time complexity is $O(2^k \times k)$ where $k$ is $n \times m \leq 20$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def uniquePathsIII(self, g: List[List[int]]) -> int:
+          N = len(g)
+          M = len(g[0])
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+          ALL = 0
+
+          def b(i, j):
+              return 1 << (i * M + j)
+
+          for i in range(N):
+              for j in range(M):
+                  if g[i][j] == 1:
+                      si = i
+                      sj = j
+                  if g[i][j] == 2:
+                      ei = i
+                      ej = j
+                  if g[i][j] != -1:
+                      ALL = ALL | b(i, j)
+
+          def dfs(i, j, vis):
+              if i == ei and j == ej:
+                  return 1 if vis == ALL else 0
+              ans = 0
+              for di, dj in D:
+                  ni = di + i
+                  nj = dj + j
+                  if (
+                      0 <= ni < N
+                      and 0 <= nj < M
+                      and g[ni][nj] != -1
+                      and vis & b(ni, nj) == 0
+                  ):
+                      ans += dfs(ni, nj, vis | b(ni, nj))
+              return ans
+
+          return dfs(si, sj, b(si, sj))
+
+
+  assert Solution().uniquePathsIII([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, -1]]) == 2
+  assert Solution().uniquePathsIII([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 2]]) == 4
+  assert Solution().uniquePathsIII([[0, 1], [2, 0]]) == 0
+#+end_src

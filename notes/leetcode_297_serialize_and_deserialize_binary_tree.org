@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       C21A4159-3DA2-475A-9E2A-02AC35B910CC
+:ROAM_REFS: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+:END:
+#+TITLE: Leetcode: 297. Serialize and Deserialize Binary Tree
+#+ROAM_REFS: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:768F4C3F-EEAA-429B-886F-0435CEC7DACD][Pattern: Traverse paths on tree]].
+
+#+begin_src python
+  # Definition for a binary tree node.
+  # class TreeNode(object):
+  #     def __init__(self, x):
+  #         self.val = x
+  #         self.left = None
+  #         self.right = None
+
+
+  class Codec:
+      def serialize(self, root):
+          def dfs(node):
+              if node is None:
+                  return "None"
+              return f"{node.val},{dfs(node.left)},{dfs(node.right)}"
+
+          return dfs(root)
+
+      def deserialize(self, data):
+          vals = [None if v == "None" else int(v) for v in data.split(",")]
+
+          def dfs(i):
+              if vals[i] is None:
+                  return i + 1, None
+              u = vals[i]
+              j, left = dfs(i + 1)
+              j, right = dfs(j)
+              return j, TreeNode(u, left, right)
+
+          return dfs(0)[1]
+
+
+  # Your Codec object will be instantiated and called as such:
+  # ser = Codec()
+  # deser = Codec()
+  # ans = deser.deserialize(ser.serialize(root))
+#+end_src

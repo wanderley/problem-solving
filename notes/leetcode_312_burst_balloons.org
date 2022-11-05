@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID:       AE256719-D28F-4CF0-A027-73E79E6EF5C4
+:ROAM_REFS: https://leetcode.com/problems/burst-balloons/
+:END:
+#+TITLE: Leetcode: 312. Burst Balloons
+#+ROAM_REFS: https://leetcode.com/problems/burst-balloons/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:9F096D07-EED2-44C8-9538-6EB5F5DEC2BC][Can we solve the problem from end to start?]]  Instead of bursting from the first to the last balloon, we can burst from the last to the first since it is easier to know the last balloon's neighbors.  Time and space complexity is $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+  from functools import cache
+
+
+  class Solution:
+      def maxCoins(self, nums: List[int]) -> int:
+          N = len(nums)
+
+          @cache
+          def dfs(i, j):
+              if i > j:
+                  return 0
+              ans = float("-inf")
+              for k in range(i, j + 1):
+                  ans = max(
+                      ans,
+                      dfs(i, k - 1)
+                      + dfs(k + 1, j)
+                      + (nums[i - 1] if i - 1 >= 0 else 1)
+                      ,* nums[k]
+                      ,* (nums[j + 1] if j + 1 < N else 1),
+                  )
+              return ans
+
+          return dfs(0, N - 1)
+
+
+  assert Solution().maxCoins([3, 1, 5, 8]) == 167
+  assert Solution().maxCoins([1, 5]) == 10
+#+end_src
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maxCoins(self, nums: List[int]) -> int:
+          N = len(nums)
+          dp = [[0] * N for _ in range(N)]
+          for i in range(N - 1, -1, -1):
+              for j in range(i, N):
+                  for k in range(i, j + 1):
+                      dp[i][j] = max(
+                          dp[i][j],
+                          (dp[i][k - 1] if i <= k - 1 else 0)
+                          + (dp[k + 1][j] if k + 1 <= j else 0)
+                          + nums[k]
+                          ,* (nums[i - 1] if i - 1 >= 0 else 1)
+                          ,* (nums[j + 1] if j + 1 < N else 1),
+                      )
+          return dp[0][N - 1]
+
+
+  assert Solution().maxCoins([3, 1, 5, 8]) == 167
+  assert Solution().maxCoins([1, 5]) == 10
+#+end_src

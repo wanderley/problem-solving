@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID:       503700D9-E7CF-4C0D-94F0-25EB4459C0F1
+:ROAM_REFS: https://leetcode.com/problems/shortest-distance-from-all-buildings/
+:END:
+#+TITLE: Leetcode: 317. Shortest Distance from All Buildings
+#+ROAM_REFS: https://leetcode.com/problems/shortest-distance-from-all-buildings/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  It would be easier to extract the [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] function.
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].  Anything close to $10^8$ needs heavy optimization in python.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Compute the distance from each house to an empty space and take the space that can be reached by all houses with the lower total distance.  Time complexity is $O(n^2 \times m^2)$ and space is $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def shortestDistance(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          M = len(grid[0])
+          dst = [[0] * M for _ in range(N)]
+          cnt = [[0] * M for _ in range(N)]
+
+          delta = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+          def bfs(si, sj):
+              vis = [[False] * M for _ in range(N)]
+              queue = [(si, sj, 0)]
+              for i, j, d in queue:
+                  dst[i][j] += d
+                  cnt[i][j] += 1
+                  for di, dj in delta:
+                      ni = di + i
+                      nj = dj + j
+                      if 0 <= ni < N and 0 <= nj < M and not vis[ni][nj]:
+                          vis[ni][nj] = True
+                          if grid[ni][nj] == 0:
+                              queue.append((ni, nj, d + 1))
+                          elif grid[ni][nj] == 1:
+                              cnt[ni][nj] += 1
+
+          houses = 0
+          for si in range(N):
+              for sj in range(M):
+                  if grid[si][sj] == 1:
+                      if cnt[si][sj] != houses:
+                          return -1
+                      houses += 1
+                      bfs(si, sj)
+
+          ans = float("inf")
+          for i in range(N):
+              for j in range(M):
+                  if grid[i][j] == 0 and cnt[i][j] == houses and ans > dst[i][j]:
+                      ans = dst[i][j]
+
+          return -1 if ans == float("inf") else ans
+
+
+  assert (
+      Solution().shortestDistance([[1, 0, 2, 0, 1], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0]])
+      == 7
+  )
+  assert Solution().shortestDistance([[1, 0]]) == 1
+  assert Solution().shortestDistance([[1]]) == -1
+#+end_src

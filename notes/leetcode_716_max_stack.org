@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       A187DF80-539E-4BE2-811A-AB2587F78662
+:ROAM_REFS: https://leetcode.com/problems/max-stack/
+:END:
+#+TITLE: Leetcode: 716. Max Stack
+#+ROAM_REFS: https://leetcode.com/problems/max-stack/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]
+- [[id:3D263A82-52AE-4C90-830D-C533ABAFFF3E][Mistake: Missing required invariants]]
+
+The source is in [[id:A0500087-56D9-4D34-936F-E8E3912C4761][Max Stack]] since it might be useful in other problems.  It was implemented with a stack to efficiently reply to ~pop~ and ~top~, a heap for ~peekMax~ and ~popMax~.  While ~top~ is $O(1)$, all other operations are $O(\log n)$.

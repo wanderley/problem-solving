@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       B18A5DB4-749A-4930-A684-D934CF8358EB
+:ROAM_REFS: https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times/
+:END:
+#+TITLE: Leetcode: 158. Read N Characters Given read4 II - Call Multiple Times
+#+ROAM_REFS: https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+#+begin_src python
+  from typing import List
+
+  # The read4 API is already defined for you.
+  # def read4(buf4: List[str]) -> int:
+
+
+  class Solution:
+      def __init__(self):
+          self.buf = [" "] * 4
+          self.pos = 0
+          self.len = 0
+
+      def read(self, buf: List[str], n: int) -> int:
+          i = 0
+          while i < n:
+              if self.pos == self.len:
+                  self.buf = [" "] * 4
+                  self.pos = 0
+                  self.len = read4(self.buf)
+
+              if self.len == 0:
+                  break
+
+              buf[i] = self.buf[self.pos]
+              self.pos += 1
+              i += 1
+
+          return i
+#+end_src

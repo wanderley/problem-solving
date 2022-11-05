@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       53BDDD47-8E31-4727-9E73-1AA40088D053
+:ROAM_REFS: https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/
+:END:
+#+TITLE: Leetcode: 302. Smallest Rectangle Enclosing Black Pixels
+#+ROAM_REFS: https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]. Missed the restriction of the time complexity.
+
+- [[id:3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE][Can we state the problem as result of multiple searches?]]  Do a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the first and last row and column.  Time complexity is $O(n \log n + m \log m)$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minArea(self, image: List[List[str]], x: int, y: int) -> int:
+          N = len(image)
+          M = len(image[0])
+
+          def first(lo, hi, chk):
+              while lo < hi:
+                  m = lo + (hi - lo) // 2
+                  if chk(m):
+                      hi = m
+                  else:
+                      lo = m + 1
+              return lo if chk(lo) else lo + 1
+
+          l = first(0, y, lambda j: any(image[i][j] == "1" for i in range(N)))
+          r = first(y, M - 1, lambda j: all(image[i][j] == "0" for i in range(N)))
+          u = first(0, x, lambda i: "1" in image[i])
+          d = first(x, N - 1, lambda i: "1" not in image[i])
+
+          return (l - r) * (u - d)
+
+
+  assert (
+      Solution().minArea(
+          [["0", "0", "1", "0"], ["0", "1", "1", "0"], ["0", "1", "0", "0"]], 0, 2
+      )
+      == 6
+  )
+  assert Solution().minArea([["1"]], 0, 0) == 1
+#+end_src

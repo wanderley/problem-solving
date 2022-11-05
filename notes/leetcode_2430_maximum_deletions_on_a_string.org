@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       862B99CA-0EA5-4E99-885F-83CBA407416C
+:ROAM_REFS: https://leetcode.com/problems/maximum-deletions-on-a-string/
+:END:
+#+TITLE: Leetcode: 2430. Maximum Deletions on a String
+#+ROAM_REFS: https://leetcode.com/problems/maximum-deletions-on-a-string/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!
+
+- Resources to study:
+  - https://www.geeksforgeeks.org/longest-common-substring-dp-29/
+  - https://en.wikipedia.org/wiki/Rolling_hash
+  - https://www.geeksforgeeks.org/string-hashing-using-polynomial-rolling-hash-function/
+  - https://github.com/tatyam-prime/kyopro_library/blob/master/RollingHash.cpp

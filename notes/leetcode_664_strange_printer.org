@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       6EEAB5C3-A643-4A90-999E-D7BDFED64CD5
+:ROAM_REFS: https://leetcode.com/problems/strange-printer/
+:END:
+#+TITLE: Leetcode: 664. Strange Printer
+#+ROAM_REFS: https://leetcode.com/problems/strange-printer/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  I shouldn't have try to immediately after defining the match.
+
+- [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  Swap consecutive letters with only one of them.
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The trick part of this problem is that we have to postpone as much as we can to count a print when we are dealing with $s[i] = s[k]$ and $i < k$.  To do so, we find an interval to print $s[i..k..j]$ where $s[i]=s[k]$ and we recur over $s[i..(k-1)]$ leaving the printing of $s[i..k]$ to be record when $s[i]$ is inevitably printed.  Time complexity is $O(n^3)$ and space is $O(n^2)$.
+
+#+begin_src python
+  class Solution:
+      def strangePrinter(self, s: str) -> int:
+          s = "".join([a for a, b in zip(s, s[1:] + "$") if a != b])
+          N = len(s)
+
+          dp = [[0] * N for _ in range(N)]
+          for i in range(N - 1, -1, -1):
+              for j in range(i, N):
+                  if i == j:
+                      dp[i][j] = 1
+                  elif i + 1 == j:
+                      dp[i][j] = 2
+                  else:
+                      dp[i][j] = 1 + dp[i + 1][j]
+                      for k in range(i + 1, j + 1):
+                          if s[i] == s[k]:
+                              dp[i][j] = min(
+                                  dp[i][j],
+                                  dp[i][k - 1] + (dp[k + 1][j] if k + 1 < N else 0),
+                              )
+
+          return dp[0][N - 1]
+
+
+  assert Solution().strangePrinter("aaabbb") == 2
+  assert Solution().strangePrinter("aba") == 2
+#+end_src

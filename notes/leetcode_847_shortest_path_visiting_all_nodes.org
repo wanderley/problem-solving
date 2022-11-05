@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID:       4EFB6677-6C89-4A45-A0BE-8AB0AAC2C510
+:ROAM_REFS: https://leetcode.com/problems/shortest-path-visiting-all-nodes/
+:END:
+#+TITLE: Leetcode: 847. Shortest Path Visiting All Nodes
+#+ROAM_REFS: https://leetcode.com/problems/shortest-path-visiting-all-nodes/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def shortestPathLength(self, graph: List[List[int]]) -> int:
+          N = len(graph)
+          ALL_VISITED = (1 << N) - 1
+
+          seen = set()
+          queue = [(i, (1 << i), 0) for i in range(N)]
+          for u, vis, steps in queue:
+              if vis == ALL_VISITED:
+                  return steps
+              for v in graph[u]:
+                  nvis = vis | (1 << v)
+                  if (v, nvis) not in seen:
+                      seen.add((v, nvis))
+                      queue.append((v, nvis, steps + 1))
+
+
+  assert Solution().shortestPathLength([[1, 2, 3], [0], [0], [0]]) == 4
+  assert Solution().shortestPathLength([[1], [0, 2, 4], [1, 3, 4], [2], [1, 2]]) == 4
+#+end_src

@@ -1,0 +1,93 @@
+:PROPERTIES:
+:ID:       573BD47D-FC20-4EDC-9925-4C377FCC050F
+:ROAM_REFS: https://leetcode.com/problems/the-maze-iii/
+:END:
+#+TITLE: Leetcode: 499. The Maze III
+#+ROAM_REFS: https://leetcode.com/problems/the-maze-iii/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Find [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]] where the path is measure by the distance and then its description.  Time complexity is $O((n \times m) \times \log (n \times m))$ and space is $O(n \times m)$.
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def findShortestWay(
+          self, maze: List[List[int]], ball: List[int], hole: List[int]
+      ) -> str:
+          N = len(maze)
+          M = len(maze[0])
+          D = {"u": [-1, +0], "d": [+1, +0], "l": [+0, -1], "r": [+0, +1]}
+
+          def move(d, i, j):
+              ni = i + D[d][0]
+              nj = j + D[d][1]
+              if 0 <= ni < N and 0 <= nj < M and maze[ni][nj] == 0:
+                  return (ni, nj)
+              return None
+
+          pq = [(0, d, ball[0], ball[1]) for d in D]
+          seen = set(tuple(e[1:]) for e in pq)
+          while pq:
+              dist, path, i, j = heappop(pq)
+              if hole[0] == i and hole[1] == j:
+                  return path
+
+              nxt = move(path[-1], i, j)
+              if nxt and nxt not in seen:
+                  heappush(pq, (dist + 1, path, *nxt))
+                  continue
+
+              for d in "u", "d", "l", "r":
+                  if (d, i, j) not in seen:
+                      seen.add((d, i, j))
+                      heappush(pq, (dist, path + d, i, j))
+
+          return "impossible"
+
+
+  assert (
+      Solution().findShortestWay(
+          [
+              [0, 0, 0, 0, 0],
+              [1, 1, 0, 0, 1],
+              [0, 0, 0, 0, 0],
+              [0, 1, 0, 0, 1],
+              [0, 1, 0, 0, 0],
+          ],
+          [4, 3],
+          [0, 1],
+      )
+      == "lul"
+  )
+  assert (
+      Solution().findShortestWay(
+          [
+              [0, 0, 0, 0, 0],
+              [1, 1, 0, 0, 1],
+              [0, 0, 0, 0, 0],
+              [0, 1, 0, 0, 1],
+              [0, 1, 0, 0, 0],
+          ],
+          [4, 3],
+          [3, 0],
+      )
+      == "impossible"
+  )
+  assert (
+      Solution().findShortestWay(
+          [
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 1, 0, 0, 1, 0],
+              [0, 0, 0, 0, 1, 0, 0],
+              [0, 0, 0, 0, 0, 0, 1],
+          ],
+          [0, 4],
+          [3, 5],
+      )
+      == "dldr"
+  )
+#+end_src

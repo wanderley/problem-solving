@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       39B6E6E3-E84F-4970-A03B-29B931907AE6
+:ROAM_REFS: https://leetcode.com/problems/guess-the-word/
+:END:
+#+TITLE: Leetcode: 843. Guess the Word
+#+ROAM_REFS: https://leetcode.com/problems/guess-the-word/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:716E3863-6B6F-4F6F-86ED-72820E061E11][Pattern: Remove max number of candidates every turn]].
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  There are two important parts of the problem: (1) filter words after a guess and (2) pick the best guess.  For the first, we have to filter all words which the number of matches is different than the number of matches from the last guess (the secret will have to match these letters any way).  The more problematic guess is the one that returns 0.  In this situation, we want to remove the maximum number of words as possible.  To do that, we take the word that contains the most frequent letter per position.  If it returns 0, then you are guaranteed to remove as much words as possible.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+  # """
+  # This is Master's API interface.
+  # You should not implement it, or speculate about its implementation
+  # """
+  # class Master:
+  #     def guess(self, word: str) -> int:
+
+
+  class Solution:
+      def findSecretWord(self, wordlist: List[str], master: "Master") -> None:
+          N = len(wordlist[0])
+
+          f = [Counter(w[i] for w in wordlist) for i in range(6)]
+          wordlist.sort(reverse=True, key=lambda w: sum(f[i][c] for i, c in enumerate(w)))
+
+          @cache
+          def guess(s1, s2):
+              ans = 0
+              for a, b in zip(s1, s2):
+                  ans += 1 if a == b else 0
+              return ans
+
+          value = 0
+          for _ in range(30):
+              if not wordlist or value == N:
+                  break
+              candidate = wordlist[0]
+              value = master.guess(candidate)
+              wordlist = [
+                  w for w in wordlist if w != candidate and guess(candidate, w) == value
+              ]
+#+end_src

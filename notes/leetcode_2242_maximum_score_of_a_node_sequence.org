@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID:       2BF83F2E-19CF-428E-8C3A-10267C2BCA78
+:ROAM_REFS: https://leetcode.com/problems/maximum-score-of-a-node-sequence/
+:END:
+#+TITLE: Leetcode: 2242. Maximum Score of a Node Sequence
+#+ROAM_REFS: https://leetcode.com/problems/maximum-score-of-a-node-sequence/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:DD73E390-3303-40F8-9CE1-D1ED048D9588][How can we find the solution knowing part of it?]]  Be $(u, v)$ the central edge of the maximum path.  We have to find its extreme vertices $p$ and $q$, since the maximum path must have length 4.  We can find those vertices by searching through the top-4 vertices connected with $u$ and $v$.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def maximumScore(self, scores: List[int], edges: List[List[int]]) -> int:
+          N = len(scores)
+          candidates = [[] for _ in range(N)]
+
+          def add_candidate(u, v):
+              heappush(candidates[u], (scores[v], v))
+              if len(candidates[u]) > 4:
+                  heappop(candidates[u])
+
+          for u, v in edges:
+              add_candidate(u, v)
+              add_candidate(v, u)
+
+          ans = -1
+          for u, v in edges:
+              for pscore, p in candidates[u]:
+                  if p == v:
+                      continue
+                  for qscore, q in candidates[v]:
+                      if q == u or q == p:
+                          continue
+                      ans = max(ans, pscore + qscore + scores[u] + scores[v])
+          return ans
+
+
+  assert (
+      Solution().maximumScore(
+          [5, 2, 9, 8, 4], [[0, 1], [1, 2], [2, 3], [0, 2], [1, 3], [2, 4]]
+      )
+      == 24
+  )
+  assert (
+      Solution().maximumScore([9, 20, 6, 4, 11, 12], [[0, 3], [5, 3], [2, 4], [1, 3]])
+      == -1
+  )
+#+end_src

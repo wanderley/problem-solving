@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       FE3066D7-C3A1-41B8-82D8-50CF4F139019
+:ROAM_REFS: https://leetcode.com/problems/sliding-window-maximum/
+:END:
+#+TITLE: Leetcode: 239. Sliding Window Maximum
+#+ROAM_REFS: https://leetcode.com/problems/sliding-window-maximum/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:07D31904-E85B-4566-A2CD-9013AAA800C0][Pattern: Find optimal values for every subarray of specific size]].  This problem is similar to [[id:798B6359-F1A6-4B42-BBA1-2120D8CD228B][Sliding Window Maximum]].  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from collections import deque
+
+
+  class Solution:
+      def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+          q = deque()
+          ans = []
+          for i in range(len(nums)):
+              while q and i - q[0] >= k:
+                  q.popleft()
+              while q and nums[q[-1]] <= nums[i]:
+                  q.pop()
+              q.append(i)
+              if i + 1 >= k:
+                  ans.append(nums[q[0]])
+          return ans
+
+
+  assert Solution().maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3) == [3, 3, 5, 5, 6, 7]
+  assert Solution().maxSlidingWindow([1], 1) == [1]
+#+end_src

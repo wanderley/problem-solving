@@ -1,0 +1,72 @@
+:PROPERTIES:
+:ID:       067DD555-D4A5-470C-8818-2A69F769521E
+:ROAM_REFS: https://leetcode.com/problems/stamping-the-grid/
+:END:
+#+TITLE: Leetcode: 2132. Stamping the Grid
+#+ROAM_REFS: https://leetcode.com/problems/stamping-the-grid/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]]. Discovered the area to paint by computing all possible valid rectangles and painting its area.
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  If $stampHeight=1$, the problem becomes detecting if all empty cells are part of an empty segment of size at least $stampWidth$.  This can be done by extending the empty segments with the empty cells to its right.  If $stampHeight>1$, we have to find the segments where each cell is part of a vertical segment of empty cells of size at least $stampHeight$ ().  We paint all these segments as we find them.  To paint efficiently, we do it from bottom to up and stop when we find a painted cell since it marks that from that point on there is more $stampHeight$ painted cells.  Time and space complexity is $O(n \times m)$.
+
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def possibleToStamp(
+          self, grid: List[List[int]], stampHeight: int, stampWidth: int
+      ) -> bool:
+          N = len(grid)
+          M = len(grid[0])
+
+          p = [[False] * M for _ in range(N)]
+
+          def paint(i0, j0, i1, j1):
+              j = j1
+              while j >= j0:
+                  i = i1
+                  while i >= i0 and not p[i][j]:
+                      p[i][j] = True
+                      i -= 1
+                  j -= 1
+
+          a = [0] * M
+          for i in range(N):
+              for j in range(M):
+                  a[j] = a[j] + 1 if grid[i][j] == 0 else 0
+              j0 = 0
+              while j0 < M:
+                  while j0 < M and a[j0] < stampHeight:
+                      j0 += 1
+                  j1 = j0
+                  while j1 < M and a[j1] >= stampHeight:
+                      j1 += 1
+                  if j1 - j0 >= stampWidth:
+                      paint(i - stampHeight + 1, j0, i, j1 - 1)
+                  j0 = j1
+
+          ans = True
+          for i in range(N):
+              for j in range(M):
+                  if grid[i][j] == 0 and p[i][j] == False:
+                      return False
+          return ans
+
+
+  assert (
+      Solution().possibleToStamp(
+          [[1, 0, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0]], 4, 3
+      )
+      == True
+  )
+  assert (
+      Solution().possibleToStamp(
+          [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]], 2, 2
+      )
+      == False
+  )
+#+end_src

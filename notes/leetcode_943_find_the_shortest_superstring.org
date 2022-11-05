@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID:       111BF0DE-ED4B-445B-ABBE-D5022DA96CC5
+:ROAM_REFS: https://leetcode.com/problems/find-the-shortest-superstring/
+:END:
+#+TITLE: Leetcode: 943. Find the Shortest Superstring
+#+ROAM_REFS: https://leetcode.com/problems/find-the-shortest-superstring/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not test for single elements (e.g. ~["a"]~).
+
+- [[id:FEEE596A-DFF4-4B02-8995-1BCF70A76410][Pattern: Find optimal subset of small set]].
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  After we put the word $i$, we should put a word $j$ using the maximum of overlap possible which is the biggest suffix of $i$ that is a prefix of $j$.  With that, we have to keep increasing the answer until all words are covered.
+
+#+begin_src python
+  from typing import List
+  from functools import cache
+
+
+  class Solution:
+      def shortestSuperstring(self, words: List[str]) -> str:
+          N = len(words)
+
+          nxt = [list() for _ in range(N)]
+          for i in range(N):
+              for j in range(N):
+                  for k in range(0, len(words[i]) + 1):
+                      if words[j].startswith(words[i][k:]):
+                          nxt[i].append((j, k))
+                          break
+
+          @cache
+          def dfs(i, used):
+              if used == (1 << N) - 1:
+                  return words[i]
+
+              ans = None
+              for j, k in nxt[i]:
+                  if used & (1 << j) != 0:
+                      continue
+                  s = words[i][:k] + words[j]
+                  cur = words[i][:k] + dfs(j, used | (1 << j))
+                  if ans is None or len(ans) > len(cur):
+                      ans = cur
+
+              return ans
+
+          return min([dfs(i, 0) for i in range(N)], key=len)
+
+
+  assert (
+      Solution().shortestSuperstring(["alex", "loves", "leetcode"]) == "alexlovesleetcode"
+  )
+  assert (
+      Solution().shortestSuperstring(["catg", "ctaagt", "gcta", "ttca", "atgcatc"])
+      == "gctaagttcatgcatc"
+  )
+#+end_src

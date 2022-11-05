@@ -1,0 +1,101 @@
+:PROPERTIES:
+:ID:       67FB613D-D791-4CBA-9CAB-F770A46C1715
+:ROAM_REFS: https://leetcode.com/problems/minimum-number-of-refueling-stops/
+:END:
+#+TITLE: Leetcode: 871. Minimum Number of Refueling Stops
+#+ROAM_REFS: https://leetcode.com/problems/minimum-number-of-refueling-stops/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:E6B9ECE9-E7F6-4273-90DB-226664B11C0A][Mistake: Did not slow down to make sure that each part of the problem was solved correctly]].  I found the recurrence with time complexity of $O(n^2 \times k)$ and didn't not carefully extract the memorization to make it $O(n \times k)$.
+
+- [[id:A32AAFD2-5569-4417-8085-04005F85A435][Pattern: Find shortest path on directed acyclic graph]].
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Compute $m[k][i]$ which represents the minimum fuel required to go from station $i$ to $target$ stopping in other $k$ stations ahead.  If $stations[i][0] + m[k][i] <= startFuel$, then $k$ is an answer to the original problem.  The original recurrence is $m[k][i] = max(0, min_{i < j \leq n}(m[k-1][j] + stations[j][0] - stations[i][0] - stations[i][1] for j in range(i + 1, N))$ which consumes $O(n^2 \times k)$ to be computed, but the $min$ part can be extracted and answered in $O(1)$.  Therefore, the time and space complexity of the solution is $O(n \times k)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minRefuelStops(
+          self, target: int, startFuel: int, stations: List[List[int]]
+      ) -> int:
+          if target <= startFuel:
+              return 0
+          N = len(stations)
+          m = [[float("inf")] * N for _ in range(N)]
+          b = [[float("inf")] * N for _ in range(N)]
+          for k in range(N):
+              for i in range(N - 1, -1, -1):
+                  if k == 0:
+                      m[k][i] = max(0, target - stations[i][0] - stations[i][1])
+                      b[k][i] = min(
+                          b[k][i + 1] if i + 1 < N else float("inf"),
+                          m[k][i] + stations[i][0],
+                      )
+                  elif i + 1 == N:
+                      b[k][i] = float("inf")
+                  else:
+                      m[k][i] = b[k - 1][i + 1]
+                      m[k][i] += -stations[i][0] - stations[i][1]
+                      m[k][i] = max(0, m[k][i])
+                      b[k][i] = min(b[k][i + 1], m[k][i] + stations[i][0])
+                  if stations[i][0] + m[k][i] <= startFuel:
+                      return k + 1
+          return -1
+
+
+  assert Solution().minRefuelStops(1, startFuel=1, stations=[])
+  assert Solution().minRefuelStops(100, startFuel=1, stations=[[10, 100]])
+  assert Solution().minRefuelStops(
+      100, startFuel=10, stations=[[10, 60], [20, 30], [30, 30], [60, 40]]
+  )
+#+end_src
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Compute the max distance that it is possible to reach with 0 stops (ie. $startFuel$).  Compute the max distance with 1 stop, it will be $startFuel+stations[0][1]$ iff $startFuel \geq stations[0][1]$.  Time complexity is $O(n ^ 2)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minRefuelStops(
+          self, target: int, startFuel: int, stations: List[List[int]]
+      ) -> int:
+          N = len(stations)
+          dp = [0] * (N + 1)
+          dp[0] = startFuel
+          for i in range(N):
+              for k in range(i, -1, -1):
+                  if dp[k] >= stations[i][0]:
+                      dp[k + 1] = max(dp[k + 1], dp[k] + stations[i][1])
+          for k in range(N + 1):
+              if dp[k] >= target:
+                  return k
+          return -1
+#+end_src
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Similar to the idea above, but keep the station that you passed by in a heap and use the one with max fuel if you need it.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def minRefuelStops(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+          stations = stations + [[target, 0]]
+          N = len(stations)
+
+          last = ans = 0
+          tank = startFuel
+          pq = []
+          for i in range(N):
+              dist = stations[i][0] - last
+              tank -= dist
+              while pq and tank < 0:
+                  tank += -heappop(pq)
+                  ans += 1
+              if tank < 0:
+                  return -1
+              last = stations[i][0]
+              heappush(pq, -stations[i][1])
+          return ans
+#+end_src

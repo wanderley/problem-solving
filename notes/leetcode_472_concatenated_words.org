@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       DBE9E650-174B-4262-B154-590C73C159C9
+:ROAM_REFS: https://leetcode.com/problems/concatenated-words/
+:END:
+#+TITLE: Leetcode: 472. Concatenated Words
+#+ROAM_REFS: https://leetcode.com/problems/concatenated-words/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  For a given word, find if it is possible to decompose it as words in the dictionary.  The search-space for this problem is $(i, j, k)$ which means if it possible to break down the word $i$, starting on position $j$ after breaking it already in $k$ parts.  The problem left is to quickly find a part starting on the current position which can be solved using a [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]].  Time complexity is $O(n \times s)$ where $s$ is $\max |w[i]|$.  Space complexity is $\sum |w[i]|$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
+          root = {}
+          for w in words:
+              node = root
+              for c in w:
+                  node.setdefault(c, {})
+                  node = node[c]
+              node["$"] = True
+
+          @cache
+          def dfs(i, j, k):
+              if j == len(words[i]):
+                  return k > 1
+              node = root
+              while j < len(words[i]) and words[i][j] in node:
+                  node = node[words[i][j]]
+                  j += 1
+                  if "$" in node and dfs(i, j, k + 1):
+                      return True
+              return False
+
+          return [w for i, w in enumerate(words) if dfs(i, 0, 0)]
+#+end_src

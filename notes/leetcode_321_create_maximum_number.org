@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       315F7154-B00E-4AC7-BA4E-1077345DCBAF
+:ROAM_REFS: https://leetcode.com/problems/create-maximum-number/
+:END:
+#+TITLE: Leetcode: 321. Create Maximum Number
+#+ROAM_REFS: https://leetcode.com/problems/create-maximum-number/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!

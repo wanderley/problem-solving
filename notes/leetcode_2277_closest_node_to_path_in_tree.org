@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       141BB54B-16FD-44FB-B40E-92FC27C4EA67
+:ROAM_REFS: https://leetcode.com/problems/closest-node-to-path-in-tree/
+:END:
+#+TITLE: Leetcode: 2277. Closest Node to Path in Tree
+#+ROAM_REFS: https://leetcode.com/problems/closest-node-to-path-in-tree/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  For each query $(u, v, p)$, search for $v$ and $p$ starting from $u$ while keeping track of the last both that could reach both of them.  Time and space complexity for each query is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def closestNode(
+          self, n: int, edges: List[List[int]], query: List[List[int]]
+      ) -> List[int]:
+          A = defaultdict(list)
+          for u, v in edges:
+              A[u].append(v)
+              A[v].append(u)
+
+          def dfs(root, parent, e1, e2):
+              if root == e1 or root == e2:
+                  return root
+              found = []
+              for u in A[root]:
+                  if u != parent:
+                      v = dfs(u, root, e1, e2)
+                      if v is not None:
+                          found.append(v)
+              if found:
+                  return found[0] if len(found) == 1 else root
+              return None
+
+          return [dfs(q, None, u, v) for u, v, q in query]
+
+
+  assert Solution().closestNode(
+      7, [[0, 1], [0, 2], [0, 3], [1, 4], [2, 5], [2, 6]], [[5, 3, 4], [5, 3, 6]]
+  ) == [0, 2]
+  assert Solution().closestNode(3, [[0, 1], [1, 2]], [[0, 1, 2]]) == [1]
+  assert Solution().closestNode(3, [[0, 1], [1, 2]], [[0, 0, 0]]) == [0]
+#+end_src

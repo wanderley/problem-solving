@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID:       CE27629E-BBAE-433F-BD60-CE9B76EA5ED1
+:ROAM_REFS: https://leetcode.com/problems/making-a-large-island/
+:END:
+#+TITLE: Leetcode: 827. Making A Large Island
+#+ROAM_REFS: https://leetcode.com/problems/making-a-large-island/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not test for world without any island.
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Island cells are vertices and they are connected if they are 4-directional neighbor.  The problem becomes finding all connected component and then testing which 0-cell would create the largest component.  Time and space complexity are $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+  from collections import defaultdict
+
+
+  class Solution:
+      def largestIsland(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+          counter = defaultdict(int)
+
+          def dfs(i, j, key):
+              counter[key] += 1
+              grid[i][j] = key
+              for di, dj in D:
+                  ni = i + di
+                  nj = j + dj
+                  if 0 <= ni < N and 0 <= nj < N and grid[ni][nj] == 1:
+                      dfs(ni, nj, key)
+
+          cur = 2
+          for i in range(N):
+              for j in range(N):
+                  if grid[i][j] == 1:
+                      dfs(i, j, cur)
+                      cur += 1
+
+          ans = max(counter.values()) if counter else 0
+          for i in range(N):
+              for j in range(N):
+                  if grid[i][j] == 0:
+                      candidates = set()
+                      for di, dj in D:
+                          ni = i + di
+                          nj = j + dj
+                          if 0 <= ni < N and 0 <= nj < N and grid[ni][nj] != 0:
+                              candidates.add(grid[ni][nj])
+                      cur = 1
+                      for c in candidates:
+                          cur += counter[c]
+                      if cur > ans:
+                          ans = cur
+          return ans
+
+
+  assert Solution().largestIsland([[1, 0], [0, 1]]) == 3
+  assert Solution().largestIsland([[1, 1], [1, 0]]) == 4
+  assert Solution().largestIsland([[1, 1], [1, 1]]) == 4
+#+end_src

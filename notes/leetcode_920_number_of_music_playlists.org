@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       7B375AB3-8EB4-44A3-97C9-C344ECF8061F
+:ROAM_REFS: https://leetcode.com/problems/number-of-music-playlists/
+:END:
+#+TITLE: Leetcode: 920. Number of Music Playlists
+#+ROAM_REFS: https://leetcode.com/problems/number-of-music-playlists/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]].  Got stuck on a recursion using $(i, r)$ the  $i$ song to play having to play $r$ required songs.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Suppose that you played $i$ songs which $j$ are unique songs.  There are two ways to select the next song: (1) you play one of $n - j$ new songs, or (2) you play one $\max(j - k, 0)$ already played songs.  Time and space complexity is $O(g \times n)$.
+
+#+begin_src python
+  class Solution:
+      def numMusicPlaylists(self, n: int, goal: int, k: int) -> int:
+          MOD = 10**9 + 7
+
+          @cache
+          def dfs(i, u):
+              if i == goal:
+                  return 1 if u == n else 0
+              return ((n - u) * dfs(i + 1, u + 1) + max(u - k, 0) * dfs(i + 1, u)) % MOD
+
+          return dfs(0, 0)
+#+end_src

@@ -1,0 +1,103 @@
+:PROPERTIES:
+:ID:       30CE632C-B965-4C3B-A1B4-5A38F9A1EF36
+:ROAM_REFS: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/
+:END:
+#+TITLE: Leetcode: 632. Smallest Range Covering Elements from K Lists
+#+ROAM_REFS: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:CCCF9587-5365-4BB0-B0D3-8FC82D55E781][Mistake: Failed to recognize known problem]]
+
+[[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  This problem is similar to [[id:02D2E665-4FC5-45C7-A1BF-E7CE82E67B05][Leetcode: 23. Merge k Sorted Lists]].  The difference is that we have to keep the maximum of the next candidates while we remove one by one from the smaller to the greater.
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def smallestRange(self, nums: List[List[int]]) -> List[int]:
+          pq = []
+          for i, ns in enumerate(nums):
+              heappush(pq, (ns[0], 0, i))
+
+          def best(a, b):
+              sa = a[1] - a[0]
+              sb = b[1] - b[0]
+              if sa < sb or (sa == sb and a[0] < b[0]):
+                  return a
+              return b
+
+          ans = [min(ns[0] for ns in nums), max(ns[0] for ns in nums)]
+          upper_bound = ans[1]
+          while True:
+              v, k, i = heappop(pq)
+              ans = best(ans, [v, upper_bound])
+
+              nk = k + 1
+              if nk == len(nums[i]):
+                  break
+              nv = nums[i][nk]
+              upper_bound = max(upper_bound, nv)
+
+              heappush(pq, (nv, nk, i))
+          return ans
+
+
+  assert Solution().smallestRange(
+      [[4, 10, 15, 24, 26], [0, 9, 12, 20], [5, 18, 22, 30]]
+  ) == [20, 24]
+  assert Solution().smallestRange([[1, 2, 3], [1, 2, 3], [1, 2, 3]]) == [1, 1]
+#+end_src
+
+[[id:46522C06-DAC3-4986-A13A-17C2ED44ADD1][Can we formulate the problem as sliding window?]]  Yes, if the input was a list.  [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  In this case, we want to pre-process to use a sliding window.  Be $l$ a list of pairs $(a, b)$ sorted by $a$ where $a$ is a number of the list $nums[b]$.  A valid solution for the original problem is a subsequence of $l$ where there is at least one number from each list in $nums$.  We can start our window with the first element and slide it to the right.  After we add a new item to the window, we can remove the left-most elements that have at least one more element from the same list in the window.  While doing this, we can update the best interval found so far.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def smallestRange(self, nums: List[List[int]]) -> List[int]:
+          horizon = []
+          for i, ns in enumerate(nums):
+              for n in ns:
+                  horizon.append((n, i))
+          horizon.sort()
+
+          covered = [0] * len(nums)
+          total_covered = 0
+
+          def best(a, b):
+              sa = a[1] - a[0]
+              sb = b[1] - b[0]
+              if sa < sb or (sa == sb and a[0] < b[0]):
+                  return a
+              return b
+
+          ans = [horizon[0][0], horizon[-1][0]]
+          i = 0
+          covered[horizon[0][1]] = 1
+          total_covered = 1
+
+          for j in range(1, len(horizon)):
+              jv, jk = horizon[j]
+              total_covered += 1 if covered[jk] == 0 else 0
+              covered[jk] += 1
+
+              while covered[horizon[i][1]] > 1:
+                  covered[horizon[i][1]] -= 1
+                  i += 1
+
+              if total_covered == len(nums):
+                  iv, ik = horizon[i]
+                  ans = best(ans, [iv, jv])
+
+          return ans
+
+
+  assert Solution().smallestRange(
+      [[4, 10, 15, 24, 26], [0, 9, 12, 20], [5, 18, 22, 30]]
+  ) == [20, 24]
+  assert Solution().smallestRange([[1, 2, 3], [1, 2, 3], [1, 2, 3]]) == [1, 1]
+#+end_src

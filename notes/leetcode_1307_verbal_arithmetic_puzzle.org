@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       2E12EFAD-27A0-4F54-A825-5FA7D7E60F7E
+:ROAM_REFS: https://leetcode.com/problems/verbal-arithmetic-puzzle/
+:END:
+#+TITLE: Leetcode: 1307. Verbal Arithmetic Puzzle
+#+ROAM_REFS: https://leetcode.com/problems/verbal-arithmetic-puzzle/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!

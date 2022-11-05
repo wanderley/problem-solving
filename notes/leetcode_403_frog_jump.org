@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID:       0FDE8A3E-A212-4AFD-A25E-0D417A57D74E
+:ROAM_REFS: https://leetcode.com/problems/frog-jump/
+:END:
+#+TITLE: Leetcode: 403. Frog Jump
+#+ROAM_REFS: https://leetcode.com/problems/frog-jump/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]] and tried to solve using a wrong DP approach.
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Stones are vertices and two stones are connected if the frog can jump between them.  The problem becomes search a path from the start position to the end using a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]].  Time and space complexity are $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def canCross(self, stones: List[int]) -> bool:
+          N = len(stones)
+          S = {stones[i]: i for i in range(N)}
+          seen = set()
+          queue = [(0, 1)]
+          for i, k in queue:
+              if i == N - 1:
+                  return True
+              for d in [-1, 0, +1] if i > 0 else [0]:
+                  v = stones[i] + k + d
+                  if v not in S:
+                      continue
+                  j = S[v]
+                  if (j, k + d) not in seen:
+                      seen.add((j, k + d))
+                      queue.append((j, k + d))
+          return False
+#+end_src

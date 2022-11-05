@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID:       8730E31B-149E-4000-9967-D79A25F8FE02
+:ROAM_REFS: https://leetcode.com/problems/tiling-a-rectangle-with-the-fewest-squares/
+:END:
+#+TITLE: Leetcode: 1240. Tiling a Rectangle with the Fewest Squares
+#+ROAM_REFS: https://leetcode.com/problems/tiling-a-rectangle-with-the-fewest-squares/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  My [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] had the current square size to paint what made the solution too complicated.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  For each cell of the rectangle, for each possible square that can have its top-left corner on that cell, fill the area and move to the next empty cell *on the same line*.   If there is no empty line in the line, continue the [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] on the next row.  Time complexity is $O(n \times m \times k^3)$ and space is $O(n \times m)$.
+
+#+begin_src python
+  class Solution:
+      def tilingRectangle(self, n: int, m: int) -> int:
+          grid = [[0] * m for _ in range(n)]
+
+          ans = n * m
+
+          def bt(i, j, cur):
+              nonlocal ans
+              if cur >= ans:
+                  return
+              if i == n:
+                  ans = min(ans, cur)
+                  return
+              while j < m and grid[i][j] > 0:
+                  j += 1
+              if j == m:
+                  bt(i + 1, 0, cur)
+                  return
+              for k in range(min(n - i, m - j), 0, -1):
+                  valid = True
+                  for ii in range(i, i + k):
+                      for jj in range(j, j + k):
+                          if grid[ii][jj] > 0:
+                              valid = False
+                          grid[ii][jj] += 1
+                  if valid:
+                      bt(i, j + k, cur + 1)
+                  for ii in range(i, i + k):
+                      for jj in range(j, j + k):
+                          grid[ii][jj] -= 1
+
+          bt(0, 0, 0)
+          return ans
+
+
+  assert Solution().tilingRectangle(2, 3) == 3
+  assert Solution().tilingRectangle(5, 8) == 5
+  assert Solution().tilingRectangle(11, 13) == 6
+#+end_src

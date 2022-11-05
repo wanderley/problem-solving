@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID:       39EE7F55-5048-4821-9E43-1B6D8A310B78
+:ROAM_REFS: https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/
+:END:
+#+TITLE: Leetcode: 2127. Maximum Employees to Be Invited to a Meeting
+#+ROAM_REFS: https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Failed to recognize that the solution is either a cycle of a sum of paths.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Clearly, one possible solution is to find the [[id:0E6E671A-F49C-4962-ABE0-7F5AAD6ACC05][Longest Cycle in a Directed Graph]].  Otherwise, we can seat groups of people that where their favorite chain ends on two people that would like to seat besides each other.  Time complexity is $O(n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from collections import defaultdict
+
+
+  class Solution:
+      def maximumInvitations(self, e: List[int]) -> int:
+          N = len(e)
+
+          re = defaultdict(list)
+          for u, v in enumerate(e):
+              if e[v] != u:
+                  re[v].append(u)
+
+          def find_longest_path(u, seen):
+              if longest_path[u] is not None:
+                  return longest_path[u]
+              seen.add(u)
+              ans = 1
+              for v in re[u]:
+                  ans = max(ans, 1 + find_longest_path(v, seen))
+              longest_path[u] = ans
+              return ans
+
+          longest_path = [None] * N
+          ans = 0
+          seen = set()
+          for u, v in enumerate(e):
+              if e[v] == u and u < v:
+                  ans += find_longest_path(u, seen) + find_longest_path(v, seen)
+
+          found_at = [None] * N
+
+          def find_longest_cycle(u, k, seen):
+              seen.add(u)
+              found_at[u] = k
+              v = e[u]
+              if v in seen:
+                  ans = ((k + 1) - found_at[v]) if found_at[v] is not None else 0
+              else:
+                  ans = find_longest_cycle(v, k + 1, seen)
+              found_at[u] = None
+              return ans
+
+          seen = set()
+          for u in range(N):
+              if u not in seen:
+                  ans = max(ans, find_longest_cycle(u, 0, seen))
+          return ans
+
+
+  assert Solution().maximumInvitations([2, 2, 1, 2]) == 3
+  assert Solution().maximumInvitations([1, 2, 0]) == 3
+  assert Solution().maximumInvitations([3, 0, 1, 4, 1]) == 4
+#+end_src

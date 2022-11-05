@@ -1,0 +1,83 @@
+:PROPERTIES:
+:ID:       CC072BAD-D291-4D3C-9D4A-AB65277AFA3A
+:ROAM_REFS: https://leetcode.com/problems/race-car/
+:END:
+#+TITLE: Leetcode: 818. Race Car
+#+ROAM_REFS: https://leetcode.com/problems/race-car/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:298CCCF3-C9A7-4FEC-BE7B-17CF0F67332C][Mistake: Bug caused by incorrect assumption]].  Started to look for prunes and added one to avoid numbers greater than ~target~.
+- [[id:3C649CC4-0609-4686-96C3-5F774F9C0292][Mistake: Failed to consider different strategies to solve the problem]].  Came up with [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] and didn't ask myself if I could solve the problem using [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].
+- [[id:27524F0A-5DA2-4768-8897-2934633CB62F][Mistake: Missing inspection of test cases]].  The test case ~5~ gave a hint which I didn't see because I rushed to code the BFS.
+
+[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  As in [[id:B9F5B1C1-6ED3-49C5-9AA1-6F0D56434720][Leetcode: 1675. Minimize Deviation in Array]], we can reduce the number of different operations by thinking on the problem to get from $0$ to $i$ only doing forward moves.  $dp[i]$ is the number of steps to get from $0$ to $i$ starting with speed 1.  The best way to get close to $i$ is to accelerate as much as possible.  Be $j$ the closest position to $i$ that we can get accelerating $t$ times at speed $s$.  If $i=j$, the solution is $dp[i]=t$.  Otherwise, $j<i$ and you can either go back to $k$ accelerating $p$ times and then try to go to $i$ or accelerate one more time and then go back to $i$.  Therefore, $dp[i]=min(t + 1 + p + 1 + dp[i - (j - k)], t + 1 + dp[t + s - i] + 1)$ for all $k$.  In summary, the idea is to define the search-space as distances from $0$ to $i$ where $0 \leq i \leq target$.  Space complexity is $O(target)$ and time complexity is $O(target \times \log(target))$.
+
+#+begin_src python
+  class Solution:
+      def racecar(self, target: int) -> int:
+          dp = [0] * (target + 1)
+          dp[0] = 0
+
+          def stops(target):
+              pos = 0
+              speed = 1
+              steps = 0
+              yield (pos, speed, steps)
+              while pos + speed <= i:
+                  pos += speed
+                  speed *= 2
+                  steps += 1
+                  yield (pos, speed, steps)
+
+
+          for i in range(1, target + 1):
+              ,*_, (pos, speed, steps) = stops(i)
+              if pos == i:
+                  dp[i] = steps
+                  continue
+
+              dp[i] = steps + 1 + dp[(pos + speed) - i] + 1
+              for rpos, _, rsteps in stops(pos):
+                  dp[i] = min(dp[i], steps + 1 + rsteps + 1 + dp[i - (pos - rpos)])
+
+          return dp[target]
+
+  assert Solution().racecar(3) == 2
+  assert Solution().racecar(6) == 5
+
+#+end_src
+
+[[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] solution starts by doing as much ~A~ as possible and them searching for the optimal path:
+#+begin_src python
+  class Solution:
+      def racecar(self, target: int) -> int:
+          seen = set()
+
+          pos = 0
+          speed = 1
+          steps = 0
+          while pos + speed <= target:
+              pos += speed
+              speed *= 2
+              steps += 1
+
+          queue = [(pos, speed, steps)]
+          for pos, speed, steps in queue:
+              if pos == target:
+                  return steps
+
+              if (pos, speed) in seen:
+                  continue
+              seen.add((pos, speed))
+
+              queue.append((pos + speed, speed * 2, steps + 1))
+              if speed > 0:
+                  queue.append((pos, -1, steps + 1))
+              else:
+                  queue.append((pos, +1, steps + 1))
+
+
+  assert Solution().racecar(3) == 2
+  assert Solution().racecar(6) == 5
+#+end_src

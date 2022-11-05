@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       7283309E-AA7E-463E-B392-6E4D7697E93D
+:ROAM_REFS: https://leetcode.com/problems/count-vowels-permutation/
+:END:
+#+TITLE: Leetcode: 1220. Count Vowels Permutation
+#+ROAM_REFS: https://leetcode.com/problems/count-vowels-permutation/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+#+begin_src python
+  from collections import defaultdict
+
+
+  class Solution:
+      def countVowelPermutation(self, n: int) -> int:
+          adj = {"a": "e", "e": "ai", "i": "aeou", "o": "iu", "u": "a"}
+          cur = nxt = defaultdict(lambda: 1)
+          for i in range(n - 2, -1, -1):
+              cur = defaultdict(int)
+              for u in "aeiou":
+                  cnt = 0
+                  for v in adj[u]:
+                      cnt = (cnt + nxt[v]) % 1_000_000_007
+                  cur[u] = cnt
+              nxt = cur
+          return sum(cur[u] for u in "aeiou") % 1_000_000_007
+
+
+  assert Solution().countVowelPermutation(1) == 5
+  assert Solution().countVowelPermutation(2) == 10
+  assert Solution().countVowelPermutation(5) == 68
+#+end_src

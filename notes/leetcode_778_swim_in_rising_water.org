@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID:       5F166A32-B7CD-47DA-B469-1CD6DC5D6124
+:ROAM_REFS: https://leetcode.com/problems/swim-in-rising-water/
+:END:
+#+TITLE: Leetcode: 778. Swim in Rising Water
+#+ROAM_REFS: https://leetcode.com/problems/swim-in-rising-water/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] with increasing paths on grid and sorting the cells was useful.
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  This is a variation of [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]] and can be solved using [[id:3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A][Dijkstra Algorithm]].  Instead of adding up to compute the distance, we take the vertices with greatest value in the path so far.
+- Time complexity is $O(n^2 \log n)$ and space is $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+  from heapq import heappush, heappop
+
+
+  class Solution:
+      def swimInWater(self, grid: List[List[int]]) -> int:
+          N = len(grid)
+
+          seen = set((grid[0][0], 0, 0))
+          pq = [(grid[0][0], 0, 0)]
+
+          while pq:
+              t, i, j = heappop(pq)
+
+              if i == N - 1 and j == N - 1:
+                  return t
+
+              for ni, nj in [[i, j + 1], [i, j - 1], [i + 1, j], [i - 1, j]]:
+                  if 0 <= ni < N and 0 <= nj < N and (ni, nj) not in seen:
+                      seen.add((ni, nj))
+                      heappush(pq, (max(grid[ni][nj], t), ni, nj))
+
+
+  assert Solution().swimInWater([[0, 2], [1, 3]]) == 3
+  assert (
+      Solution().swimInWater(
+          [
+              [0, 1, 2, 3, 4],
+              [24, 23, 22, 21, 5],
+              [12, 13, 14, 15, 16],
+              [11, 17, 18, 19, 20],
+              [10, 9, 8, 7, 6],
+          ]
+      )
+      == 16
+  )
+#+end_src

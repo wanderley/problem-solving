@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       E9DE6F18-7E12-45DA-9F9D-83B07458EF47
+:ROAM_REFS: https://leetcode.com/problems/expression-add-operators/
+:END:
+#+TITLE: Leetcode: 282. Expression Add Operators
+#+ROAM_REFS: https://leetcode.com/problems/expression-add-operators/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Didn't even try to write down edge cases.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The length of $num$ is at most 10 what means that there are 8 positions where we can decide to not put an operator or put $+,-,\times$.  So, there are $8^4$ possible expressions.  Generate all them avoiding operands with leading zero and compute their value on the end.  Time complexity is $O(4^n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def addOperators(self, num: str, target: int) -> List[str]:
+          def valid(exp):
+              value = 0
+              for e in exp.replace("-", "+-").split("+"):
+                  cur = 1
+                  for m in e.split("*"):
+                      cur *= int(m)
+                  value += cur
+              return value == target
+
+          ans = []
+
+          def bt(i, leading, exp):
+              if i == len(num):
+                  if valid(exp):
+                      ans.append(exp)
+                  return
+              for o in "*", "+", "-":
+                  bt(i + 1, num[i] == "0", exp + o + num[i])
+              if not leading:
+                  bt(i + 1, False, exp + num[i])
+
+          bt(1, num[0] == "0", num[0])
+
+          return ans
+
+
+  assert Solution().addOperators("123", 6) == ["1*2*3", "1+2+3"]
+  assert Solution().addOperators("232", 8) == ["2*3+2", "2+3*2"]
+  assert Solution().addOperators("3456237490", 9191) == []
+#+end_src

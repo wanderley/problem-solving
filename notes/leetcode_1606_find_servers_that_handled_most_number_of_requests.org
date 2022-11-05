@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       C12BCD8D-6F09-4EA8-BD97-AF5C75F6AA6B
+:ROAM_REFS: https://leetcode.com/problems/find-servers-that-handled-most-number-of-requests/
+:END:
+#+TITLE: Leetcode: 1606. Find Servers That Handled Most Number of Requests
+#+ROAM_REFS: https://leetcode.com/problems/find-servers-that-handled-most-number-of-requests/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+This is a simulation problem where the goal is to pick the right data structures.  Time complexity is $O(n \log m)$ with space $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from sortedcontainers import SortedList
+  from heapq import heappush, heappop
+
+
+  from sortedcontainers import SortedList
+
+
+  class Solution:
+      def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
+          available = SortedList(range(k))
+          cleanup = []
+          counter = {}
+
+          busiest_count = 0
+
+          for i, start, time in zip(range(len(arrival)), arrival, load):
+              while cleanup and cleanup[0][0] < start:
+                  _, server = heappop(cleanup)
+                  available.add(server)
+
+              if available:
+                  j = available.bisect_left(i % k)
+                  server = available[j if j < len(available) else 0]
+                  available.remove(server)
+                  heappush(cleanup, (start + time - 1, server))
+                  counter.setdefault(server, 0)
+                  counter[server] += 1
+                  busiest_count = max(busiest_count, counter[server])
+
+          return [server for server in counter if counter[server] == busiest_count]
+
+
+  assert Solution().busiestServers(3, [1, 2, 3, 4, 5], [5, 2, 3, 3, 3]) == [1]
+  assert Solution().busiestServers(3, [1, 2, 3, 4], [1, 2, 1, 2]) == [0]
+  assert Solution().busiestServers(3, [1, 2, 3], [10, 12, 11]) == [0, 1, 2]
+#+end_src

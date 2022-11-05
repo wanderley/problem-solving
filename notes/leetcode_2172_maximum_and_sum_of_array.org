@@ -1,0 +1,66 @@
+:PROPERTIES:
+:ID:       5EB78D73-ED2A-43F0-8993-4DE07EDD1645
+:ROAM_REFS: https://leetcode.com/problems/maximum-and-sum-of-array/
+:END:
+#+TITLE: Leetcode: 2172. Maximum AND Sum of Array
+#+ROAM_REFS: https://leetcode.com/problems/maximum-and-sum-of-array/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]].  I got stuck on representing only the used numbers in the bitmask.
+
+- [[id:13025164-D62A-450B-AA2F-332E097F7A16][What are the different ways to represent the search-space?]]  The first way that came to mind was $(k, s)$ where $k$ is the next slot to fill up and $s$ is the set of used numbers.  Space is $O(k \times 2^n)$ and time complexity is $O(k \times 2^n \times n^2)$.   As $k$ is *small*, the best way to represent the search-space is $(i, p, q)$ where $i$ is the number that I want to place, $p$ is a set of slots that has one position (left position) used and $q$ is a set of slots that have one position (right position) used.  Space is $O(n \times 2^k \times 2^k)$ and times complexity is $O(n^2 \times 2^k \times 2^k)$.
+
+#+begin_src python
+  from typing import List
+  from functools import cache
+
+
+  class Solution:
+      def maximumANDSum(self, nums: List[int], numSlots: int) -> int:
+          N = len(nums)
+          ans = float("-inf")
+
+          @cache
+          def dfs(i, f, s):
+              if i == N:
+                  return 0
+              ans = float("-inf")
+              for j in range(numSlots):
+                  c = nums[i] & (j + 1)
+                  if f & (1 << j) == 0:
+                      ans = max(ans, c + dfs(i + 1, f | (1 << j), s))
+                  elif s & (1 << j) == 0:
+                      ans = max(ans, c + dfs(i + 1, f, s | (1 << j)))
+              return ans
+
+          return dfs(0, 0, 0)
+
+
+  assert Solution().maximumANDSum([1, 2, 3, 4, 5, 6], 3) == 9
+  assert Solution().maximumANDSum([1, 3, 10, 4, 7, 1], 9) == 24
+#+end_src
+
+#+begin_src python
+  class Solution:
+      def maximumANDSum(self, nums: List[int], numSlots: int) -> int:
+          N = len(nums)
+
+          @cache
+          def dfs(i, used):
+              if i == N:
+                  return 0
+
+              ans = 0
+              cur = used
+              b = 1
+              for k in range(1, numSlots + 1):
+                  slot = cur % 3
+                  cur = cur // 3
+                  if slot < 2:
+                      ans = max(ans, (nums[i] & k) + dfs(i + 1, used + b))
+                  b = b * 3
+              return ans
+
+          return dfs(0, 0)
+#+end_src

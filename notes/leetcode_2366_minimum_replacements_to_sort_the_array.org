@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       F63104F7-CDA5-43DD-99AF-16AAAA5B7B36
+:ROAM_REFS: https://leetcode.com/problems/minimum-replacements-to-sort-the-array/
+:END:
+#+TITLE: Leetcode: 2366. Minimum Replacements to Sort the Array
+#+ROAM_REFS: https://leetcode.com/problems/minimum-replacements-to-sort-the-array/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  I should have spent more times thinking on ways to find a close formula.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  We will never split the last number of the array.  For the other numbers, we want to split them close as possible to the current bound.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumReplacement(self, nums: List[int]) -> int:
+          N = len(nums)
+          ans = 0
+          cur = nums[-1]
+
+          for i in range(N - 2, -1, -1):
+              if nums[i] <= cur:
+                  cur = nums[i]
+              elif cur == 1:
+                  ans += nums[i] - 1
+              else:
+                  j = (nums[i] + cur - 1) // cur
+                  ans += j - 1
+                  cur = nums[i] // j
+          return ans
+
+
+  assert Solution().minimumReplacement([3, 9, 3]) == 2
+  assert Solution().minimumReplacement([1, 2, 3, 4, 5]) == 0
+#+end_src

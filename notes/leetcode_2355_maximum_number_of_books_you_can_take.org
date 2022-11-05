@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       7B4E37C8-2F4D-4DC5-BBAC-CE217EA39E5B
+:ROAM_REFS: https://leetcode.com/problems/maximum-number-of-books-you-can-take/
+:END:
+#+TITLE: Leetcode: 2355. Maximum Number of Books You Can Take
+#+ROAM_REFS: https://leetcode.com/problems/maximum-number-of-books-you-can-take/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:C715BAE2-002C-4F72-B5FC-5E727F0BA19E][Pattern: Find optimal subarray]].  Use a [[id:E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5][Monotonic Stack]] to support the construction of the optimal subarrays ending on each index of the array.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumBooks(self, books: List[int]) -> int:
+          st = []
+          best = [0] * len(books)
+          pa = lambda n: (n * (n + 1)) // 2
+          ans = 0
+          for i, b in enumerate(books):
+              while st and books[st[-1]] >= b - (i - st[-1]):
+                  st.pop()
+              if not st:
+                  best[i] = pa(b) if b <= i else pa(b) - pa(b - i - 1)
+              else:
+                  best[i] = pa(b) if b <= i - st[-1] else pa(b) - pa(b - (i - st[-1]))
+                  best[i] += best[st[-1]]
+              if best[i] > ans:
+                  ans = best[i]
+                  tmp = i
+              st.append(i)
+          return ans
+#+end_src

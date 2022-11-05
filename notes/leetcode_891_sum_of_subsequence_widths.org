@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       763B1CD7-8460-49B6-B81E-D4CFC0164DA8
+:ROAM_REFS: https://leetcode.com/problems/sum-of-subsequence-widths/
+:END:
+#+TITLE: Leetcode: 891. Sum of Subsequence Widths
+#+ROAM_REFS: https://leetcode.com/problems/sum-of-subsequence-widths/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:21114DEC-E1B0-4B45-8A7C-E4DA93BB9474][Pattern: Compute value for all subsequences of an array]].  Sort the array and compute how many time each element appear as the minimum and maximum in all subsequences.  Time complexity is $O(n)$ with space $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def sumSubseqWidths(self, nums: List[int]) -> int:
+          N = len(nums)
+          MOD = 10**9 + 7
+          nums.sort()
+
+          mins = 0
+          maxs = 0
+          p = 1
+          for i in range(N):
+              mins = (mins + nums[N - i - 1] * p) % MOD
+              maxs = (maxs + nums[i] * p) % MOD
+              p = (p * 2) % MOD
+
+          return (maxs - mins + MOD) % MOD
+#+end_src

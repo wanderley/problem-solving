@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       9A28BF2B-FE43-4984-B942-94BA8CB31FF5
+:ROAM_REFS: https://leetcode.com/problems/build-binary-expression-tree-from-infix-expression/
+:END:
+#+TITLE: Leetcode: 1597. Build Binary Expression Tree From Infix Expression
+#+ROAM_REFS: https://leetcode.com/problems/build-binary-expression-tree-from-infix-expression/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Convert the expression from infix to posfix and then generate the binary expression tree using the posfix form.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  # Definition for a binary tree node.
+  # class Node(object):
+  #     def __init__(self, val=" ", left=None, right=None):
+  #         self.val = val
+  #         self.left = left
+  #         self.right = right
+  class Solution:
+      def expTree(self, s: str) -> "Node":
+          s = "(" + s + ")"
+          precedence = {"+": 1, "-": 1, "*": 2, "/": 2}
+          posfix = []
+          st = []
+          for c in s:
+              if c.isdigit():
+                  posfix.append(c)
+              elif c == "(":
+                  st.append(c)
+              elif c == ")":
+                  while st and st[-1] != "(":
+                      posfix.append(st.pop())
+                  st.pop()
+              else:
+                  while st and st[-1] != "(" and precedence[c] <= precedence[st[-1]]:
+                      posfix.append(st.pop())
+                  st.append(c)
+          ans = []
+          for c in posfix:
+              if c.isdigit():
+                  ans.append(Node(c))
+              else:
+                  right = ans.pop()
+                  left = ans.pop()
+                  ans.append(Node(c, left, right))
+          return ans[0]
+#+end_src

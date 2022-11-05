@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID:       4E941C9B-EA99-4C4B-8925-456AFDAEE326
+:ROAM_REFS: https://leetcode.com/problems/best-meeting-point/
+:END:
+#+TITLE: Leetcode: 296. Best Meeting Point
+#+ROAM_REFS: https://leetcode.com/problems/best-meeting-point/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:AF523FD7-71A3-44F0-B9F2-E288B8A6EB6D][Mistake: Wrong time complexity]].  First solution was $O(n^4)$.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The total sum can be split on the total distance by axis.  Therefore, the problem is returning the sum of these independent sums.  Time complexity is $O(\max(n \times m, n^2, m^2))$ and space complexity is $O(n + m)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minTotalDistance(self, g: List[List[int]]) -> int:
+          N = len(g)
+          M = len(g[0])
+          cfreq = [0] * M
+          rfreq = [0] * N
+          for i in range(N):
+              for j in range(M):
+                  cfreq[j] += g[i][j]
+                  rfreq[i] += g[i][j]
+
+          x = float("inf")
+          for j in range(M):
+              cur = 0
+              for k in range(M):
+                  if j != k:
+                      cur += cfreq[k] * abs(k - j)
+              x = min(x, cur)
+
+          y = float("inf")
+          for i in range(N):
+              cur = 0
+              for k in range(N):
+                  if i != k:
+                      cur += rfreq[k] * abs(k - i)
+              y = min(y, cur)
+
+          return x + y
+
+
+  assert (
+      Solution().minTotalDistance([[1, 0, 0, 0, 1], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0]])
+      == 6
+  )
+  assert Solution().minTotalDistance([[1, 1]]) == 1
+#+end_src

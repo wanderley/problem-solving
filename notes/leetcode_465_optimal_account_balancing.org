@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID:       947F7F64-9D41-44F5-82E9-A096639FC8AF
+:ROAM_REFS: https://leetcode.com/problems/optimal-account-balancing/
+:END:
+#+TITLE: Leetcode: 465. Optimal Account Balancing
+#+ROAM_REFS: https://leetcode.com/problems/optimal-account-balancing/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Create an array $b$ that represents the balance after all transactions.  We have that $sum(b)$ is 0 and represents how much each one needs to receive or send.  The problem becomes find the minimum number of transactions to make all balances equal to zero.  Time complexity is $O(n \times 2^n)$ since each there are $2^n$ possible open balances and you need to process $n$ possible ways to send/receive money.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minTransfers(self, transactions: List[List[int]]) -> int:
+          ans = len(transactions)
+
+          def dfs(i):
+              if i == 12:
+                  return 0
+              if net[i] == 0:
+                  return dfs(i + 1)
+              ans = 8
+              for j in range(i + 1, 12):
+                  if (
+                      net[j] == 0
+                      or (net[i] < 0 and net[j] < 0)
+                      or (net[i] > 0 and net[j] > 0)
+                  ):
+                      continue
+                  tmp = net[j]
+                  net[i] += tmp
+                  net[j] = 0
+                  ans = min(ans, 1 + dfs(i))
+                  net[i] -= tmp
+                  net[j] = tmp
+              return ans
+
+          net = [0] * 12
+          for f, t, a in transactions:
+              net[f] -= a
+              net[t] += a
+
+          return dfs(0)
+
+
+  assert Solution().minTransfers([[0, 1, 10], [2, 0, 5]]) == 2
+  assert Solution().minTransfers([[0, 1, 10], [1, 0, 1], [1, 2, 5], [2, 0, 5]]) == 1
+#+end_src

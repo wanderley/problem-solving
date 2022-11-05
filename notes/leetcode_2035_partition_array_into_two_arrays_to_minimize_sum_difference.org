@@ -1,0 +1,63 @@
+:PROPERTIES:
+:ID:       2534D30E-52A4-4632-A589-7D4C09802CD2
+:ROAM_REFS: https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/
+:END:
+#+TITLE: Leetcode: 2035. Partition Array Into Two Arrays to Minimize Sum Difference
+#+ROAM_REFS: https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- Blackbox: Split the input.  We have to split the array in the half and its size is $2 \times n$ with $1 \leq n \leq 15$.  My intuition focused on the fact that $2^15$ isn't too much to compute.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Generate all possible sums with $0, 1, 2, ..., n / 2$ numbers for the first half of the array.  Do the same for the other side.  Suppose that we picked $A$ numbers from the first half.  We have to pick $B$ numbers from the other side to build a valid array where $|B|=n/2-|A|$.  For each $a$ in $A$, we can find the number in $B$ closest as possible to $S/2-a$ using [[id:5CDA0F71-AED2-47E7-9BB4-3B66EA8B85BF][Find index of first greater in sorted array]] algorithm, since it will be the one that minimize the difference between the two final arrays.  Time complexity is $O(2^15 \times \log(2^15))$ and space is $O(2^15)$.
+
+#+begin_src python
+  from typing import List
+  from bisect import bisect_left
+
+
+  class Solution:
+      def minimumDifference(self, nums: List[int]) -> int:
+          N = len(nums)
+          M = N // 2
+
+          m = min(n for n in nums)
+          nums = [m + n for n in nums]
+          S = sum(nums)
+
+          a = [set() for _ in range(M + 1)]
+          b = [set() for _ in range(M + 1)]
+
+          a[0].add(0)
+          b[0].add(0)
+
+          for n in nums[:M]:
+              for i in range(M - 1, -1, -1):
+                  for k in a[i]:
+                      a[i + 1].add(k + n)
+
+          for n in nums[M:]:
+              for i in range(M - 1, -1, -1):
+                  for k in b[i]:
+                      b[i + 1].add(k + n)
+
+          for i in range(M + 1):
+              a[i] = sorted(a[i])
+              b[i] = sorted(b[i])
+
+          ans = float("inf")
+          for i in range(M + 1):
+              j = M - i
+              for p in a[i]:
+                  t = S // 2 - p
+                  m = bisect_left(b[j], t)
+                  for k in range(max(0, m - 1), min(m + 1, len(b[j]))):
+                      ans = min(ans, abs(S - 2 * (p + b[j][k])))
+
+          return ans
+
+
+  assert Solution().minimumDifference([3, 9, 7, 3]) == 2
+  assert Solution().minimumDifference([-36, 36]) == 72
+  assert Solution().minimumDifference([2, -1, 0, 4, -2, -9]) == 0
+#+end_src

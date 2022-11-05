@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID:       80D89090-8EDA-474E-92CF-A796DE67DC01
+:ROAM_REFS: https://leetcode.com/problems/minimum-difference-in-sums-after-removal-of-elements/
+:END:
+#+TITLE: Leetcode: 2163. Minimum Difference in Sums After Removal of Elements
+#+ROAM_REFS: https://leetcode.com/problems/minimum-difference-in-sums-after-removal-of-elements/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  Partition the given array in two subarrays $ln=a[0..i]$ and $rn=a[(i+1)..(n-1)]$ such that $\sum l[i] - \sum r[j]$ is the smallest possible after removing elements from $l$ and $r$ to make them have exactly $n$ elements.  Due the optimization function, we want to remove the greatest elements from $l$ and the smaller elements from $r$ to make both have exactly $n$ elements.  To solve the problem, we can first compute $l(i)$ and $r(i)$ which is the best left and right sum ending on $i$.  This can be done by keeping two sorted list while processing the indexes from the left to right and right to left respectively.  Time complexity is $O(n \log n)$ with space is $O(n)$.
+
+#+begin_src python
+  from heapq import heappush, heappop
+  from typing import List
+
+
+  class Solution:
+      def minimumDifference(self, nums: List[int]) -> int:
+          N = len(nums)
+          M = N // 3
+
+          left = []
+          left_sum = 0
+          dpl = [float("inf")] * N
+          for i in range(2 * M):
+              left_sum += nums[i]
+              heappush(left, -nums[i])
+              if len(left) > M:
+                  left_sum -= -heappop(left)
+              if i >= M - 1:
+                  dpl[i] = left_sum
+
+          right = []
+          right_sum = 0
+          ans = float("inf")
+          for i in range(N - 1, M - 1, -1):
+              right_sum += nums[i]
+              heappush(right, nums[i])
+              if len(right) > M:
+                  right_sum -= heappop(right)
+              if N - i >= M - 1:
+                  ans = min(ans, dpl[i - 1] - right_sum)
+
+          return ans
+#+end_src

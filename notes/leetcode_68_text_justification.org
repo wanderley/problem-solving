@@ -1,0 +1,96 @@
+:PROPERTIES:
+:ID:       1F2EBF73-A90F-4353-B5C7-CCD84462FC0E
+:ROAM_REFS: https://leetcode.com/problems/text-justification/
+:END:
+#+TITLE: Leetcode: 68. Text Justification
+#+ROAM_REFS: https://leetcode.com/problems/text-justification/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The smaller parts are (1) split the list on the words on each line, (2) justify one line and (3) left-justify one line.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+          def justify(line):
+              if len(line) == 1:
+                  return line[0] + (" " * (maxWidth - len(line[0])))
+
+              s = sum(map(len, line))
+              ans = ""
+              g = len(line) - 1
+              e = (maxWidth - s) // g
+              x = maxWidth - s - e * g
+              for i, w in enumerate(line):
+                  if i > 0:
+                      ans += " " * e
+                      ans += " " if x > 0 else ""
+                      x -= 1
+                  ans += w
+              return ans
+
+          def align_left(line):
+              l = " ".join(line)
+              l = l + (" " * (maxWidth - len(l)))
+              return l
+
+          lines = []
+          line = []
+          line_len = 0
+          for w in words:
+              new_line_len = line_len + (1 if line_len > 0 else 0) + len(w)
+              if new_line_len > maxWidth:
+                  lines.append(line)
+                  line = []
+                  line_len = 0
+                  new_line_len = len(w)
+
+              line.append(w)
+              line_len = new_line_len
+
+          if len(line) > 0:
+              lines.append(line)
+
+          return list(map(justify, lines[0:-1])) + [align_left(lines[-1])]
+
+
+  assert Solution().fullJustify(
+      ["This", "is", "an", "example", "of", "text", "justification."], 16
+  ) == ["This    is    an", "example  of text", "justification.  "]
+  assert Solution().fullJustify(
+      ["What", "must", "be", "acknowledgment", "shall", "be"], 16
+  ) == ["What   must   be", "acknowledgment  ", "shall be        "]
+  assert Solution().fullJustify(
+      [
+          "Science",
+          "is",
+          "what",
+          "we",
+          "understand",
+          "well",
+          "enough",
+          "to",
+          "explain",
+          "to",
+          "a",
+          "computer.",
+          "Art",
+          "is",
+          "everything",
+          "else",
+          "we",
+          "do",
+      ],
+      20,
+  ) == [
+      "Science  is  what we",
+      "understand      well",
+      "enough to explain to",
+      "a  computer.  Art is",
+      "everything  else  we",
+      "do                  ",
+  ]
+#+end_src

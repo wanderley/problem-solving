@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID:       FA11EE9D-F301-4A3C-B9A2-504F929A12FD
+:ROAM_REFS: https://leetcode.com/problems/maximum-score-words-formed-by-letters/
+:END:
+#+TITLE: Leetcode: 1255. Maximum Score Words Formed by Letters
+#+ROAM_REFS: https://leetcode.com/problems/maximum-score-words-formed-by-letters/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  Generate all sets and take the one with maximum score.  Time complexity is $O(2^n \times n)$ and space complexity is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from collections import Counter
+
+
+  class Solution:
+      def maxScoreWords(
+          self, words: List[str], letters: List[str], score: List[int]
+      ) -> int:
+          N = len(words)
+
+          allowed = Counter(letters)
+
+          def value(selection):
+              required = Counter([])
+              for i in range(N):
+                  if selection & (1 << i):
+                      required.update(words[i])
+              ans = 0
+              for k, v in required.items():
+                  if allowed[k] < required[k]:
+                      return float("-inf")
+                  ans += required[k] * score[ord(k) - ord("a")]
+              return ans
+
+          return max(value(selection) for selection in range(2**N))
+
+
+  assert (
+      Solution().maxScoreWords(
+          ["dog", "cat", "dad", "good"],
+          ["a", "a", "c", "d", "d", "d", "g", "o", "o"],
+          [1, 0, 9, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      )
+      == 23
+  )
+  assert (
+      Solution().maxScoreWords(
+          ["xxxz", "ax", "bx", "cx"],
+          ["z", "a", "b", "c", "x", "x", "x"],
+          [4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 10],
+      )
+      == 27
+  )
+  assert (
+      Solution().maxScoreWords(
+          ["leetcode"],
+          ["l", "e", "t", "c", "o", "d"],
+          [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+      )
+      == 0
+  )
+#+end_src

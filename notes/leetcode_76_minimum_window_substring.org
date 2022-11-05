@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID:       984D2536-2C7B-4A5D-BBFF-9D8DAA708A0E
+:ROAM_REFS: https://leetcode.com/problems/minimum-window-substring/
+:END:
+#+TITLE: Leetcode: 76. Minimum Window Substring
+#+ROAM_REFS: https://leetcode.com/problems/minimum-window-substring/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]]. I tried but didn't come up with ~("a", "b")~.
+
+- [[id:46522C06-DAC3-4986-A13A-17C2ED44ADD1][Can we formulate the problem as sliding window?]]  To check if the window is valid, we count the number of letters that reached the correct frequency in the window.  It can be done by keeping a dictionary with the frequency.  Time complexity is $O(n)$ and space complexity is $O(1)$.
+
+#+begin_src python
+  from collections import defaultdict
+
+
+  class Solution:
+      def minWindow(self, s: str, t: str) -> str:
+          R = len(set(t))
+          N = len(s)
+          required = defaultdict(int)
+          for c in t:
+              required[c] += 1
+
+          freq = defaultdict(int)
+          cnt_ok = 0
+
+          start = 0
+          valid = False
+
+          ans = None
+          for end, c in enumerate(s):
+              if not valid and freq[c] == required[c] - 1:
+                  cnt_ok += 1
+                  valid = cnt_ok == R
+
+              freq[c] += 1
+              while start < N and freq[s[start]] > required[s[start]]:
+                  freq[s[start]] -= 1
+                  start += 1
+
+              if valid and (ans is None or (ans[1] - ans[0] + 1) > (end - start + 1)):
+                  ans = (start, end)
+
+          return s[ans[0] : ans[1] + 1] if ans else ""
+
+
+  assert Solution().minWindow("ADOBECODEBANC", "ABC") == "BANC"
+  assert Solution().minWindow("a", "a") == "a"
+#+end_src

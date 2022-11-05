@@ -1,0 +1,119 @@
+:PROPERTIES:
+:ID:       E0A05C44-73E3-47EE-B8DE-CB24752D5F28
+:ROAM_REFS: https://leetcode.com/problems/maximum-score-of-a-good-subarray/
+:END:
+#+TITLE: Leetcode: 1793. Maximum Score of a Good Subarray
+#+ROAM_REFS: https://leetcode.com/problems/maximum-score-of-a-good-subarray/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The problem asks to find indexes $i$ and $j$ such that $i \leq k \leq j$, but the optimal choice can have the minimum value in $i$ or $j$.  Therefore, we can try to find the best $j$ by supposing that $i$ the is minimum one and the do the same fixing $j$.  To do so, we need a data structure (two sorted lists) that we could query $j$ in logarithm time.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+  from sortedcontainers import SortedList
+
+
+  class Solution:
+      def maximumScore(self, nums: List[int], k: int) -> int:
+          return max(solve(nums, k), solve(list(reversed(nums)), len(nums) - k - 1))
+
+
+  def solve(nums, k):
+      right = []
+      cur = float("+inf")
+      for i in range(k, len(nums)):
+          cur = min(cur, nums[i])
+          right.append((i, cur))
+
+      a = SortedList(right, key=lambda e: -e[1])
+      c0 = SortedList([], key=lambda e: e[1])
+      c1 = SortedList([], key=lambda e: -e[0])
+
+      ans = float("-inf")
+      cur = float("+inf")
+      for i in range(k, -1, -1):
+          cur = min(cur, nums[i])
+          while a and a[0][1] >= cur:
+              e = a.pop(0)
+              c0.add(e)
+              c1.add(e)
+          while c0 and c0[0][1] < cur:
+              e = c0.pop(0)
+              c1.discard(e)
+          if c1 and cur * (c1[0][0] - i + 1) > ans:
+              ans = cur * (c1[0][0] - i + 1)
+      return ans
+
+
+  assert Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+  assert Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+#+end_src
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumScore(self, nums: List[int], k: int) -> int:
+          return max(solve(nums, k), solve(list(reversed(nums)), len(nums) - k - 1))
+
+
+  def solve(nums, k):
+      right = []
+      cur = float("+inf")
+      for i in range(k, len(nums)):
+          cur = min(cur, nums[i])
+          if right and right[-1][1] == cur:
+              right[-1][0] = i
+          else:
+              right.append([i, cur])
+      right.sort(key=lambda e: e[1], reverse=True)
+
+      j = 0
+      ans = float("-inf")
+      cur = float("+inf")
+      for i in range(k, -1, -1):
+          cur = min(cur, nums[i])
+          while j < len(right) and right[j][1] > cur:
+              j += 1
+          if j == len(right):
+              ans = max(ans, cur * (len(nums) - i))
+          else:
+              ans = max(ans, cur * (right[j if right[j][1] == cur else j - 1][0] - i + 1))
+      return ans
+
+
+  assert Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+  assert Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+#+end_src
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Suppose the input is $3,4,5$.  If we start from $4$, we would expand the interval first to $5$ and then to $3$ to make sure that we would consider the minimum $4$ times its max range.  If the input is $5, 4, 3$, we would like to expand first to the left and then to the right.  Starting from $k$, we have only two choices to make to expand the interval: expand to the direction that maximizes the minimum value.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def maximumScore(self, nums: List[int], k: int) -> int:
+          i = j = k
+          ans = m = nums[k]
+
+          while i > 0 or j < len(nums) - 1:
+              if i == 0:
+                  j += 1
+              elif j == len(nums) - 1:
+                  i -= 1
+              elif nums[i - 1] < nums[j + 1]:
+                  j += 1
+              else:
+                  i -= 1
+              m = min(m, nums[i], nums[j])
+              ans = max(ans, m * (j - i + 1))
+
+          return ans
+
+
+  assert Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+  assert Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+#+end_src

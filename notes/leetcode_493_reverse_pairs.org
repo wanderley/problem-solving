@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       99FFA850-FD78-458A-9C45-99A2BA7D119A
+:ROAM_REFS: https://leetcode.com/problems/reverse-pairs/
+:END:
+#+TITLE: Leetcode: 493. Reverse Pairs
+#+ROAM_REFS: https://leetcode.com/problems/reverse-pairs/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:26656051-E32D-42FE-9315-05ADB46A1A82][Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?]]  The number of reverse pairs in the last element is zero.  We will have only one reverse pair if $a[n-2] > 2 \times a[n-1]$.  On iteration $i$, be $b$ an array with numbers $2 \times a[i+1], ... 2 \times a[n-1]$.  The problem is then finding the number of number in $b$ that are smaller than $a[i]$.  After processing $i$, we can add $2 \times a[i]$ to the list and continue to the next index.  Time complexity is $O(n \times \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+  from typing import List
+
+
+  class Solution:
+      def reversePairs(self, nums: List[int]) -> int:
+          sl = SortedList()
+          ans = 0
+          for num in reversed(nums):
+              p = sl.bisect_left(num)
+              ans += p
+              sl.add(num * 2)
+          return ans
+
+
+  assert Solution().reversePairs([1, 3, 2, 3, 1]) == 2
+  assert Solution().reversePairs([2, 4, 3, 5, 1]) == 3
+#+end_src
+
+- Other way to solve this problem is to implement a [[id:1A99D477-2FF8-481E-80B4-735122D0A8D7][Merge Sort]] and count the number of swaps was done.  Time complexity is $O(n \log n)$ and space is $O(n)$.

@@ -1,0 +1,74 @@
+:PROPERTIES:
+:ID:       1D3509D2-499B-442D-B748-886D8F8A9A03
+:ROAM_REFS: https://leetcode.com/problems/design-excel-sum-formula/
+:END:
+#+TITLE: Leetcode: 631. Design Excel Sum Formula
+#+ROAM_REFS: https://leetcode.com/problems/design-excel-sum-formula/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:3D263A82-52AE-4C90-830D-C533ABAFFF3E][Mistake: Missing required invariants]].  The cache has to be invalidate after ~set~ and ~sum~, but I forgot the last one.
+
+- [[id:117736F8-6CF6-435F-9043-18B8D22EDDE9][Pattern: Answer queries on online directed acyclic graph]].  Invalidate a cache for queries every time that the graph changes.
+
+- [[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Cells are edges on the graph.  Fixed-value cells don't have any outgoing edges while formula-cells have edges to all cells that need to be summed.  As there is no cicle on the formulas, the graph is an [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] what allows us to recursively compute the formulas values using cache to avoid repeating computation.  Time complexity of ~get~ and ~sum~ is $O(r^2 \times c^2)$ since there at most $(n \times (n-1))/2$ edges on a [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]] with $n$ edges.  As there are $r \times c$ vertices in the graph, the search-space is at most $O(r \times c)$ with $O(r \times c)$ the value of each formula.  Space complexity is $O(r \times c)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Excel:
+      def __init__(self, height: int, width: str):
+          self.s = [[0] * 100 for _ in range(100)]
+          self.cache = {}
+
+      def set(self, row: int, column: str, val: int) -> None:
+          self.s[row][self._col2idx(column)] = val
+          self.cache = {}
+
+      def get(self, row: int, column: str) -> int:
+          return self._get(row, self._col2idx(column))
+
+      def _get(self, row, col):
+          v = self.s[row][col]
+          if isinstance(v, int):
+              return v
+
+          if (row, col) in self.cache:
+              return self.cache[row, col]
+          v = self._compute(v)
+          self.cache[row, col] = v
+          return v
+
+      def sum(self, row: int, column: str, numbers: List[str]) -> int:
+          self.s[row][self._col2idx(column)] = numbers
+          self.cache = {}
+          return self.get(row, column)
+
+      def _compute(self, numbers):
+          ans = 0
+          for n in numbers:
+              if ":" not in n:
+                  ans += self._get(*self._s2idxs(n))
+                  continue
+              f, t = n.split(":")
+              fi, fj = self._s2idxs(f)
+              ti, tj = self._s2idxs(t)
+              for i in range(fi, ti + 1):
+                  for j in range(fj, tj + 1):
+                      ans += self._get(i, j)
+          return ans
+
+      def _col2idx(self, c):
+          return ord(c) - ord("A")
+
+      def _s2idxs(self, s):
+          return (int(s[1:]), self._col2idx(s[0]))
+
+
+  # Your Excel object will be instantiated and called as such:
+  # obj = Excel(height, width)
+  # obj.set(row,column,val)
+  # param_2 = obj.get(row,column)
+  # param_3 = obj.sum(row,column,numbers)
+#+end_src

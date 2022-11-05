@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       ADE0798C-6979-43C2-97C4-42D1B6A3F642
+:ROAM_REFS: https://leetcode.com/problems/count-all-valid-pickup-and-delivery-options/
+:END:
+#+TITLE: Leetcode: 1359. Count All Valid Pickup and Delivery Options
+#+ROAM_REFS: https://leetcode.com/problems/count-all-valid-pickup-and-delivery-options/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  Select the order to pick and when it will be delivered.  To delivery the rest of order, we have the solve the same problem with less one order.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def countOrders(self, n: int) -> int:
+          MOD = 10**9 + 7
+          ans = 1
+          for i in range(2, n + 1):
+              ans = ((i * (2 * i - 1) % MOD) * ans) % MOD
+          return ans
+
+
+  assert Solution().countOrders(1) == 1
+  assert Solution().countOrders(2) == 6
+  assert Solution().countOrders(3) == 90
+#+end_src

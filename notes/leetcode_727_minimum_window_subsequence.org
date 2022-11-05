@@ -1,0 +1,42 @@
+:PROPERTIES:
+:ID:       474148A3-1DD0-40C9-AE80-5D2BBBE5A598
+:ROAM_REFS: https://leetcode.com/problems/minimum-window-subsequence/
+:END:
+#+TITLE: Leetcode: 727. Minimum Window Subsequence
+#+ROAM_REFS: https://leetcode.com/problems/minimum-window-subsequence/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  Find the smallest index $f(i,j)=k$ where $s[i:k]$ has $t[j:]$ as subsequence.  The problem becomes getting the minimum between $f(i,0)$.  Time complexity is $O(n \times m)$ and space is $O(m)$.
+
+#+begin_src python
+  class Solution:
+      def minWindow(self, s1: str, s2: str) -> str:
+          N = len(s1)
+          M = len(s2)
+
+          cur = [float("inf")] * (M + 1)
+          cur[M] = N
+          ans = None
+          for i in range(N - 1, -1, -1):
+              new = [float("inf")] * (M + 1)
+              new[M] = i
+              for j in range(M):
+                  if s1[i] == s2[j]:
+                      new[j] = cur[j + 1]
+                  else:
+                      new[j] = cur[j]
+
+              j = new[0]
+              if j <= N and (ans is None or (j - i) <= len(ans)):
+                  ans = s1[i:j]
+              cur = new
+
+          return "" if ans is None else ans
+
+
+  assert Solution().minWindow("abcdebdde", "bde") == "bcde"
+  assert Solution().minWindow("jmeqksfrsdcmsiwvaovztaqenprpvnbstl", "u") == ""
+#+end_src

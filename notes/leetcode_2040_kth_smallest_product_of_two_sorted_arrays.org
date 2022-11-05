@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       8ED5885A-B45E-4A61-9EE1-4DD570CB26CE
+:ROAM_REFS: https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/
+:END:
+#+TITLE: Leetcode: 2040. Kth Smallest Product of Two Sorted Arrays
+#+ROAM_REFS: https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!

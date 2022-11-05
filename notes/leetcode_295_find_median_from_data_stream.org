@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       CA7E6559-D1E8-488B-A803-67B445515302
+:ROAM_REFS: https://leetcode.com/problems/find-median-from-data-stream/
+:END:
+#+TITLE: Leetcode: 295. Find Median from Data Stream
+#+ROAM_REFS: https://leetcode.com/problems/find-median-from-data-stream/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:A18543C4-83BC-40F1-A243-B85FD935FAC0][Pattern: Answer query on sorted data]].  Keep a sorted list of the numbers and compute the median using it.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from sortedcontainers import SortedList
+
+
+  class MedianFinder:
+      def __init__(self):
+          self.s = SortedList()
+
+      def addNum(self, num: int) -> None:
+          self.s.add(num)
+
+      def findMedian(self) -> float:
+          N = len(self.s)
+          if N % 2 == 0:
+              return (self.s[N // 2] + self.s[N // 2 - 1]) / 2
+          return self.s[N // 2]
+
+
+  # Your MedianFinder object will be instantiated and called as such:
+  # obj = MedianFinder()
+  # obj.addNum(num)
+  # param_2 = obj.findMedian()
+#+end_src

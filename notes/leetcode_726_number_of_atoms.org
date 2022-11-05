@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID:       51DD9762-BF5D-4ED4-8C01-FF3F67E99BC6
+:ROAM_REFS: https://leetcode.com/problems/number-of-atoms/
+:END:
+#+TITLE: Leetcode: 726. Number of Atoms
+#+ROAM_REFS: https://leetcode.com/problems/number-of-atoms/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]]: ~(A)2(B)2~.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The difficult of the problem comes from implementing a parser which you can break-down on ~read_atom~, ~read_int~ and ~parse~.  Time complexity is $O(n^2)$ and space $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def countOfAtoms(self, formula: str) -> str:
+          def read_atom(i):
+              assert formula[i].isalpha()
+              j = i + 1
+              while j < len(formula) and "a" <= formula[j] <= "z":
+                  j += 1
+              atom = formula[i:j]
+              k, count = read_int(j)
+              return k, atom, count
+
+          def read_int(i):
+              j = i
+              while j < len(formula) and "0" <= formula[j] <= "9":
+                  j += 1
+              return j, 1 if i == j else int(formula[i:j])
+
+          def parse(i, atoms):
+              if i == len(formula) or formula[i] == ")":
+                  return i, atoms
+              elif formula[i] == "(":
+                  j, new_atoms = parse(i + 1, {})
+                  k, count = read_int(j + 1)
+                  for atom in new_atoms:
+                      atoms.setdefault(atom, 0)
+                      atoms[atom] += new_atoms[atom] * count
+                  return parse(k, atoms)
+              elif formula[i].isalpha():
+                  j, atom, count = read_atom(i)
+                  atoms.setdefault(atom, 0)
+                  atoms[atom] += count
+                  return parse(j, atoms)
+
+          ans = ""
+          for atom, count in sorted(parse(0, {})[1].items()):
+              ans += atom
+              if count > 1:
+                  ans += str(count)
+          return ans
+
+  assert Solution().countOfAtoms("H2O") == "H2O"
+  assert Solution().countOfAtoms("Mg(OH)2") == "H2MgO2"
+  assert Solution().countOfAtoms("K4(ON(SO3)2)2") == "K4N2O14S4"
+  assert Solution().countOfAtoms("(A)2(B)2") == "A2B2"
+#+end_src

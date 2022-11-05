@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID:       41D39DCB-E3A3-4008-A2D0-D31E53CD2BF0
+:ROAM_REFS: https://leetcode.com/problems/trapping-rain-water-ii/
+:END:
+#+TITLE: Leetcode: 407. Trapping Rain Water II
+#+ROAM_REFS: https://leetcode.com/problems/trapping-rain-water-ii/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:CCCF9587-5365-4BB0-B0D3-8FC82D55E781][Mistake: Failed to recognize known problem]]: [[id:8BACB101-3C8B-47CA-9AB1-89D52F85F6DA][Shortest Path in a Graph Problem]].
+
+- [[id:E79DA5C2-ACB6-4611-AD11-090310B72BC1][Mistake: Did not play with small examples draw invariants]].
+
+- [[id:48E699CB-3125-47FF-AA1A-5FCCF0EF235E][Can we simulate the problem?]]  We can simulate the water raising from the border to the center of the grid.  Every time that water gets to a cell (from the lowest height to the highest height), it will trap water in neighbors that weren't visited and have smaller heights.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def trapRainWater(self, h: List[List[int]]) -> int:
+          N = len(h)
+          M = len(h[0])
+          D = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+          vis = [[False] * M for _ in range(N)]
+          pq = []
+          for i in range(N):
+              heappush(pq, (h[i][0], i, 0))
+              heappush(pq, (h[i][M - 1], i, M - 1))
+              vis[i][0] = vis[i][M - 1] = True
+          for j in range(M):
+              heappush(pq, (h[0][j], 0, j))
+              heappush(pq, (h[N - 1][j], N - 1, j))
+              vis[0][j] = vis[N - 1][j] = True
+
+          ans = 0
+          while pq:
+              cur, i, j = heappop(pq)
+              for di, dj in D:
+                  ni = i + di
+                  nj = j + dj
+                  if 0 <= ni < N and 0 <= nj < M and not vis[ni][nj]:
+                      vis[ni][nj] = True
+                      diff = max(cur - h[ni][nj], 0)
+                      ans += diff
+                      heappush(pq, (max(h[ni][nj], cur), ni, nj))
+          return ans
+
+
+  assert (
+      Solution().trapRainWater(
+          [[1, 4, 3, 1, 3, 2], [3, 2, 1, 3, 2, 4], [2, 3, 3, 2, 3, 1]]
+      )
+      == 4
+  )
+  assert (
+      Solution().trapRainWater(
+          [
+              [3, 3, 3, 3, 3],
+              [3, 2, 2, 2, 3],
+              [3, 2, 1, 2, 3],
+              [3, 2, 2, 2, 3],
+              [3, 3, 3, 3, 3],
+          ]
+      )
+      == 10
+  )
+#+end_src

@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID:       8889BD48-CED8-48BE-9705-FCA12FA3A90B
+:ROAM_REFS: https://leetcode.com/problems/minimum-cost-to-merge-stones/
+:END:
+#+TITLE: Leetcode: 1000. Minimum Cost to Merge Stones
+#+ROAM_REFS: https://leetcode.com/problems/minimum-cost-to-merge-stones/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:4060A2EA-09E8-4E05-922D-8340AAF60F44][Pattern: Find optimal partition of array]].  If the input has only one number, the answer is 0.  If there are less than $K$ numbers, the answer is -1.  If there are exactly $K$ numbers, the answer is $sum(stones)$.  Otherwise, we have to first find optimal partition of the array in exactly $K$ parts and them merge them.  Time complexity is $O(n^4)$ and space is $O(n^3)$.
+
+#+begin_src python
+  class Solution:
+      def mergeStones(self, stones: List[int], K: int) -> int:
+          N = len(stones)
+
+          @cache
+          def g(i, j, k):
+              n = j - i + 1
+              if k == 1:
+                  return f(i, j)
+              assert k > 0
+              ans = float("inf")
+              for p in range(i, j):
+                  if p == i:
+                      ans = min(ans, g(p + 1, j, k - 1))
+                  else:
+                      ans = min(ans, f(i, p) + g(p + 1, j, k - 1))
+              return ans
+
+
+          @cache
+          def f(i, j):
+              n = j - i + 1
+              if n == 1:
+                  return 0
+              if n < K:
+                  return float("inf")
+              if n == K:
+                  return sum(stones[i:j+1])
+              return sum(stones[i:j+1]) + g(i, j, K)
+
+          ans = f(0, N - 1)
+          return -1 if ans == float("inf") else ans
+#+end_src

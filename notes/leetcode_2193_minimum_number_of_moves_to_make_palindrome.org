@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       5456C34F-1DBB-44F0-9B55-35418500F8F2
+:ROAM_REFS: https://leetcode.com/problems/minimum-number-of-moves-to-make-palindrome/
+:END:
+#+TITLE: Leetcode: 2193. Minimum Number of Moves to Make Palindrome
+#+ROAM_REFS: https://leetcode.com/problems/minimum-number-of-moves-to-make-palindrome/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  Tried to search through all possible sub-problems and didn't consider (couldn't prove) that the greedy approach work.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  If the first and last char match, we can discard them.  Otherwise, we should fix the end that requires the less amount of swaps.  Time complexity is $O(n^2)$ and space is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def minMovesToMakePalindrome(self, s: str) -> int:
+          def normalize(s):
+              i = 0
+              j = len(s) - 1
+              while i < j:
+                  if s[i] != s[j]:
+                      return s[i : j + 1]
+                  i += 1
+                  j -= 1
+              return ""
+
+          ans = 0
+          s = normalize(s)
+          while s:
+              i = s.find(s[-1])
+              j = s.rfind(s[0])
+              if i < len(s) - j - 1:
+                  ans += i
+                  s = normalize(s[-1] + s[:i] + s[i + 1 :])
+              else:
+                  ans += len(s) - j - 1
+                  s = normalize(s[:j] + s[j + 1 :] + s[0])
+          return ans
+#+end_src

@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       2EE2711B-2EB9-4E97-9171-EB7010EC2DBF
+:ROAM_REFS: https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/
+:END:
+#+TITLE: Leetcode: 2147. Number of Ways to Divide a Long Corridor
+#+ROAM_REFS: https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Missed smallest edge cases possible (i.e. one letter).
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  We can trim the plants on both extremes since no section will be created between them.
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Be $p_0, p_1, ..., p_k$ the number of plants between the first two seats and the next two and so on.  The problem becomes computing $p_0 \times p_1 \times ... \times p_k \mod 10^9 + 7$.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def numberOfWays(self, corridor: str) -> int:
+          M = 10**9 + 7
+          N = len(corridor)
+          i = 0
+          while i < N and corridor[i] == "P":
+              i += 1
+          ans = None
+          while i < N:
+              cnt = 0
+              while i < N and corridor[i] == "P":
+                  i += 1
+                  cnt += 1
+              if i == N:
+                  break
+              assert corridor[i] == "S"
+              i += 1
+              while i < N and corridor[i] == "P":
+                  i += 1
+              if i == N:
+                  return 0
+              assert corridor[i] == "S"
+              if ans is None:
+                  ans = 1
+              ans = (ans * (cnt + 1)) % M
+              i += 1
+          return 0 if ans is None else ans
+
+
+  assert Solution().numberOfWays("SSPPSPS") == 3
+  assert Solution().numberOfWays("PPSPSP") == 1
+  assert Solution().numberOfWays("S") == 0
+#+end_src

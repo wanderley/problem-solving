@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       B7AA19BC-8770-4810-865F-A54CAA9C2F69
+:ROAM_REFS: https://leetcode.com/problems/total-appeal-of-a-string/
+:END:
+#+TITLE: Leetcode: 2262. Total Appeal of A String
+#+ROAM_REFS: https://leetcode.com/problems/total-appeal-of-a-string/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Count the number of substring that $s[i]$ is the first appearance of $s[i]$ on it.  For strings starting on $i$, it will appear on $N - i$ of those.  It will appear in the mid of $(i - prev[s[i]]) \times (N - i - 1)$ where $prev[s[i]]$ is the last occurrence of $s[i]$ on $0..(i-1)$.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def appealSum(self, s: str) -> int:
+          N = len(s)
+          last = defaultdict(lambda: -1)
+          prev = [-1] * N
+          for i in range(N):
+              prev[i] = last[s[i]]
+              last[s[i]] = i
+          ans = 0
+          for i in range(N):
+              ans += (N - i) * (i - prev[i])
+          return ans
+#+end_src

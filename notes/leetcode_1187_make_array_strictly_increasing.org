@@ -1,0 +1,71 @@
+:PROPERTIES:
+:ID:       89E59E33-3597-4858-894D-93FA22FAB3E0
+:END:
+#+TITLE: Leetcode: 1187. Make Array Strictly Increasing
+#+ROAM_REFS: https://leetcode.com/problems/make-array-strictly-increasing/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446287800
+
+- [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]].
+
+- [[id:EC7DFA39-8E96-4EF7-9297-FAEE2ABF0849][Blackbox: The dependent problem needs to be optimized]].  I have to make the choice for the $i$ item in $O(1)$ or $O(\log n)$ otherwise the solution will exceed the time limit.
+
+- [[id:74F32EE1-D1C9-4EC8-A447-9F87FB5E1D28][Pattern: Find optimal subsequence]].
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  It reminds [[id:665B7733-6D7E-4A34-8F77-7E64747CE2C9][Longest Increasing Subsequence]], since we have to change the given array to become one be LIS.  For each item $i$, we should take the best of either keeping it as the original value or changing it with one of the backup numbers.  Time complexity is $O(n^2 \log n)$ and space complexity is $O(n^2)$.
+
+#+begin_src python
+  from typing import List
+  from bisect import bisect_right
+
+
+  class Solution:
+      def makeArrayIncreasing(self, a1: List[int], a2: List[int]) -> int:
+          N = len(a1)
+          M = len(a2)
+          a1.append(float("+inf"))
+          a2.sort()
+
+          dp = [[0] * (M + 1) for _ in range(N + 1)]
+          for i in range(N - 1, -1, -1):
+              for j in range(M, -1, -1):
+                  e = 1 if j > 0 else 0
+                  a = a1[i] if j == 0 else a2[j - 1]
+                  b = (e + dp[i + 1][0]) if a < a1[i + 1] else float("+inf")
+                  k = bisect_right(a2, a)
+                  if k < len(a2):
+                      b = min(b, e + dp[i + 1][k + 1])
+                  dp[i][j] = b
+
+          ans = min(dp[0][0], dp[0][1])
+          return -1 if ans == float("inf") else ans
+
+
+  assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [1, 3, 2, 4]) == 1
+  assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [4, 3, 1]) == 2
+  assert Solution().makeArrayIncreasing([1, 5, 3, 6, 7], [1, 6, 3, 3]) == -1
+#+end_src
+
+#+begin_src python
+  class Solution:
+      def makeArrayIncreasing(self, a1: List[int], a2: List[int]) -> int:
+          a2.append(float("inf"))
+          a2.sort()
+          N = len(a1)
+          M = len(a2)
+
+          @cache
+          def dfs(i, last):
+              if last == float("inf"):
+                  return float("inf")
+              if i == N:
+                  return 0
+              return min(
+                  dfs(i + 1, a1[i]) if a1[i] > last else float("inf"),
+                  1 + dfs(i + 1, a2[bisect_right(a2, last)]),
+              )
+
+          ans = dfs(0, float("-inf"))
+          return -1 if ans == float("inf") else ans
+#+end_src

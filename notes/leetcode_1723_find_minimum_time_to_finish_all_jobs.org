@@ -1,0 +1,91 @@
+:PROPERTIES:
+:ID:       998E305B-A6C9-4044-BE2F-FC8D42875F71
+:ROAM_REFS: https://leetcode.com/problems/find-minimum-time-to-finish-all-jobs/
+:END:
+#+TITLE: Leetcode: 1723. Find Minimum Time to Finish All Jobs
+#+ROAM_REFS: https://leetcode.com/problems/find-minimum-time-to-finish-all-jobs/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]] and got stuck on the Dynamic Programming solution.
+
+- [[id:FEEE596A-DFF4-4B02-8995-1BCF70A76410][Pattern: Find optimal subset of small set]].  Use [[id:EC1C87C8-A221-4823-9EF5-BEC706B2EEA5][Brute Force]] to assign each job to a worker and prune the search with the current maximum working time for the updated job.  To make the search faster, sort the input in decreasing order.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  The most important prune is to make sure that a job is assigned as the first job of a work only once.  Time complexity is $O(n^k)$ but the prunes makes the solution faster than [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]].
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumTimeRequired(self, jobs: List[int], K: int) -> int:
+          N = len(jobs)
+          jobs.sort(reverse=True)
+          load = [0] * N
+          ans = float("inf")
+
+          def bt(i, cur):
+              nonlocal ans
+              if cur >= ans:
+                  return
+              if i == N:
+                  ans = min(ans, cur)
+                  return
+              for j in range(K):
+                  load[j] += jobs[i]
+                  if load[j] < ans:
+                      bt(i + 1, max(cur, load[j]))
+                  load[j] -= jobs[i]
+                  if load[j] == 0:
+                      break
+
+          bt(0, 0)
+          return ans
+
+
+  assert Solution().minimumTimeRequired([3, 2, 3], 3) == 3
+  assert Solution().minimumTimeRequired([1, 2, 4, 7, 8], 2) == 11
+#+end_src
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  The search-space is defined by $(k, S)$ where $k$ is the number of workers used so far and $S$ represents the completed jobs.  Time and space complexity is $O(k \times 2^n)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minimumTimeRequired(self, jobs: List[int], K: int) -> int:
+          S = sum(jobs)
+          N = len(jobs)
+          M = 2**N
+
+          cost = [0] * M
+          for i in range(M):
+              for j in range(N):
+                  if i & (1 << j):
+                      cost[i] += jobs[j]
+
+          def submasks(mask):
+              submask = mask
+              while submask:
+                  yield submask
+                  submask = (submask - 1) & mask
+
+          dp = [[float("inf")] * M for _ in range(K + 1)]
+          for k in range(K, -1, -1):
+              if k == K:
+                  dp[k][M - 1] = 0
+              else:
+                  for used in range(M):
+                      allowed = (M - 1) ^ used
+                      cur = float("inf")
+                      for new in submasks(allowed):
+                          if cost[new] < cur:
+                              cur = min(cur, max(cost[new], dp[k + 1][used | new]))
+                      dp[k][used] = cur
+          return dp[0][0]
+
+
+  assert Solution().minimumTimeRequired([3, 2, 3], 3) == 3
+  assert Solution().minimumTimeRequired([1, 2, 4, 7, 8], 2) == 11
+#+end_src

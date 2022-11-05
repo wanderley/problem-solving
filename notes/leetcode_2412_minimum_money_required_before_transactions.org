@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:       3D15DF90-55C2-45B7-BFD6-1C08E72707DB
+:ROAM_REFS: https://leetcode.com/problems/minimum-money-required-before-transactions/
+:END:
+#+TITLE: Leetcode: 2412. Minimum Money Required Before Transactions
+#+ROAM_REFS: https://leetcode.com/problems/minimum-money-required-before-transactions/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:F431A436-0E2F-42F4-9EB9-13A82272F944][Pattern: Find optimal arrangement]].  After find the optimal arrangement for the transactions, the problem becomes finding the smallest value that satisfy it with a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  All values with negative net comes first.  And number with the same net should have the ones with higher cost first, so it forces more money to be used early on.
+
+#+begin_src python
+  from functools import cmp_to_key
+
+  class Solution:
+      def minimumMoney(self, transactions: List[List[int]]) -> int:
+          def is_positive(a):
+              return a[0] < a[1]
+          def compare(a, b):
+              if is_positive(a) and is_positive(b):
+                  return b[0] - a[0]
+              if is_positive(a):
+                  return +1
+              if is_positive(b):
+                  return -1
+              if a[1] != b[1]:
+                  return a[1] - b[1]
+              return b[0] - a[0]
+
+          def check(money):
+              for cost, cash in transactions:
+                  if money < cost:
+                      return False
+                  money = money - cost + cash
+              return money >= 0
+
+          transactions.sort(key=cmp_to_key(compare))
+          lo = 0
+          ans = hi = sum(c for c, _ in transactions)
+
+          while lo < hi:
+              mid = lo + (hi - lo) // 2
+              if check(mid):
+                  hi = mid
+                  ans = mid
+              else:
+                  lo = mid + 1
+
+          return ans
+#+end_src

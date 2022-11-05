@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       4240193E-CFDA-465C-930E-89093231028A
+:ROAM_REFS: https://leetcode.com/problems/k-inverse-pairs-array/
+:END:
+#+TITLE: Leetcode: 629. K Inverse Pairs Array
+#+ROAM_REFS: https://leetcode.com/problems/k-inverse-pairs-array/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]] where the solution was to construct the solution from the last move to the first one ([[id:12BA5684-2AD8-4891-A53B-7E4C08A73882][Leetcode: 312. Burst Balloons]]).
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]  Be $a$ an empty array where we will fill with permutation of $0..(n-1)$.  Pick a position $i$ to put the number 1.  How many inversions will it create?  The answer is $i$, since all $i$ numbers on $0..(i-1)$ are greater than $a[i]$.  After doing the same with 2, we can notice that the position of 1 doesn't affect if we consider that it was excluded from the array.  In other words, we try to put 2 in an empty array with $n-1$ positions.  The following solution implements this strategy that we can compute part of it using a suffix sum.  Time complexity is $O(n \times k)$ and space complexity is $O(k)$.
+
+#+begin_src python
+  class Solution:
+      def kInversePairs(self, N: int, K: int) -> int:
+          MOD = 10**9 + 7
+
+          right = [0] * (K + 1)
+          right[0] = 1
+          for n in range(2, N + 1):
+              cur = [0] * (K + 1)
+              for k in range(K, -1, -1):
+                  cur[k] = right[k - min(n, k + 1) + 1] - (
+                      right[k + 1] if k + 1 <= K else 0
+                  )
+                  if k < K:
+                      cur[k] = cur[k] + cur[k + 1]
+                  cur[k] = cur[k] % MOD
+              right = cur
+
+          return right[K]
+
+
+  assert Solution().kInversePairs(3, 0) == 1
+  assert Solution().kInversePairs(3, 1) == 2
+#+end_src

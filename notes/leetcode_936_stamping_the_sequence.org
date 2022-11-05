@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       2D9BA507-11E9-4B91-AADB-FB083CC366E0
+:ROAM_REFS: https://leetcode.com/problems/stamping-the-sequence/
+:END:
+#+TITLE: Leetcode: 936. Stamping The Sequence
+#+ROAM_REFS: https://leetcode.com/problems/stamping-the-sequence/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!

@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID:       BAC379CA-7A9C-4C8D-BD4D-EAE1745A22AC
+:END:
+#+TITLE: Leetcode: 1675. Minimize Deviation in Array
+#+ROAM_REFS: https://leetcode.com/problems/minimize-deviation-in-array/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:1AE37D0A-8E53-4F30-BBBE-114219226182][Mistake: Failed to find efficient solution for the alternative problem]].  I tried to represent the problem using intervals, but didn't really try to solve it.  After the tip, I came back to the problem and could solve it.
+
+[[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  In the original problem, you can either divide (decrease) even number or multiply (increase) odd numbers.  As there is no need to minimize the number of operations, we can divide all numbers as much as we can and solve the problem where we will only increase the numbers.  Each turn, we remove the smallest element and add it's double back to the [[id:FCBEA48C-CFF6-43C4-B430-BCD00E245D22][Priority-Queue]].  We keep the maximum after each update.  This will be enough for us to compute the shortest interval that contains at least one of each given numbers.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def minimumDeviation(self, nums: List[int]) -> int:
+          if len(nums) == 1:
+              return 0
+
+          seen = set()
+          min_pq = []
+          max_pq = []
+
+          def push(a, b):
+              if (a, b) not in seen:
+                  heappush(min_pq, (a, b))
+                  heappush(max_pq, (-a, b))
+                  seen.add((a, b))
+
+          def pop():
+              a, b = heappop(min_pq)
+              seen.remove((a, b))
+              while len(max_pq) > 0 and (-max_pq[0][0], max_pq[0][1]) not in seen:
+                  heappop(max_pq)
+              return (a, b)
+
+          k = 0
+          for i in nums:
+              if i % 2 == 1:
+                  push(i, i * 2)
+                  k += 2
+              else:
+                  j = i
+                  while j % 2 == 0 and j > 0:
+                      j = j // 2
+                      k += 1
+                  push(j, i)
+                  k += 1
+
+          ans = -max_pq[0][0] - min_pq[0][0]
+          for i in range(k):
+              cur = -max_pq[0][0] - min_pq[0][0]
+              ans = min(ans, cur)
+              left, right = pop()
+              if left * 2 <= right:
+                  push(left * 2, right)
+              else:
+                  push(left, right)
+
+          return ans
+#+end_src

@@ -1,0 +1,55 @@
+:PROPERTIES:
+:ID:       AB6D37F0-456A-4A0F-A093-EF3B3C24FF11
+:ROAM_REFS: https://leetcode.com/problems/palindrome-partitioning-ii/
+:END:
+#+TITLE: Leetcode: 132. Palindrome Partitioning II
+#+ROAM_REFS: https://leetcode.com/problems/palindrome-partitioning-ii/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:EC7DFA39-8E96-4EF7-9297-FAEE2ABF0849][Blackbox: The dependent problem needs to be optimized]].  Noticed that I had to be able to query if $(i,j)$ is a palindrome in $O(1)$.
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  Build a matrix $p[i,j]$ which is $True$ if $s[i...j]$ is a palindrome and $False$ otherwise.  With that done, we can compute $dp[i]$ which is the minimum number of cuts to make $s[i...(n-1)]$ palindromes.  To do that, we pick the best $j$ where $p[i,j]=True$ and $1 + dp[j]$ is minimum.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def minCut(self, s: str) -> int:
+          N = len(s)
+
+          is_palindrome = [[False] * N for _ in range(N)]
+          for k in range(N):
+              i = k
+              j = k
+              while 0 <= i and j < N and s[i] == s[j] and is_palindrome[i][j] == False:
+                  is_palindrome[i][j] = True
+                  i -= 1
+                  j += 1
+          for k in range(N - 1):
+              if s[k] != s[k + 1]:
+                  continue
+              i = k
+              j = k + 1
+              while 0 <= i and j < N and s[i] == s[j] and is_palindrome[i][j] == False:
+                  is_palindrome[i][j] = True
+                  i -= 1
+                  j += 1
+
+          dp = [float("inf")] * N
+          for i in range(N - 1, -1, -1):
+              for j in range(i, N):
+                  if not is_palindrome[i][j]:
+                      continue
+                  if j + 1 == N:
+                      dp[i] = min(dp[i], 0)
+                  else:
+                      dp[i] = min(dp[i], 1 + dp[j + 1])
+          return dp[0]
+
+
+  assert Solution().minCut("aab") == 1
+  assert Solution().minCut("a") == 0
+  assert Solution().minCut("ab") == 1
+#+end_src

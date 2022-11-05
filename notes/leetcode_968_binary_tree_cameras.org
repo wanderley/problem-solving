@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       C2F568EF-3622-4DF0-B222-C7E7A71FFD04
+:ROAM_REFS: https://leetcode.com/problems/binary-tree-cameras/
+:END:
+#+TITLE: Leetcode: 968. Binary Tree Cameras
+#+ROAM_REFS: https://leetcode.com/problems/binary-tree-cameras/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!

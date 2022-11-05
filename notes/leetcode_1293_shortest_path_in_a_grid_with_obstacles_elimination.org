@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:       E1925A58-2234-4E48-8A45-DB1396F54E47
+:END:
+#+TITLE: Leetcode: 1293. Shortest Path in a Grid with Obstacles Elimination
+#+ROAM_REFS: https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:8E8E98F9-335A-4279-B523-549FD9025A0C][Mistake: Picked the wrong data structure]]:  A priority queue was unnecessary to solve the problem.
+
+[[id:DA1E3A63-73BB-475E-B087-128602B13450][Can we formulate the problem using graphs?]]  Yes.  The problem becomes do a [[id:AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F][Breadth-first search]] starting from node $(0, 0)$ and ending on $(n-1, m-1)$.  Time and space complexity is $O(N \times M \times K)$.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def shortestPath(self, grid: List[List[int]], k: int) -> int:
+          N = len(grid)
+          M = len(grid[0])
+
+          queue = []
+          vis = [[[False] * (k + 1) for _ in range(M)] for _ in range(N)]
+
+          queue.append((0, 1 if grid[0][0] == 1 else 0, 0, 0))
+          for d, c, i, j in queue:
+              if c > k:
+                  continue
+              if vis[i][j][c]:
+                  continue
+              vis[i][j][c] = True
+
+              if i == N - 1 and j == M - 1:
+                  return d
+
+              for di, dj in [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                  nd = d + 1
+                  nc = c + (1 if grid[i][j] == 1 else 0)
+                  if 0 <= di + i < N and 0 <= dj + j < M and nc <= k:
+                      queue.append((nd, nc, di + i, dj + j))
+
+          return -1
+
+
+  assert (
+      Solution().shortestPath([[0, 0, 0], [1, 1, 0], [0, 0, 0], [0, 1, 1], [0, 0, 0]], 1)
+      == 6
+  )
+  assert Solution().shortestPath([[0, 1, 1], [1, 1, 1], [1, 0, 0]], 1) == -1
+#+end_src

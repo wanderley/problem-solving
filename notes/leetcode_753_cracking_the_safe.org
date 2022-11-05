@@ -1,0 +1,76 @@
+:PROPERTIES:
+:ID:       64A94E45-ECEA-40D0-8AC7-2DB03A4B3CD7
+:ROAM_REFS: https://leetcode.com/problems/cracking-the-safe/
+:END:
+#+TITLE: Leetcode: 753. Cracking the Safe
+#+ROAM_REFS: https://leetcode.com/problems/cracking-the-safe/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Find the smallest string which contains all possible string with $n$ digits where each digit is between $0$ and $k-1$.  I don't know how to prove (even though I saw a relationship with [[id:BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9][Eulerian path in Directed Graph]]), it is always possible to create such string where each new digit covers a new possible string.  Therefore, we can try all possibilities with a basic prune (i.e. stop if the current answer is greater than the best one so far).  Time complexity is $O(X \times k)$ where $X$ is the size of the final string.  Space complexity is $O(X)$.
+
+#+begin_src python
+  class Solution:
+      def crackSafe(self, n: int, k: int) -> str:
+          M = k**n
+          ans = None
+
+          def bt(cur, words):
+              nonlocal ans
+              if len(words) == M:
+                  ans = cur
+                  return
+              if ans is not None:
+                  return
+              for d in range(k):
+                  new = cur + str(d)
+                  word = new[-n:]
+                  if word not in words:
+                      if len(word) == n:
+                          words.add(word)
+                      bt(new, words)
+                      if len(word) == n:
+                          words.discard(word)
+
+          bt("", set())
+          return ans
+
+
+  assert Solution().crackSafe(1, 2) == "10"
+  assert Solution().crackSafe(2, 2) == "01100"
+#+end_src
+
+- A solution with [[id:BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9][Eulerian path in Directed Graph]] is possible using [[https://en.wikipedia.org/wiki/De_Bruijn_sequence#Example_using_de_Bruijn_graph][Bruijin graph]], where vertices are prefix of size $n-1$ and edges are label with $k$ digits to form the next word.  Time and space complexity are $O(k^n)$.
+
+#+begin_src python
+  class Solution:
+      def crackSafe(self, n: int, k: int) -> str:
+          st = ["0" * n]
+          seen = set(st)
+
+          def adj(u):
+              for i in range(k):
+                  v = (u + str(i))[-n:]
+                  if v not in seen:
+                      return v
+              return None
+
+          words = []
+          while st:
+              u = adj(st[-1])
+              if u is None:
+                  words.append(st.pop())
+                  continue
+              seen.add(u)
+              st.append(u)
+          words.reverse()
+
+          res = words[0]
+          for w in words[1:]:
+              res += w[-1]
+          return res
+
+
+  assert Solution().crackSafe(1, 2) == "10"
+  assert Solution().crackSafe(2, 2) == "01100"
+#+end_src

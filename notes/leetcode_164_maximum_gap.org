@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       1C4349E0-EE32-44EB-90F8-36DA48052D19
+:ROAM_REFS: https://leetcode.com/problems/maximum-gap/
+:END:
+#+TITLE: Leetcode: 164. Maximum Gap
+#+ROAM_REFS: https://leetcode.com/problems/maximum-gap/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+Not solved yet!

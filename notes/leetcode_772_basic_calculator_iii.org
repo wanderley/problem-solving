@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID:       33E6F612-899F-4B16-905F-3D5706C6E0A2
+:ROAM_REFS: https://leetcode.com/problems/basic-calculator-iii/
+:END:
+#+TITLE: Leetcode: 772. Basic Calculator III
+#+ROAM_REFS: https://leetcode.com/problems/basic-calculator-iii/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  ~a // b~ is different than ~int(a/b)~ in Python.
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Eval expression with binary operators.
+
+#+begin_src python
+  class Solution:
+      def calculate(self, s: str) -> int:
+          s = s + "+0"
+          N = len(s)
+
+          po = {")": 0, "+": 1, "-": 1, "*": 2, "/": 2}
+          st = []
+          op = []
+          i = 0
+          while i < N:
+              if "0" <= s[i] <= "9":
+                  start = i
+                  while i < N and "0" <= s[i] <= "9":
+                      i += 1
+                  st.append(int(s[start:i]))
+              elif s[i] == "(":
+                  op.append(s[i])
+                  i += 1
+              else:
+                  while op and len(st) > 1 and op[-1] != "(" and po[op[-1]] >= po[s[i]]:
+                      b = st.pop()
+                      a = st.pop()
+                      o = op.pop()
+                      if o == "+":
+                          st.append(a + b)
+                      elif o == "-":
+                          st.append(a - b)
+                      elif o == "*":
+                          st.append(a * b)
+                      elif o == "/":
+                          st.append(int(a / b))
+                  if s[i] == ")":
+                      op.pop()
+                  else:
+                      op.append(s[i])
+                  i += 1
+
+          return st[0]
+
+
+  assert Solution().calculate("1+1") == 2
+  assert Solution().calculate("6-4/2") == 4
+  assert Solution().calculate("2*(5+5*2)/3+(6/2+8)") == 21
+#+end_src

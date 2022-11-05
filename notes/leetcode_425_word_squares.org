@@ -1,0 +1,61 @@
+:PROPERTIES:
+:ID:       2AFE6FA5-7D0D-4EFC-8138-31AA54E0CB7A
+:ROAM_REFS: https://leetcode.com/problems/word-squares/
+:END:
+#+TITLE: Leetcode: 425. Word Squares
+#+ROAM_REFS: https://leetcode.com/problems/word-squares/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  Spent most of the time trying to reduce the complexity, when the problem required a [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]].
+
+- [[id:56B18554-8EDB-44AF-B72A-8FD307B2980C][Mistake: High constant factor in the implementation]].  First [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] wasn't optimized enough.
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  Generate all possible squares while selecting the next word that match the current prefix so far.
+
+#+begin_src python
+  from typing import List
+
+
+  class Solution:
+      def wordSquares(self, words: List[str]) -> List[List[str]]:
+          N = len(words)
+          M = len(words[0])
+
+          if M == 1:
+              return list(set(words))
+
+          pref = {}
+          for w in words:
+              for i in range(M):
+                  p = w[0 : i + 1]
+                  pref.setdefault(p, set())
+                  pref[p].add(w)
+
+          ans = []
+
+          def bt(i, cur):
+              if i == M:
+                  ans.append(cur[:])
+                  return
+
+              for w in pref.get("".join(v[i] for v in cur), []):
+                  cur.append(w)
+                  bt(i + 1, cur)
+                  cur.pop()
+
+          for w in words:
+              bt(1, [w])
+
+          return ans
+
+
+  assert Solution().wordSquares(["area", "lead", "wall", "lady", "ball"]) == [
+      ["ball", "area", "lead", "lady"],
+      ["wall", "area", "lead", "lady"],
+  ]
+  assert Solution().wordSquares(["abat", "baba", "atan", "atal"]) == [
+      ["baba", "abat", "baba", "atal"],
+      ["baba", "abat", "baba", "atan"],
+  ]
+#+end_src

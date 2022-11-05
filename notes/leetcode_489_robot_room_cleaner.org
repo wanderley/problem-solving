@@ -1,0 +1,75 @@
+:PROPERTIES:
+:ID:       AD709E36-C3FE-4DD9-A9C8-1160CC7AEBF5
+:ROAM_REFS: https://leetcode.com/problems/robot-room-cleaner/
+:END:
+#+TITLE: Leetcode: 489. Robot Room Cleaner
+#+ROAM_REFS: https://leetcode.com/problems/robot-room-cleaner/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]]. My first idea was to make a [[id:212DBFC3-FE3C-493E-86A6-42FF3F82CD53][Depth-first search]], but spent much of the time thinking about other ways to do the search.
+
+#+begin_src python
+  # """
+  # This is the robot's control interface.
+  # You should not implement it, or speculate about its implementation
+  # """
+  #class Robot:
+  #    def move(self):
+  #        """
+  #        Returns true if the cell in front is open and robot moves into the cell.
+  #        Returns false if the cell in front is blocked and robot stays in the current cell.
+  #        :rtype bool
+  #        """
+  #
+  #    def turnLeft(self):
+  #        """
+  #        Robot will stay in the same cell after calling turnLeft/turnRight.
+  #        Each turn will be 90 degrees.
+  #        :rtype void
+  #        """
+  #
+  #    def turnRight(self):
+  #        """
+  #        Robot will stay in the same cell after calling turnLeft/turnRight.
+  #        Each turn will be 90 degrees.
+  #        :rtype void
+  #        """
+  #
+  #    def clean(self):
+  #        """
+  #        Clean the current cell.
+  #        :rtype void
+  #        """
+
+  class Solution:
+      def cleanRoom(self, robot):
+          """
+          :type robot: Robot
+          :rtype: None
+          """
+
+          DIR = [[-1, +0], [+0, -1], [+1, +0], [+0, +1]]
+
+          seen = set()
+          def dfs(i, j, d):
+              if (i, j, d) in seen:
+                  return
+              robot.clean()
+              seen.add((i, j, d))
+
+              if robot.move():
+                  dfs(i + DIR[d][0], j + DIR[d][1], d)
+                  robot.turnLeft()
+                  robot.turnLeft()
+                  robot.move()
+                  robot.turnLeft()
+                  robot.turnLeft()
+
+              for k in range(3):
+                  robot.turnLeft()
+                  dfs(i, j, (d + k + 1) % len(DIR))
+              robot.turnLeft()
+
+          dfs(0, 0, 0)
+#+end_src

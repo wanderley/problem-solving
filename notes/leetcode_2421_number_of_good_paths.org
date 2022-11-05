@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       60E1D8E9-D3A9-4F24-81EE-1A02380E564F
+:ROAM_REFS: https://leetcode.com/problems/number-of-good-paths/
+:END:
+#+TITLE: Leetcode: 2421. Number of Good Paths
+#+ROAM_REFS: https://leetcode.com/problems/number-of-good-paths/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+
+- [[id:49FB2683-60E5-4B10-B2B7-1D0B951EA1E0][Pattern: Build graph online]].  Count path while building a forest using smaller to bigger edges.  For example, only edges where both vertices are less than $x$, then $x+1$ and so on.  Time complexity is $O(n \log n)$ since we have to sort the edges.
+
+#+begin_src python
+  class Solution:
+      def numberOfGoodPaths(self, vals: List[int], edges: List[List[int]]) -> int:
+          N = len(vals)
+          p = [u for u in range(N)]
+          s = [Counter([vals[u]]) for u in range(N)]
+          c = [1 for u in range(N)]
+
+          gmax = lambda e: max(vals[e[0]], vals[e[1]])
+          gmin = lambda e: min(vals[e[0]], vals[e[1]])
+
+          edges.sort(key=lambda e: (gmax(e), gmin(e)))
+
+          def find(u):
+              if p[u] != u:
+                  p[u] = find(p[u])
+              return p[u]
+
+          def union(u, v):
+              pu = find(u)
+              pv = find(v)
+              if pu != pv:
+                  m = max(vals[u], vals[v])
+                  s[pv][m] += s[pu][m]
+                  # c[pv] += c[pu]
+                  p[pu] = p[pv]
+
+          ans = N
+          for u, v in edges:
+              if vals[u] < vals[v]:
+                  u, v = v, u
+              pu = find(u)
+              pv = find(v)
+              ans += s[pu][vals[u]] * s[pv][vals[u]]
+              union(u, v)
+          return ans
+#+end_src
