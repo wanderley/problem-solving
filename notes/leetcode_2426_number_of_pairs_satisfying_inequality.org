@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/number-of-pairs-satisfying-inequality/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1664644714543
 
 - [[id:B0C2170B-0DDA-4E0C-B03A-998F29ABDF97][Pattern: Compute values for all pair in array]].  [[id:F19C9539-EE46-41EE-8DEF-24C3076C6DC2][Can we simplify the problem while keeping it the same?]]  The condition can be stated as $n_1[i]-n_2[i]-diff \leq n_1[j]-n_2[j]$.  [[id:3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE][Can we state the problem as result of multiple searches?]]  For each position $i$, we search for the smallest $j$ that satisfy the condition.  Time complexity is $O(n \log n)$ and space is $O(n)$.
 

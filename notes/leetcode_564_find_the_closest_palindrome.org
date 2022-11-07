@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/find-the-closest-palindrome/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446161797
 
 - [[id:05007800-BCCC-415E-A4D3-7B69ABC73588][Pattern: Search for closest number of some kind]].  Generate all closest palindromes and pick the optimal one: closest palindrome with less digits is "999...", with more digits "100..001" and others can be generate by summing or subtracting one from the middle digits.
 
@@ -14,91 +15,21 @@
 #+begin_src python
   class Solution:
       def nearestPalindromic(self, num: str) -> str:
-          N = len(num)
-          even = N % 2 == 0
-          l = list(num)
-
-          def same():
-              p = l[0 : N // 2]
-              if even:
-                  return "".join(p + p[::-1])
-              else:
-                  return "".join(p + [l[N // 2]] + p[::-1])
-
-          def smaller():
-              if even:
-                  p = l[0 : N // 2]
-                  n = str(int("".join(p)) - 1)
-                  return "".join(n + n[::-1])
-              else:
-                  p = l[0 : N // 2 + 1]
-                  n = str(int("".join(p)) - 1)
-                  return "".join(n + n[:-1][::-1])
-
-          def greater():
-              if even:
-                  p = l[0 : N // 2]
-                  n = str(int("".join(p)) + 1)
-                  return "".join(n + n[::-1])
-              else:
-                  p = l[0 : N // 2 + 1]
-                  n = str(int("".join(p)) + 1)
-                  return "".join(n + n[:-1][::-1])
-
-          candidates = set([str(10 ** N + 1), str(10 ** (N - 1) - 1)])
-          candidates.add(same())
-          candidates.add(smaller())
-          candidates.add(greater())
-          candidates.discard(num)
-
-          return min(*candidates, key=lambda e: (abs(int(e)-int(num)), int(e)))
-
-  assert Solution().nearestPalindromic("123") == "121"
-  assert Solution().nearestPalindromic("1") == "0"
-  assert Solution().nearestPalindromic("10") == "9"
-  assert Solution().nearestPalindromic("11") == "9"
-  assert Solution().nearestPalindromic("19") == "22"
-  assert Solution().nearestPalindromic("9") == "8"
-  assert Solution().nearestPalindromic("99") == "101"
-  assert Solution().nearestPalindromic("999") == "1001"
-  assert Solution().nearestPalindromic("100") == "99"
-  assert Solution().nearestPalindromic("1000") == "999"
-#+end_src
-
-
-#+begin_src python
-  class Solution:
-      def nearestPalindromic(self, num: str) -> str:
-          if len(num) == 1:
-              return str(int(num) - 1)
-
           inum = int(num)
-          num = list(num)
-
-          candidates = set()
-
-          def add(x):
-              ix = int("".join(x))
-              if ix != inum:
-                  candidates.add(ix)
-
-          add(["9"] * (len(num) - 1))
-          add(["1"] + ["0"] * (len(num) - 1) + ["1"])
-
-          if len(num) % 2 == 0:
-              p = num[:len(num) // 2]
-              for d in +0, +1, -1:
-                  q = list(str(int("".join(p)) + d))
-                  add(q + q[::-1])
-          else:
-              p = num[:len(num) // 2]
-              for d in +0, +1, -1:
-                  q = list(str(int("".join(p + [num[len(num) // 2]])) + d))
-                  add(q[:-1] + q[::-1])
-
+          if inum <= 10:
+              return str(inum - 1)
+          N = len(num)
+          c = set([int("9" * (N - 1)), int("1" + ("0" * (N - 1)) + "1")])
+          for e in 0, 1:
+              for d in +1, 0, -1:
+                  p = str(int(num[:N // 2 + e]) + d)
+                  c.add(int(p[:-1] + p[::-1]))
+                  c.add(int(p + p[::-1]))
           ans = None
-          for c in sorted(candidates):
-              if ans is None or abs(ans - inum) > abs(c - inum):
-                  ans = c
+          for x in sorted(c):
+              if x == inum:
+                  continue
+              if ans is None or abs(ans - inum) > abs(x - inum):
+                  ans = x
           return str(ans)
 #+end_src

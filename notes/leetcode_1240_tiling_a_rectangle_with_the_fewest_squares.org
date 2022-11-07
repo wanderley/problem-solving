@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/tiling-a-rectangle-with-the-fewest-squares/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667688455232
 
 - [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  My [[id:605B3009-7C7C-410A-9361-218A24ED8D8C][Backtracking]] had the current square size to paint what made the solution too complicated.
 

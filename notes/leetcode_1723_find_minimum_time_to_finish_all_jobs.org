@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/find-minimum-time-to-finish-all-jobs/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446225825
 
 - [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]] and got stuck on the Dynamic Programming solution.
 

@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/24-game/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446270074
 
 - [[id:AFD7D485-25CB-450F-B116-365FE7239669][Mistake: Bug introduced when copy-pasting code]].
 
