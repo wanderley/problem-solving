@@ -1,0 +1,42 @@
+:PROPERTIES:
+:ID:       B1777933-F188-491F-A34D-1EF904D689ED
+:ROAM_REFS: https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+:END:
+#+TITLE: Leetcode: 2461. Maximum Sum of Distinct Subarrays With Length K
+#+ROAM_REFS: https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667794593864
+
+* Understand the problem
+
+Given an integer array $a$ and an integer $k$.  Find the maximum subarray sum of all subarrays of length $k$ with $k$ distinct values.
+
+** Useful prompts
+
+- [[id:46522C06-DAC3-4986-A13A-17C2ED44ADD1][Can we formulate the problem as sliding window?]]  Since $n \leq 10^5$, we have to solve the problem in linear time.  So, a [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]] of size $k$ can help with that.
+
+* Devise a plan
+
+Create a window of length $k$ and slide it from left to right.  For every new valid window (ones that contains $k$ distinct elements), pick it sum if it greater to the best result so far.  Time complexity is $O(n)$ and space is $O(1)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def maximumSubarraySum(self, nums: List[int], k: int) -> int:
+          N = len(nums)
+          freq = Counter(nums[:k])
+          cur = sum(nums[:k])
+          ans = cur if len(freq) == k else 0
+          for i in range(k, N):
+              x, y = nums[i - k], nums[i]
+              cur += y - x
+              freq[x] -= 1
+              freq[y] += 1
+              if freq[x] == 0:
+                  freq.pop(x)
+              if len(freq) == k and ans < cur:
+                  ans = cur
+          return ans
+#+end_src

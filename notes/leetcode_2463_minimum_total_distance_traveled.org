@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       6BBFEF0E-4A7F-412E-9DCB-FCDEE18A0C16
+:ROAM_REFS: https://leetcode.com/problems/minimum-total-distance-traveled/description/
+:END:
+#+TITLE: Leetcode: 2463. Minimum Total Distance Traveled
+#+ROAM_REFS: https://leetcode.com/problems/minimum-total-distance-traveled/description/
+#+LEETCODE_LEVEL: Hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667799056518
+
+* Understand the problem
+
+Given $n$ moving-points and $m$ storage-points, find the minimum total distance sum to store all moving-points in the storage-points.  Moving-points are represented by $r[i]$ which is the coordinate of the point, and $f[i]=[x, c]$ represents a storage-point in the position $x$ and capacity $c$.  Moving-points are moving in constant speed and all you have to decide is what directions they will move: left or right.
+
+** Useful prompts
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  We can sort the moving-points and storage-points from left to right to make it easier to process.
+
+- [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Is there a fixed direction (e.g. left to right, right to left) that we could use to solve the problem?]]  Having the points sorted by position.  We can try to put the moving-points on the storage-points from the left to right, since crossing moving-points won't create optimal solutions (instead of crossing you can send them in opposite directions).
+
+* Devise a plan
+
+Sort the moving-points and storage-points from left to right.  Compute $dfs(i, j, k)$ which is the minimum total sum of putting moving-points $i..n$ on the storage-points $j..m$ where $k$ slots of $j$ storage-point is already used.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def minimumTotalDistance(self, robot: List[int], factory: List[List[int]]) -> int:
+          robot.sort()
+          factory.sort()
+          N = len(robot)
+          M = len(factory)
+
+          @cache
+          def dfs(i, j, k):
+              if i == N:
+                  return 0
+              if j == M:
+                  return float("+inf")
+              return min(
+                  dfs(i, j + 1, 0),
+                  abs(robot[i] - factory[j][0]) + dfs(i + 1, j, k + 1)
+                  if k < factory[j][1]
+                  else float("+inf")
+              )
+
+          return dfs(0, 0, 0)g
+#+end_src

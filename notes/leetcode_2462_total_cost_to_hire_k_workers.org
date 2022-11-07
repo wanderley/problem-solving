@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID:       34FF31F3-108C-4EE1-ACF6-202C64BC6DEB
+:ROAM_REFS: https://leetcode.com/problems/total-cost-to-hire-k-workers/
+:END:
+#+TITLE: Leetcode: 2462. Total Cost to Hire K Workers
+#+ROAM_REFS: https://leetcode.com/problems/total-cost-to-hire-k-workers/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1667797871867
+
+* Understand the problem
+
+Given a non-negative integer array $a$ and integers $k$ and $m$, find the cost of picking $k$ integers from $a$ as following:
+
+1. pick $i$ such that $a[i]$ is minimum and $i \leq m$ or $n - m \leq i$;
+2. remove $i$ from the array and continue the process.
+
+** Useful prompts
+
+- [[id:48E699CB-3125-47FF-AA1A-5FCCF0EF235E][Can we simulate the problem?]]
+
+* Devise a plan
+
+On every turn, the array reduces in one.  Because of that, we have to efficiently resize the pool of candidates to pick.  To do so, we keep a priority queue with the candidates to pick.  After removing the best candidate from the pool, we add the next one from the left or the right depending on each side the best candidate is.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+
+** Carry out the plan
+
+#+begin_src python
+  class Solution:
+      def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
+          N = len(costs)
+          pq = []
+          left, right = candidates, max(candidates, N - candidates) - 1
+          for i in range(left):
+              heappush(pq, (costs[i], i))
+          for i in range(N - 1, right, -1):
+              heappush(pq, (costs[i], i))
+          ans = 0
+          for _ in range(k):
+              c, i = heappop(pq)
+              ans += c
+              if left > right:
+                  continue
+              if i < left:
+                  heappush(pq, (costs[left], left))
+                  left += 1
+              elif i > right:
+                  heappush(pq, (costs[right], right))
+                  right -= 1
+          return ans
+#+end_src
