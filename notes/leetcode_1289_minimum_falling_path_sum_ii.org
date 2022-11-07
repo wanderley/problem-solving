@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/minimum-falling-path-sum-ii/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446109398
 
 - [[id:DA951820-DBB5-4A7F-9401-DF5860EFAB8A][Mistake: Incorrect evaluation of solution's viability]].  First solution was $O(n^4)$ which was solution after manual test with $100 \times 100$ grid.
 - [[id:37AF9679-42D1-4A85-9927-2A590268AD87][Blackbox: You solved a similar problem]],  where you had a fast way to pick the best result from the left and right ([[id:D00AC85C-A22C-4946-B379-812595D8387B][Leetcode: 1563. Stone Game V]]).

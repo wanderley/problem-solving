@@ -23,54 +23,33 @@ Use [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]] to represent the directory
 ** Carry out the plan
 
 #+begin_src python
-  import string
-
   class FileSystem:
 
       def __init__(self):
-          self.root = {"directory": True, "/": {}}
+          self.root = {}
 
       def ls(self, path: str) -> List[str]:
-          node = self._get_node(path)
-          if "file" in node:
+          node = self.node(path)
+          if "__content__" in node:
               return [path.split("/")[-1]]
-
-          node = node["/"]
-          ans = []
-
-          def dfs(node, name):
-              if "file" in node or "directory" in node:
-                  ans.append(name)
-              for c in string.ascii_lowercase:
-                  if c in node:
-                      dfs(node[c], name + c)
-
-          dfs(node, "")
-          return ans
+          return list(sorted(node.keys()))
 
       def mkdir(self, path: str) -> None:
-          node = self._get_node(path)
-          node["directory"] = True
-          node["/"] = {}
+          self.node(path)
 
       def addContentToFile(self, filePath: str, content: str) -> None:
-          node = self._get_node(filePath)
-          node["file"] = True
-          node["content"] = node.get("content", "") + content
+          node = self.node(filePath)
+          node["__content__"] = node.get("__content__", "") + content
 
       def readContentFromFile(self, filePath: str) -> str:
-          return self._get_node(filePath).get("content", "")
+          return self.node(filePath).get("__content__", "")
 
-      def _get_node(self, path):
+      def node(self, path):
           if path == "/":
               return self.root
           node = self.root
-          for c in path:
-              if c not in node:
-                  node[c] = {}
-              if c == "/":
-                  node["directory"] = True
-              node = node[c]
+          for p in path.split("/")[1:]:
+              node = node.setdefault(p, {})
           return node
 
 
