@@ -6,8 +6,9 @@
 #+ROAM_REFS: https://leetcode.com/problems/text-justification/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446016746
 
-[[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The smaller parts are (1) split the list on the words on each line, (2) justify one line and (3) left-justify one line.  Time and space complexity is $O(n)$.
+[[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Is there a fixed direction (e.g. left to right, right to left) that we could use to solve the problem?]]  Process each word from left to right and flush the current line when adding a word to it would exceed the max allowed width.  Time and space complexity is $O(n)$.
 
 #+begin_src python
   from typing import List
@@ -15,46 +16,28 @@
 
   class Solution:
       def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
-          def justify(line):
-              if len(line) == 1:
-                  return line[0] + (" " * (maxWidth - len(line[0])))
-
-              s = sum(map(len, line))
-              ans = ""
-              g = len(line) - 1
-              e = (maxWidth - s) // g
-              x = maxWidth - s - e * g
-              for i, w in enumerate(line):
-                  if i > 0:
-                      ans += " " * e
-                      ans += " " if x > 0 else ""
-                      x -= 1
-                  ans += w
-              return ans
-
-          def align_left(line):
-              l = " ".join(line)
-              l = l + (" " * (maxWidth - len(l)))
-              return l
-
-          lines = []
-          line = []
-          line_len = 0
-          for w in words:
-              new_line_len = line_len + (1 if line_len > 0 else 0) + len(w)
-              if new_line_len > maxWidth:
-                  lines.append(line)
-                  line = []
-                  line_len = 0
-                  new_line_len = len(w)
-
-              line.append(w)
-              line_len = new_line_len
-
-          if len(line) > 0:
-              lines.append(line)
-
-          return list(map(justify, lines[0:-1])) + [align_left(lines[-1])]
+          letters_on_line, line = 0, []
+          ans = []
+          for word in words:
+              if letters_on_line + len(line) + len(word) > maxWidth:
+                  b = len(line) - 1 if len(line) > 1 else 1
+                  l = maxWidth - letters_on_line
+                  s, r = l // b, l % b
+                  cur = ""
+                  for lword in line:
+                      if cur:
+                          cur += " " * (s + int(r > 0))
+                          r -= 1
+                      cur += lword
+                  ans.append(cur + " " * (maxWidth - len(cur)))
+                  letters_on_line, line = 0, []
+              letters_on_line += len(word)
+              line.append(word)
+          if line:
+              ans.append(
+                  " ".join(line) + " " * (maxWidth - letters_on_line - (len(line) - 1))
+              )
+          return ans
 
 
   assert Solution().fullJustify(

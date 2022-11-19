@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446074114
 
 - [[id:CCCF9587-5365-4BB0-B0D3-8FC82D55E781][Mistake: Failed to recognize known problem]]
 

@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446256390
 
 - [[id:189F5E87-F560-4397-A3E3-AAD465EEBCFB][Pattern: Find shortest path between two vertices in a graph]].
 

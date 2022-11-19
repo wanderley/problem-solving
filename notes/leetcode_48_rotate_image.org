@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       9E895A7B-442D-4A8B-A4E7-C09D415944DB
+:ROAM_REFS: https://leetcode.com/problems/rotate-image/
+:END:
+#+TITLE: Leetcode: 48. Rotate Image
+#+ROAM_REFS: https://leetcode.com/problems/rotate-image/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1668831502793
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Fix one element and derive the relative position of all other elements.  Elements from the first row will come from the first column.  Elements from the first column will come from elements from the last row.   Elements from the last column will come from element from the last column.  Time complexity is $O(n ^ 2)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def rotate(self, matrix: List[List[int]]) -> None:
+          N = len(matrix)
+          for i in range(N // 2 + N % 2):
+              for j in range(N // 2):
+                  (
+                      matrix[i][j],
+                      matrix[N - 1 - j][i],
+                      matrix[N - 1 - i][N - 1 - j],
+                      matrix[j][N - 1 - i],
+                  ) = (
+                      matrix[N - 1 - j][i],
+                      matrix[N - 1 - i][N - 1 - j],
+                      matrix[j][N - 1 - i],
+                      matrix[i][j],
+                  )
+#+end_src

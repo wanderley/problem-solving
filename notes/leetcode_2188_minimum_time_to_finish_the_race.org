@@ -6,7 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/minimum-time-to-finish-the-race/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
-#+ANKI_CARD_ID: 1666413741679
+#+ANKI_CARD_ID: 1661446200869
 
 * Understand the problem
 

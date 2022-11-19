@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/find-the-shortest-superstring/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446214876
 
 - [[id:29B5FD8A-98FD-48CE-8C30-04671E44AD27][Mistake: Missing edge case]].  Did not test for single elements (e.g. ~["a"]~).
 

@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/maximum-and-sum-of-array/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446228363
 
 - [[id:477B8042-5F3E-4814-9F0B-C49485B85A64][Mistake: Did not consider different approaches]].  I got stuck on representing only the used numbers in the bitmask.
 

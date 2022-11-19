@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/max-stack/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446043397
 
 - [[id:192401C2-DA6F-4496-B530-89A3546712FD][Mistake: Misread the problem]]
 - [[id:3D263A82-52AE-4C90-830D-C533ABAFFF3E][Mistake: Missing required invariants]]

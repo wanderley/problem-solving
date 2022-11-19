@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       E4E1316F-92A3-4C51-8FC6-16A39DD1C1CE
+:ROAM_REFS: https://leetcode.com/problems/find-peak-element/
+:END:
+#+TITLE: Leetcode: 162. Find Peak Element
+#+ROAM_REFS: https://leetcode.com/problems/find-peak-element/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1668826648942
+
+[[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Since there is no $a[i] = a[i+1]$, a given $i$ is either a peak or we continue the search in the side of its greatest neighbor using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \times \log n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def findPeakElement(self, nums: List[int]) -> int:
+          start = 0
+          end = len(nums) - 1
+
+          while start <= end:
+              mid = start + (end - start) // 2
+              left = nums[mid - 1] if mid > 0 else float("-inf")
+              right = nums[mid + 1] if mid + 1 < len(nums) else float("-inf")
+              if left < nums[mid] > right:
+                  return mid
+              elif left > nums[mid]:
+                  end = mid - 1
+              else:
+                  start = mid + 1
+
+          return ans
+#+end_src

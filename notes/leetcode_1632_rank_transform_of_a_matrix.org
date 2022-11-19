@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/rank-transform-of-a-matrix/
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1661446158980
 
 - [[id:AC9291C6-4C72-4143-80F2-0D414EF7B681][Mistake: Did not try hard to solve alternative problem]].  I considered the graph formed by rows and cols, but I didn't think about having one graph for each value in the grid.
 
