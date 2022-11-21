@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID:       D500C3CF-B17C-4C7D-90F2-BFA02AB1C9D6
+:ROAM_REFS: https://leetcode.com/problems/number-of-beautiful-partitions/
+:END:
+#+TITLE: Leetcode: 2478. Number of Beautiful Partitions
+#+ROAM_REFS: https://leetcode.com/problems/number-of-beautiful-partitions/
+#+LEETCODE_LEVEL: hard
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1668979870175
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  If $s$ starts is a non-prime or ends with a prime, then the solution is always 0.
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  We want to partition $s$ only in positions where $s[i]$ is a non-prime and $s[i+1]$ is a prime.  So, we can create $starts$ with indexes where valid partitions can start.  Now, the problem becomes find partitions on indexes in $starts$ of length at least $minLength$.
+
+- The first idea that comes to mind is using [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]] to solve the problem.  Be $dp(i, k)$ the number of ways to partitions $s[i...(n-1)]$ in $k$ partitions.  Be $V(i)$ indexes $j$ where $s[i...(j-1)]$ is a valid partition.  It is not difficult to see how to compute each sub problem in linear time.  This solution won't make in time, since the complexity is $O(n^3)$.
+
+  $$
+    dp(i, k)=\begin{cases}
+      0, & \mbox{if $i = n$ and $k \neq 0$} \\
+      1, & \mbox{if $i = n$ and $k = 0$} \\
+      \sum_{j \in V(i)} dp(j, k - 1), & \mbox{otherwise}.
+    \end{cases}
+  $$
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]  The problem with the above recurrence is that it takes linear time to compute each sub problem.  To improve it, we can break-down the third-case in other [[id:241ABA4C-A86F-405F-B6FC-85BF441EB24B][Dynamic Programming]] that depends on $dp$.  Be $ac(i, k)$ the number of beautiful partitions starting on $starts[i], starts[i+1], starts[i+2], ...$.  We have that $ac(i, k)=\sum_{i \leq j < |starts|} dp(i, k)$.  Note that there are $O(n^2)$ possible states for $ac$, but we can compute each one in $O(1)$.  Now, we can re-write $dp$ in terms of $ac$ and the time complexity to solve the problem becomes $O(n^2 \log n)$ with space $O(n^2)$.  The log comes from the [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the next valid position to start a partition after $i$.
+
+  $$
+    dp(i, k)=\begin{cases}
+      0, & \mbox{if $i = n$ and $k \neq 0$} \\
+      1, & \mbox{if $i = n$ and $k = 0$} \\
+      ac(j, k - 1), & \mbox{where $j$ is the first valid start of partition after $i$}.
+    \end{cases}
+  $$
+
+
+#+begin_src python
+  class Solution:
+      def beautifulPartitions(self, s: str, k: int, minLength: int) -> int:
+          N = len(s)
+          MOD = 10**9 + 7
+          primes = "2357"
+
+          if s[0] not in primes or s[-1] in primes:
+              return 0
+
+          starts = []
+          for i, a, b in zip(range(N), s, s[1:]):
+              if a not in primes and b in primes:
+                  starts.append(i + 1)
+          starts.append(N)
+
+          @cache
+          def dfs2(i, k):
+              if i == len(starts):
+                  return 0
+              return (dfs1(starts[i], k) + dfs2(i + 1, k)) % MOD
+
+          @cache
+          def dfs1(i, k):
+              if i == N:
+                  return 1 if k == 0 else 0
+              if k < 0:
+                  return 0
+              return dfs2(bisect_left(starts, i + minLength), k - 1) % MOD
+
+          return dfs1(0, k)
+#+end_src

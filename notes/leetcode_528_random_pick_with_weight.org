@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID:       CAED2A71-415F-4DA4-BA47-7ED2D00C81AF
+:ROAM_REFS: https://leetcode.com/problems/random-pick-with-weight/
+:END:
+#+TITLE: Leetcode: 528. Random Pick with Weight
+#+ROAM_REFS: https://leetcode.com/problems/random-pick-with-weight/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1668868162293
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]] :: Compute the accumulate probability of picking any of $0..i$ elements using [[id:6C76A007-72FB-4495-904F-CC3407193847][Prefix Sum]].
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]] :: [[id:880741CF-6D5A-4E40-9EDD-AF23283D6A91][Weighted Sample]].
+
+Compute the accumulate probability of picking any of $0..i$ elements and use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the index of one random element.  Time complexity is $O(n)$ for pre-processing and $O(\log n)$ to answer each query.  Space complexity is $O(n)$ to store the accumulated probabilities.
+
+#+begin_src python
+  class Solution:
+      def __init__(self, w: List[int]):
+          s = sum(w)
+          self.a = list(accumulate([x / s for x in w]))
+
+      def pickIndex(self) -> int:
+          r = random.random()
+          start, end, ans = 0, len(self.a) - 1, None
+          while start <= end:
+              mid = start + (end - start) // 2
+              if r <= self.a[mid]:
+                  ans, end = mid, mid - 1
+              else:
+                  start = mid + 1
+          return ans
+#+end_src

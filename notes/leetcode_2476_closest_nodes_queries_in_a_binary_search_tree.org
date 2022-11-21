@@ -1,0 +1,42 @@
+:PROPERTIES:
+:ID:       7F2BA5B5-2C29-40AE-A4D3-B3D438A660C9
+:ROAM_REFS: https://leetcode.com/problems/closest-nodes-queries-in-a-binary-search-tree/
+:END:
+#+TITLE: Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree
+#+ROAM_REFS: https://leetcode.com/problems/closest-nodes-queries-in-a-binary-search-tree/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1668976889626
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  While the input for the problem is a [[id:84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD][Binary Search Tree]], we don't know if it is balanced or not.  Because of that, we have to assume that queries can take linear time to be answered.  Therefore, we can traverse the tree storing the values on a sorted list which will be used to answer the queries.  With the sorted list, we can use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the first element $e$ that is equal or greater than the query $q$.  If $q=a[e]$, the answer is $(q, q)$.  If $e=0$, all elements on the list are greater than $q$ and the answer is $(-1, a[e])$.  If $e=n$, all elements on the list are smaller than $q$ and the answer is $(a[e-1], -1)$.  Otherwise, $(a[e-1],a[e])$ is the answer for the query.  Time complexity is $O(m \log n)$ where $m$ is the number of queries and $n$ is the number of vertices.  The space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def closestNodes(
+          self, root: Optional[TreeNode], queries: List[int]
+      ) -> List[List[int]]:
+          values = []
+
+          def dfs(node):
+              if node is None:
+                  return
+              dfs(node.left)
+              values.append(node.val)
+              dfs(node.right)
+
+          dfs(root)
+
+          N = len(values)
+          ans = []
+          for q in queries:
+              k = bisect_left(values, q)
+              if k < N and values[k] == q:
+                  ans.append((q, q))
+              elif k == 0:
+                  ans.append((-1, values[k]))
+              elif k == N:
+                  ans.append((values[k - 1], -1))
+              else:
+                  ans.append((values[k - 1], values[k]))
+          return ans
+#+end_src

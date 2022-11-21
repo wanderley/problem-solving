@@ -15,17 +15,14 @@
       def findPeakElement(self, nums: List[int]) -> int:
           start = 0
           end = len(nums) - 1
-
           while start <= end:
               mid = start + (end - start) // 2
-              left = nums[mid - 1] if mid > 0 else float("-inf")
-              right = nums[mid + 1] if mid + 1 < len(nums) else float("-inf")
-              if left < nums[mid] > right:
+              l = nums[mid - 1] if mid > 0 else float("-inf")
+              r = nums[mid + 1] if mid + 1 < len(nums) else float("-inf")
+              if l < nums[mid] and r < nums[mid]:
                   return mid
-              elif left > nums[mid]:
+              elif l > nums[mid]:
                   end = mid - 1
               else:
                   start = mid + 1
-
-          return ans
 #+end_src

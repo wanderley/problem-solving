@@ -22,32 +22,27 @@
   class Solution:
       def shortestSuperstring(self, words: List[str]) -> str:
           N = len(words)
-
-          nxt = [list() for _ in range(N)]
-          for i in range(N):
-              for j in range(N):
-                  for k in range(0, len(words[i]) + 1):
-                      if words[j].startswith(words[i][k:]):
-                          nxt[i].append((j, k))
-                          break
+          ALL = (1 << N) - 1
 
           @cache
-          def dfs(i, used):
-              if used == (1 << N) - 1:
-                  return words[i]
+          def k(a, b):
+              for i in range(len(words[a]) + 1):
+                  if words[b].startswith(words[a][i:]):
+                      return i
 
+          @cache
+          def dfs(last, used):
+              if used == ALL:
+                  return words[last]
               ans = None
-              for j, k in nxt[i]:
-                  if used & (1 << j) != 0:
-                      continue
-                  s = words[i][:k] + words[j]
-                  cur = words[i][:k] + dfs(j, used | (1 << j))
-                  if ans is None or len(ans) > len(cur):
-                      ans = cur
-
+              for i in range(N):
+                  if (1 << i) & used == 0:
+                      cur = words[last][: k(last, i)] + dfs(i, used | (1 << i))
+                      if ans is None or len(ans) > len(cur):
+                          ans = cur
               return ans
 
-          return min([dfs(i, 0) for i in range(N)], key=len)
+          return min([dfs(i, (1 << i)) for i in range(N)], key=len)
 
 
   assert (

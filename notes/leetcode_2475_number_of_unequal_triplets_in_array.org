@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID:       AD689352-C66F-4BFC-95A4-65B58110A851
+:ROAM_REFS: https://leetcode.com/problems/number-of-unequal-triplets-in-array/
+:END:
+#+TITLE: Leetcode: 2475. Number of Unequal Triplets in Array
+#+ROAM_REFS: https://leetcode.com/problems/number-of-unequal-triplets-in-array/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1668976462814
+
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  As $n \leq 100$, we can go over all triplets in the array and count ones that satisfy the condition.  Time complexity is $O(n^3)$ and space is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def unequalTriplets(self, nums: List[int]) -> int:
+          N = len(nums)
+          ans = 0
+          for i in range(N):
+              for j in range(i + 1, N):
+                  for k in range(j + 1, N):
+                      if len(set([nums[i], nums[j], nums[k]])) == 3:
+                          ans += 1
+          return ans
+#+end_src

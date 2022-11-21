@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID:       04A65628-529B-488B-A71E-C5341D0EFBB3
+:ROAM_REFS: https://leetcode.com/problems/course-schedule-ii/
+:END:
+#+TITLE: Leetcode: 210. Course Schedule II
+#+ROAM_REFS: https://leetcode.com/problems/course-schedule-ii/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1668866906178
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]] in a graph.
+
+- Build the graph of dependencies and then run [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]] to find the order of courses to take.  Time complexity is $O(n)$ and space is $O(m)$.
+
+#+begin_src python
+  class Solution:
+      def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+          A = {u: [] for u in range(numCourses)}
+          in_degree = [0] * numCourses
+          for u, v in prerequisites:
+              A[v].append(u)
+              in_degree[u] += 1
+
+          queue = [u for u in range(numCourses) if in_degree[u] == 0]
+          ans = []
+          for u in queue:
+              ans.append(u)
+              for v in A[u]:
+                  in_degree[v] -= 1
+                  if in_degree[v] == 0:
+                      queue.append(v)
+          return ans if len(ans) == numCourses else []
+#+end_src
