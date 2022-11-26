@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       9830B74A-7B62-4243-A7B7-DDF430C2A38C
+:ROAM_REFS: https://leetcode.com/problems/minimum-number-of-frogs-croaking/
+:END:
+#+TITLE: Leetcode: 1419. Minimum Number of Frogs Croaking
+#+ROAM_REFS: https://leetcode.com/problems/minimum-number-of-frogs-croaking/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1669095683272
+
+- [[id:1CA3366B-D045-4BF4-9E39-DFA5131EF937][Can we solve the problem using a greedy approach?]]  The greedy approach consists on keeping a counter for how many times each letter from "croak" appeared on the text so far.  When "c" appears, we either use a frog that finished on "k" or add new one to the count.  After all letters were processed, we should have all frogs on the letter "k" otherwise the string isn't valid.  Time complexity is $O(n)$ and space complexity is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def minNumberOfFrogs(self, croakOfFrogs: str) -> int:
+          c = Counter()
+          p = {a: b for a, b in zip("roak", "croak")}
+
+          for x in croakOfFrogs:
+              if x == "c":
+                  c["k"] -= 1 if c["k"] else 0
+                  c[x] += 1
+              elif c[p[x]]:
+                  c[p[x]] -= 1
+                  c[x] += 1
+              else:
+                  return -1
+          return c["k"] if c["k"] == c.total() else -1
+#+end_src

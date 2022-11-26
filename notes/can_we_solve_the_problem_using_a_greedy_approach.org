@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       1CA3366B-D045-4BF4-9E39-DFA5131EF937
+:END:
+#+TITLE: Can we solve the problem using a greedy approach?
