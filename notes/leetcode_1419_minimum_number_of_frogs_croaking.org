@@ -8,7 +8,7 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1669095683272
 
-- [[id:1CA3366B-D045-4BF4-9E39-DFA5131EF937][Can we solve the problem using a greedy approach?]]  The greedy approach consists on keeping a counter for how many times each letter from "croak" appeared on the text so far.  When "c" appears, we either use a frog that finished on "k" or add new one to the count.  After all letters were processed, we should have all frogs on the letter "k" otherwise the string isn't valid.  Time complexity is $O(n)$ and space complexity is $O(1)$.
+- [[id:1CA3366B-D045-4BF4-9E39-DFA5131EF937][Can we solve the problem using a greedy approach?]]  The greedy approach consists on keeping a counter for how many times each letter from "croak" appeared on the text so far.  When "c" appears, we either use a frogs that finished on "k" or add new one to the count.  After all letters were processed, we should have all frogs on the letter "k" otherwise the string isn't valid.  Time complexity is $O(n)$ and space complexity is $O(1)$.
 
 #+begin_src python
   class Solution:
