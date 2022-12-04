@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E02BB151-F02E-4F91-8F89-03077F4B2C97
+:END:
+#+TITLE: Pattern: Optimization problem to find the smallest/longest X that respect condition Y

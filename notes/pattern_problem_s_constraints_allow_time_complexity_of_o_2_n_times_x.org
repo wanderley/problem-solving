@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       D01DE8B5-6747-477C-9EC1-E8A658F83851
+:END:
+#+TITLE: Pattern: Problem's constraints allow time complexity of $O(2^n \times X)$

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       8CCAE757-A015-4494-A17E-C6BBFC38F658
+:END:
+#+TITLE: Pattern: Problem's constraints play big role on the solution
