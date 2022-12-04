@@ -8,7 +8,7 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1661446214876
 
-* Exploration
+* Patterns
 
 - [[id:D01DE8B5-6747-477C-9EC1-E8A658F83851][Pattern: Problem's constraints allow time complexity of $O(2^n \times X)$]].
 
