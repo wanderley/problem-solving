@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       12D16A10-EB7A-4EF8-A0E8-91B5EE694582
+:END:
+#+TITLE: Pattern: Searching in Array

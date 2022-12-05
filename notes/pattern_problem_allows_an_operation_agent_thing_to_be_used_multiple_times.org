@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       8AC0BCE3-B400-477D-B4F0-F56E6BD308A3
+:END:
+#+TITLE: Pattern: Problem allows an operation/agent/thing to be used multiple times

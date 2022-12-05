@@ -8,21 +8,33 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1669095683272
 
-- [[id:1CA3366B-D045-4BF4-9E39-DFA5131EF937][Can we solve the problem using a greedy approach?]]  The greedy approach consists on keeping a counter for how many times each letter from "croak" appeared on the text so far.  When "c" appears, we either use a frogs that finished on "k" or add new one to the count.  After all letters were processed, we should have all frogs on the letter "k" otherwise the string isn't valid.  Time complexity is $O(n)$ and space complexity is $O(1)$.
+* Patterns
+
+- [[id:45D8FD21-992F-4073-8EC6-7695FAA0E3AB][Pattern: Optimization problem to find minimum/maximum number of X to cover Y]].
+
+- [[id:8AC0BCE3-B400-477D-B4F0-F56E6BD308A3][Pattern: Problem allows an operation/agent/thing to be used multiple times]].
+
+* Prompts
+
+- [[id:1CA3366B-D045-4BF4-9E39-DFA5131EF937][Can we solve the problem using a greedy approach?]]
+
+* Solution
+
+The fact that one frog can croak multiple times means that two independent croaks can be performed by the same frog.  For example, one frog can produce "croakcroak" while two frogs are required to produce "crcroakoakcroak" ("aabbbbbaaaaaaaa" or "aabbbbbaaabbbbb" where $a$ and $b$ represents two frogs).  Thus, we can postpone the decision to add one frog to the answer iff all other frogs are in busy croaking.  Doing so, the algorithm is making a locally optimal choice ([[id:FFC75108-C74E-44B1-9B60-B3A22B15E617][Greedy algorithm]]).
+
+The solution consists on iterating over input letters counting how many frogs are busy on each letter "c", "r", "o", "a" and "k".  If the next letter is a "c", we only add a new frog if at least one frog finished a "k" letter.  After processing all letters, the number of frogs on the letter "k" is the final answer iff there is no frog stuck on any other letter.  Time complexity is $O(n)$ and space is $O(1)$.
 
 #+begin_src python
   class Solution:
       def minNumberOfFrogs(self, croakOfFrogs: str) -> int:
           c = Counter()
           p = {a: b for a, b in zip("roak", "croak")}
-
           for x in croakOfFrogs:
+              c[x] += 1
               if x == "c":
                   c["k"] -= 1 if c["k"] else 0
-                  c[x] += 1
               elif c[p[x]]:
                   c[p[x]] -= 1
-                  c[x] += 1
               else:
                   return -1
           return c["k"] if c["k"] == c.total() else -1

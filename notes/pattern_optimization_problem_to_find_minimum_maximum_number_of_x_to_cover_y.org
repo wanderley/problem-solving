@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       45D8FD21-992F-4073-8EC6-7695FAA0E3AB
+:END:
+#+TITLE: Pattern: Optimization problem to find minimum/maximum number of X to cover Y

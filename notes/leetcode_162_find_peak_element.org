@@ -8,13 +8,24 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1668826648942
 
-[[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  Since there is no $a[i] = a[i+1]$, a given $i$ is either a peak or we continue the search in the side of its greatest neighbor using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \times \log n)$ and space is $O(1)$.
+* Patterns
+
+- [[id:12D16A10-EB7A-4EF8-A0E8-91B5EE694582][Pattern: Searching in Array]].
+
+- [[id:8CCAE757-A015-4494-A17E-C6BBFC38F658][Pattern: Problem's constraints play big role on the solution]].  The problem requires a logarithmic solution.
+
+* Prompts
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]
+
+* Solution
+
+There are two ways to search for elements in an array: linear search of [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  The problem statement rules out the first possibility, so the problem becomes finding a way to use [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to solve the problem.  Be $m$ the index of the pivot.  If $nums[m-1]<nums[m]$ and $nums[m+1]>nums[m]$, $m$ is a valid answer.  Otherwise, one neighbor is greater than $nums[m]$.  If $nums[m-1]>nums[m]$, then $m-1$ can be an answer iff $nums[m-2]<nums[m]$.  Instead of checking this neighbor, we can conclude that there is a valid solution on the left side of $m$.  In case of $m-1=0$, then $0$ is a valid answer since by definition $nums[-1]=-\infin$.  When this is not the case, we are back to the same situation as in $m$ if $nums[m-2]>nums[m-1]$.  The same argument can be done for $nums[m+1]$.  The time complexity of the search is $O(\log n)$ and space is $O(1)$.
 
 #+begin_src python
   class Solution:
       def findPeakElement(self, nums: List[int]) -> int:
-          start = 0
-          end = len(nums) - 1
+          start, end = 0, len(nums) - 1
           while start <= end:
               mid = start + (end - start) // 2
               l = nums[mid - 1] if mid > 0 else float("-inf")
