@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       106D2C06-9633-40A5-9BA7-E3CE17A0C784
+:END:
+#+TITLE: Pattern: Ordering problem

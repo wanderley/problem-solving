@@ -8,9 +8,19 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1668866906178
 
-- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]] in a graph.
+* Patterns
 
-- Build the graph of dependencies and then run [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]] to find the order of courses to take.  Time complexity is $O(n)$ and space is $O(m)$.
+- [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]].
+
+- [[id:106D2C06-9633-40A5-9BA7-E3CE17A0C784][Pattern: Ordering problem]].
+
+* Prompts
+
+- [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]]  [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]].
+
+* Solution
+
+Build the graph of dependencies and then run [[id:80122A2F-3B84-48B1-B10D-6ACEE4373298][Topological Sort]] to find the order of courses to take.  Time complexity is $O(n)$ and space is $O(m)$.
 
 #+begin_src python
   class Solution:
