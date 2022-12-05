@@ -8,7 +8,7 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1661446016746
 
-[[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Is there a fixed direction (e.g. left to right, right to left) that we could use to solve the problem?]]  Process each word from left to right and flush the current line when adding a word to it would exceed the max allowed width.  Time and space complexity is $O(n)$.
+[[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]  Process each word from left to right and flush the current line when adding a word to it would exceed the max allowed width.  Time and space complexity is $O(n)$.
 
 #+begin_src python
   from typing import List

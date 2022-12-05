@@ -16,7 +16,7 @@ Given $n$ moving-points and $m$ storage-points, find the minimum total distance 
 
 - [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  We can sort the moving-points and storage-points from left to right to make it easier to process.
 
-- [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Is there a fixed direction (e.g. left to right, right to left) that we could use to solve the problem?]]  Having the points sorted by position.  We can try to put the moving-points on the storage-points from the left to right, since crossing moving-points won't create optimal solutions (instead of crossing you can send them in opposite directions).
+- [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]  Having the points sorted by position.  We can try to put the moving-points on the storage-points from the left to right, since crossing moving-points won't create optimal solutions (instead of crossing you can send them in opposite directions).
 
 * Devise a plan
 

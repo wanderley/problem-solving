@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09
+:END:
+#+TITLE: Can we solve the problem by iterating from left to right (or right to left)?
