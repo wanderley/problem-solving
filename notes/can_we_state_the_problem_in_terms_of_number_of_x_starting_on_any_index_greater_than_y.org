@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       19659A01-72E7-49D4-A70C-8DE16C17AC8A
+:END:
+#+TITLE: Can we state the problem in terms of number of X starting on any index greater than Y?

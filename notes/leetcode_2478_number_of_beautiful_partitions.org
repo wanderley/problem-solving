@@ -8,6 +8,45 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1668979870175
 
+* Patterns
+
+- [[id:5BBCFD49-3103-4D06-BBCE-DC812A9633C6][Pattern: Counting Problem]].
+
+- [[id:C830EA9B-D231-4D49-B0CB-137BC3FF0E55][Pattern: Find optimal cuts with length restrictions]].
+
+* Prompts
+
+- [[id:19659A01-72E7-49D4-A70C-8DE16C17AC8A][Can we state the problem in terms of number of X starting on any index greater than Y?]]
+
+* Solution $O(n^2)$
+
+Be $dp(i, k)$ the number of beautiful partitions where the first partition starts on *any* index between $i$ and $n-1$.  Base cases:  if $i>n$ or $k<0$, the answer is 0.  If $i=n$, the answer is 1 if $k=0$ and 0 otherwise.  Induction step: if $s[i]$ is a prime and $s[i-1]$ is not a prime, then $dp(i, k)=dp(i+1,k) + dp(i + minLength, k - 1)$ since we must consider cutting on $i$.  Otherwise, $dp(i, k)=dp(i + 1, k)$ since there is no cut to consider.  Time and space complexity is $O(n^2)$.
+
+#+begin_src python
+  class Solution:
+      def beautifulPartitions(self, s: str, k: int, minLength: int) -> int:
+          N = len(s)
+          P = "2357"
+
+          if s[0] not in P or s[-1] in P:
+              return 0
+
+          @cache
+          def dfs(i, k, level=0):
+              if i > N or k < 0:
+                  return 0
+              if i == N:
+                  return 1 if k == 0 else 0
+              ans = dfs(i + 1, k, level + 1)
+              if s[i - 1] not in P and s[i] in P:
+                  ans += dfs(i + minLength, k - 1, level + 1)
+              return ans % (10**9 + 7)
+
+          return dfs(minLength, k - 1)
+#+end_src
+
+* Solution $O(n^2 \times \log n)$
+
 - [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  If $s$ starts is a non-prime or ends with a prime, then the solution is always 0.
 
 - [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  We want to partition $s$ only in positions where $s[i]$ is a non-prime and $s[i+1]$ is a prime.  So, we can create $starts$ with indexes where valid partitions can start.  Now, the problem becomes find partitions on indexes in $starts$ of length at least $minLength$.

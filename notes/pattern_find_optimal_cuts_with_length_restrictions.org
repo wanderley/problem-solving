@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       C830EA9B-D231-4D49-B0CB-137BC3FF0E55
+:END:
+#+TITLE: Pattern: Find optimal cuts with length restrictions

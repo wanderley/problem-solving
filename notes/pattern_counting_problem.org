@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       5BBCFD49-3103-4D06-BBCE-DC812A9633C6
+:END:
+#+TITLE: Pattern: Counting Problem
