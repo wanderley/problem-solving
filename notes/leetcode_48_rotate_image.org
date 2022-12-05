@@ -8,7 +8,21 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1668831502793
 
-- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]  Fix one element and derive the relative position of all other elements.  Elements from the first row will come from the first column.  Elements from the first column will come from elements from the last row.   Elements from the last column will come from element from the last column.  Time complexity is $O(n ^ 2)$ and space is $O(1)$.
+* Patterns
+
+- [[id:E3DBD022-AEC0-4EF7-93B3-3C92ABE06DE7][Pattern: Rearrange elements in a vector/matrix]].
+
+- [[id:28FDB026-56CC-4A58-9800-E72A4F2135B0][Pattern: Fixed number of connections between elements]].
+
+- [[id:779E5263-12AE-4DF3-9949-401FDE101C1D][Pattern: Graph composed of fixed-length cycles]].
+
+* Prompts
+
+- [[id:BA632D61-93B6-47AB-B11A-7E9EBE3FC71D][Can we derive an invariant based on the smallest possible examples?]]
+
+* Solution
+
+Fix one element and derive the relative position of all other elements.  Elements from the first row will come from the first column.  Elements from the first column will come from elements from the last row.   Elements from the last column will come from element from the last column.  Time complexity is $O(n ^ 2)$ and space is $O(1)$.
 
 #+begin_src python
   class Solution:

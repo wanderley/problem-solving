@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E3DBD022-AEC0-4EF7-93B3-3C92ABE06DE7
+:END:
+#+TITLE: Pattern: Rearrange elements in a vector/matrix

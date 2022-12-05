@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       28FDB026-56CC-4A58-9800-E72A4F2135B0
+:END:
+#+TITLE: Pattern: Fixed number of connections between elements

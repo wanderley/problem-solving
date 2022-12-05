@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       779E5263-12AE-4DF3-9949-401FDE101C1D
+:END:
+#+TITLE: Pattern: Graph composed of fixed-length cycles
