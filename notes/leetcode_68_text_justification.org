@@ -8,7 +8,21 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1661446016746
 
-[[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]  Process each word from left to right and flush the current line when adding a word to it would exceed the max allowed width.  Time and space complexity is $O(n)$.
+* Patterns
+
+- [[id:2AA9CA31-5C60-4702-87E8-4441D9C4AF61][Pattern: Simulation problem]].
+
+- [[id:82697515-9F9A-4CAF-83D5-00665332E4AD][Pattern: Problem has a greedy property]].
+
+* Prompts
+
+- [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]
+
+- [[id:46522C06-DAC3-4986-A13A-17C2ED44ADD1][Can we formulate the problem as sliding window?]]
+
+* Solution
+
+The solution consists on simulating the rules that are describes in the problem statement.  Pack as much words possible while distributing them evenly.  The trick part becomes how to implement it in a clear and concise way.  All that we need are two values to decide when to flush or extend a line: number of words and total number of chars to be flushed.  If these values, we can determine if the line exceeded the max length and compute the number of spaces required when flushing the line.  Time complexity and space are $O(n)$.
 
 #+begin_src python
   from typing import List

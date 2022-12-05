@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       82697515-9F9A-4CAF-83D5-00665332E4AD
+:END:
+#+TITLE: Pattern: Problem has a greedy property

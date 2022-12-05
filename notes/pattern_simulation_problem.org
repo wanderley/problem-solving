@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       2AA9CA31-5C60-4702-87E8-4441D9C4AF61
+:END:
+#+TITLE: Pattern: Simulation problem
