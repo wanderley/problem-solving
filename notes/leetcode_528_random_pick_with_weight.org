@@ -8,9 +8,17 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1668868162293
 
+* Patterns
+
+- [[id:0679DF6C-5271-409F-A4EF-AD92EE1C3036][Pattern: Cumulative Sum]].
+
+* Prompts
+
 - [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]] :: Compute the accumulate probability of picking any of $0..i$ elements using [[id:6C76A007-72FB-4495-904F-CC3407193847][Prefix Sum]].
 
 - [[id:1CFF662A-6F16-43CE-BB07-EA12BA382690][Can we formulate the problem as a classical problem?]] :: [[id:880741CF-6D5A-4E40-9EDD-AF23283D6A91][Weighted Sample]].
+
+* Solution
 
 Compute the accumulate probability of picking any of $0..i$ elements and use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the index of one random element.  Time complexity is $O(n)$ for pre-processing and $O(\log n)$ to answer each query.  Space complexity is $O(n)$ to store the accumulated probabilities.
 

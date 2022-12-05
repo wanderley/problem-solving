@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       0679DF6C-5271-409F-A4EF-AD92EE1C3036
+:END:
+#+TITLE: Pattern: Cumulative Sum
