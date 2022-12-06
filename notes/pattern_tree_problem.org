@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       63791EB8-1E2A-41D3-AFCE-1511EFAE55AC
+:END:
+#+TITLE: Pattern: Tree Problem

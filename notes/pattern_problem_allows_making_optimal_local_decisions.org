@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       63F5032C-75D7-4D9E-A558-914218193D0B
+:END:
+#+TITLE: Pattern: Problem allows making optimal local decisions

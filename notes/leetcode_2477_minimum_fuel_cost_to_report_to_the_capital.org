@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       47D88994-CD09-41C5-A3BA-9EDF2B9AB80E
+:ROAM_REFS: https://leetcode.com/problems/minimum-fuel-cost-to-report-to-the-capital/
+:END:
+#+TITLE: Leetcode: 2477. Minimum Fuel Cost to Report to the Capital
+#+ROAM_REFS: https://leetcode.com/problems/minimum-fuel-cost-to-report-to-the-capital/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1670217268124
+
+* Patterns
+
+- [[id:63791EB8-1E2A-41D3-AFCE-1511EFAE55AC][Pattern: Tree Problem]].
+
+- [[id:45D8FD21-992F-4073-8EC6-7695FAA0E3AB][Pattern: Optimization problem to find minimum/maximum number of X to cover Y]].
+
+- [[id:63F5032C-75D7-4D9E-A558-914218193D0B][Pattern: Problem allows making optimal local decisions]].
+
+* Prompts
+
+- [[id:1CA3366B-D045-4BF4-9E39-DFA5131EF937][Can we solve the problem using a greedy approach?]]
+
+* Solution
+
+Let's explore this problem looking the cities in a particular order: leaf cities to the capital.  A leaf city has only one connection which we call parent.  The representative must use one car to move up to the parent city.  Since you always have to happen, there is only one way to do it.  Suppose that you moved all representatives from leaf cities to their respective parent cities.  You end up with either one city (the capital) or a tree with new leaves.  Now, the problem is bit different since you have to move all representatives that got to the new leaf cities and their own representative.  Luckily, we can easily do that by accumulating the total cost to move the child cities and the number of cities moved there.  So, processing the cities from the leaves to the capital will force only one option to choose on every turn, and this option is always optimal.  Time and space complexity is $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def minimumFuelCost(self, roads: List[List[int]], seats: int) -> int:
+          N = len(roads) + 1
+          A = [[] for _ in range(N)]
+          for u, v in roads:
+              A[u].append(v)
+              A[v].append(u)
+
+          def dfs(u, p):
+              total, count = 0, 1
+              for v in A[u]:
+                  if v != p:
+                      ecost, ecount = dfs(v, u)
+                      total += ecost
+                      count += ecount
+              if u == 0:
+                  return total
+              return total + ceil(count / seats), count
+
+          return dfs(0, None)
+#+end_src
