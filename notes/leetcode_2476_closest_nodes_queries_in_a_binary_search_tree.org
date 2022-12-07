@@ -8,7 +8,21 @@
 #+ANKI_DECK: Problem Solving
 #+ANKI_CARD_ID: 1668976889626
 
-- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  While the input for the problem is a [[id:84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD][Binary Search Tree]], we don't know if it is balanced or not.  Because of that, we have to assume that queries can take linear time to be answered.  Therefore, we can traverse the tree storing the values on a sorted list which will be used to answer the queries.  With the sorted list, we can use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the first element $e$ that is equal or greater than the query $q$.  If $q=a[e]$, the answer is $(q, q)$.  If $e=0$, all elements on the list are greater than $q$ and the answer is $(-1, a[e])$.  If $e=n$, all elements on the list are smaller than $q$ and the answer is $(a[e-1], -1)$.  Otherwise, $(a[e-1],a[e])$ is the answer for the query.  Time complexity is $O(m \log n)$ where $m$ is the number of queries and $n$ is the number of vertices.  The space complexity is $O(n)$.
+* Patterns
+
+- [[id:63791EB8-1E2A-41D3-AFCE-1511EFAE55AC][Pattern: Tree Problem]].
+
+- [[id:05007800-BCCC-415E-A4D3-7B69ABC73588][Pattern: Search for closest number of some kind]].
+
+- [[id:8CCAE757-A015-4494-A17E-C6BBFC38F658][Pattern: Problem's constraints play big role on the solution]] ::  There is no mention that the [[id:84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD][Binary Search Tree]] is balanced.  So, we can't use it directly to answer the queries.
+
+* Prompts
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]
+
+* Solution
+
+While the input for the problem is a [[id:84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD][Binary Search Tree]], we don't know if it is balanced or not.  In this case, we should assume that the tree could be a path, and traversing it to answer the queries would take linear time what is too slow.  As traversing for each query is not an option, we can traverse the tree once and create a *sorted* array with its values.  Now, the problem becomes answering the queries using the sorted array, and we can do it using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the first element $e$ that is equal or greater than the query $q$.  If $q=a[e]$, the answer is $(q, q)$.  If $e=0$, all elements on the list are greater than $q$ and the answer is $(-1, a[e])$.  If $e=n$, all elements on the list are smaller than $q$ and the answer is $(a[e-1], -1)$.  Otherwise, $(a[e-1],a[e])$ is the answer for the query.  Time complexity is $O(m \log n)$ where $m$ is the number of queries and $n$ is the number of vertices.  The space complexity is $O(n)$.
 
 #+begin_src python
   class Solution:
