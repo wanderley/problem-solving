@@ -1,0 +1,100 @@
+:PROPERTIES:
+:ID:       8C7E9E52-9220-4A7B-B0E6-54F960E17CA8
+:END:
+#+TITLE: Interview preparation: V
+
+The time has come to test the method with someone that wants to get ready for coding interviews.
+
+I have two purposes for this note.  It contains support material for V's preparation like explanations about the interview process, method used to study for interview, weekly assignments etc.  This will help us to keep track where we are and what we should work next.  The other purpose is to serve as a place where I can formalize my thoughts about the theme.  Explaining things to others forces me to look to the problems in different perspectives.
+
+* Coding Interviews
+
+To best define the preparation required for coding interviews, let's compare (coding) interview problems with problems that we usually see on Computer Science's courses.  They require application of knowledge in Data Structure, Algorithms on Graphs and ad-hoc strategies (e.g. Dynamic Programming, Line-Sweeping, Sliding-Window etc).  They differ in two aspects: time to solve and difficult.  You have many days to solve an assignment exercise, but only have 15-20 minutes to solve an interview problem.  Due this difference in time to solve, you can expect interview problems to be easier than most of the assignments that you've done on University.
+
+Due the wide range of topics covered and restriction in time, interview problems are more like final exam's questions on Data Structure and Algorithms courses than assignments.  But there is an important difference.  While you do your exam alone and in silence, you have to verbalize your thoughts while solving the interview problem.  It is definitely an extra challenge, but also an opportunity to engage with the interviewer in case you don't see the solution right away.
+
+The structure and requirements of coding interviews ask for two distinct preparations: studying and performing.  You have to quickly find the solution for the problem using the right data structure, algorithm or technique.  While doing so, you have to perform the interview routine: come up with a solution, explain your thought process and code it in a clear and concise way.  /Learning/ does not need to be time-bounded, since some concepts require time to sink in.  But /performing/ should follow as close as possible a real interview with time constraints and feedback.
+
+A popular way to study is using a curated lists like [[https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions][Blind 75]].  Such lists cover majority of topics that you see in an interview.  These problems cover specific data structures, algorithms and techniques that work as building blocks for your future solutions.  While these lists are a good start, you might have more success if you discover the kind of problems that your target company asks.  It is not that a company uses only one type of questions, but their interviewers might converge to a sub-set of topics due internal culture or type of business.  Since during the interview you do not know the problem's type, it is wise to also study without using hints like Array, Graphs, DP etc.  To play safe, practice as many topics and problems that you can.
+
+
+* Spaced-repetition
+
+Spaced-repetition is a study-technique commonly used to memorization of factual information.  It uses flashcard as way to store and review content.  A flashcard has two sides: front and back.  A question or prompt goes in the front of the card, and the information to memorize goes on the back.  For example, you have a picture of someone in the front of the card and their name on the back.  The technique uses the [[https://en.wikipedia.org/wiki/Spacing_effect][spacing effect]] to encode information in the long-term memory by spacing the study sessions, and it is known to have better results than [[https://en.wikipedia.org/wiki/Cramming_(education)][cramming]] (repeat many times in a single session).  Difficult cards appear more often while easier ones are less frequent.  [[https://ankiweb.net/][Anki]] is a well-know and flexible program to manage cards.
+
+How spaced-repetition can be applied to problem solving.  While this technique has proven to be efficient when memorizing facts, it still unclear its impact on other types of study.  My bet is that we can use spaced-repetition to prepare for interviews in the following way.  After you solve a problem, you create a card that contains the problem statement (or simplify a link to the problem) and put on the back the steps that you should take to solve the problem.  By steps, I mean the observation that you found crucial to solve the problem.  Building blocks that you used to solve the problem in the correct order.  For example:
+
+- Constraints require a logarithmic solution.
+- One element of the array with its neighbors is enough to decide which side of the array lays the answer.
+- Use a Binary-search for find the answer.
+
+
+* Method
+
+An studying session is divided in two parts: solving new problems and reviewing old problems.
+
+*For new problems*, you pick one or two problems per day and spend as much time you need to solve them.  If you solved the problem, follow the instructions on [[id:65FBC7A2-7F72-47E8-9462-58E35974DE1D][Creating a new card]].  Otherwise, give at least one day to try again.  On the second day, you can check a solution to the problem.  The goal is to understand the solution and find the gaps on your knowledge.  There is a data structure that you are not familiar, a particular technique or idea that makes the problem dead easy to solve.  After you learned how to solve the problem (congrats!), [[id:65FBC7A2-7F72-47E8-9462-58E35974DE1D][create a card]] for it and move on.
+
+*For old problems*, you open Anki and practice each available card (/new/ and /for review/).  Avoid reviewing cards using "Easy" button since they schedule a new review for too far way.  Use the "Good" button if you solved the problem without any issues: recalled the steps to solve it and passed the problem on the first try.  The "Hard" button should be used if you had difficult on recalling the steps to solve the problem or when coding it.  Reserve the "Again" button for when you couldn't solve the problem at all.  Be emotionally ready for that because this might happen more often than you expect.
+
+
+** Creating a new card
+:PROPERTIES:
+:ID:       65FBC7A2-7F72-47E8-9462-58E35974DE1D
+:END:
+
+The front of the card has a link for the problem.  The back of the card has the steps to solve the problem and optionally an example for the solution.  You might get stuck trying to write the /perfect/ card.  Don't bother with this.  You will have many opportunities to improve them after a review session.
+
+
+* FAQ
+
+** When should I work in a new problem?
+
+Don't start working in a new problem if you have more reviews than you have time to get them done in a day, or you already have new cards waiting for you.  It is easy to get overwhelmed with the number of reviews.  Striving for consistency will bring better results than rushing every other day.
+
+** Should I code the solution on every review?
+
+Yes!  Reconstructing your steps to the solution and writing the code again will cement the building blocks on your memory.
+
+** What should I do if I can't solve a problem?
+
+First of all, that is fine and will happen more frequently than you imagine.  Give at least one day before looking to solutions.  After you read and *understand* a solution, ask yourself "what steps should I have done to solve this problem?".  Create a card with these steps and review it as any other card.
+
+
+* Meetings
+
+** December 2, 2022
+
+- The goal of this method is to use spaced-repetition to build your intuition to solve coding challenges.  The card has the path to solve the problem and this will be internalized after many repetitions.  When solving new problems, a thought will scream at you "Binary Search!" or "This is a Graph Problem".  In fact, this is not much different of how we learned math.  How many times did you verbalize the steps to isolate $x$ in an equation?  You used descriptive knowledge to build the intuition muscle that later on helped you to perform simplification without using much mental energy.
+
+- For next session, you will work in [[https://leetcode.com/contest/weekly-contest-320/][4 problems]] which you should apply the method: solve them, create and review the cards.  We will review your thought process to solve these problems and what worked and didn't work when create and reviewing your cards:
+
+  - [[id:AD689352-C66F-4BFC-95A4-65B58110A851][Leetcode: 2475. Number of Unequal Triplets in Array]]
+  - [[id:7F2BA5B5-2C29-40AE-A4D3-B3D438A660C9][Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree]]
+  - [[id:47D88994-CD09-41C5-A3BA-9EDF2B9AB80E][Leetcode: 2477. Minimum Fuel Cost to Report to the Capital]]
+  - [[id:D500C3CF-B17C-4C7D-90F2-BFA02AB1C9D6][Leetcode: 2478. Number of Beautiful Partitions]]
+
+** December 9, 2022
+
+*** Performing a solution
+
+- [X] Found the worst case but didn't narrow the search for the optimal algorithm to that case.
+- [X] Explain what are chucks and how to use them.
+  - [[https://www.theroar.com.au/2016/12/19/ten-ways-get-cricket-including-youve-never-seen/][What are the ways to be dismissed in cricket?]]
+    - Define one of them.
+    - Define other one.
+    - Contrast them.
+- [X] Things that will improve over time:
+  - Proficiency in the selected Programming Language.
+  - Formulate a high-level plan and execute each part in isolation.
+
+*** Next steps
+
+We will start with [[https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions][Blind 75]] problems.  As we work through them, we will find that few areas should get more attention.  For those, I will add problems to increase your proficiency on specific building blocks.  Here is the list of problems for this week:
+
+- Blind 75
+  - [[https://leetcode.com/problems/two-sum/][Two Sum]]
+  - [[https://leetcode.com/problems/best-time-to-buy-and-sell-stock/][Best Time to Buy and Sell Stock]]
+  - [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]]
+- Supplement
+  - [[https://leetcode.com/problems/binary-tree-inorder-traversal/][Binary Tree Inorder Traversal]].
