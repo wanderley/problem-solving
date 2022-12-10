@@ -32,6 +32,12 @@
   (load bootstrap-file nil 'nomessage))
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(setq debug-on-error t)
+
+
+;;; Early setup
+
+(setq make-backup-files nil)
 
 
 ;;; Install dependencies
@@ -48,31 +54,32 @@
 (require 'org-roam)
 
 
-;;; Setup
+;;; Setup Org-roam
 
-(setq
+(setq org-roam-directory (expand-file-name "./notes")
+      org-roam-db-location (expand-file-name "./notes/org-roam.db"))
 
- ;; Org-roam
- org-roam-directory (expand-file-name "./notes")
- org-roam-db-location (expand-file-name "./notes/org-roam.db")
+(org-roam-db-sync t)
 
- ;; Org
- org-id-locations-file ".orgids"
- org-id-link-to-org-use-id t
- org-id-extra-files (org-roam-list-files)
- org-id-track-globally t
 
- ;; Org-publish
- org-export-with-broken-links 'mark
- org-html-validation-link nil
- org-html-home/up-format "<!-- %s --><nav><a href=\"%s\">Problem Solving</a></nav>"
- org-html-link-home "index.html"
- org-html-head-include-scripts nil
- org-html-head-include-default-style nil
- org-html-head  "<link rel=\"stylesheet\" href=\"style.css\">"
+;;; Setup Org
 
- static-directory "static"
- publish-directory "out")
+(setq org-id-locations-file ".orgids"
+      org-id-link-to-org-use-id t
+      org-id-extra-files (org-roam-list-files)
+      org-id-track-globally t
+
+      ;; Org-publish
+      org-export-with-broken-links 'mark
+      org-html-validation-link nil
+      org-html-home/up-format "<!-- %s --><nav><a href=\"%s\">Problem Solving</a></nav>"
+      org-html-link-home "index.html"
+      org-html-head-include-scripts nil
+      org-html-head-include-default-style nil
+      org-html-head  "<link rel=\"stylesheet\" href=\"style.css\">"
+
+      static-directory "static"
+      publish-directory "out")
 
 (setq org-publish-project-alist
       (list
@@ -99,7 +106,7 @@
        ))
 
 
-;;; Extension to  Org-publish
+;;; Extension to Org-publish
 
 (defun wander/org-roam-collect-backlinks-string ()
   (when (org-roam-node-at-point)
@@ -111,10 +118,11 @@
            (content (when (> count 0)
                       (concat (format "\n\n* Cited by %d\n\n" count)
                               (mapconcat (lambda (node)
-                                           (format "- [[id:%s][%s]]\n"
+                                           (format "- [[id:%s][%s]]"
                                                    (org-roam-node-id node)
                                                    (org-roam-node-title node)))
-                                         backlinks)
+                                         backlinks
+                                         "\n")
                               "\n\n"))))
       content)))
 
