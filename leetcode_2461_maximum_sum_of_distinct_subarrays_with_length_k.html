@@ -45,17 +45,17 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2461. Maximum Sum of Distinct Subarrays With Length K</h1>
 
-<div id="outline-container-org05de938" class="outline-2">
-<h2 id="org05de938">Understand the problem</h2>
-<div class="outline-text-2" id="text-org05de938">
+<div id="outline-container-org433525a" class="outline-2">
+<h2 id="org433525a">Understand the problem</h2>
+<div class="outline-text-2" id="text-org433525a">
 <p>
 Given an integer array \(a\) and an integer \(k\).  Find the maximum subarray sum of all subarrays of length \(k\) with \(k\) distinct values.
 </p>
 </div>
 
-<div id="outline-container-orgcdd1d58" class="outline-3">
-<h3 id="orgcdd1d58">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgcdd1d58">
+<div id="outline-container-org259e996" class="outline-3">
+<h3 id="org259e996">Useful prompts</h3>
+<div class="outline-text-3" id="text-org259e996">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a>  Since \(n \leq 10^5\), we have to solve the problem in linear time.  So, a <a href="sliding_window.html#ID-CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2">Sliding Window</a> of size \(k\) can help with that.</li>
 </ul>
@@ -63,17 +63,17 @@ Given an integer array \(a\) and an integer \(k\).  Find the maximum subarray su
 </div>
 </div>
 
-<div id="outline-container-org08d9eec" class="outline-2">
-<h2 id="org08d9eec">Devise a plan</h2>
-<div class="outline-text-2" id="text-org08d9eec">
+<div id="outline-container-orgd708c6a" class="outline-2">
+<h2 id="orgd708c6a">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgd708c6a">
 <p>
 Create a window of length \(k\) and slide it from left to right.  For every new valid window (ones that contains \(k\) distinct elements), pick it sum if it greater to the best result so far.  Time complexity is \(O(n)\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-org569e422" class="outline-3">
-<h3 id="org569e422">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org569e422">
+<div id="outline-container-org3967a61" class="outline-3">
+<h3 id="org3967a61">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org3967a61">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumSubarraySum</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

@@ -45,9 +45,9 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree</h1>
 
-<div id="outline-container-orga4731b9" class="outline-2">
-<h2 id="orga4731b9">Patterns</h2>
-<div class="outline-text-2" id="text-orga4731b9">
+<div id="outline-container-org0ae8094" class="outline-2">
+<h2 id="org0ae8094">Patterns</h2>
+<div class="outline-text-2" id="text-org0ae8094">
 <ul class="org-ul">
 <li><a href="pattern_tree_problem.html#ID-63791EB8-1E2A-41D3-AFCE-1511EFAE55AC">Pattern: Tree Problem</a>.</li>
 
@@ -58,18 +58,18 @@
 </div>
 </div>
 
-<div id="outline-container-org33828d9" class="outline-2">
-<h2 id="org33828d9">Prompts</h2>
-<div class="outline-text-2" id="text-org33828d9">
+<div id="outline-container-orgbefcaed" class="outline-2">
+<h2 id="orgbefcaed">Prompts</h2>
+<div class="outline-text-2" id="text-orgbefcaed">
 <ul class="org-ul">
 <li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge4e23c3" class="outline-2">
-<h2 id="orge4e23c3">Solution</h2>
-<div class="outline-text-2" id="text-orge4e23c3">
+<div id="outline-container-org21fae36" class="outline-2">
+<h2 id="org21fae36">Solution</h2>
+<div class="outline-text-2" id="text-org21fae36">
 <p>
 While the input for the problem is a <a href="binary_search_tree.html#ID-84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD">Binary Search Tree</a>, we don't know if it is balanced or not.  In this case, we should assume that the tree could be a path, and traversing it to answer the queries would take linear time what is too slow.  As traversing for each query is not an option, we can traverse the tree once and create a <b>sorted</b> array with its values.  Now, the problem becomes answering the queries using the sorted array, and we can do it using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the first element \(e\) that is equal or greater than the query \(q\).  If \(q=a[e]\), the answer is \((q, q)\).  If \(e=0\), all elements on the list are greater than \(q\) and the answer is \((-1, a[e])\).  If \(e=n\), all elements on the list are smaller than \(q\) and the answer is \((a[e-1], -1)\).  Otherwise, \((a[e-1],a[e])\) is the answer for the query.  Time complexity is \(O(m \log n)\) where \(m\) is the number of queries and \(n\) is the number of vertices.  The space complexity is \(O(n)\).
 </p>
