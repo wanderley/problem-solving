@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2290. Minimum Obstacle Rmoval to Reach Corner</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2290. Minimum Obstacle Rmoval to Reach Corner</h1>
+<p>
+<a href="https://leetcode.com/problems/minimum-obstacle-removal-to-reach-corner/">Problem Statement</a>: Given an matrix \(m \times n\) where \(0\) represents an empty cell and \(1\) represents an obstacle, determine the minimum number of obstacle to remove (or pass over) to go from \((0, 0)\) to \((m-1, n-1)\).
+</p>
+
+<p>
+This problem can be modeled as a graph where each cell is an vertex and two vertices are connected if they are adjacent cell (up, down, left and right).  The cost of a path $(0, 0), (y<sub>0</sub>, x<sub>0</sub>), (y<sub>1</sub>, x<sub>1</sub>), &#x2026;$ is \(m[0][0] + \sum m[y_i][x_i]\).  So, we can use <a href="dijkstra_algorithm.html#ID-3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A">Dijkstra Algorithm</a> to compute the best desired path.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O((m \times n) \times \log (m \times n) + (m \times n))\)</li>
+<li>Space complexity: \(O(m \times n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(grid):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(grid)
+    <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(grid[0])
+    <span style="font-weight: bold; font-style: italic;">inf</span> = n * m + 1
+    <span style="font-weight: bold; font-style: italic;">dist</span> = [[inf] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+
+    <span style="font-weight: bold; font-style: italic;">pq</span> = []
+    heappush(pq, (grid[0][0], 0, 0))
+    <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(pq) &gt; 0:
+        <span style="font-weight: bold; font-style: italic;">ud</span>, <span style="font-weight: bold; font-style: italic;">uy</span>, <span style="font-weight: bold; font-style: italic;">ux</span> = heappop(pq)
+        <span style="font-weight: bold;">if</span> dist[uy][ux] != <span style="font-weight: bold; font-style: italic;">inf</span>:
+            <span style="font-weight: bold;">continue</span>
+        dist[uy][<span style="font-weight: bold; font-style: italic;">ux</span>] = ud
+        <span style="font-weight: bold;">for</span> dy, dx <span style="font-weight: bold;">in</span> ((+1, +0), (-1, +0), (+0, +1), (+0, -1)):
+            <span style="font-weight: bold; font-style: italic;">vy</span>, <span style="font-weight: bold; font-style: italic;">vx</span> = uy + dy, ux + dx
+            <span style="font-weight: bold;">if</span> vy &lt; 0 <span style="font-weight: bold;">or</span> vy &gt;= n <span style="font-weight: bold;">or</span> vx &lt; 0 <span style="font-weight: bold;">or</span> vx &gt;= m:
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold;">if</span> dist[vy][vx] &gt;= ud + grid[vy][vx]:
+                heappush(pq, (ud + grid[vy][vx], vy, vx))
+
+    <span style="font-weight: bold;">return</span> dist[n - 1][m - 1]
+
+
+<span style="font-weight: bold;">assert</span> solve([[0, 1, 1], [1, 1, 0], [1, 1, 0]]) == 2
+<span style="font-weight: bold;">assert</span> solve([[0, 1, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 1, 0]]) == 0
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumObstacles</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(grid)
+</pre>
+</div>
+</div>
+</body>
+</html>

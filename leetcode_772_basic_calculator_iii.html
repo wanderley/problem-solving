@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 772. Basic Calculator III</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 772. Basic Calculator III</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  <code>a // b</code> is different than <code>int(a/b)</code> in Python.</li>
+
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a>  Eval expression with binary operators.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">calculate</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        s = s + <span style="font-style: italic;">"+0"</span>
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(s)
+
+        <span style="font-weight: bold; font-style: italic;">po</span> = {<span style="font-style: italic;">")"</span>: 0, <span style="font-style: italic;">"+"</span>: 1, <span style="font-style: italic;">"-"</span>: 1, <span style="font-style: italic;">"*"</span>: 2, <span style="font-style: italic;">"/"</span>: 2}
+        <span style="font-weight: bold; font-style: italic;">st</span> = []
+        <span style="font-weight: bold; font-style: italic;">op</span> = []
+        <span style="font-weight: bold; font-style: italic;">i</span> = 0
+        <span style="font-weight: bold;">while</span> i &lt; N:
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">"0"</span> &lt;= s[i] &lt;= <span style="font-style: italic;">"9"</span>:
+                <span style="font-weight: bold; font-style: italic;">start</span> = i
+                <span style="font-weight: bold;">while</span> i &lt; N <span style="font-weight: bold;">and</span> <span style="font-style: italic;">"0"</span> &lt;= s[i] &lt;= <span style="font-style: italic;">"9"</span>:
+                    <span style="font-weight: bold; font-style: italic;">i</span> += 1
+                st.append(<span style="font-weight: bold;">int</span>(s[start:i]))
+            <span style="font-weight: bold;">elif</span> s[i] == <span style="font-style: italic;">"("</span>:
+                op.append(s[i])
+                i += 1
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">while</span> op <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">len</span>(st) &gt; 1 <span style="font-weight: bold;">and</span> op[-1] != <span style="font-style: italic;">"("</span> <span style="font-weight: bold;">and</span> po[op[-1]] &gt;= po[s[i]]:
+                    b = st.pop()
+                    a = st.pop()
+                    o = op.pop()
+                    <span style="font-weight: bold;">if</span> o == <span style="font-style: italic;">"+"</span>:
+                        st.append(a + b)
+                    <span style="font-weight: bold;">elif</span> o == <span style="font-style: italic;">"-"</span>:
+                        st.append(a - b)
+                    <span style="font-weight: bold;">elif</span> o == <span style="font-style: italic;">"*"</span>:
+                        st.append(a * b)
+                    <span style="font-weight: bold;">elif</span> o == <span style="font-style: italic;">"/"</span>:
+                        st.append(<span style="font-weight: bold;">int</span>(a / b))
+                <span style="font-weight: bold;">if</span> s[i] == <span style="font-style: italic;">")"</span>:
+                    op.pop()
+                <span style="font-weight: bold;">else</span>:
+                    op.append(s[i])
+                i += 1
+
+        <span style="font-weight: bold;">return</span> st[0]
+
+
+<span style="font-weight: bold;">assert</span> Solution().calculate(<span style="font-style: italic;">"1+1"</span>) == 2
+<span style="font-weight: bold;">assert</span> Solution().calculate(<span style="font-style: italic;">"6-4/2"</span>) == 4
+<span style="font-weight: bold;">assert</span> Solution().calculate(<span style="font-style: italic;">"2*(5+5*2)/3+(6/2+8)"</span>) == 21
+</pre>
+</div>
+</div>
+</body>
+</html>

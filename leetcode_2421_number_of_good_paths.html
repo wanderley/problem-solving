@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2421. Number of Good Paths</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2421. Number of Good Paths</h1>
+<ul class="org-ul">
+<li><a href="pattern_build_graph_online.html#ID-49FB2683-60E5-4B10-B2B7-1D0B951EA1E0">Pattern: Build graph online</a>.  Count path while building a forest using smaller to bigger edges.  For example, only edges where both vertices are less than \(x\), then \(x+1\) and so on.  Time complexity is \(O(n \log n)\) since we have to sort the edges.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numberOfGoodPaths</span>(<span style="font-weight: bold;">self</span>, vals: List[<span style="font-weight: bold;">int</span>], edges: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(vals)
+        <span style="font-weight: bold; font-style: italic;">p</span> = [u <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold; font-style: italic;">s</span> = [Counter([vals[u]]) <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold; font-style: italic;">c</span> = [1 <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+
+        <span style="font-weight: bold; font-style: italic;">gmax</span> = <span style="font-weight: bold;">lambda</span> <span style="font-weight: bold; font-style: italic;">e</span>: <span style="font-weight: bold;">max</span>(vals[e[0]], vals[e[1]])
+        gmin = <span style="font-weight: bold;">lambda</span> e: <span style="font-weight: bold;">min</span>(vals[e[0]], vals[e[1]])
+
+        edges.sort(key=<span style="font-weight: bold;">lambda</span> e: (gmax(e), gmin(e)))
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(u):
+            <span style="font-weight: bold;">if</span> p[u] != u:
+                p[<span style="font-weight: bold; font-style: italic;">u</span>] = find(p[u])
+            <span style="font-weight: bold;">return</span> p[u]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">union</span>(u, v):
+            pu = find(u)
+            pv = find(v)
+            <span style="font-weight: bold;">if</span> pu != pv:
+                m = <span style="font-weight: bold;">max</span>(vals[u], vals[v])
+                s[pv][<span style="font-weight: bold; font-style: italic;">m</span>] += s[pu][m]
+                <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">c[pv] += c[pu]</span>
+                p[<span style="font-weight: bold; font-style: italic;">pu</span>] = p[pv]
+
+        ans = N
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> edges:
+            <span style="font-weight: bold;">if</span> vals[u] &lt; vals[v]:
+                <span style="font-weight: bold; font-style: italic;">u</span>, <span style="font-weight: bold; font-style: italic;">v</span> = v, u
+            pu = find(u)
+            pv = find(v)
+            ans += s[pu][vals[u]] * s[pv][vals[u]]
+            union(u, v)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

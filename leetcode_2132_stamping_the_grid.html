@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2132. Stamping the Grid</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2132. Stamping the Grid</h1>
+<ul class="org-ul">
+<li><a href="mistake_overcomplicated_solution.html#ID-40E38FD2-DDF0-4C25-BB8C-43D07F3D5136">Mistake: Overcomplicated solution</a>. Discovered the area to paint by computing all possible valid rectangles and painting its area.</li>
+
+<li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  If \(stampHeight=1\), the problem becomes detecting if all empty cells are part of an empty segment of size at least \(stampWidth\).  This can be done by extending the empty segments with the empty cells to its right.  If \(stampHeight>1\), we have to find the segments where each cell is part of a vertical segment of empty cells of size at least \(stampHeight\) ().  We paint all these segments as we find them.  To paint efficiently, we do it from bottom to up and stop when we find a painted cell since it marks that from that point on there is more \(stampHeight\) painted cells.  Time and space complexity is \(O(n \times m)\).</li>
+</ul>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">possibleToStamp</span>(
+        <span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]], stampHeight: <span style="font-weight: bold;">int</span>, stampWidth: <span style="font-weight: bold;">int</span>
+    ) -&gt; <span style="font-weight: bold;">bool</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(grid[0])
+
+        <span style="font-weight: bold; font-style: italic;">p</span> = [[<span style="font-weight: bold; text-decoration: underline;">False</span>] * M <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">paint</span>(i0, j0, i1, j1):
+            <span style="font-weight: bold; font-style: italic;">j</span> = j1
+            <span style="font-weight: bold;">while</span> j &gt;= <span style="font-weight: bold; font-style: italic;">j0</span>:
+                i = i1
+                <span style="font-weight: bold;">while</span> i &gt;= i0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">not</span> p[i][j]:
+                    p[i][<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                    <span style="font-weight: bold; font-style: italic;">i</span> -= 1
+                <span style="font-weight: bold; font-style: italic;">j</span> -= 1
+
+        <span style="font-weight: bold; font-style: italic;">a</span> = [0] * M
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold; font-style: italic;">a</span>[<span style="font-weight: bold; font-style: italic;">j</span>] = a[j] + 1 <span style="font-weight: bold;">if</span> grid[i][j] == 0 <span style="font-weight: bold;">else</span> 0
+            <span style="font-weight: bold; font-style: italic;">j0</span> = 0
+            <span style="font-weight: bold;">while</span> j0 &lt; M:
+                <span style="font-weight: bold;">while</span> j0 &lt; M <span style="font-weight: bold;">and</span> a[j0] &lt; <span style="font-weight: bold; font-style: italic;">stampHeight</span>:
+                    j0 += 1
+                <span style="font-weight: bold; font-style: italic;">j1</span> = j0
+                <span style="font-weight: bold;">while</span> j1 &lt; M <span style="font-weight: bold;">and</span> a[j1] &gt;= <span style="font-weight: bold; font-style: italic;">stampHeight</span>:
+                    j1 += 1
+                <span style="font-weight: bold;">if</span> j1 - j0 &gt;= stampWidth:
+                    paint(i - stampHeight + 1, j0, i, j1 - 1)
+                <span style="font-weight: bold; font-style: italic;">j0</span> = j1
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> grid[i][j] == 0 <span style="font-weight: bold;">and</span> p[i][j] == <span style="font-weight: bold; text-decoration: underline;">False</span>:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().possibleToStamp(
+        [[1, 0, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0]], 4, 3
+    )
+    == <span style="font-weight: bold; text-decoration: underline;">True</span>
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().possibleToStamp(
+        [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]], 2, 2
+    )
+    == <span style="font-weight: bold; text-decoration: underline;">False</span>
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2312. Selling Pieces of Wood</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2312. Selling Pieces of Wood</h1>
+<p>
+<a href="https://leetcode.com/problems/selling-pieces-of-wood/">Problem Statement</a>: Given a rectangle of dimensions \(m \times n\) and tiles \(r[i]=[h_i, w_i, p_i]\) where \(h_i, w_i\) and \(p_i\) are the height, width and price of the $i$-th tile, return the maximum coverage (sum of all prices of each tile used) of the given rectangles given that you always have to entirely cut the rectangle in horizontally or vertically.
+</p>
+
+<p>
+We can formulate using the following recurrence:
+</p>
+
+\begin{equation*}
+  f(h, w)=\begin{cases}
+    0, & \mbox{if $i = 0$ or $j = 0$} \\
+    \max(p(h, w), f(i, w) + f(h - i, w), f(h, j) + f(h, w - j)) & \mbox{for $1 \leq i < h$ and $1 \leq j < w$>}.
+  \end{cases}
+\end{equation*}
+
+<p>
+This recurrence has \(O(m \times n)\) subproblems and each one is solved in \(O(m + n)\).  So, the time complexity to compute it will be \(O(m \times n \times (m + n))\).
+</p>
+
+<div id="outline-container-orgaecafa9" class="outline-2">
+<h2 id="orgaecafa9"><a href="top_down.html#ID-3463A33B-D953-4E75-895D-0BE4AAB16813">Top-down</a></h2>
+<div class="outline-text-2" id="text-orgaecafa9">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(m, n, prices):
+    <span style="font-weight: bold; font-style: italic;">p</span> = {}
+    <span style="font-weight: bold; font-style: italic;">hs</span> = <span style="font-weight: bold;">set</span>()
+    <span style="font-weight: bold; font-style: italic;">ws</span> = <span style="font-weight: bold;">set</span>()
+
+    <span style="font-weight: bold;">for</span> h, w, price <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">prices</span>:
+        p[(h, w)] = price
+        hs.add(h)
+        ws.add(w)
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(h, w):
+        <span style="font-weight: bold;">if</span> h == 0 <span style="font-weight: bold;">or</span> w == 0:
+            <span style="font-weight: bold;">return</span> 0
+
+        ans = p.get((h, w), 0)
+        <span style="font-weight: bold;">for</span> new_h <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, h):
+            <span style="font-weight: bold;">if</span> new_h <span style="font-weight: bold;">in</span> hs:
+                ans = <span style="font-weight: bold;">max</span>(ans, dfs(new_h, w) + dfs(h - new_h, w))
+        <span style="font-weight: bold;">for</span> new_w <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, w):
+            <span style="font-weight: bold;">if</span> new_w <span style="font-weight: bold;">in</span> ws:
+                ans = <span style="font-weight: bold;">max</span>(ans, dfs(h, new_w) + dfs(h, w - new_w))
+
+        <span style="font-weight: bold;">return</span> ans
+
+    <span style="font-weight: bold;">return</span> dfs(m, n)
+
+
+<span style="font-weight: bold;">assert</span> solve(3, 5, [[1,4,2],[2,2,7],[2,1,3]]) == 19
+<span style="font-weight: bold;">assert</span> solve(4, 6, [[3,2,10],[1,4,2],[4,1,3]]) == 32
+<span style="font-weight: bold;">assert</span> solve(200, 200, [[1,1,1000000]]) == 40000000000
+<span style="font-weight: bold;">assert</span> solve(15, 7, [[14,3,1],[2,2,1],[15,1,1],[8,1,2],[13,5,1],[6,5,1],[13,1,1],[3,3,2]]) == 25
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sellingWood</span>(<span style="font-weight: bold;">self</span>, m: <span style="font-weight: bold;">int</span>, n: <span style="font-weight: bold;">int</span>, prices: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(m, n, prices)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

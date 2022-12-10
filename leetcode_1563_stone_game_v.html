@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1563. Stone Game V</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1563. Stone Game V</h1>
+<p>
+Check out the problem statement <a href="https://leetcode.com/problems/stone-game-v">here</a>.
+</p>
+
+<div id="outline-container-orgbb44d46" class="outline-2">
+<h2 id="orgbb44d46">Slow Dynamic Programming</h2>
+<div class="outline-text-2" id="text-orgbb44d46">
+<p>
+Be \(s(i,j)\) the sum of stone values from \(i\) to \(j\), and be \(f(i, j)\) the max score Alice can obtain using stones \(i..j\).  When \(i=j\), the game has finished and the score is 0.  Otherwise, \(i<j\) and \(f(i,j)\) is the maximum score between all possible ways to split the interval in two: \(i..k\) and \(k..j\) where \(i<\leq k\leq j\).  For each \(k\), the score is either \(s(i,k)+f(i,k)\) or \(s(k+1,j)+f(k+1,j)\) if one side is smaller than the other or the max of both sides if \(s(i,k)=s(k+1,j)\).  The following algorithm implements this idea by trying all possible \(k\) for each interval \(i..j\).
+</p>
+
+<p>
+With \(n\) being the number of stones, we have that
+</p>
+<ul class="org-ul">
+<li>Time complexity: \(O(n^3)\)</li>
+<li>Space complexity: \(O(n^2)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+<span style="font-weight: bold;">from</span> itertools <span style="font-weight: bold;">import</span> accumulate
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(a):
+    <span style="font-weight: bold; font-style: italic;">ps</span> = <span style="font-weight: bold;">list</span>(accumulate(a))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sum</span>(s, e):
+        <span style="font-weight: bold;">return</span> ps[e] - ps[s - 1] <span style="font-weight: bold;">if</span> s &gt; 0 <span style="font-weight: bold;">else</span> ps[e]
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(s, e):
+        <span style="font-weight: bold;">if</span> s == e:
+            <span style="font-weight: bold;">return</span> 0
+
+        ans = 0
+        <span style="font-weight: bold;">for</span> m <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(s + 1, e + 1):
+            l = <span style="font-weight: bold;">sum</span>(s, m - 1)
+            r = <span style="font-weight: bold;">sum</span>(m, e)
+            <span style="font-weight: bold;">if</span> l &gt; r:
+                ans = <span style="font-weight: bold;">max</span>(ans, r + rec(m, e))
+            <span style="font-weight: bold;">elif</span> r &gt; l:
+                ans = <span style="font-weight: bold;">max</span>(ans, l + rec(s, m - 1))
+            <span style="font-weight: bold;">else</span>:
+                ans = <span style="font-weight: bold;">max</span>(
+                    ans,
+                    r + rec(m, e),
+                    l + rec(s, m - 1)
+                )
+        <span style="font-weight: bold;">return</span> ans
+
+    <span style="font-weight: bold;">return</span> rec(0, <span style="font-weight: bold;">len</span>(ps) - 1)
+
+<span style="font-weight: bold;">assert</span> solve([6,2,3,4,5,5]) == 18
+<span style="font-weight: bold;">assert</span> solve([7,7,7,7,7,7,7]) == 28
+<span style="font-weight: bold;">assert</span> solve([4]) == 0
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">stoneGameV</span>(<span style="font-weight: bold;">self</span>, stoneValue: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(stoneValue)
+
+
+<span style="font-weight: bold;">assert</span> Solution().stoneGameV([6,2,3,4,5,5]) == 18
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc845b1d" class="outline-2">
+<h2 id="orgc845b1d"><a href="dynamic_programming_on_multiple_optimizations.html#ID-3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2">Dynamic Programming on multiple optimizations</a></h2>
+<div class="outline-text-2" id="text-orgc845b1d">
+<p>
+To speed up the solution above, we have to avoid checking all possible intervals when computing \(f(i,j)\).  But, how could we do that?  Is the cubic solution using all constraints of the problem?  The answer is <b>"No! The cubic solution is not using the fact that stone values are integers greater than 0"</b>.  How does this constraint help us when deciding where to split an interval?  Let's take \([1, 2, 1, 1, 1, 1]\) as example and \(i=0\) (first stone) and \(j=5\) (last stone).  These are all ways to split on an index \(k\):
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">k</td>
+<td class="org-right">Left interval sum</td>
+<td class="org-right">Right Interval sum</td>
+</tr>
+
+<tr>
+<td class="org-right">&#xa0;</td>
+<td class="org-right">\(s(i,k-1)\)</td>
+<td class="org-right">\(s(k, j)\)</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">6</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">3</td>
+<td class="org-right">4</td>
+</tr>
+
+<tr>
+<td class="org-right"><b>3</b></td>
+<td class="org-right"><b>4</b></td>
+<td class="org-right"><b>3</b></td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">5</td>
+<td class="org-right">2</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">6</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-right">7</td>
+<td class="org-right">0</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Note that for \(k<3\), the left side sum is always <b>smaller</b> than the right side sum.  For \(k>=3\), the left side sum is always <b>greater</b> than the right side sum.  Such \(k\) will always exist due the constraint of the problem and can be found using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>.  Be \(l(i, j)=\max(s(i,j) + f(i, j), l(i, j - 1))\) for \(i<j\), \(l(i, i)=0\), \(r(i, j)=\max(s(i, j) + f(i, j), r(i+1, j))\) for \(i<j\) and \(r(i,i)=0\) the max score obtained using stones exclusively from the left and right side, respectively.  If \(s(i, k)=s(k+1, j)\), the best score can be in either side: \(f(i,j)=\max(l(i, k), r(k+1, j))\).  Otherwise, \(f(i,j)=\max(l(i, k-1), r(k+1, j))\).  There is a dependency between \(f\), \(l\) and \(r\).  As one always reference to a smaller problem in the other, the dependency is acyclic.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n^2\times\log(n))\)
+<ul class="org-ul">
+<li>\(l\) and \(r\) has time complexity of \(O(n^2)\), and</li>
+<li>finding \(k\) is \(O(\log(n))\).</li>
+</ul></li>
+<li>Space complexity: \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+<span style="font-weight: bold;">from</span> itertools <span style="font-weight: bold;">import</span> accumulate
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sum</span>(ps, s, e):
+    <span style="font-weight: bold;">if</span> s &gt; e:
+        <span style="font-weight: bold;">return</span> 0
+    <span style="font-weight: bold;">assert</span> s &lt;= e
+    <span style="font-weight: bold;">assert</span> s &gt;= 0
+    <span style="font-weight: bold;">return</span> ps[e] - ps[s - 1] <span style="font-weight: bold;">if</span> s &gt; 0 <span style="font-weight: bold;">else</span> ps[e]
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">search</span>(ps, a, b):
+    <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; font-style: italic;">e</span> = a, b
+    <span style="font-weight: bold;">while</span> s &lt;= <span style="font-weight: bold; font-style: italic;">e</span>:
+        m = s + (e - s) // 2
+        <span style="font-weight: bold; font-style: italic;">l</span> = <span style="font-weight: bold;">sum</span>(ps, a, m)
+        <span style="font-weight: bold; font-style: italic;">r</span> = <span style="font-weight: bold;">sum</span>(ps, m + 1, b)
+        <span style="font-weight: bold;">assert</span> l + r == <span style="font-weight: bold;">sum</span>(ps, a, b), (l + r, <span style="font-weight: bold;">sum</span>(ps, a, b))
+        <span style="font-weight: bold;">if</span> l &gt;= r:
+            e = m - 1
+        <span style="font-weight: bold;">else</span>:
+            s = m + 1
+    <span style="font-weight: bold;">return</span> s
+
+<span style="font-weight: bold;">assert</span> search(<span style="font-weight: bold;">list</span>(accumulate([1, 1, 1, 1])), 0, 3) == 1
+<span style="font-weight: bold;">assert</span> search(<span style="font-weight: bold;">list</span>(accumulate([1, 1, 3, 1])), 0, 3) == 2
+<span style="font-weight: bold;">assert</span> search(<span style="font-weight: bold;">list</span>(accumulate([4, 1, 1, 1])), 0, 3) == 0
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(a):
+    ps = <span style="font-weight: bold;">list</span>(accumulate(a))
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">left</span>(s, e):
+        <span style="font-weight: bold;">if</span> s &gt; e:
+            <span style="font-weight: bold;">return</span> 0
+        <span style="font-weight: bold;">assert</span> s &gt;= 0
+        <span style="font-weight: bold;">assert</span> e &lt; <span style="font-weight: bold;">len</span>(a)
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">sum</span>(ps, s, e) + rec(s, e), left(s, e - 1))
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">right</span>(s, e):
+        <span style="font-weight: bold;">if</span> s &gt; e:
+            <span style="font-weight: bold;">return</span> 0
+        <span style="font-weight: bold;">assert</span> s &gt;= 0
+        <span style="font-weight: bold;">assert</span> e &lt; <span style="font-weight: bold;">len</span>(a)
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">sum</span>(ps, s, e) + rec(s, e), right(s + 1, e))
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(s, e):
+        <span style="font-weight: bold;">if</span> s == e:
+            <span style="font-weight: bold;">return</span> 0
+
+        m = search(ps, s, e)
+        l = <span style="font-weight: bold;">sum</span>(ps, s, m)
+        r = <span style="font-weight: bold;">sum</span>(ps, m + 1, e)
+        ans = 0
+        <span style="font-weight: bold;">if</span> l == r:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(left(s, m), right(m + 1, e))
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(left(s, m - 1), right(m + 1, e))
+        <span style="font-weight: bold;">return</span> ans
+
+    <span style="font-weight: bold;">return</span> rec(0, <span style="font-weight: bold;">len</span>(ps) - 1)
+
+<span style="font-weight: bold;">assert</span> solve([6,2,3,4,5,5]) == 18, solve([6,2,3,4,5,5])
+<span style="font-weight: bold;">assert</span> solve([7,7,7,7,7,7,7]) == 28
+<span style="font-weight: bold;">assert</span> solve([4]) == 0
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">stoneGameV</span>(<span style="font-weight: bold;">self</span>, stoneValue: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(stoneValue)
+
+
+<span style="font-weight: bold;">assert</span> Solution().stoneGameV([6,2,3,4,5,5]) == 18
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

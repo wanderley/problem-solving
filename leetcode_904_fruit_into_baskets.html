@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 904. Fruit Into Baskets</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 904. Fruit Into Baskets</h1>
+<p>
+<a href="https://leetcode.com/problems/fruit-into-baskets/">Problem Statement</a>: Given an array of \(n\) integers, find the largest segment with at most two different integers.
+</p>
+
+<p>
+Suppose that \(a\) and \(b\) are the two numbers of the current segment.  For simplicity, assume that the last seen number was a \(b\).  If the next number is either \(a\) or \(b\), we can just extend the segment.  If it is a number \(c\), then we have to start a new segment where \(a=b\) and \(c=b\).  All that we have to do is to keep \(b\) as the number that appear last in the segment and a counter of how many times it appears, since we will have to use it to bootstrap the size of the new segment.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\).</li>
+<li>Space complexity: \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">totalFruit</span>(<span style="font-weight: bold;">self</span>, fruits: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        ans = <span style="font-weight: bold; font-style: italic;">cur</span> = <span style="font-weight: bold; font-style: italic;">cnt_b</span> = 0
+        <span style="font-weight: bold; font-style: italic;">a</span> = <span style="font-weight: bold; font-style: italic;">b</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> fruits:
+            <span style="font-weight: bold;">if</span> c == a:
+                cur += 1
+                cnt_b = 1
+                <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span> = b, a
+            <span style="font-weight: bold;">elif</span> c == b:
+                cur += 1
+                cnt_b += 1
+            <span style="font-weight: bold;">else</span>:
+                cur = cnt_b + 1
+                cnt_b = 1
+                <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span> = b, c
+
+            ans = <span style="font-weight: bold;">max</span>(ans, cur)
+
+        <span style="font-weight: bold;">return</span> ans
+
+<span style="font-weight: bold;">assert</span> Solution().totalFruit([1,2,1]) == 3
+<span style="font-weight: bold;">assert</span> Solution().totalFruit([0,1,2,2]) == 3
+<span style="font-weight: bold;">assert</span> Solution().totalFruit([1,2,3,2,2]) == 4
+<span style="font-weight: bold;">assert</span> Solution().totalFruit([1,0,1,4,1,4,1,2,3]) == 5
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1263. Minimum Moves to Move a Box to Their Target Location</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1263. Minimum Moves to Move a Box to Their Target Location</h1>
+<ul class="org-ul">
+<li><a href="pattern_find_all_shortest_path_between_two_vertices_in_a_graph.html#ID-189F5E87-F560-4397-A3E3-AAD465EEBCFB">Pattern: Find shortest path between two vertices in a graph</a>.</li>
+
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a> <a href="shortest_path_in_a_graph_problem.html#ID-8BACB101-3C8B-47CA-9AB1-89D52F85F6DA">Shortest Path in a Graph Problem</a>.  Time complexity is \(O(n \times m \times \log(n \times m))\) and space \(O(n \times m)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minPushBox</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">str</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(grid[0])
+        <span style="font-weight: bold; font-style: italic;">D</span> = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+        <span style="font-weight: bold; font-style: italic;">S</span> = <span style="font-weight: bold; font-style: italic;">B</span> = <span style="font-weight: bold; font-style: italic;">T</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> grid[i][j] == <span style="font-style: italic;">"S"</span>:
+                    <span style="font-weight: bold; font-style: italic;">S</span> = (i, j)
+                <span style="font-weight: bold;">elif</span> grid[i][j] == <span style="font-style: italic;">"B"</span>:
+                    <span style="font-weight: bold; font-style: italic;">B</span> = (i, j)
+                <span style="font-weight: bold;">elif</span> grid[i][j] == <span style="font-style: italic;">"T"</span>:
+                    <span style="font-weight: bold; font-style: italic;">T</span> = (i, j)
+
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold; font-style: italic;">pq</span> = [(0, S, B)]
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">pq</span>:
+            <span style="font-weight: bold; font-style: italic;">pushes</span>, <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; font-style: italic;">b</span> = heappop(pq)
+            <span style="font-weight: bold;">if</span> b == T:
+                <span style="font-weight: bold;">return</span> pushes
+            <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> D:
+                <span style="font-weight: bold; font-style: italic;">nsi</span>, <span style="font-weight: bold; font-style: italic;">nsj</span> = s[0] + di, s[1] + dj
+                ns = (nsi, nsj)
+                <span style="font-weight: bold;">if</span> 0 &lt;= nsi &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nsj &lt; M <span style="font-weight: bold;">and</span> grid[nsi][nsj] != <span style="font-style: italic;">"#"</span>:
+                    <span style="font-weight: bold;">if</span> ns == b:
+                        <span style="font-weight: bold; font-style: italic;">nbi</span>, <span style="font-weight: bold; font-style: italic;">nbj</span> = b[0] + di, b[1] + dj
+                        nb = (nbi, nbj)
+                        <span style="font-weight: bold;">if</span> (
+                            0 &lt;= nbi &lt; N
+                            <span style="font-weight: bold;">and</span> 0 &lt;= nbj &lt; M
+                            <span style="font-weight: bold;">and</span> grid[nbi][nbj] != <span style="font-style: italic;">"#"</span>
+                            <span style="font-weight: bold;">and</span> (ns, nb) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen
+                        ):
+                            seen.add((ns, nb))
+                            heappush(pq, (pushes + 1, ns, nb))
+                    <span style="font-weight: bold;">elif</span> (ns, b) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                        seen.add((ns, b))
+                        heappush(pq, (pushes, ns, b))
+
+        <span style="font-weight: bold;">return</span> -1
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().minPushBox(
+        [
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"T"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"B"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"S"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+        ]
+    )
+    == 3
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().minPushBox(
+        [
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"T"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"B"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"S"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+        ]
+    )
+    == -1
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().minPushBox(
+        [
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"T"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"B"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"."</span>, <span style="font-style: italic;">"S"</span>, <span style="font-style: italic;">"#"</span>],
+            [<span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>, <span style="font-style: italic;">"#"</span>],
+        ]
+    )
+    == 5
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

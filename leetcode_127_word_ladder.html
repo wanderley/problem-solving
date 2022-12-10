@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 127. Word Ladder</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 127. Word Ladder</h1>
+
+<div id="outline-container-org73fce63" class="outline-2">
+<h2 id="org73fce63">Understand the problem</h2>
+<div class="outline-text-2" id="text-org73fce63">
+<p>
+<a href="pattern_find_shortest_path_between_two_vertices_in_a_graph.html#ID-3283AA3B-67CD-4F8E-960E-442AAE3FD7DC">Pattern: Find shortest path between two vertices in a graph</a> where vertices are words and two words are adjacent if they differ only by one letter.
+</p>
+</div>
+
+<div id="outline-container-org549145e" class="outline-3">
+<h3 id="org549145e">Useful prompts</h3>
+<div class="outline-text-3" id="text-org549145e">
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
+
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org925ce81" class="outline-2">
+<h2 id="org925ce81">Devise a plan</h2>
+<div class="outline-text-2" id="text-org925ce81">
+<p>
+This is a classic example of <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a>.  The only thing to look out is how to efficiently generate the edges of the graph.  By inspecting the constraints, you will find that we can generate the next word and then check if it is an vertex in the graph.  Time complexity is \(O(n^2)\) and space is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-orgcfe92d8" class="outline-3">
+<h3 id="orgcfe92d8">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgcfe92d8">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">import</span> string
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">ladderLength</span>(<span style="font-weight: bold;">self</span>, beginWord: <span style="font-weight: bold;">str</span>, endWord: <span style="font-weight: bold;">str</span>, wordList: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        D = <span style="font-weight: bold;">set</span>(wordList)
+        <span style="font-weight: bold; font-style: italic;">C</span> = {c <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> wordList + [beginWord] <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> w}
+        <span style="font-weight: bold; font-style: italic;">queue</span> = [(0, beginWord)]
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">for</span> steps, u <span style="font-weight: bold;">in</span> queue:
+            <span style="font-weight: bold;">if</span> u == endWord:
+                <span style="font-weight: bold;">return</span> steps + 1
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(u)):
+                <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> C:
+                    <span style="font-weight: bold;">if</span> c == u[i]:
+                        <span style="font-weight: bold;">continue</span>
+                    v = u[:i] + c + u[i + 1 :]
+                    <span style="font-weight: bold;">if</span> v <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen <span style="font-weight: bold;">and</span> v <span style="font-weight: bold;">in</span> D:
+                        seen.add(v)
+                        queue.append((steps + 1, v))
+        <span style="font-weight: bold;">return</span> 0
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().ladderLength(<span style="font-style: italic;">"hit"</span>, <span style="font-style: italic;">"cog"</span>, [<span style="font-style: italic;">"hot"</span>, <span style="font-style: italic;">"dot"</span>, <span style="font-style: italic;">"dog"</span>, <span style="font-style: italic;">"lot"</span>, <span style="font-style: italic;">"log"</span>, <span style="font-style: italic;">"cog"</span>])
+    == 5
+)
+<span style="font-weight: bold;">assert</span> Solution().ladderLength(<span style="font-style: italic;">"hit"</span>, <span style="font-style: italic;">"cog"</span>, [<span style="font-style: italic;">"hot"</span>, <span style="font-style: italic;">"dot"</span>, <span style="font-style: italic;">"dog"</span>, <span style="font-style: italic;">"lot"</span>, <span style="font-style: italic;">"log"</span>]) == 0
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 312. Burst Balloons</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 312. Burst Balloons</h1>
+<ul class="org-ul">
+<li><a href="can_we_solve_the_problem_from_end_to_start.html#ID-9F096D07-EED2-44C8-9538-6EB5F5DEC2BC">Can we solve the problem from end to start?</a>  Instead of bursting from the first to the last balloon, we can burst from the last to the first since it is easier to know the last balloon's neighbors.  Time and space complexity is \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxCoins</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j):
+            <span style="font-weight: bold;">if</span> i &gt; <span style="font-weight: bold; font-style: italic;">j</span>:
+                <span style="font-weight: bold;">return</span> 0
+            ans = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, j + 1):
+                <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">max</span>(
+                    ans,
+                    dfs(i, k - 1)
+                    + dfs(k + 1, j)
+                    + (nums[i - 1] <span style="font-weight: bold;">if</span> i - 1 &gt;= 0 <span style="font-weight: bold;">else</span> 1)
+                    * nums[k]
+                    * (nums[j + 1] <span style="font-weight: bold;">if</span> j + 1 &lt; N <span style="font-weight: bold;">else</span> 1),
+                )
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0, N - 1)
+
+
+<span style="font-weight: bold;">assert</span> Solution().maxCoins([3, 1, 5, 8]) == 167
+<span style="font-weight: bold;">assert</span> Solution().maxCoins([1, 5]) == 10
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxCoins</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">dp</span> = [[0] * N <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, -1, -1):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, N):
+                <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, j + 1):
+                    dp[i][<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold;">max</span>(
+                        dp[i][j],
+                        (dp[i][k - 1] <span style="font-weight: bold;">if</span> i &lt;= k - 1 <span style="font-weight: bold;">else</span> 0)
+                        + (dp[k + 1][j] <span style="font-weight: bold;">if</span> k + 1 &lt;= j <span style="font-weight: bold;">else</span> 0)
+                        + nums[k]
+                        * (nums[i - 1] <span style="font-weight: bold;">if</span> i - 1 &gt;= 0 <span style="font-weight: bold;">else</span> 1)
+                        * (nums[j + 1] <span style="font-weight: bold;">if</span> j + 1 &lt; N <span style="font-weight: bold;">else</span> 1),
+                    )
+        <span style="font-weight: bold;">return</span> dp[0][N - 1]
+
+
+<span style="font-weight: bold;">assert</span> Solution().maxCoins([3, 1, 5, 8]) == 167
+<span style="font-weight: bold;">assert</span> Solution().maxCoins([1, 5]) == 10
+</pre>
+</div>
+</div>
+</body>
+</html>

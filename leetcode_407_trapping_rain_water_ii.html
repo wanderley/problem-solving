@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 407. Trapping Rain Water II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 407. Trapping Rain Water II</h1>
+<ul class="org-ul">
+<li><a href="mistake_failed_to_recognize_known_problem.html#ID-CCCF9587-5365-4BB0-B0D3-8FC82D55E781">Mistake: Failed to recognize known problem</a>: <a href="shortest_path_in_a_graph_problem.html#ID-8BACB101-3C8B-47CA-9AB1-89D52F85F6DA">Shortest Path in a Graph Problem</a>.</li>
+
+<li><a href="mistake_did_not_play_with_small_examples_draw_invariants.html#ID-E79DA5C2-ACB6-4611-AD11-090310B72BC1">Mistake: Did not play with small examples draw invariants</a>.</li>
+
+<li><a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a>  We can simulate the water raising from the border to the center of the grid.  Every time that water gets to a cell (from the lowest height to the highest height), it will trap water in neighbors that weren't visited and have smaller heights.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">trapRainWater</span>(<span style="font-weight: bold;">self</span>, h: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(h)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(h[0])
+        <span style="font-weight: bold; font-style: italic;">D</span> = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+        <span style="font-weight: bold; font-style: italic;">vis</span> = [[<span style="font-weight: bold; text-decoration: underline;">False</span>] * M <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold; font-style: italic;">pq</span> = []
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            heappush(pq, (h[i][0], i, 0))
+            heappush(pq, (h[i][M - 1], i, M - 1))
+            vis[i][0] = vis[i][M - 1] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+            heappush(pq, (h[0][j], 0, j))
+            heappush(pq, (h[N - 1][j], N - 1, j))
+            vis[0][<span style="font-weight: bold; font-style: italic;">j</span>] = vis[N - 1][<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">pq</span>:
+            <span style="font-weight: bold; font-style: italic;">cur</span>, <span style="font-weight: bold; font-style: italic;">i</span>, <span style="font-weight: bold; font-style: italic;">j</span> = heappop(pq)
+            <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">D</span>:
+                ni = i + di
+                <span style="font-weight: bold; font-style: italic;">nj</span> = j + dj
+                <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; M <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">not</span> vis[ni][nj]:
+                    vis[ni][<span style="font-weight: bold; font-style: italic;">nj</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                    <span style="font-weight: bold; font-style: italic;">diff</span> = <span style="font-weight: bold;">max</span>(cur - h[ni][nj], 0)
+                    <span style="font-weight: bold; font-style: italic;">ans</span> += diff
+                    heappush(pq, (<span style="font-weight: bold;">max</span>(h[ni][nj], cur), ni, nj))
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().trapRainWater(
+        [[1, 4, 3, 1, 3, 2], [3, 2, 1, 3, 2, 4], [2, 3, 3, 2, 3, 1]]
+    )
+    == 4
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().trapRainWater(
+        [
+            [3, 3, 3, 3, 3],
+            [3, 2, 2, 2, 3],
+            [3, 2, 1, 2, 3],
+            [3, 2, 2, 2, 3],
+            [3, 3, 3, 3, 3],
+        ]
+    )
+    == 10
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

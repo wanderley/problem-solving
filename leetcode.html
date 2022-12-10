@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode</h1>
+
+<div id="outline-container-org9936689" class="outline-2">
+<h2 id="org9936689">Utilities</h2>
+<div class="outline-text-2" id="text-org9936689">
+</div>
+<div id="outline-container-orgd71c174" class="outline-3">
+<h3 id="orgd71c174">Remove easier problems from a list of problems</h3>
+<div class="outline-text-3" id="text-orgd71c174">
+<div class="org-src-container">
+<pre class="src src-javascript"><span style="font-weight: bold;">function</span> <span style="font-weight: bold;">getClassNameForDifficulty</span>(<span style="font-weight: bold; font-style: italic;">difficulty</span>) {
+  <span style="font-weight: bold;">switch</span> (difficulty) {
+  <span style="font-weight: bold;">case</span> <span style="font-style: italic;">"hard"</span>:
+    <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"label-danger"</span>;
+  <span style="font-weight: bold;">case</span> <span style="font-style: italic;">"medium"</span>:
+    <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"label-warning"</span>;
+  <span style="font-weight: bold;">case</span> <span style="font-style: italic;">"easy"</span>:
+    <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"label-success"</span>;
+  }
+}
+
+<span style="font-weight: bold;">function</span> <span style="font-weight: bold;">removeElements</span>(<span style="font-weight: bold; font-style: italic;">className</span>) {
+  <span style="font-weight: bold;">while</span> ((elems = document.getElementsByClassName(className)).length &gt; 0) {
+    <span style="font-weight: bold;">for</span> (i = 0; i &lt; elems.length; i++) {
+      <span style="font-weight: bold;">try</span> {
+        elems[i].parentNode.parentNode.remove()
+      } <span style="font-weight: bold;">catch</span>(ex) {}
+    }
+  }
+}
+
+<span style="font-weight: bold;">function</span> <span style="font-weight: bold;">removeProblemsByDifficulty</span>(<span style="font-weight: bold; font-style: italic;">difficulty</span>) {
+  removeElements(getClassNameForDifficulty(difficulty));
+}
+
+<span style="font-weight: bold;">function</span> <span style="font-weight: bold;">removeDone</span>() {
+  removeElements(<span style="font-style: italic;">"fa-check"</span>);
+}
+
+removeProblemsByDifficulty(<span style="font-style: italic;">"medium"</span>);
+removeProblemsByDifficulty(<span style="font-style: italic;">"easy"</span>);
+removeDone();
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2193. Minimum Number of Moves to Make Palindrome</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2193. Minimum Number of Moves to Make Palindrome</h1>
+<ul class="org-ul">
+<li><a href="mistake_overcomplicated_solution.html#ID-40E38FD2-DDF0-4C25-BB8C-43D07F3D5136">Mistake: Overcomplicated solution</a>.  Tried to search through all possible sub-problems and didn't consider (couldn't prove) that the greedy approach work.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  If the first and last char match, we can discard them.  Otherwise, we should fix the end that requires the less amount of swaps.  Time complexity is \(O(n^2)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minMovesToMakePalindrome</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">normalize</span>(s):
+            i = 0
+            <span style="font-weight: bold; font-style: italic;">j</span> = <span style="font-weight: bold;">len</span>(s) - 1
+            <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold; font-style: italic;">j</span>:
+                <span style="font-weight: bold;">if</span> s[i] != s[j]:
+                    <span style="font-weight: bold;">return</span> s[i : j + 1]
+                <span style="font-weight: bold; font-style: italic;">i</span> += 1
+                <span style="font-weight: bold; font-style: italic;">j</span> -= 1
+            <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold; font-style: italic;">s</span> = normalize(s)
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">s</span>:
+            i = s.find(s[-1])
+            <span style="font-weight: bold; font-style: italic;">j</span> = s.rfind(s[0])
+            <span style="font-weight: bold;">if</span> i &lt; <span style="font-weight: bold;">len</span>(s) - j - 1:
+                <span style="font-weight: bold; font-style: italic;">ans</span> += i
+                <span style="font-weight: bold; font-style: italic;">s</span> = normalize(s[-1] + s[:i] + s[i + 1 :])
+            <span style="font-weight: bold;">else</span>:
+                ans += <span style="font-weight: bold;">len</span>(s) - j - 1
+                <span style="font-weight: bold; font-style: italic;">s</span> = normalize(s[:j] + s[j + 1 :] + s[0])
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2127. Maximum Employees to Be Invited to a Meeting</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2127. Maximum Employees to Be Invited to a Meeting</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  Failed to recognize that the solution is either a cycle of a sum of paths.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Clearly, one possible solution is to find the <a href="longest_cycle_in_a_directed_graph.html#ID-0E6E671A-F49C-4962-ABE0-7F5AAD6ACC05">Longest Cycle in a Directed Graph</a>.  Otherwise, we can seat groups of people that where their favorite chain ends on two people that would like to seat besides each other.  Time complexity is \(O(n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> defaultdict
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumInvitations</span>(<span style="font-weight: bold;">self</span>, e: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(e)
+
+        <span style="font-weight: bold; font-style: italic;">re</span> = defaultdict(<span style="font-weight: bold;">list</span>)
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(e):
+            <span style="font-weight: bold;">if</span> e[v] != <span style="font-weight: bold; font-style: italic;">u</span>:
+                re[v].append(u)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find_longest_path</span>(u, seen):
+            <span style="font-weight: bold;">if</span> longest_path[u] <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                <span style="font-weight: bold;">return</span> longest_path[u]
+            seen.add(u)
+            ans = 1
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">re</span>[u]:
+                ans = <span style="font-weight: bold;">max</span>(ans, 1 + find_longest_path(v, seen))
+            <span style="font-weight: bold; font-style: italic;">longest_path</span>[<span style="font-weight: bold; font-style: italic;">u</span>] = ans
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold; font-style: italic;">longest_path</span> = [<span style="font-weight: bold; text-decoration: underline;">None</span>] * N
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(e):
+            <span style="font-weight: bold;">if</span> e[v] == u <span style="font-weight: bold;">and</span> u &lt; v:
+                ans += find_longest_path(u, seen) + find_longest_path(v, seen)
+
+        found_at = [<span style="font-weight: bold; text-decoration: underline;">None</span>] * N
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find_longest_cycle</span>(u, k, seen):
+            seen.add(u)
+            found_at[u] = k
+            v = e[u]
+            <span style="font-weight: bold;">if</span> v <span style="font-weight: bold;">in</span> seen:
+                ans = ((k + 1) - found_at[v]) <span style="font-weight: bold;">if</span> found_at[v] <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">else</span> 0
+            <span style="font-weight: bold;">else</span>:
+                ans = find_longest_cycle(v, k + 1, seen)
+            found_at[u] = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">return</span> ans
+
+        seen = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">if</span> u <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                ans = <span style="font-weight: bold;">max</span>(ans, find_longest_cycle(u, 0, seen))
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().maximumInvitations([2, 2, 1, 2]) == 3
+<span style="font-weight: bold;">assert</span> Solution().maximumInvitations([1, 2, 0]) == 3
+<span style="font-weight: bold;">assert</span> Solution().maximumInvitations([3, 0, 1, 4, 1]) == 4
+</pre>
+</div>
+</div>
+</body>
+</html>

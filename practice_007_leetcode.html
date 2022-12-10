@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #007: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #007: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 1 hour 14 minutes 8 seconds</li>
+<li>Time Allotted: 2 hours</li>
+<li>Completed: July 3, 2022 2:48 PM</li>
+<li>Score: Didn't finish (solved first two problems)</li>
+</ul>
+
+
+<div id="outline-container-org1e323f7" class="outline-2">
+<h2 id="org1e323f7">Leetcode: 1047. Remove All Adjacent Duplicates In String</h2>
+<div class="outline-text-2" id="text-org1e323f7">
+<p>
+<a href="https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/">Problem Statement</a>
+</p>
+
+<p>
+Keep a <a href="stack.html#ID-06D27BC1-DFDC-4063-B3A9-7074FD5E13B3">stack</a> with the chars on the answer.  For each new char from the input, pop the stack if it matches its top, or add it to the stack.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">removeDuplicates</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        ans = []
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> s:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(ans) &gt; 0 <span style="font-weight: bold;">and</span> ans[-1] == c:
+                ans.pop()
+            <span style="font-weight: bold;">else</span>:
+                ans.append(c)
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(ans)
+
+
+<span style="font-weight: bold;">assert</span> Solution().removeDuplicates(<span style="font-style: italic;">"abbaca"</span>) == <span style="font-style: italic;">"ca"</span>
+<span style="font-weight: bold;">assert</span> Solution().removeDuplicates(<span style="font-style: italic;">"azxxzy"</span>) == <span style="font-style: italic;">"ay"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9f0ada8" class="outline-2">
+<h2 id="org9f0ada8">Leetcode: 1087. Brace Expansion</h2>
+<div class="outline-text-2" id="text-org9f0ada8">
+<p>
+<a href="https://leetcode.com/problems/brace-expansion/">Problem Statement</a>
+</p>
+
+<p>
+As the problem asks for all permutations, then it will be fine to generate each on of them efficiently.  Recur over each possible character building the final string, and store the built word on the end of the recursion.  Space complexity is \(O(n)\) while time complexity is \(O(n \times 3^{n/7})\) since max words generated will require groups with exactly 3 options:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">return</span> [(<span style="font-style: italic;">"Base"</span>, <span style="font-style: italic;">"Max Words"</span>)] + [
+    (b, b ** (50 // (b + b - 1 + 2))) <span style="font-weight: bold;">for</span> b <span style="font-weight: bold;">in</span> [2, 3, 4, 5]
+]
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">expand</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        n = <span style="font-weight: bold;">len</span>(s)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, cur):
+            <span style="font-weight: bold;">if</span> i == n:
+                ans.append(cur)
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">if</span> s[i] == <span style="font-style: italic;">"{"</span>:
+                j = s.index(<span style="font-style: italic;">"}"</span>, i)
+                <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(s[i + 1 : j].split(<span style="font-style: italic;">","</span>)):
+                    dfs(j + 1, cur + c)
+            <span style="font-weight: bold;">else</span>:
+                dfs(i + 1, cur + s[i])
+
+        dfs(0, <span style="font-style: italic;">""</span>)
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().expand(<span style="font-style: italic;">"{a,b}c{d,e}f"</span>) == [<span style="font-style: italic;">"acdf"</span>, <span style="font-style: italic;">"acef"</span>, <span style="font-style: italic;">"bcdf"</span>, <span style="font-style: italic;">"bcef"</span>]
+<span style="font-weight: bold;">assert</span> Solution().expand(<span style="font-style: italic;">"abcd"</span>) == [<span style="font-style: italic;">"abcd"</span>]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2c6b724" class="outline-2">
+<h2 id="org2c6b724">Leetcode: 1032. Stream of Characters</h2>
+<div class="outline-text-2" id="text-org2c6b724">
+<p>
+<a href="https://leetcode.com/problems/stream-of-characters/">Problem Statement</a>
+</p>
+
+<p>
+Retrospective:  I didn't solve this problem during the practice, but I thought about creating a trie with the words reversed.  I didn't went deep on the idea and searched for other ways to solve.  After that, I got caught on making a solution using prefix arrays for each word but with \(O(n)\) for each query which resulted on time limit exceeded.
+</p>
+
+<p>
+The operation <code>query</code> should be efficient (faster than \(O(n)\)).  Construct a <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a> with the words in the dictionary reversed.  Add each char from the query to a queue and keep only the last \(200\).  After that, search in the trie the current word on the stream.  Note that the word on the stream is in the reverse order what matches with the fact that our trie was created with the words reversed.  So, the search will find any word in the dictionary that is a prefix of the stream.  Time and space complexity is \(O(m)\) where \(m\) is the sum of the length of all words.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">StreamChecker</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>]):
+        <span style="font-weight: bold;">self</span>.stream = deque(maxlen=<span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">len</span>, words)) + 1)
+        <span style="font-weight: bold;">self</span>.trie = {}
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> words:
+            node = <span style="font-weight: bold;">self</span>.trie
+            <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">reversed</span>(w):
+                <span style="font-weight: bold;">if</span> c <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> node:
+                    node[<span style="font-weight: bold; font-style: italic;">c</span>] = {}
+                node = node[c]
+            node[<span style="font-style: italic;">"$"</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">query</span>(<span style="font-weight: bold;">self</span>, letter: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">self</span>.stream.appendleft(letter)
+        node = <span style="font-weight: bold;">self</span>.trie
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.stream:
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">"$"</span> <span style="font-weight: bold;">in</span> node:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">if</span> c <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> node:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+            node = node[c]
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"$"</span> <span style="font-weight: bold;">in</span> node
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

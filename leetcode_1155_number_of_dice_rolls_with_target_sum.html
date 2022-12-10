@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1155. Number of Dice Rolls With Target Sum</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1155. Number of Dice Rolls With Target Sum</h1>
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a>  This is a variant of <a href="knapsack_problem.html#ID-0F085C54-E45A-41E6-951B-79CFD7ECBED5">Knapsack problem</a>, where we subtract the target after simulating the faces of each dice.  If there is no more dices and target is 0, then count it as 1 otherwise 0.  Time complexity is \(O(n^2 \times t)\) and space complexity is \(O(n \times t)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numRollsToTarget</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>, target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        MOD = 10**9 + 7
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, t):
+            <span style="font-weight: bold;">if</span> i == n:
+                <span style="font-weight: bold;">return</span> 1 <span style="font-weight: bold;">if</span> t == 0 <span style="font-weight: bold;">else</span> 0
+            ans = 0
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, <span style="font-weight: bold;">min</span>(k, t) + 1):
+                ans = (ans + dfs(i + 1, t - v)) % MOD
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0, target)
+
+
+<span style="font-weight: bold;">assert</span> Solution().numRollsToTarget(1, 6, 3) == 1
+<span style="font-weight: bold;">assert</span> Solution().numRollsToTarget(2, 6, 7) == 6
+<span style="font-weight: bold;">assert</span> Solution().numRollsToTarget(30, 30, 500) == 222616187
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numRollsToTarget</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>, target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        MOD = 10**9 + 7
+
+        <span style="font-weight: bold; font-style: italic;">dp</span> = [[0] * (target + 1) <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n + 1)]
+        dp[n][0] = 1
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n - 1, -1, -1):
+            <span style="font-weight: bold;">for</span> t <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(target + 1):
+                <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+                <span style="font-weight: bold;">for</span> f <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, <span style="font-weight: bold;">min</span>(k, t) + 1):
+                    <span style="font-weight: bold; font-style: italic;">ans</span> = (ans + dp[i + 1][t - f]) % MOD
+                dp[i][<span style="font-weight: bold; font-style: italic;">t</span>] = ans
+
+        <span style="font-weight: bold;">return</span> dp[0][target]
+
+
+<span style="font-weight: bold;">assert</span> Solution().numRollsToTarget(1, 6, 3) == 1
+<span style="font-weight: bold;">assert</span> Solution().numRollsToTarget(2, 6, 7) == 6
+<span style="font-weight: bold;">assert</span> Solution().numRollsToTarget(30, 30, 500) == 222616187
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 410. Split Array Largest Sum</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 410. Split Array Largest Sum</h1>
+<ul class="org-ul">
+<li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Given a candidate answer, check if it is possible to partition the array in at most \(m\) parts.  If so, the candidate is valid, otherwise you have to increase it.  The optimal answer can be found using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>.  Time complexity is \(O(n \log \sum a[i])\) and space is \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">splitArray</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], M: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">s</span> = <span style="font-weight: bold;">max</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">e</span> = <span style="font-weight: bold;">sum</span>(nums)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">valid</span>(m):
+            <span style="font-weight: bold; font-style: italic;">cnt</span> = <span style="font-weight: bold; font-style: italic;">i</span> = <span style="font-weight: bold; font-style: italic;">cur</span> = 0
+            <span style="font-weight: bold;">while</span> i &lt; N:
+                <span style="font-weight: bold;">if</span> cur + nums[i] &lt;= <span style="font-weight: bold; font-style: italic;">m</span>:
+                    cur += nums[i]
+                <span style="font-weight: bold;">else</span>:
+                    cur = nums[i]
+                    <span style="font-weight: bold; font-style: italic;">cnt</span> += 1
+                <span style="font-weight: bold; font-style: italic;">i</span> += 1
+            <span style="font-weight: bold;">return</span> cnt &lt; M
+
+        <span style="font-weight: bold;">while</span> s &lt; <span style="font-weight: bold; font-style: italic;">e</span>:
+            m = s + (e - s) // 2
+            <span style="font-weight: bold;">if</span> valid(m):
+                <span style="font-weight: bold; font-style: italic;">e</span> = m
+            <span style="font-weight: bold;">else</span>:
+                s = m + 1
+        <span style="font-weight: bold;">return</span> s
+</pre>
+</div>
+</div>
+</body>
+</html>

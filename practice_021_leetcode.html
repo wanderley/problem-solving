@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #021: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #021: Leetcode</h1>
+
+<div id="outline-container-orgdac4367" class="outline-2">
+<h2 id="orgdac4367">Leetcode: 1592. Rearrange Spaces Between Words</h2>
+<div class="outline-text-2" id="text-orgdac4367">
+<p>
+<a href="https://leetcode.com/problems/rearrange-spaces-between-words/">Problem Statement</a>
+</p>
+
+<p>
+Compute the number of spaces and words and reassemble them back using the proper spacing.  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">reorderSpaces</span>(<span style="font-weight: bold;">self</span>, text: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        spaces = 0
+        <span style="font-weight: bold; font-style: italic;">word_start</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold; font-style: italic;">words</span> = []
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(text)):
+            <span style="font-weight: bold;">if</span> text[i] == <span style="font-style: italic;">" "</span>:
+                spaces += 1
+                <span style="font-weight: bold;">if</span> word_start <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                    words.append(text[word_start:i])
+                    word_start = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">elif</span> word_start <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                word_start = i
+
+        <span style="font-weight: bold;">if</span> word_start <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            words.append(text[word_start:])
+
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(words) == 1:
+            <span style="font-weight: bold;">return</span> words[0] + (<span style="font-style: italic;">" "</span> * spaces)
+
+        mid = spaces // (<span style="font-weight: bold;">len</span>(words) - 1)
+        extra = spaces - mid * (<span style="font-weight: bold;">len</span>(words) - 1)
+        <span style="font-weight: bold;">return</span> (<span style="font-style: italic;">" "</span> * mid).join(words) + (<span style="font-style: italic;">" "</span> * extra)
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().reorderSpaces(<span style="font-style: italic;">"  this   is  a sentence "</span>) == <span style="font-style: italic;">"this   is   a   sentence"</span>
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().reorderSpaces(<span style="font-style: italic;">" practice   makes   perfect"</span>)
+    == <span style="font-style: italic;">"practice   makes   perfect "</span>
+)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6bab133" class="outline-2">
+<h2 id="org6bab133">Leetcode: 801. Minimum Swaps To Make Sequences Increasing</h2>
+<div class="outline-text-2" id="text-org6bab133">
+<p>
+<a href="https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/">Problem Statement</a>
+</p>
+
+<p>
+<a href="can_we_reuse_or_extend_a_solution_from_a_sub_problem_to_solve_the_next_sub_problem_more_efficiently.html#ID-26656051-E32D-42FE-9315-05ADB46A1A82">Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?</a>  Suppose that the array has length 1.  The solution is either keeping the number as they are or swapping them.  Now, suppose that the array has length 2.  We can swap the first element and use second unchanged or swap it too.  In short, we can define the problem from \(i\) in term of the best we can do for \(i+1\), since the choices for \(i+1\) are independent for \(i\).  Time complexity is \(O(n)\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minSwap</span>(<span style="font-weight: bold;">self</span>, nums1: List[<span style="font-weight: bold;">int</span>], nums2: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums1)
+
+        nums1.append(<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>))
+        nums2.append(<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>))
+
+        <span style="font-weight: bold; font-style: italic;">pa</span> = 0
+        <span style="font-weight: bold; font-style: italic;">pb</span> = 0
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, -1, -1):
+            <span style="font-weight: bold; font-style: italic;">na</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+            <span style="font-weight: bold; font-style: italic;">nb</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+
+            <span style="font-weight: bold;">if</span> nums1[i] &lt; nums1[i + 1] <span style="font-weight: bold;">and</span> nums2[i] &lt; <span style="font-weight: bold; font-style: italic;">nums2</span>[i + 1]:
+                na = <span style="font-weight: bold;">min</span>(na, pa)
+                <span style="font-weight: bold; font-style: italic;">nb</span> = <span style="font-weight: bold;">min</span>(nb, 1 + pb)
+
+            <span style="font-weight: bold;">if</span> nums1[i] &lt; nums2[i + 1] <span style="font-weight: bold;">and</span> nums2[i] &lt; <span style="font-weight: bold; font-style: italic;">nums1</span>[i + 1]:
+                na = <span style="font-weight: bold;">min</span>(na, pb)
+                <span style="font-weight: bold; font-style: italic;">nb</span> = <span style="font-weight: bold;">min</span>(nb, 1 + pa)
+
+            <span style="font-weight: bold; font-style: italic;">pa</span> = na
+            <span style="font-weight: bold; font-style: italic;">pb</span> = nb
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>(pa, pb)
+
+
+<span style="font-weight: bold;">assert</span> Solution().minSwap([1, 3, 5, 4], [1, 2, 3, 7]) == 1
+<span style="font-weight: bold;">assert</span> Solution().minSwap([0, 3, 5, 8, 9], [2, 1, 4, 6, 9]) == 1
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org724049b" class="outline-2">
+<h2 id="org724049b">Leetcode: 1088. Confusing Number II</h2>
+<div class="outline-text-2" id="text-org724049b">
+<p>
+<a href="https://leetcode.com/problems/confusing-number-ii/">Problem Statement</a>
+</p>
+
+<p>
+<a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  The only thing to keep an eye on is the test if the number is different from its reversed version.  The code above generate all numbers, but it would be also useful to generate all numbers that start with numbers different than 0, what would allow us to generate the rotate and make the comparison in \(O(1)\).  Time complexity is \(O(5^n)\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">confusingNumberII</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        digits = <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(n)))
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(digits)
+        <span style="font-weight: bold; font-style: italic;">valid_digits</span> = [0, 1, 6, 8, 9]
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, smaller, n):
+            <span style="font-weight: bold;">if</span> i == N:
+                r = 0
+                k = n
+                <span style="font-weight: bold;">while</span> k &gt; 0:
+                    d = k % 10
+                    <span style="font-weight: bold;">if</span> d == 6:
+                        d = 9
+                    <span style="font-weight: bold;">elif</span> d == 9:
+                        d = 6
+                    r = r * 10 + d
+                    k = k // 10
+                <span style="font-weight: bold;">return</span> 1 <span style="font-weight: bold;">if</span> n != r <span style="font-weight: bold;">else</span> 0
+
+            ans = 0
+            limit = digits[i] + 1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> smaller <span style="font-weight: bold;">else</span> 10
+            <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> valid_digits:
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> smaller <span style="font-weight: bold;">and</span> d &gt; digits[i]:
+                    <span style="font-weight: bold;">break</span>
+                ans += dfs(i + 1, smaller <span style="font-weight: bold;">or</span> (d &lt; digits[i]), n * 10 + d)
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0, <span style="font-weight: bold; text-decoration: underline;">False</span>, 0)
+
+
+<span style="font-weight: bold;">assert</span> Solution().confusingNumberII(20) == 6
+<span style="font-weight: bold;">assert</span> Solution().confusingNumberII(100) == 19
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

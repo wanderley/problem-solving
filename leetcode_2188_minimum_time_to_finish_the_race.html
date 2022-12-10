@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2188. Minimum Time to Finish the Race</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2188. Minimum Time to Finish the Race</h1>
+
+<div id="outline-container-org08d892a" class="outline-2">
+<h2 id="org08d892a">Understand the problem</h2>
+<div class="outline-text-2" id="text-org08d892a">
+<p>
+Given an array representing tires where \(tires[i] = [f_i, r_i]\), a cost to change tires and number of laps in the race.  The time \(t\) for the tire \(i\) to make j-th lap is \(t(i, j) = t(i, j - 1) + f_i \times r_i^j\).  Determine the minimum times to finish the race.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8a750e8" class="outline-2">
+<h2 id="org8a750e8">Devise a plan</h2>
+<div class="outline-text-2" id="text-org8a750e8">
+<ul class="org-ul">
+<li><a href="can_we_simplify_the_problem_which_keeping_it_the_same.html#ID-F19C9539-EE46-41EE-8DEF-24C3076C6DC2">Can we simplify the problem while keeping it the same?</a>  As the cost of change tires is at most \(10^5\), we don't need to use a tire for more than 17 laps at most since \(r_i^17 \geq 2^17 \geq 10^5\).</li>
+
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a>  Suppose that we have \(b[i]\) equal to the minimum time to make \(i\) laps with the same tire.  Now, the problem is reduced to <a href="knapsack_problem.html#ID-0F085C54-E45A-41E6-951B-79CFD7ECBED5">Knapsack problem</a>.  Time complexity is \(O(n \times m)\) with space \(O(n ^ 2)\).</li>
+</ul>
+</div>
+
+<div id="outline-container-orgbb7c9fb" class="outline-3">
+<h3 id="orgbb7c9fb">Carry out the solution</h3>
+<div class="outline-text-3" id="text-orgbb7c9fb">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumFinishTime</span>(
+        <span style="font-weight: bold;">self</span>, tires: List[List[<span style="font-weight: bold;">int</span>]], changeTime: <span style="font-weight: bold;">int</span>, numLaps: <span style="font-weight: bold;">int</span>
+    ) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(tires)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">min</span>(numLaps + 1, 17)
+        <span style="font-weight: bold; font-style: italic;">best</span> = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * M
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold; font-style: italic;">cur</span> = 0
+            <span style="font-weight: bold; font-style: italic;">f</span>, <span style="font-weight: bold; font-style: italic;">r</span> = tires[i]
+            <span style="font-weight: bold; font-style: italic;">p</span> = 1
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, M):
+                <span style="font-weight: bold; font-style: italic;">cur</span> += f * p
+                <span style="font-weight: bold; font-style: italic;">p</span> *= r
+                <span style="font-weight: bold; font-style: italic;">best</span>[<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold;">min</span>(best[j], cur)
+                <span style="font-weight: bold;">if</span> cur &gt; changeTime + f:
+                    <span style="font-weight: bold;">break</span>
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i):
+            <span style="font-weight: bold;">if</span> i == numLaps:
+                <span style="font-weight: bold;">return</span> 0
+            ans = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, <span style="font-weight: bold;">min</span>(M, numLaps - i + 1)):
+                ans = <span style="font-weight: bold;">min</span>(ans, changeTime + best[j] + dfs(i + j))
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0) - changeTime
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

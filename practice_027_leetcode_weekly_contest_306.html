@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #027: Leetcode Weekly Contest 306</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #027: Leetcode Weekly Contest 306</h1>
+
+<div id="outline-container-orga76dbbd" class="outline-2">
+<h2 id="orga76dbbd">Leetcode: 2373. Largest Local Values in a Matrix</h2>
+<div class="outline-text-2" id="text-orga76dbbd">
+<p>
+<a href="https://leetcode.com/problems/largest-local-values-in-a-matrix/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">largestLocal</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = [[<span style="font-weight: bold; text-decoration: underline;">None</span>] * (N - 2) <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 2)]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 2):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 2):
+                ans[i][<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold;">max</span>(
+                    grid[ii][jj]
+                    <span style="font-weight: bold;">for</span> ii <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, i + 3)
+                    <span style="font-weight: bold;">for</span> jj <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(j, j + 3)
+                )
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().largestLocal(
+    [[9, 9, 8, 1], [5, 6, 2, 6], [8, 2, 6, 4], [6, 2, 2, 2]]
+) == [[9, 9], [8, 6]]
+<span style="font-weight: bold;">assert</span> Solution().largestLocal(
+    [
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 2, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+    ]
+) == [[2, 2, 2], [2, 2, 2], [2, 2, 2]]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org888ef3e" class="outline-2">
+<h2 id="org888ef3e">Leetcode: 2374. Node With Highest Edge Score</h2>
+<div class="outline-text-2" id="text-org888ef3e">
+<p>
+<a href="https://leetcode.com/problems/node-with-highest-edge-score/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">edgeScore</span>(<span style="font-weight: bold;">self</span>, edges: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        s = [0] * <span style="font-weight: bold;">len</span>(edges)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> i, u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(edges):
+            <span style="font-weight: bold; font-style: italic;">s</span>[<span style="font-weight: bold; font-style: italic;">u</span>] += i
+            <span style="font-weight: bold;">if</span> m <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> s[m] &lt; s[u] <span style="font-weight: bold;">or</span> (s[m] == s[u] <span style="font-weight: bold;">and</span> u &lt; m):
+                m = u
+        <span style="font-weight: bold;">return</span> m
+
+<span style="font-weight: bold;">assert</span> Solution().edgeScore([1, 0, 0, 0, 0, 7, 7, 5]) == 7
+<span style="font-weight: bold;">assert</span> Solution().edgeScore([2, 0, 0, 2]) == 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf59abb9" class="outline-2">
+<h2 id="orgf59abb9">Leetcode: 2375. Construct Smallest Number From DI String</h2>
+<div class="outline-text-2" id="text-orgf59abb9">
+<p>
+<a href="https://leetcode.com/problems/node-with-highest-edge-score/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">smallestNumber</span>(<span style="font-weight: bold;">self</span>, pattern: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, cur):
+            <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(pattern) + 1:
+                <span style="font-weight: bold;">return</span> cur
+
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, 10):
+                c = <span style="font-weight: bold;">chr</span>(<span style="font-weight: bold;">ord</span>(<span style="font-style: italic;">"0"</span>) + j)
+                <span style="font-weight: bold;">if</span> c <span style="font-weight: bold;">in</span> cur:
+                    <span style="font-weight: bold;">continue</span>
+                <span style="font-weight: bold;">if</span> i &gt; 0 <span style="font-weight: bold;">and</span> pattern[i - 1] == <span style="font-style: italic;">"I"</span> <span style="font-weight: bold;">and</span> cur[-1] &gt;= c:
+                    <span style="font-weight: bold;">continue</span>
+                <span style="font-weight: bold;">if</span> i &gt; 0 <span style="font-weight: bold;">and</span> pattern[i - 1] == <span style="font-style: italic;">"D"</span> <span style="font-weight: bold;">and</span> cur[-1] &lt;= c:
+                    <span style="font-weight: bold;">continue</span>
+                new = cur + c
+                r = dfs(i + 1, new)
+                <span style="font-weight: bold;">if</span> r <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                    <span style="font-weight: bold;">return</span> r
+
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        <span style="font-weight: bold;">return</span> dfs(0, <span style="font-style: italic;">""</span>)
+
+
+<span style="font-weight: bold;">assert</span> Solution().smallestNumber(<span style="font-style: italic;">"IIIDIDDD"</span>) == <span style="font-style: italic;">"123549876"</span>
+<span style="font-weight: bold;">assert</span> Solution().smallestNumber(<span style="font-style: italic;">"DDD"</span>) == <span style="font-style: italic;">"4321"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8e2c443" class="outline-2">
+<h2 id="org8e2c443">Leetcode: 2376. Count Special Integers</h2>
+<div class="outline-text-2" id="text-org8e2c443">
+<p>
+<a href="https://leetcode.com/problems/count-special-integers/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="mistake_careless_coding.html#ID-461C7633-08C5-468D-9FC3-D78154DDBD42">Mistake: Careless coding</a>.</li>
+
+<li><a href="blackbox_you_solved_a_similar_problem.html#ID-37AF9679-42D1-4A85-9927-2A590268AD87">Blackbox: You solved a similar problem</a> with <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a>.</li>
+
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  You can generate all numbers and memorize their prefix to speed up the process.  Space complexity is \(O(n \times 2^d)\) and time complexity is \(O(n \times 2^d \times d)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countSpecialNumbers</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        digits = <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(n)))
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(digits)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, smaller, first, used):
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">return</span> 1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> first <span style="font-weight: bold;">else</span> 0
+            ans = 0
+            <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(10):
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> smaller <span style="font-weight: bold;">and</span> d &gt; digits[i]:
+                    <span style="font-weight: bold;">continue</span>
+                <span style="font-weight: bold;">if</span> used &amp; (1 &lt;&lt; d) != 0:
+                    <span style="font-weight: bold;">continue</span>
+                <span style="font-weight: bold;">if</span> d == 0 <span style="font-weight: bold;">and</span> first:
+                    nused = used
+                <span style="font-weight: bold;">else</span>:
+                    nused = used | (1 &lt;&lt; d)
+                ans += dfs(i + 1, smaller <span style="font-weight: bold;">or</span> d &lt; digits[i], first <span style="font-weight: bold;">and</span> d == 0, nused)
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0, <span style="font-weight: bold; text-decoration: underline;">False</span>, <span style="font-weight: bold; text-decoration: underline;">True</span>, 0)
+
+
+<span style="font-weight: bold;">assert</span> Solution().countSpecialNumbers(20) == 19
+<span style="font-weight: bold;">assert</span> Solution().countSpecialNumbers(5) == 5
+<span style="font-weight: bold;">assert</span> Solution().countSpecialNumbers(135) == 110
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

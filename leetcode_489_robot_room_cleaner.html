@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 489. Robot Room Cleaner</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 489. Robot Room Cleaner</h1>
+<ul class="org-ul">
+<li><a href="mistake_incorrect_evaluation_of_solution_s_viability.html#ID-DA951820-DBB5-4A7F-9401-DF5860EFAB8A">Mistake: Incorrect evaluation of solution's viability</a>. My first idea was to make a <a href="depth_first_search.html#ID-212DBFC3-FE3C-493E-86A6-42FF3F82CD53">Depth-first search</a>, but spent much of the time thinking about other ways to do the search.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">This is the robot's control interface.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">You should not implement it, or speculate about its implementation</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">class Robot:</span>
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">def move(self):</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">Returns true if the cell in front is open and robot moves into the cell.</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">Returns false if the cell in front is blocked and robot stays in the current cell.</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">:rtype bool</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#</span>
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">def turnLeft(self):</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">Robot will stay in the same cell after calling turnLeft/turnRight.</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">Each turn will be 90 degrees.</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">:rtype void</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#</span>
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">def turnRight(self):</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">Robot will stay in the same cell after calling turnLeft/turnRight.</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">Each turn will be 90 degrees.</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">:rtype void</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#</span>
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">def clean(self):</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">Clean the current cell.</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">:rtype void</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">"""</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">cleanRoom</span>(<span style="font-weight: bold;">self</span>, robot):
+        <span style="font-style: italic;">"""</span>
+<span style="font-style: italic;">        :type robot: Robot</span>
+<span style="font-style: italic;">        :rtype: None</span>
+<span style="font-style: italic;">        """</span>
+
+        DIR = [[-1, +0], [+0, -1], [+1, +0], [+0, +1]]
+
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j, d):
+            <span style="font-weight: bold;">if</span> (i, j, d) <span style="font-weight: bold;">in</span> seen:
+                <span style="font-weight: bold;">return</span>
+            robot.clean()
+            seen.add((i, j, d))
+
+            <span style="font-weight: bold;">if</span> robot.move():
+                dfs(i + DIR[d][0], j + DIR[d][1], d)
+                robot.turnLeft()
+                robot.turnLeft()
+                robot.move()
+                robot.turnLeft()
+                robot.turnLeft()
+
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(3):
+                robot.turnLeft()
+                dfs(i, j, (d + k + 1) % <span style="font-weight: bold;">len</span>(DIR))
+            robot.turnLeft()
+
+        dfs(0, 0, 0)
+</pre>
+</div>
+</div>
+</body>
+</html>

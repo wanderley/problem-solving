@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #025: Leetcode Weekly Contest 303</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #025: Leetcode Weekly Contest 303</h1>
+
+<div id="outline-container-orgd41c688" class="outline-2">
+<h2 id="orgd41c688">Leetcode: 2351. First Letter to Appear Twice</h2>
+<div class="outline-text-2" id="text-orgd41c688">
+<p>
+<a href="https://leetcode.com/problems/first-letter-to-appear-twice/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">repeatedCharacter</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        used = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> s:
+            <span style="font-weight: bold;">if</span> c <span style="font-weight: bold;">in</span> used:
+                <span style="font-weight: bold;">return</span> c
+            used.add(c)
+
+
+<span style="font-weight: bold;">assert</span> Solution().repeatedCharacter(<span style="font-style: italic;">"abccbaacz"</span>) == <span style="font-style: italic;">"c"</span>
+<span style="font-weight: bold;">assert</span> Solution().repeatedCharacter(<span style="font-style: italic;">"abcdd"</span>) == <span style="font-style: italic;">"d"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org76ea151" class="outline-2">
+<h2 id="org76ea151">Leetcode: 2352. Equal Row and Column Pairs</h2>
+<div class="outline-text-2" id="text-org76ea151">
+<p>
+<a href="https://leetcode.com/problems/equal-row-and-column-pairs/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">equalPairs</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold; font-style: italic;">k</span> = 0
+                <span style="font-weight: bold;">while</span> k &lt; N <span style="font-weight: bold;">and</span> grid[i][k] == grid[k][j]:
+                    <span style="font-weight: bold; font-style: italic;">k</span> += 1
+                <span style="font-weight: bold;">if</span> k == N:
+                    ans += 1
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().equalPairs([[3, 2, 1], [1, 7, 6], [2, 7, 7]]) == 1
+<span style="font-weight: bold;">assert</span> (
+    Solution().equalPairs([[3, 1, 2, 2], [1, 4, 4, 5], [2, 4, 2, 2], [2, 4, 2, 2]]) == 3
+)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgde67026" class="outline-2">
+<h2 id="orgde67026">Leetcode: 2353. Design a Food Rating System</h2>
+<div class="outline-text-2" id="text-orgde67026">
+<p>
+<a href="https://leetcode.com/problems/design-a-food-rating-system/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  We can use a <a href="priority_queue.html#ID-FCBEA48C-CFF6-43C4-B430-BCD00E245D22">Priority-Queue</a> to manage the query for each food and use a map to store the connection between foods, cuisines and ratings.  Time complexity is \(O(\log n)\) for each operation and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FoodRatings</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, foods: List[<span style="font-weight: bold;">str</span>], cuisines: List[<span style="font-weight: bold;">str</span>], ratings: List[<span style="font-weight: bold;">int</span>]):
+        <span style="font-weight: bold;">self</span>.fc = {}
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">fr</span> = {}
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">cr</span> = {}
+        <span style="font-weight: bold;">for</span> f, c, r <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(foods, cuisines, ratings):
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">fc</span>[<span style="font-weight: bold; font-style: italic;">f</span>] = c
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">fr</span>[<span style="font-weight: bold; font-style: italic;">f</span>] = r
+            <span style="font-weight: bold;">self</span>.cr.setdefault(c, [])
+            heappush(<span style="font-weight: bold;">self</span>.cr[c], (-r, f))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">changeRating</span>(<span style="font-weight: bold;">self</span>, food: <span style="font-weight: bold;">str</span>, newRating: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">self</span>.fr[<span style="font-weight: bold; font-style: italic;">food</span>] = newRating
+        heappush(<span style="font-weight: bold;">self</span>.cr[<span style="font-weight: bold;">self</span>.fc[food]], (-newRating, food))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">highestRated</span>(<span style="font-weight: bold;">self</span>, cuisine: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">while</span> -<span style="font-weight: bold;">self</span>.cr[cuisine][0][0] != <span style="font-weight: bold;">self</span>.fr[<span style="font-weight: bold;">self</span>.cr[cuisine][0][1]]:
+            heappop(<span style="font-weight: bold;">self</span>.cr[cuisine])
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.cr[cuisine][0][1]
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Your FoodRatings object will be instantiated and called as such:</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj = FoodRatings(foods, cuisines, ratings)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj.changeRating(food,newRating)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">param_2 = obj.highestRated(cuisine)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga650948" class="outline-2">
+<h2 id="orga650948">Leetcode: 2354. Number of Excellent Pairs</h2>
+<div class="outline-text-2" id="text-orga650948">
+<p>
+<a href="https://leetcode.com/problems/number-of-excellent-pairs/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  Pick one number \(x\).  If it has at least \(k\) bits, then it can be combine with any other number in the list (inclusive with itself) to form a pair.  If \(x\) has less than \(k\) bits, say \(k_x\), it can be combined with any number \(y\) that has at least \(k_y \geq k-k_x\).  The problem becomes counting the numbers per their numbers of bits.  Time complexity is \(O(b^2)\) where \(b\) is the number max of bits in the numbers, and space is \(O(b)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countExcellentPairs</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        cnt = {}
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">set</span>(nums):
+            <span style="font-weight: bold; font-style: italic;">c</span> = 0
+            <span style="font-weight: bold;">while</span> n &gt; 0:
+                <span style="font-weight: bold; font-style: italic;">c</span> += n % 2
+                <span style="font-weight: bold; font-style: italic;">n</span> = n // 2
+            cnt.setdefault(c, 0)
+            <span style="font-weight: bold; font-style: italic;">cnt</span>[<span style="font-weight: bold; font-style: italic;">c</span>] += 1
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> ca, ba <span style="font-weight: bold;">in</span> cnt.items():
+            <span style="font-weight: bold;">for</span> cb, bb <span style="font-weight: bold;">in</span> cnt.items():
+                <span style="font-weight: bold;">if</span> ca + cb &gt;= <span style="font-weight: bold; font-style: italic;">k</span>:
+                    ans += ba * bb
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().countExcellentPairs([1, 2, 3, 1], 3) == 5
+<span style="font-weight: bold;">assert</span> Solution().countExcellentPairs([5, 1, 1], 10) == 0
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

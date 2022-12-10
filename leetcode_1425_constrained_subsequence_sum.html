@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1425. Constrained Subsequence Sum</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1425. Constrained Subsequence Sum</h1>
+<p>
+<a href="https://leetcode.com/problems/constrained-subsequence-sum/">Problem Statement</a>: Given an array of integers \(a\) and an integer \(k\), return the maximum sum of a non-empty subsequence where adjacent elements are at most k distance in \(n\).
+</p>
+
+<p>
+Let's use <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a> to find this value. Be \(f(i)\) the maximum sum of a subsequence starting on \(i\).  We can use \(f\) to solve the problem: \(\max_{0 \leq i \leq i} f(i)\), but how can we compute \(f\) efficiently?  The naive approach is would be
+</p>
+
+\begin{equation*}
+  f(i)=\begin{cases}
+    a[i], & \mbox{if $i = |a| - 1$} \\
+    \max(a[i], a[i]+\max_{i < j \leq i + k - 1}_{} f(j)), & \mbox{otherwise}.
+  \end{cases}
+\end{equation*}
+
+<p>
+If we iterate over \(j\), the time complexity of the algorithm will be \(|a| \times k\) what is too slow for the problem.  We have to efficiently compute \(\max_{i < j \leq i + k - 1}_{} f(j)\) for all \(i\).  This problem can be solved using <a href="sliding_window.html#ID-798B6359-F1A6-4B42-BBA1-2120D8CD228B">Sliding Window Maximum</a> data structure which has amortized time complexity of \(O(1)\) for the <code>add</code> operation.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|a|)\).</li>
+<li>Space complexity: \(O(k)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">SlidingWindowMaximum</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, size):
+        <span style="font-weight: bold;">self</span>.size = size
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">window</span> = deque(maxlen=size)
+        <span style="font-weight: bold;">self</span>.index = 0
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, value):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.window) &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.window[0][1] &lt;= <span style="font-weight: bold;">self</span>.index - <span style="font-weight: bold;">self</span>.size:
+            <span style="font-weight: bold;">self</span>.window.popleft()
+
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.window) &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.window[-1][0] &lt;= value:
+            <span style="font-weight: bold;">self</span>.window.pop()
+
+        <span style="font-weight: bold;">self</span>.window.append((value, <span style="font-weight: bold;">self</span>.index))
+        <span style="font-weight: bold;">self</span>.index += 1
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">max</span>()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.window[0][0]
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(nums, k):
+    INF = 10**9
+
+    dp = [-INF] * <span style="font-weight: bold;">len</span>(nums)
+    swm = SlidingWindowMaximum(k)
+
+    swm.add(nums[-1])
+    dp[-1] = nums[-1]
+
+    ans = -INF
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(nums) - 2, -1, -1):
+        dp[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">max</span>(nums[i], nums[i] + swm.<span style="font-weight: bold;">max</span>())
+        ans = <span style="font-weight: bold;">max</span>(ans, swm.add(dp[i]))
+
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve([10, 2, -10, 5, 20], 2) == 37
+<span style="font-weight: bold;">assert</span> solve([-1, -2, -3], 1) == -1
+<span style="font-weight: bold;">assert</span> solve([10, -2, -10, -5, 20], 2) == 23
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">constrainedSubsetSum</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(nums, k)
+</pre>
+</div>
+</div>
+</body>
+</html>

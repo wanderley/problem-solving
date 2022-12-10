@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 847. Shortest Path Visiting All Nodes</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 847. Shortest Path Visiting All Nodes</h1>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">shortestPathLength</span>(<span style="font-weight: bold;">self</span>, graph: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(graph)
+        <span style="font-weight: bold; font-style: italic;">ALL_VISITED</span> = (1 &lt;&lt; N) - 1
+
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold; font-style: italic;">queue</span> = [(i, (1 &lt;&lt; i), 0) <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold;">for</span> u, vis, steps <span style="font-weight: bold;">in</span> queue:
+            <span style="font-weight: bold;">if</span> vis == ALL_VISITED:
+                <span style="font-weight: bold;">return</span> steps
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> graph[u]:
+                nvis = vis | (1 &lt;&lt; v)
+                <span style="font-weight: bold;">if</span> (v, nvis) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                    seen.add((v, nvis))
+                    queue.append((v, nvis, steps + 1))
+
+
+<span style="font-weight: bold;">assert</span> Solution().shortestPathLength([[1, 2, 3], [0], [0], [0]]) == 4
+<span style="font-weight: bold;">assert</span> Solution().shortestPathLength([[1], [0, 2, 4], [1, 3, 4], [2], [1, 2]]) == 4
+</pre>
+</div>
+</div>
+</body>
+</html>

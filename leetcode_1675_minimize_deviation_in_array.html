@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1675. Minimize Deviation in Array</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1675. Minimize Deviation in Array</h1>
+<ul class="org-ul">
+<li><a href="mistake_failed_to_find_efficient_solution_for_the_alternative_problem.html#ID-1AE37D0A-8E53-4F30-BBBE-114219226182">Mistake: Failed to find efficient solution for the alternative problem</a>.  I tried to represent the problem using intervals, but didn't really try to solve it.  After the tip, I came back to the problem and could solve it.</li>
+</ul>
+
+<p>
+<a href="can_we_simplify_the_problem_which_keeping_it_the_same.html#ID-F19C9539-EE46-41EE-8DEF-24C3076C6DC2">Can we simplify the problem while keeping it the same?</a>  In the original problem, you can either divide (decrease) even number or multiply (increase) odd numbers.  As there is no need to minimize the number of operations, we can divide all numbers as much as we can and solve the problem where we will only increase the numbers.  Each turn, we remove the smallest element and add it's double back to the <a href="priority_queue.html#ID-FCBEA48C-CFF6-43C4-B430-BCD00E245D22">Priority-Queue</a>.  We keep the maximum after each update.  This will be enough for us to compute the shortest interval that contains at least one of each given numbers.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumDeviation</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(nums) == 1:
+            <span style="font-weight: bold;">return</span> 0
+
+        seen = <span style="font-weight: bold;">set</span>()
+        min_pq = []
+        max_pq = []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">push</span>(a, b):
+            <span style="font-weight: bold;">if</span> (a, b) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                heappush(min_pq, (a, b))
+                heappush(max_pq, (-a, b))
+                seen.add((a, b))
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">pop</span>():
+            <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span> = heappop(min_pq)
+            seen.remove((a, b))
+            <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(max_pq) &gt; 0 <span style="font-weight: bold;">and</span> (-max_pq[0][0], max_pq[0][1]) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                heappop(max_pq)
+            <span style="font-weight: bold;">return</span> (a, b)
+
+        k = 0
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> nums:
+            <span style="font-weight: bold;">if</span> i % 2 == 1:
+                push(i, i * 2)
+                k += 2
+            <span style="font-weight: bold;">else</span>:
+                j = i
+                <span style="font-weight: bold;">while</span> j % 2 == 0 <span style="font-weight: bold;">and</span> j &gt; 0:
+                    j = j // 2
+                    k += 1
+                push(j, i)
+                k += 1
+
+        ans = -max_pq[0][0] - min_pq[0][0]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k):
+            cur = -max_pq[0][0] - min_pq[0][0]
+            ans = <span style="font-weight: bold;">min</span>(ans, cur)
+            <span style="font-weight: bold; font-style: italic;">left</span>, <span style="font-weight: bold; font-style: italic;">right</span> = pop()
+            <span style="font-weight: bold;">if</span> left * 2 &lt;= right:
+                push(left * 2, right)
+            <span style="font-weight: bold;">else</span>:
+                push(left, right)
+
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

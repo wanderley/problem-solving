@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 843. Guess the Word</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 843. Guess the Word</h1>
+<ul class="org-ul">
+<li><a href="pattern_remove_max_number_of_candidates_every_turn.html#ID-716E3863-6B6F-4F6F-86ED-72820E061E11">Pattern: Remove max number of candidates every turn</a>.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  There are two important parts of the problem: (1) filter words after a guess and (2) pick the best guess.  For the first, we have to filter all words which the number of matches is different than the number of matches from the last guess (the secret will have to match these letters any way).  The more problematic guess is the one that returns 0.  In this situation, we want to remove the maximum number of words as possible.  To do that, we take the word that contains the most frequent letter per position.  If it returns 0, then you are guaranteed to remove as much words as possible.  Time and space complexity are \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">This is Master's API interface.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">You should not implement it, or speculate about its implementation</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class Master:</span>
+<span style="font-weight: bold; font-style: italic;">#     </span><span style="font-weight: bold; font-style: italic;">def guess(self, word: str) -&gt; int:</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findSecretWord</span>(<span style="font-weight: bold;">self</span>, wordlist: List[<span style="font-weight: bold;">str</span>], master: <span style="font-style: italic;">"Master"</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        N = <span style="font-weight: bold;">len</span>(wordlist[0])
+
+        <span style="font-weight: bold; font-style: italic;">f</span> = [Counter(w[i] <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> wordlist) <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(6)]
+        wordlist.sort(reverse=<span style="font-weight: bold; text-decoration: underline;">True</span>, key=<span style="font-weight: bold;">lambda</span> w: <span style="font-weight: bold;">sum</span>(f[i][c] <span style="font-weight: bold;">for</span> i, c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(w)))
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">guess</span>(s1, s2):
+            ans = 0
+            <span style="font-weight: bold;">for</span> a, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(s1, s2):
+                ans += 1 <span style="font-weight: bold;">if</span> a == b <span style="font-weight: bold;">else</span> 0
+            <span style="font-weight: bold;">return</span> ans
+
+        value = 0
+        <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(30):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> wordlist <span style="font-weight: bold;">or</span> value == N:
+                <span style="font-weight: bold;">break</span>
+            candidate = wordlist[0]
+            value = master.guess(candidate)
+            wordlist = [
+                w <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> wordlist <span style="font-weight: bold;">if</span> w != candidate <span style="font-weight: bold;">and</span> guess(candidate, w) == value
+            ]
+</pre>
+</div>
+</div>
+</body>
+</html>

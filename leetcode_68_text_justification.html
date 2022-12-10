@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 68. Text Justification</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 68. Text Justification</h1>
+
+<div id="outline-container-org861fae2" class="outline-2">
+<h2 id="org861fae2">Patterns</h2>
+<div class="outline-text-2" id="text-org861fae2">
+<ul class="org-ul">
+<li><a href="pattern_simulation_problem.html#ID-2AA9CA31-5C60-4702-87E8-4441D9C4AF61">Pattern: Simulation problem</a>.</li>
+
+<li><a href="pattern_problem_has_a_greedy_property.html#ID-82697515-9F9A-4CAF-83D5-00665332E4AD">Pattern: Problem has a greedy property</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3745d7f" class="outline-2">
+<h2 id="org3745d7f">Prompts</h2>
+<div class="outline-text-2" id="text-org3745d7f">
+<ul class="org-ul">
+<li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
+
+<li><a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4e4af9d" class="outline-2">
+<h2 id="org4e4af9d">Solution</h2>
+<div class="outline-text-2" id="text-org4e4af9d">
+<p>
+The solution consists on simulating the rules that are describes in the problem statement.  Pack as much words possible while distributing them evenly.  The trick part becomes how to implement it in a clear and concise way.  All that we need are two values to decide when to flush or extend a line: number of words and total number of chars to be flushed.  If these values, we can determine if the line exceeded the max length and compute the number of spaces required when flushing the line.  Time complexity and space are \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">fullJustify</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>], maxWidth: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        <span style="font-weight: bold; font-style: italic;">letters_on_line</span>, <span style="font-weight: bold; font-style: italic;">line</span> = 0, []
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> word <span style="font-weight: bold;">in</span> words:
+            <span style="font-weight: bold;">if</span> letters_on_line + <span style="font-weight: bold;">len</span>(line) + <span style="font-weight: bold;">len</span>(word) &gt; <span style="font-weight: bold; font-style: italic;">maxWidth</span>:
+                b = <span style="font-weight: bold;">len</span>(line) - 1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(line) &gt; 1 <span style="font-weight: bold;">else</span> 1
+                <span style="font-weight: bold; font-style: italic;">l</span> = maxWidth - letters_on_line
+                <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; font-style: italic;">r</span> = l // b, l % b
+                <span style="font-weight: bold; font-style: italic;">cur</span> = <span style="font-style: italic;">""</span>
+                <span style="font-weight: bold;">for</span> lword <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">line</span>:
+                    <span style="font-weight: bold;">if</span> cur:
+                        cur += <span style="font-style: italic;">" "</span> * (s + <span style="font-weight: bold;">int</span>(r &gt; 0))
+                        <span style="font-weight: bold; font-style: italic;">r</span> -= 1
+                    <span style="font-weight: bold; font-style: italic;">cur</span> += lword
+                ans.append(cur + <span style="font-style: italic;">" "</span> * (maxWidth - <span style="font-weight: bold;">len</span>(cur)))
+                <span style="font-weight: bold; font-style: italic;">letters_on_line</span>, <span style="font-weight: bold; font-style: italic;">line</span> = 0, []
+            <span style="font-weight: bold; font-style: italic;">letters_on_line</span> += <span style="font-weight: bold;">len</span>(word)
+            line.append(word)
+        <span style="font-weight: bold;">if</span> line:
+            ans.append(
+                <span style="font-style: italic;">" "</span>.join(line) + <span style="font-style: italic;">" "</span> * (maxWidth - letters_on_line - (<span style="font-weight: bold;">len</span>(line) - 1))
+            )
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().fullJustify(
+    [<span style="font-style: italic;">"This"</span>, <span style="font-style: italic;">"is"</span>, <span style="font-style: italic;">"an"</span>, <span style="font-style: italic;">"example"</span>, <span style="font-style: italic;">"of"</span>, <span style="font-style: italic;">"text"</span>, <span style="font-style: italic;">"justification."</span>], 16
+) == [<span style="font-style: italic;">"This    is    an"</span>, <span style="font-style: italic;">"example  of text"</span>, <span style="font-style: italic;">"justification.  "</span>]
+<span style="font-weight: bold;">assert</span> Solution().fullJustify(
+    [<span style="font-style: italic;">"What"</span>, <span style="font-style: italic;">"must"</span>, <span style="font-style: italic;">"be"</span>, <span style="font-style: italic;">"acknowledgment"</span>, <span style="font-style: italic;">"shall"</span>, <span style="font-style: italic;">"be"</span>], 16
+) == [<span style="font-style: italic;">"What   must   be"</span>, <span style="font-style: italic;">"acknowledgment  "</span>, <span style="font-style: italic;">"shall be        "</span>]
+<span style="font-weight: bold;">assert</span> Solution().fullJustify(
+    [
+        <span style="font-style: italic;">"Science"</span>,
+        <span style="font-style: italic;">"is"</span>,
+        <span style="font-style: italic;">"what"</span>,
+        <span style="font-style: italic;">"we"</span>,
+        <span style="font-style: italic;">"understand"</span>,
+        <span style="font-style: italic;">"well"</span>,
+        <span style="font-style: italic;">"enough"</span>,
+        <span style="font-style: italic;">"to"</span>,
+        <span style="font-style: italic;">"explain"</span>,
+        <span style="font-style: italic;">"to"</span>,
+        <span style="font-style: italic;">"a"</span>,
+        <span style="font-style: italic;">"computer."</span>,
+        <span style="font-style: italic;">"Art"</span>,
+        <span style="font-style: italic;">"is"</span>,
+        <span style="font-style: italic;">"everything"</span>,
+        <span style="font-style: italic;">"else"</span>,
+        <span style="font-style: italic;">"we"</span>,
+        <span style="font-style: italic;">"do"</span>,
+    ],
+    20,
+) == [
+    <span style="font-style: italic;">"Science  is  what we"</span>,
+    <span style="font-style: italic;">"understand      well"</span>,
+    <span style="font-style: italic;">"enough to explain to"</span>,
+    <span style="font-style: italic;">"a  computer.  Art is"</span>,
+    <span style="font-style: italic;">"everything  else  we"</span>,
+    <span style="font-style: italic;">"do                  "</span>,
+]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

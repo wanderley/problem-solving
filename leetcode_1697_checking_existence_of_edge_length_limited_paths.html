@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1697. Checking Existence of Edge Length Limited Paths</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1697. Checking Existence of Edge Length Limited Paths</h1>
+
+<div id="outline-container-orgde9f2fb" class="outline-2">
+<h2 id="orgde9f2fb">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgde9f2fb">
+<p>
+For each query \((u, v, l)\), return \(True\) if there is a path between \(u\) and \(v\) where all edges in the path has cost less than \(l\).
+</p>
+</div>
+
+<div id="outline-container-orgd064f3d" class="outline-3">
+<h3 id="orgd064f3d">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgd064f3d">
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
+
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a></li>
+
+<li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3fa7703" class="outline-2">
+<h2 id="org3fa7703">Devise a plan</h2>
+<div class="outline-text-2" id="text-org3fa7703">
+<p>
+The naive solution is to build a graph for each query and test if there is required path.  The issue with the naive solution is that we compute parts of the graph over and over again.  For <a href="pattern_answer_queries_on_online_directed_acyclic_graph.html#ID-117736F8-6CF6-435F-9043-18B8D22EDDE9">Pattern: Answer queries on online graph</a>, we can usually rearrange the queries in a way that the computation of one query can be reused by the next one.  In this case, we can process the queries from the smallest limit to the greatest one.  For each query in order, we add to the graph all edges (using <a href="union_find.html#ID-23A4E36E-24D3-40F8-AA20-32C0DB1E36F6">Union-Find</a>) that doesn't exceed the limit.  When there is no more edges to add, we answer the query.  Time complexity is \(O(n \times \log n)\) and space is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-orgbea63c8" class="outline-3">
+<h3 id="orgbea63c8">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgbea63c8">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">distanceLimitedPathsExist</span>(
+        <span style="font-weight: bold;">self</span>, N: <span style="font-weight: bold;">int</span>, edges: List[List[<span style="font-weight: bold;">int</span>]], queries: List[List[<span style="font-weight: bold;">int</span>]]
+    ) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">bool</span>]:
+        E = <span style="font-weight: bold;">len</span>(edges)
+        edges.sort(key=<span style="font-weight: bold;">lambda</span> e: e[2])
+
+        p = [i <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(u):
+            <span style="font-weight: bold;">if</span> p[u] != u:
+                p[<span style="font-weight: bold; font-style: italic;">u</span>] = find(p[u])
+            <span style="font-weight: bold;">return</span> p[u]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">union</span>(u, v):
+            p[find(u)] = p[find(v)]
+
+        ans = [<span style="font-weight: bold; text-decoration: underline;">False</span>] * <span style="font-weight: bold;">len</span>(queries)
+        j = 0
+        <span style="font-weight: bold;">for</span> i, (u, v, l) <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(<span style="font-weight: bold;">enumerate</span>(queries), key=<span style="font-weight: bold;">lambda</span> e: e[1][2]):
+            <span style="font-weight: bold;">while</span> j &lt; E <span style="font-weight: bold;">and</span> edges[j][2] &lt; l:
+                union(edges[j][0], edges[j][1])
+                j += 1
+            ans[<span style="font-weight: bold; font-style: italic;">i</span>] = find(u) == find(v)
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().distanceLimitedPathsExist(
+    3, [[0, 1, 2], [1, 2, 4], [2, 0, 8], [1, 0, 16]], [[0, 1, 2], [0, 2, 5]]
+) == [<span style="font-weight: bold; text-decoration: underline;">False</span>, <span style="font-weight: bold; text-decoration: underline;">True</span>]
+<span style="font-weight: bold;">assert</span> Solution().distanceLimitedPathsExist(
+    5, [[0, 1, 10], [1, 2, 5], [2, 3, 9], [3, 4, 13]], [[0, 4, 14], [1, 4, 13]]
+) == [<span style="font-weight: bold; text-decoration: underline;">True</span>, <span style="font-weight: bold; text-decoration: underline;">False</span>]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

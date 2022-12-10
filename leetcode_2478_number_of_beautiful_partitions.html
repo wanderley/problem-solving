@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2478. Number of Beautiful Partitions</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2478. Number of Beautiful Partitions</h1>
+
+<div id="outline-container-orge2105c5" class="outline-2">
+<h2 id="orge2105c5">Patterns</h2>
+<div class="outline-text-2" id="text-orge2105c5">
+<ul class="org-ul">
+<li><a href="pattern_counting_problem.html#ID-5BBCFD49-3103-4D06-BBCE-DC812A9633C6">Pattern: Counting Problem</a>.</li>
+
+<li><a href="pattern_find_optimal_cuts_with_length_restrictions.html#ID-C830EA9B-D231-4D49-B0CB-137BC3FF0E55">Pattern: Find optimal cuts with length restrictions</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2f04d34" class="outline-2">
+<h2 id="org2f04d34">Prompts</h2>
+<div class="outline-text-2" id="text-org2f04d34">
+<ul class="org-ul">
+<li><a href="can_we_state_the_problem_in_terms_of_number_of_x_starting_on_any_index_greater_than_y.html#ID-19659A01-72E7-49D4-A70C-8DE16C17AC8A">Can we state the problem in terms of number of X starting on any index greater than Y?</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5d559ac" class="outline-2">
+<h2 id="org5d559ac">Solution \(O(n^2)\)</h2>
+<div class="outline-text-2" id="text-org5d559ac">
+<p>
+Be \(dp(i, k)\) the number of beautiful partitions where the first partition starts on <b>any</b> index between \(i\) and \(n-1\).  Base cases:  if \(i>n\) or \(k<0\), the answer is 0.  If \(i=n\), the answer is 1 if \(k=0\) and 0 otherwise.  Induction step: if \(s[i]\) is a prime and \(s[i-1]\) is not a prime, then \(dp(i, k)=dp(i+1,k) + dp(i + minLength, k - 1)\) since we must consider cutting on \(i\).  Otherwise, \(dp(i, k)=dp(i + 1, k)\) since there is no cut to consider.  Time and space complexity is \(O(n^2)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">beautifulPartitions</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, k: <span style="font-weight: bold;">int</span>, minLength: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(s)
+        <span style="font-weight: bold; font-style: italic;">P</span> = <span style="font-style: italic;">"2357"</span>
+
+        <span style="font-weight: bold;">if</span> s[0] <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> P <span style="font-weight: bold;">or</span> s[-1] <span style="font-weight: bold;">in</span> P:
+            <span style="font-weight: bold;">return</span> 0
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, k, level=0):
+            <span style="font-weight: bold;">if</span> i &gt; N <span style="font-weight: bold;">or</span> k &lt; 0:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">return</span> 1 <span style="font-weight: bold;">if</span> k == 0 <span style="font-weight: bold;">else</span> 0
+            ans = dfs(i + 1, k, level + 1)
+            <span style="font-weight: bold;">if</span> s[i - 1] <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> P <span style="font-weight: bold;">and</span> s[i] <span style="font-weight: bold;">in</span> P:
+                ans += dfs(i + minLength, k - 1, level + 1)
+            <span style="font-weight: bold;">return</span> ans % (10**9 + 7)
+
+        <span style="font-weight: bold;">return</span> dfs(minLength, k - 1)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7e2d1da" class="outline-2">
+<h2 id="org7e2d1da">Solution \(O(n^2 \times \log n)\)</h2>
+<div class="outline-text-2" id="text-org7e2d1da">
+<ul class="org-ul">
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  If \(s\) starts is a non-prime or ends with a prime, then the solution is always 0.</li>
+
+<li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  We want to partition \(s\) only in positions where \(s[i]\) is a non-prime and \(s[i+1]\) is a prime.  So, we can create \(starts\) with indexes where valid partitions can start.  Now, the problem becomes find partitions on indexes in \(starts\) of length at least \(minLength\).</li>
+
+<li><p>
+The first idea that comes to mind is using <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a> to solve the problem.  Be \(dp(i, k)\) the number of ways to partitions \(s[i...(n-1)]\) in \(k\) partitions.  Be \(V(i)\) indexes \(j\) where \(s[i...(j-1)]\) is a valid partition.  It is not difficult to see how to compute each sub problem in linear time.  This solution won't make in time, since the complexity is \(O(n^3)\).
+</p>
+
+<p>
+\[
+    dp(i, k)=\begin{cases}
+      0, & \mbox{if $i = n$ and $k \neq 0$} \\
+      1, & \mbox{if $i = n$ and $k = 0$} \\
+      \sum_{j \in V(i)} dp(j, k - 1), & \mbox{otherwise}.
+    \end{cases}
+  \]
+</p></li>
+
+<li><p>
+<a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  The problem with the above recurrence is that it takes linear time to compute each sub problem.  To improve it, we can break-down the third-case in other <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a> that depends on \(dp\).  Be \(ac(i, k)\) the number of beautiful partitions starting on $starts[i], starts[i+1], starts[i+2], &#x2026;$.  We have that \(ac(i, k)=\sum_{i \leq j < |starts|} dp(i, k)\).  Note that there are \(O(n^2)\) possible states for \(ac\), but we can compute each one in \(O(1)\).  Now, we can re-write \(dp\) in terms of \(ac\) and the time complexity to solve the problem becomes \(O(n^2 \log n)\) with space \(O(n^2)\).  The log comes from the <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the next valid position to start a partition after \(i\).
+</p>
+
+<p>
+\[
+    dp(i, k)=\begin{cases}
+      0, & \mbox{if $i = n$ and $k \neq 0$} \\
+      1, & \mbox{if $i = n$ and $k = 0$} \\
+      ac(j, k - 1), & \mbox{where $j$ is the first valid start of partition after $i$}.
+    \end{cases}
+  \]
+</p></li>
+</ul>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">beautifulPartitions</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, k: <span style="font-weight: bold;">int</span>, minLength: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(s)
+        <span style="font-weight: bold; font-style: italic;">MOD</span> = 10**9 + 7
+        <span style="font-weight: bold; font-style: italic;">primes</span> = <span style="font-style: italic;">"2357"</span>
+
+        <span style="font-weight: bold;">if</span> s[0] <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> primes <span style="font-weight: bold;">or</span> s[-1] <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">primes</span>:
+            <span style="font-weight: bold;">return</span> 0
+
+        starts = []
+        <span style="font-weight: bold;">for</span> i, a, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(<span style="font-weight: bold;">range</span>(N), s, s[1:]):
+            <span style="font-weight: bold;">if</span> a <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> primes <span style="font-weight: bold;">and</span> b <span style="font-weight: bold;">in</span> primes:
+                starts.append(i + 1)
+        starts.append(N)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs2</span>(i, k):
+            <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(starts):
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">return</span> (dfs1(starts[i], k) + dfs2(i + 1, k)) % MOD
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs1</span>(i, k):
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">return</span> 1 <span style="font-weight: bold;">if</span> k == 0 <span style="font-weight: bold;">else</span> 0
+            <span style="font-weight: bold;">if</span> k &lt; 0:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">return</span> dfs2(bisect_left(starts, i + minLength), k - 1) % MOD
+
+        <span style="font-weight: bold;">return</span> dfs1(0, k)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1504. Count Submatrices With All Ones</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1504. Count Submatrices With All Ones</h1>
+<p>
+A solution \(O(m^2 \times n^2)\) won't pass the time limit, but one \(O(m \times n^2)\) would pass.  How does such solution looks like?  We have to iterating only once on each line and for each of those, we can do two nested loops for each column.  In other words, we can fix the base of the submatrices and check if they are valid for all possible left and right side.  Be \(k, i\) and \(k\) the bottom row, the left column and the right column respectively.  The number of submatrices filled with zero will be \(\max_{i \leq c \le j}_{} height(k, c)\), where \(height(k, c)\) is the number of ones starting on \((k, c)\) to the top of the matrix.  You can compute \(height\) while processing each row from the top to the bottom of the matrix.  Time complexity is \(O(m \times n^2)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numSubmat</span>(<span style="font-weight: bold;">self</span>, mat: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        n = <span style="font-weight: bold;">len</span>(mat)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(mat[0])
+
+        <span style="font-weight: bold; font-style: italic;">height</span> = [0] * m
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> r <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                <span style="font-weight: bold;">if</span> mat[r][j] == 1:
+                    <span style="font-weight: bold; font-style: italic;">height</span>[j] += 1
+                <span style="font-weight: bold;">else</span>:
+                    height[j] = 0
+            <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                <span style="font-weight: bold; font-style: italic;">max_height</span> = height[s]
+                <span style="font-weight: bold;">for</span> e <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(s, m, 1):
+                    <span style="font-weight: bold; font-style: italic;">max_height</span> = <span style="font-weight: bold;">min</span>(max_height, height[e])
+                    <span style="font-weight: bold; font-style: italic;">ans</span> += max_height
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().numSubmat([[1, 0, 1], [1, 1, 0], [1, 1, 0]]) == 13
+<span style="font-weight: bold;">assert</span> Solution().numSubmat([[0, 1, 1, 0], [0, 1, 1, 1], [1, 1, 1, 0]]) == 24
+</pre>
+</div>
+
+<div id="outline-container-org6a43460" class="outline-2">
+<h2 id="org6a43460"><span class="todo TODO">TODO</span> Implement solution \(O(m \times n^2)\)</h2>
+</div>
+</div>
+</body>
+</html>

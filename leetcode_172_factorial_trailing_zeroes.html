@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 172. Factorial Trailing Zeroes</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 172. Factorial Trailing Zeroes</h1>
+<p>
+The simplest approach is to compute \(n!\) and then counting the leading zeros.  Note that it would require a big integer to compute factorial of \(10^4!\) since it has \(35660\) digits (see more about <a href="count_the_number_of_digits_of_an_integer.html#ID-9FF985B9-B5FE-415C-94F0-CCBB3FF91F2F">Counting the number of digits of an integer</a>).
+</p>
+
+<p>
+Other way without use of big integers consist on <a href="count_leading_zeros_of_a_number.html#ID-6B97E80F-C3C9-4D78-B24B-59B8EC5B97F0">Count leading zeros of a number using its 2's and 5's factors</a>.  The number of leading zeros in \(n!\) is the minimum between the number of its 2's and 5's factors.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> <span style="font-weight: bold;">reduce</span>
+<span style="font-weight: bold;">from</span> operator <span style="font-weight: bold;">import</span> add
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">trailingZeroes</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">count_factors</span>(n, f):
+            ret = 0
+            <span style="font-weight: bold;">while</span> n % f == 0 <span style="font-weight: bold;">and</span> n &gt;= f:
+                ret += 1
+                n = n // f
+            <span style="font-weight: bold;">return</span> ret
+
+        <span style="font-weight: bold;">if</span> n == 0:
+            <span style="font-weight: bold;">return</span> 0
+
+        f2 = <span style="font-weight: bold;">reduce</span>(add, [count_factors(k, 2) <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, n + 1)])
+        f5 = <span style="font-weight: bold;">reduce</span>(add, [count_factors(k, 5) <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, n + 1)])
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>(f2, f5)
+
+
+<span style="font-weight: bold;">assert</span> Solution().trailingZeroes(3) == 0
+<span style="font-weight: bold;">assert</span> Solution().trailingZeroes(5) == 1
+<span style="font-weight: bold;">assert</span> Solution().trailingZeroes(0) == 0
+</pre>
+</div>
+</div>
+</body>
+</html>

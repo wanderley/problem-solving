@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 317. Shortest Distance from All Buildings</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 317. Shortest Distance from All Buildings</h1>
+<ul class="org-ul">
+<li><a href="mistake_overcomplicated_solution.html#ID-40E38FD2-DDF0-4C25-BB8C-43D07F3D5136">Mistake: Overcomplicated solution</a>.  It would be easier to extract the <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a> function.</li>
+
+<li><a href="mistake_high_constant_factor_in_the_implementation.html#ID-56B18554-8EDB-44AF-B72A-8FD307B2980C">Mistake: High constant factor in the implementation</a>.  Anything close to \(10^8\) needs heavy optimization in python.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Compute the distance from each house to an empty space and take the space that can be reached by all houses with the lower total distance.  Time complexity is \(O(n^2 \times m^2)\) and space is \(O(n \times m)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">shortestDistance</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(grid[0])
+        <span style="font-weight: bold; font-style: italic;">dst</span> = [[0] * M <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold; font-style: italic;">cnt</span> = [[0] * M <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+
+        <span style="font-weight: bold; font-style: italic;">delta</span> = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bfs</span>(si, sj):
+            <span style="font-weight: bold; font-style: italic;">vis</span> = [[<span style="font-weight: bold; text-decoration: underline;">False</span>] * M <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+            <span style="font-weight: bold; font-style: italic;">queue</span> = [(si, sj, 0)]
+            <span style="font-weight: bold;">for</span> i, j, d <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">queue</span>:
+                dst[i][<span style="font-weight: bold; font-style: italic;">j</span>] += d
+                cnt[i][<span style="font-weight: bold; font-style: italic;">j</span>] += 1
+                <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">delta</span>:
+                    ni = di + i
+                    <span style="font-weight: bold; font-style: italic;">nj</span> = dj + j
+                    <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; M <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">not</span> vis[ni][nj]:
+                        vis[ni][<span style="font-weight: bold; font-style: italic;">nj</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                        <span style="font-weight: bold;">if</span> grid[ni][nj] == 0:
+                            queue.append((ni, nj, d + 1))
+                        <span style="font-weight: bold;">elif</span> grid[ni][nj] == 1:
+                            cnt[ni][nj] += 1
+
+        <span style="font-weight: bold; font-style: italic;">houses</span> = 0
+        <span style="font-weight: bold;">for</span> si <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> sj <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> grid[si][sj] == 1:
+                    <span style="font-weight: bold;">if</span> cnt[si][sj] != houses:
+                        <span style="font-weight: bold;">return</span> -1
+                    <span style="font-weight: bold; font-style: italic;">houses</span> += 1
+                    bfs(si, sj)
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> grid[i][j] == 0 <span style="font-weight: bold;">and</span> cnt[i][j] == houses <span style="font-weight: bold;">and</span> ans &gt; dst[i][j]:
+                    <span style="font-weight: bold; font-style: italic;">ans</span> = dst[i][j]
+
+        <span style="font-weight: bold;">return</span> -1 <span style="font-weight: bold;">if</span> ans == <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>) <span style="font-weight: bold;">else</span> ans
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().shortestDistance([[1, 0, 2, 0, 1], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0]])
+    == 7
+)
+<span style="font-weight: bold;">assert</span> Solution().shortestDistance([[1, 0]]) == 1
+<span style="font-weight: bold;">assert</span> Solution().shortestDistance([[1]]) == -1
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2272. Substring With Largest Variance</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2272. Substring With Largest Variance</h1>
+<p>
+Quadratic
+</p>
+<div class="org-src-container">
+<pre class="src src-python">
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve_chegado_mal_mal</span>(s):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(s)
+    <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+    <span style="font-weight: bold; font-style: italic;">cnt</span> = [0] * 30
+    <span style="font-weight: bold; font-style: italic;">nums</span> = [0] * n
+
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(30):
+            <span style="font-weight: bold; font-style: italic;">cnt</span>[<span style="font-weight: bold; font-style: italic;">j</span>] = 0
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            <span style="font-weight: bold; font-style: italic;">nums</span>[<span style="font-weight: bold; font-style: italic;">j</span>] = 0
+
+        <span style="font-weight: bold; font-style: italic;">cur_max</span> = 0
+        <span style="font-weight: bold; font-style: italic;">cur_min</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, n):
+            <span style="font-weight: bold; font-style: italic;">c</span> = <span style="font-weight: bold;">ord</span>(s[j]) - <span style="font-weight: bold;">ord</span>(<span style="font-style: italic;">"a"</span>)
+            <span style="font-weight: bold; font-style: italic;">old_cnt</span> = cnt[c]
+            <span style="font-weight: bold; font-style: italic;">new_cnt</span> = old_cnt + 1
+            <span style="font-weight: bold; font-style: italic;">cnt</span>[<span style="font-weight: bold; font-style: italic;">c</span>] = new_cnt
+
+            <span style="font-weight: bold; font-style: italic;">cur_max</span> = <span style="font-weight: bold;">max</span>(cur_max, new_cnt)
+
+            <span style="font-weight: bold;">if</span> new_cnt == 1:
+                cur_min = 1
+                nums[1] += 1
+            <span style="font-weight: bold;">else</span>:
+                nums[<span style="font-weight: bold; font-style: italic;">old_cnt</span>] -= 1
+                nums[<span style="font-weight: bold; font-style: italic;">new_cnt</span>] += 1
+                <span style="font-weight: bold;">if</span> cur_min == old_cnt <span style="font-weight: bold;">and</span> nums[old_cnt] == 0:
+                    cur_min = new_cnt
+            ans = <span style="font-weight: bold;">max</span>(ans, cur_max - cur_min)
+    <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+
+<p>
+Linear
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(s)
+    <span style="font-weight: bold; font-style: italic;">letters</span> = <span style="font-weight: bold;">set</span>(s)
+    <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+
+    <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> letters:
+        <span style="font-weight: bold;">for</span> y <span style="font-weight: bold;">in</span> letters:
+            <span style="font-weight: bold;">if</span> x == y:
+                <span style="font-weight: bold;">continue</span>
+
+            cur = 0
+            seen_y = <span style="font-weight: bold; text-decoration: underline;">False</span>
+            starts_on_y = <span style="font-weight: bold; text-decoration: underline;">False</span>
+            <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> s:
+                <span style="font-weight: bold;">if</span> c != x <span style="font-weight: bold;">and</span> c != y:
+                    <span style="font-weight: bold;">continue</span>
+
+                <span style="font-weight: bold;">if</span> cur == -1 <span style="font-weight: bold;">and</span> c == y:
+                    cur = -1
+                    seen_y = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                    starts_on_y = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                <span style="font-weight: bold;">elif</span> cur == 0 <span style="font-weight: bold;">and</span> c == y:
+                    <span style="font-weight: bold;">if</span> starts_on_y:
+                        cur = 0
+                        starts_on_y = <span style="font-weight: bold; text-decoration: underline;">False</span>
+                    <span style="font-weight: bold;">else</span>:
+                        cur = -1
+                        starts_on_y = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                <span style="font-weight: bold;">elif</span> cur &gt; 0 <span style="font-weight: bold;">and</span> c == y <span style="font-weight: bold;">and</span> starts_on_y:
+                    starts_on_y = <span style="font-weight: bold; text-decoration: underline;">False</span>
+                <span style="font-weight: bold;">else</span>:
+                    cur += 1 <span style="font-weight: bold;">if</span> c == x <span style="font-weight: bold;">else</span> -1
+
+                seen_y = seen_y <span style="font-weight: bold;">or</span> c == y
+                <span style="font-weight: bold;">if</span> seen_y:
+                    ans = <span style="font-weight: bold;">max</span>(ans, cur)
+
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aababbb"</span>) == 3
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"abcde"</span>) == 0
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aabbbbaa"</span>) == 3
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"icexiahccknibwuwgi"</span>) == 3
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"uwwuu"</span>) == 1
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">largestVariance</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(s)
+</pre>
+</div>
+</div>
+</body>
+</html>

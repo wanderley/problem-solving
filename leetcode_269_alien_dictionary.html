@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 269. Alien Dictionary</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 269. Alien Dictionary</h1>
+
+<div id="outline-container-org8dffca2" class="outline-2">
+<h2 id="org8dffca2">Understand the problem</h2>
+<div class="outline-text-2" id="text-org8dffca2">
+<p>
+Given a sequence of words sorted lexicographically using unknown alphabetic order, return the alphabet's letters sorted in respect to the alphabet's rule.
+</p>
+</div>
+
+<div id="outline-container-org73c6708" class="outline-3">
+<h3 id="org73c6708">Useful prompts</h3>
+<div class="outline-text-3" id="text-org73c6708">
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
+
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5ea44b0" class="outline-2">
+<h2 id="org5ea44b0">Devise a plan</h2>
+<div class="outline-text-2" id="text-org5ea44b0">
+<p>
+Modeling as a graph problem, letters are vertices and an edge \((u,v)\) means that the letter \(u\) comes before \(v\) in the unknown alphabet.  If there are cycles in this graph then there is no way to build (discover) the alphabet because \(u, v_1, v_2, ..., v_k, u\) means that \(u\) comes before \(u\) what is impossible.  Therefore, this is a <a href="directed_graph.html#ID-ABCED065-0F63-4FFE-8FEC-2D2615196BF7">Directed Graph</a>.  The problem become <a href="pattern_find_topological_order_of_vertices_in_a_graph.html#ID-38C2A4B4-E65F-4507-A1C6-0F2AF200DA69">Pattern: Find topological order of vertices in a graph</a>.  Time complexity is \(O(n)\) and space complexity is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-org4a065f0" class="outline-3">
+<h3 id="org4a065f0">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org4a065f0">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">alienOrder</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">str</span>:
+        A = {c: [] <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> words <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> w}
+        <span style="font-weight: bold;">for</span> a, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(words, words[1:]):
+            <span style="font-weight: bold;">if</span> a == b:
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold;">if</span> a.startswith(b):
+                <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>
+            i = 0
+            <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold;">len</span>(a) <span style="font-weight: bold;">and</span> i &lt; <span style="font-weight: bold;">len</span>(b) <span style="font-weight: bold;">and</span> a[i] == b[i]:
+                i += 1
+            <span style="font-weight: bold;">if</span> i &lt; <span style="font-weight: bold;">len</span>(a) <span style="font-weight: bold;">and</span> i &lt; <span style="font-weight: bold;">len</span>(b):
+                A[a[i]].append(b[i])
+        deg = {c: 0 <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> A}
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> A:
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> A[u]:
+                deg[v] += 1
+        queue = [u <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> A <span style="font-weight: bold;">if</span> deg[u] == 0]
+        ans = []
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> queue:
+            ans.append(u)
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> A[u]:
+                deg[v] -= 1
+                <span style="font-weight: bold;">if</span> deg[v] == 0:
+                    queue.append(v)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(ans) != <span style="font-weight: bold;">len</span>(A):
+            <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(ans)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">alienOrder</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">str</span>:
+        adj = {}
+        <span style="font-weight: bold;">for</span> w1, w2 <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(words, words[1:]):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(w2) &lt; <span style="font-weight: bold;">len</span>(w1) <span style="font-weight: bold;">and</span> w1.startswith(w2):
+                <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>
+            <span style="font-weight: bold;">for</span> c1, c2 <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(w1, w2):
+                <span style="font-weight: bold;">if</span> c1 != <span style="font-weight: bold; font-style: italic;">c2</span>:
+                    adj.setdefault(c1, <span style="font-weight: bold;">set</span>())
+                    adj[c1].add(c2)
+                    <span style="font-weight: bold;">break</span>
+
+        NOT_VISITED = <span style="font-style: italic;">"NOT_VISITED"</span>
+        <span style="font-weight: bold; font-style: italic;">OPEN</span> = <span style="font-style: italic;">"OPEN"</span>
+        <span style="font-weight: bold; font-style: italic;">CLOSED</span> = <span style="font-style: italic;">"CLOSED"</span>
+
+        <span style="font-weight: bold; font-style: italic;">status</span> = {<span style="font-weight: bold; font-style: italic;">c</span>: NOT_VISITED <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> words <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> w}
+        ans = []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(u):
+            <span style="font-weight: bold;">if</span> status[u] == CLOSED:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">if</span> status[u] == OPEN:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+            status[u] = OPEN
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> adj.get(u, []):
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> dfs(v):
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+            ans.append(u)
+            status[u] = CLOSED
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> status:
+            <span style="font-weight: bold;">if</span> status[c] == NOT_VISITED:
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> dfs(c):
+                    <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>
+
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(<span style="font-weight: bold;">reversed</span>(ans))
+
+<span style="font-weight: bold;">assert</span> Solution().alienOrder([<span style="font-style: italic;">"wrt"</span>,<span style="font-style: italic;">"wrf"</span>,<span style="font-style: italic;">"er"</span>,<span style="font-style: italic;">"ett"</span>,<span style="font-style: italic;">"rftt"</span>]) == <span style="font-style: italic;">"wertf"</span>
+<span style="font-weight: bold;">assert</span> Solution().alienOrder([<span style="font-style: italic;">"z"</span>,<span style="font-style: italic;">"x"</span>]) == <span style="font-style: italic;">"zx"</span>
+<span style="font-weight: bold;">assert</span> Solution().alienOrder([<span style="font-style: italic;">"z"</span>,<span style="font-style: italic;">"x"</span>,<span style="font-style: italic;">"z"</span>]) == <span style="font-style: italic;">""</span>
+<span style="font-weight: bold;">assert</span> Solution().alienOrder([<span style="font-style: italic;">"z"</span>,<span style="font-style: italic;">"z"</span>]) == <span style="font-style: italic;">"z"</span>
+<span style="font-weight: bold;">assert</span> Solution().alienOrder([<span style="font-style: italic;">"abc"</span>,<span style="font-style: italic;">"ab"</span>]) == <span style="font-style: italic;">""</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org076ddb8" class="outline-2">
+<h2 id="org076ddb8">Common mistakes</h2>
+<div class="outline-text-2" id="text-org076ddb8">
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>: \(abc,ab\).</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 839. Similar String Groups</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 839. Similar String Groups</h1>
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Words are vertices and they are connected if similar.  The problem becomes finding the number of connected components in the graph using <a href="union_find.html#ID-23A4E36E-24D3-40F8-AA20-32C0DB1E36F6">Union-Find</a>.  Time and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numSimilarGroups</span>(<span style="font-weight: bold;">self</span>, strs: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(strs)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(strs[0])
+        <span style="font-weight: bold; font-style: italic;">p</span> = [i <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(u):
+            <span style="font-weight: bold;">if</span> p[u] == u:
+                <span style="font-weight: bold;">return</span> u
+            p[u] = find(p[u])
+            <span style="font-weight: bold;">return</span> p[u]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">union</span>(u, v):
+            gu = find(u)
+            gv = find(v)
+            p[gu] = gv
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_similar</span>(i, j):
+            cnt = 0
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> cnt &gt; 2:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+                <span style="font-weight: bold;">if</span> strs[i][k] != strs[j][k]:
+                    cnt += 1
+            <span style="font-weight: bold;">return</span> cnt == 0 <span style="font-weight: bold;">or</span> cnt == 2
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i + 1, N):
+                <span style="font-weight: bold;">if</span> is_similar(i, j):
+                    union(i, j)
+
+        comps = <span style="font-weight: bold;">set</span>(find(i) <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N))
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>(comps)
+
+
+<span style="font-weight: bold;">assert</span> Solution().numSimilarGroups([<span style="font-style: italic;">"tars"</span>, <span style="font-style: italic;">"rats"</span>, <span style="font-style: italic;">"arts"</span>, <span style="font-style: italic;">"star"</span>]) == 2
+<span style="font-weight: bold;">assert</span> Solution().numSimilarGroups([<span style="font-style: italic;">"omv"</span>, <span style="font-style: italic;">"ovm"</span>]) == 1
+</pre>
+</div>
+</div>
+</body>
+</html>

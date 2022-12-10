@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Convert integer to array of digits</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Convert integer to array of digits</h1>
+
+<div id="outline-container-org236dab8" class="outline-2">
+<h2 id="org236dab8">Python</h2>
+<div class="outline-text-2" id="text-org236dab8">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">to_digits</span>(n):
+    <span style="font-weight: bold;">if</span> n &lt; 10:
+        <span style="font-weight: bold;">return</span> [n]
+    <span style="font-weight: bold; font-style: italic;">ans</span> = []
+    <span style="font-weight: bold;">while</span> n &gt; 0:
+        ans.append(n % 10)
+        <span style="font-weight: bold; font-style: italic;">n</span> = n // 10
+    <span style="font-weight: bold;">return</span> ans[::-1]
+
+<span style="font-weight: bold;">assert</span> to_digits(1234) == [1, 2, 3, 4]
+<span style="font-weight: bold;">assert</span> to_digits(1) == [1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbe21f62" class="outline-2">
+<h2 id="orgbe21f62">C++</h2>
+<div class="outline-text-2" id="text-orgbe21f62">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold;">to_digits</span>(<span style="font-weight: bold; text-decoration: underline;">long</span> <span style="font-weight: bold; text-decoration: underline;">long</span> <span style="font-weight: bold; font-style: italic;">n</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">digits</span>;
+
+  <span style="font-weight: bold;">if</span> (n &lt; 10) {
+    digits.push_back(n);
+    <span style="font-weight: bold;">return</span> digits;
+  }
+  <span style="font-weight: bold;">while</span> (n &gt; 0) {
+    digits.push_back(n % 10);
+    n = n / 10;
+  }
+  reverse(digits.begin(), digits.end());
+  <span style="font-weight: bold;">return</span> digits;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">e0</span>[] = {1, 2, 3, 4};
+  <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">v0</span>(e0, e0 + 4);
+  assert(to_digits(1234) == v0);
+
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">e1</span>[] = {1};
+  <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">v1</span>(e1, e1 + 1);
+  assert(to_digits(1) == v1);
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

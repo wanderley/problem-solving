@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 354. Russian Doll Envelopes</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 354. Russian Doll Envelopes</h1>
+<ul class="org-ul">
+<li><a href="mistake_incorrect_evaluation_of_solution_s_viability.html#ID-DA951820-DBB5-4A7F-9401-DF5860EFAB8A">Mistake: Incorrect evaluation of solution's viability</a>.  The constant factor of <a href="segment_tree_from_one_dimensional_array.html#ID-252C5055-2C0D-4B0E-A4BF-9507B85A179F">Segment Tree</a> was too high to get an AC.</li>
+
+<li><a href="mistake_did_not_try_hard_to_solve_alternative_problem.html#ID-AC9291C6-4C72-4143-80F2-0D414EF7B681">Mistake: Did not try hard to solve alternative problem</a>.  I found many useful properties but couldn't put all them together (e.g. sort envelopes first by increase \(h\) and then decreasing \(w\)).</li>
+
+<li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  Sort the envelopes by \(h\) values.  Now the problem becomes finding <a href="longest_increasing_subsequence.html#ID-665B7733-6D7E-4A34-8F77-7E64747CE2C9">Longest Increasing Subsequence</a> on values of \(w\).  To avoid creating number with same \(h\), we make sure that \(h\) values are increase and \(w\) values with same \(h\) value is in decrease order.  Time complexity is \(O(n \log n)\) and space is \(O(k)\) where \(k\) is the size of the longest subsequence.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> bisect <span style="font-weight: bold;">import</span> bisect_left
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxEnvelopes</span>(<span style="font-weight: bold;">self</span>, envelopes: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(envelopes)
+        envelopes.sort(key=<span style="font-weight: bold;">lambda</span> e: (e[1], -e[0]))
+        seq = []
+        <span style="font-weight: bold;">for</span> n, _ <span style="font-weight: bold;">in</span> envelopes:
+            k = bisect_left(seq, n)
+            <span style="font-weight: bold;">if</span> k == <span style="font-weight: bold;">len</span>(seq):
+                seq.append(n)
+            <span style="font-weight: bold;">else</span>:
+                seq[<span style="font-weight: bold; font-style: italic;">k</span>] = n
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>(seq)
+
+
+<span style="font-weight: bold;">assert</span> Solution().maxEnvelopes([[5, 4], [6, 4], [6, 7], [2, 3]]) == 3
+<span style="font-weight: bold;">assert</span> Solution().maxEnvelopes([[1, 1], [1, 1], [1, 1]]) == 1
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_using_a_segment_tree.html#ID-37B33434-71C2-4E55-9121-5D6855D8E169">Can we formulate the problem using a segment tree?</a>  Sort the envelopes by \(h\) and from the last to the first.  Add them to a <a href="segment_tree_from_one_dimensional_array.html#ID-252C5055-2C0D-4B0E-A4BF-9507B85A179F">Segment Tree</a> or <a href="fenwicktree.html#ID-2B44007C-8EC7-49DA-9A9B-0D6CF6578083">FenwickTree</a> which supports getting the max value of an interval.  Time complexity is \(O(n \log m)\) where \(m\) is the max size of the interval, and space is \(O(m)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FenwickTreeMax</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n):
+        <span style="font-weight: bold;">self</span>.n = n
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">bit</span> = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)] * n
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">getmax</span>(<span style="font-weight: bold;">self</span>, r):
+        <span style="font-weight: bold; font-style: italic;">ret</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+        <span style="font-weight: bold;">while</span> r &gt;= 0:
+            <span style="font-weight: bold; font-style: italic;">ret</span> = <span style="font-weight: bold;">max</span>(ret, <span style="font-weight: bold;">self</span>.bit[r])
+            <span style="font-weight: bold; font-style: italic;">r</span> = (r &amp; (r + 1)) - 1
+        <span style="font-weight: bold;">return</span> ret
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update</span>(<span style="font-weight: bold;">self</span>, idx, val):
+        <span style="font-weight: bold;">while</span> idx &lt; <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">n</span>:
+            <span style="font-weight: bold;">self</span>.bit[<span style="font-weight: bold; font-style: italic;">idx</span>] = <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">self</span>.bit[idx], val)
+            <span style="font-weight: bold; font-style: italic;">idx</span> = idx | (idx + 1)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxEnvelopes</span>(<span style="font-weight: bold;">self</span>, envelopes: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        M = 123_456
+        <span style="font-weight: bold; font-style: italic;">best</span> = FenwickTreeMax(M)
+
+        envelopes.sort(key=<span style="font-weight: bold;">lambda</span> e: (e[1], -e[0]))
+        ans = 0
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(envelopes) - 1, -1, -1):
+            n = envelopes[i][0]
+            c = <span style="font-weight: bold;">max</span>(1, 1 + best.getmax(M - (n + 1)))
+            best.update(M - n, c)
+            ans = <span style="font-weight: bold;">max</span>(ans, c)
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().maxEnvelopes([[5, 4], [6, 4], [6, 7], [2, 3]]) == 3
+<span style="font-weight: bold;">assert</span> Solution().maxEnvelopes([[1, 1], [1, 1], [1, 1]]) == 1
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1255. Maximum Score Words Formed by Letters</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1255. Maximum Score Words Formed by Letters</h1>
+<ul class="org-ul">
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  Generate all sets and take the one with maximum score.  Time complexity is \(O(2^n \times n)\) and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> Counter
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxScoreWords</span>(
+        <span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>], letters: List[<span style="font-weight: bold;">str</span>], score: List[<span style="font-weight: bold;">int</span>]
+    ) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(words)
+
+        <span style="font-weight: bold; font-style: italic;">allowed</span> = Counter(letters)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">value</span>(selection):
+            <span style="font-weight: bold; font-style: italic;">required</span> = Counter([])
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold;">if</span> selection &amp; (1 &lt;&lt; i):
+                    required.update(words[i])
+            <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+            <span style="font-weight: bold;">for</span> k, v <span style="font-weight: bold;">in</span> required.items():
+                <span style="font-weight: bold;">if</span> allowed[k] &lt; required[k]:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+                <span style="font-weight: bold; font-style: italic;">ans</span> += required[k] * score[<span style="font-weight: bold;">ord</span>(k) - <span style="font-weight: bold;">ord</span>(<span style="font-style: italic;">"a"</span>)]
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(value(selection) <span style="font-weight: bold;">for</span> selection <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(2**N))
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().maxScoreWords(
+        [<span style="font-style: italic;">"dog"</span>, <span style="font-style: italic;">"cat"</span>, <span style="font-style: italic;">"dad"</span>, <span style="font-style: italic;">"good"</span>],
+        [<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"c"</span>, <span style="font-style: italic;">"d"</span>, <span style="font-style: italic;">"d"</span>, <span style="font-style: italic;">"d"</span>, <span style="font-style: italic;">"g"</span>, <span style="font-style: italic;">"o"</span>, <span style="font-style: italic;">"o"</span>],
+        [1, 0, 9, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    )
+    == 23
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().maxScoreWords(
+        [<span style="font-style: italic;">"xxxz"</span>, <span style="font-style: italic;">"ax"</span>, <span style="font-style: italic;">"bx"</span>, <span style="font-style: italic;">"cx"</span>],
+        [<span style="font-style: italic;">"z"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>, <span style="font-style: italic;">"c"</span>, <span style="font-style: italic;">"x"</span>, <span style="font-style: italic;">"x"</span>, <span style="font-style: italic;">"x"</span>],
+        [4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 10],
+    )
+    == 27
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().maxScoreWords(
+        [<span style="font-style: italic;">"leetcode"</span>],
+        [<span style="font-style: italic;">"l"</span>, <span style="font-style: italic;">"e"</span>, <span style="font-style: italic;">"t"</span>, <span style="font-style: italic;">"c"</span>, <span style="font-style: italic;">"o"</span>, <span style="font-style: italic;">"d"</span>],
+        [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+    )
+    == 0
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1776. Car Fleet II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1776. Car Fleet II</h1>
+<ul class="org-ul">
+<li><a href="mistake_did_not_play_with_small_examples_draw_invariants.html#ID-E79DA5C2-ACB6-4611-AD11-090310B72BC1">Mistake: Did not play with small examples draw invariants</a>.</li>
+
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  If there is only one car, the answer is -1.  Be \(a\) and \(b\) two cars where \(b\) comes after \(a\) in the input.  If \(b\) is faster than \(a\), both will have answer -1.  Otherwise, \(a\) will collide with \(b\).  Be \(c\) other car that come after \(b\).  If \(a\) is faster than \(b\) and \(c\), then \(a\) will collide with \(c\) iff it doesn't collide first with \(b\).  Therefore, we can discard all cars that go faster than \(a\) or collide with a slower car before it would collide with \(a\).  These property can be implemented using a <a href="monotonic_stack.html#ID-E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5">Monotonic Stack</a>.  Time and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">getCollisionTimes</span>(<span style="font-weight: bold;">self</span>, c: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; List[<span style="font-weight: bold;">float</span>]:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">t</span>(a, b):
+            <span style="font-weight: bold;">return</span> (b[0] - a[0]) / (a[1] - b[1])
+
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(c)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * N
+        <span style="font-weight: bold; font-style: italic;">st</span> = []
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, -1, -1):
+            <span style="font-weight: bold;">while</span> st <span style="font-weight: bold;">and</span> (
+                st[-1][1] &gt;= c[i][1] <span style="font-weight: bold;">or</span> 0 &lt; ans[st[-1][2]] &lt;= t(c[i], st[-1])
+            ):
+                st.pop()
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold; font-style: italic;">st</span>:
+                ans[<span style="font-weight: bold; font-style: italic;">i</span>] = t(c[i], st[-1])
+            st.append((*c[i], i))
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().getCollisionTimes([[1, 2], [2, 1], [4, 3], [7, 2]]) == [
+    1.00000,
+    -1.00000,
+    3.00000,
+    -1.00000,
+]
+<span style="font-weight: bold;">assert</span> Solution().getCollisionTimes([[3, 4], [5, 4], [6, 3], [9, 1]]) == [
+    2.00000,
+    1.00000,
+    1.50000,
+    -1.00000,
+]
+</pre>
+</div>
+</div>
+</body>
+</html>

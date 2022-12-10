@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 679. 24 Game</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 679. 24 Game</h1>
+<ul class="org-ul">
+<li><a href="mistake_bug_introduced_when_copy_pasting_code.html#ID-AFD7D485-25CB-450F-B116-365FE7239669">Mistake: Bug introduced when copy-pasting code</a>.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  One and two numbers are easy to solve.  For more numbers, break them down on all possible groups and recursively compute the expressions.  Time complexity is \(T=O(n! \times 2^n \times 4)\) and space complexity is \(O(n \times T)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> itertools <span style="font-weight: bold;">import</span> permutations
+<span style="font-weight: bold;">from</span> math <span style="font-weight: bold;">import</span> gcd
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Fraction</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, a, b):
+        <span style="font-weight: bold;">if</span> b == 0:
+            <span style="font-weight: bold;">self</span>.a = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">self</span>.b = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">else</span>:
+            d = gcd(a, b)
+            <span style="font-weight: bold;">self</span>.a = a // d
+            <span style="font-weight: bold;">self</span>.b = b // d
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> f<span style="font-style: italic;">"</span>{<span style="font-weight: bold;">self</span>.a}<span style="font-style: italic;">/</span>{<span style="font-weight: bold;">self</span>.b}<span style="font-style: italic;">"</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__eq__</span>(<span style="font-weight: bold;">self</span>, other):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.a == other.a <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.b == other.b
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__add__</span>(<span style="font-weight: bold;">self</span>, other):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> other.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>
+        <span style="font-weight: bold;">return</span> Fraction(<span style="font-weight: bold;">self</span>.a * other.b + other.a * <span style="font-weight: bold;">self</span>.b, <span style="font-weight: bold;">self</span>.b * other.b)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__sub__</span>(<span style="font-weight: bold;">self</span>, other):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> other.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>
+        <span style="font-weight: bold;">return</span> Fraction(<span style="font-weight: bold;">self</span>.a * other.b - other.a * <span style="font-weight: bold;">self</span>.b, <span style="font-weight: bold;">self</span>.b * other.b)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__mul__</span>(<span style="font-weight: bold;">self</span>, other):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> other.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>
+        <span style="font-weight: bold;">return</span> Fraction(<span style="font-weight: bold;">self</span>.a * other.a, <span style="font-weight: bold;">self</span>.b * other.b)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__truediv__</span>(<span style="font-weight: bold;">self</span>, other):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> other.a <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span> * Fraction(other.b, other.a)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">judgePoint24</span>(<span style="font-weight: bold;">self</span>, cards: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">bool</span>:
+        cards = [Fraction(c, 1) <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> cards]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">calc</span>(c):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(c) == 1:
+                <span style="font-weight: bold;">return</span> [c[0]]
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(c) == 2:
+                <span style="font-weight: bold;">return</span> [c[0] + c[1], c[0] - c[1], c[0] * c[1], c[0] / c[1]]
+            ans = []
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, <span style="font-weight: bold;">len</span>(c)):
+                left = calc(c[:i])
+                right = calc(c[i:])
+                <span style="font-weight: bold;">for</span> l <span style="font-weight: bold;">in</span> left:
+                    <span style="font-weight: bold;">for</span> r <span style="font-weight: bold;">in</span> right:
+                        ans.extend(calc([l, r]))
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">any</span>(Fraction(24, 1) <span style="font-weight: bold;">in</span> calc(p) <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> permutations(cards))
+
+
+<span style="font-weight: bold;">assert</span> Solution().judgePoint24([4, 1, 8, 7]) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> Solution().judgePoint24([1, 2, 1, 2]) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

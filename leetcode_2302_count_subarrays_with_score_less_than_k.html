@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2302. Count Subarrays With Score Less Than K</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2302. Count Subarrays With Score Less Than K</h1>
+<p>
+<a href="https://leetcode.com/problems/count-subarrays-with-score-less-than-k/">Problem Statement</a>: Given an array of integers \(a\) and an integer \(k\), return the number of non-empty subarrays \(a[i..j]\) such that \(s(i,j)=(a[i]+a[i+1]+...+a[j]) \times (j - i + 1) < k\).
+</p>
+
+<p>
+Be \(i\) and \(j\) such \(s(i,j)<k\), but \(s(i, j+1) \geq k\).  As \(a\) contains only positive integers, we know that \(s(i,k)\) is also less than \(k\) for all \(i \leq k < j\), and they are all valid subarrays: \((j - i + 1)\).  <a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  For \(i+1\), we want to find the greatest index \(j'\) such that \(s(i+1, j')<k\).  To find \(j'\), we can extend/shrink the subarray until the score less than \(k\).  The function \(s\) can be implemented efficiently using an <a href="prefix_sum.html#ID-1E82ABF5-661B-47CC-8656-26B50FE472B8">One-dimensional Prefix Sum</a>.
+</p>
+
+
+<div id="orge64f27a" class="figure">
+<p><img src="./assets/leetcode-2302.png" alt="leetcode-2302.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|a|)\).</li>
+<li>Space complexity: \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(nums, k):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(nums)
+
+    <span style="font-weight: bold; font-style: italic;">pref</span> = [0] * n
+    <span style="font-weight: bold; font-style: italic;">pref</span>[0] = nums[0]
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, n):
+        <span style="font-weight: bold; font-style: italic;">pref</span>[<span style="font-weight: bold; font-style: italic;">i</span>] = nums[i] + pref[i - 1]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">score</span>(i, j):
+        <span style="font-weight: bold; font-style: italic;">size</span> = j - i + 1
+        <span style="font-weight: bold;">return</span> (pref[j] - (0 <span style="font-weight: bold;">if</span> i == 0 <span style="font-weight: bold;">else</span> pref[i - 1])) * size
+
+    j = n - 1
+    ans = 0
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n - 1, -1, -1):
+        <span style="font-weight: bold;">while</span> i &lt;= j <span style="font-weight: bold;">and</span> score(i, j) &gt;= k:
+            j -= 1
+        <span style="font-weight: bold;">if</span> i &lt;= j:
+            ans += j - i + 1
+
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve([2, 1, 4, 3, 5], 10) == 6
+<span style="font-weight: bold;">assert</span> solve([1, 1, 1], 5) == 5
+<span style="font-weight: bold;">assert</span> solve([3, 3], 2) == 0
+<span style="font-weight: bold;">assert</span> solve([1, 1, 1, 1], 5) == 7
+<span style="font-weight: bold;">assert</span> solve([5, 2, 6, 8, 9, 7], 50) == 13
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countSubarrays</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(nums, k)
+</pre>
+</div>
+</div>
+</body>
+</html>

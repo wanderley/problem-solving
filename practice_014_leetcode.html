@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #014: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #014: Leetcode</h1>
+
+<div id="outline-container-orga4bfd11" class="outline-2">
+<h2 id="orga4bfd11">Leetcode: 852. Peak Index in a Mountain Array</h2>
+<div class="outline-text-2" id="text-orga4bfd11">
+<p>
+<a href="https://leetcode.com/problems/peak-index-in-a-mountain-array/">Problem Statement</a>
+</p>
+
+<p>
+Same as <a href="practice_015_leetcode_binary_search.html#ID-1B312D82-8DED-49FE-8521-F8C2B6AAB660">Leetcode: 162. Find Peak Element</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">peakIndexInMountainArray</span>(<span style="font-weight: bold;">self</span>, arr: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        n = <span style="font-weight: bold;">len</span>(arr)
+        <span style="font-weight: bold; font-style: italic;">s</span> = 0
+        <span style="font-weight: bold; font-style: italic;">e</span> = n - 1
+        <span style="font-weight: bold;">while</span> s &lt; <span style="font-weight: bold; font-style: italic;">e</span>:
+            m = s + (e - s) // 2
+            <span style="font-weight: bold;">if</span> arr[m] &lt; <span style="font-weight: bold; font-style: italic;">arr</span>[m + 1]:
+                s = m + 1
+            <span style="font-weight: bold;">else</span>:
+                e = m
+        <span style="font-weight: bold;">return</span> s
+
+
+<span style="font-weight: bold;">assert</span> Solution().peakIndexInMountainArray([0, 1, 0]) == 1
+<span style="font-weight: bold;">assert</span> Solution().peakIndexInMountainArray([0, 2, 1, 0]) == 1
+<span style="font-weight: bold;">assert</span> Solution().peakIndexInMountainArray([0, 10, 5, 2]) == 1
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org14d04e6" class="outline-2">
+<h2 id="org14d04e6">Leetcode: 1095. Find in Mountain Array</h2>
+<div class="outline-text-2" id="text-org14d04e6">
+<p>
+<a href="https://leetcode.com/problems/find-in-mountain-array/">Problem Statement</a>
+</p>
+
+<p>
+We can solve the problem using three <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>es: (1) to find the peak, (2) to find the target on the left side of the peak and (3) to find the target on the right side of the peak.  Time complexity is \(O(\log(n))\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">This is MountainArray's API interface.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">You should not implement it, or speculate about its implementation</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">"""</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">class MountainArray:</span>
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">def get(self, index: int) -&gt; int:</span>
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">def length(self) -&gt; int:</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findInMountainArray</span>(<span style="font-weight: bold;">self</span>, target: <span style="font-weight: bold;">int</span>, mountain_arr: <span style="font-style: italic;">'MountainArray'</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        n = mountain_arr.length()
+        <span style="font-weight: bold; font-style: italic;">s</span> = 0
+        <span style="font-weight: bold; font-style: italic;">e</span> = n - 1
+        <span style="font-weight: bold;">while</span> s &lt; <span style="font-weight: bold; font-style: italic;">e</span>:
+            m = s + (e - s) // 2
+            <span style="font-weight: bold; font-style: italic;">a</span> = mountain_arr.get(m)
+            <span style="font-weight: bold; font-style: italic;">b</span> = mountain_arr.get(m+1)
+            <span style="font-weight: bold;">if</span> a &lt; <span style="font-weight: bold; font-style: italic;">b</span>:
+                s = m + 1
+            <span style="font-weight: bold;">else</span>:
+                e = m
+        <span style="font-weight: bold; font-style: italic;">top</span> = s
+        <span style="font-weight: bold; font-style: italic;">a</span> = mountain_arr.get(s)
+        <span style="font-weight: bold;">if</span> target == a:
+            <span style="font-weight: bold;">return</span> s
+
+        <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; font-style: italic;">e</span> = 0, top
+        <span style="font-weight: bold;">while</span> s &lt; e:
+            m = s + (e - s) // 2
+            a = mountain_arr.get(m)
+            <span style="font-weight: bold;">if</span> a == target:
+                <span style="font-weight: bold;">return</span> m
+            <span style="font-weight: bold;">if</span> a &gt; target:
+                e = m - 1
+            <span style="font-weight: bold;">else</span>:
+                s = m + 1
+        <span style="font-weight: bold;">if</span> 0 &lt;= s &lt; n <span style="font-weight: bold;">and</span> mountain_arr.get(s) == target:
+            <span style="font-weight: bold;">return</span> s
+
+        <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; font-style: italic;">e</span> = top, n - 1
+        <span style="font-weight: bold;">while</span> s &lt; e:
+            m = s + (e - s) // 2
+            a = mountain_arr.get(m)
+            <span style="font-weight: bold;">if</span> a == target:
+                <span style="font-weight: bold;">return</span> m
+            <span style="font-weight: bold;">if</span> a &gt; target:
+                s = m + 1
+            <span style="font-weight: bold;">else</span>:
+                e = m - 1
+        <span style="font-weight: bold;">if</span> 0 &lt;= s &lt; n <span style="font-weight: bold;">and</span> mountain_arr.get(s) == target:
+            <span style="font-weight: bold;">return</span> s
+        <span style="font-weight: bold;">return</span> -1
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1de52b3" class="outline-2">
+<h2 id="org1de52b3">Leetcode: 1110. Delete Nodes And Return Forest</h2>
+<div class="outline-text-2" id="text-org1de52b3">
+<p>
+<a href="https://leetcode.com/problems/delete-nodes-and-return-forest/">Problem Statement</a>
+</p>
+
+<p>
+Traverse the tree keeping track of the new roots and updating links to them (ie. deleting the links).  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for a binary tree node.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class TreeNode:</span>
+<span style="font-weight: bold; font-style: italic;">#     </span><span style="font-weight: bold; font-style: italic;">def __init__(self, val=0, left=None, right=None):</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.val = val</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.left = left</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.right = right</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">delNodes</span>(<span style="font-weight: bold;">self</span>, root: Optional[TreeNode], to_delete: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[TreeNode]:
+        <span style="font-weight: bold;">if</span> root <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">should_delete</span>(node):
+            <span style="font-weight: bold;">if</span> node <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+            <span style="font-weight: bold;">if</span> node.val <span style="font-weight: bold;">in</span> d:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+        d = <span style="font-weight: bold;">set</span>(to_delete)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(node, is_root):
+            <span style="font-weight: bold;">if</span> node <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                <span style="font-weight: bold;">return</span>
+
+            <span style="font-weight: bold;">if</span> is_root <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">not</span> should_delete(node):
+                ans.add(node)
+
+            dfs(node.left, node.val <span style="font-weight: bold;">in</span> d)
+            dfs(node.right, node.val <span style="font-weight: bold;">in</span> d)
+
+            <span style="font-weight: bold;">if</span> should_delete(node.left):
+                node.left = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">if</span> should_delete(node.right):
+                node.<span style="font-weight: bold; font-style: italic;">right</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        dfs(root, root.val <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> d)
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">list</span>(ans)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

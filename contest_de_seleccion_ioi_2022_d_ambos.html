@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contest de seleccion IOI 2022: D. Ambos</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Contest de seleccion IOI 2022: D. Ambos</h1>
+<p>
+<a href="https://contest.yandex.ru/contest/38353/download/">Problem Statement</a>: Given a string with characters <code>o</code> and <code>x</code>, return the number of substring that contains at least one of each character.
+</p>
+
+<p>
+Let's take \(s=\texttt{oooxoxo}\) as example.  A valid interval \((0, i)\) must have \(i>2\), since it is the first occurrence of an <code>x</code>.  There are \(7-3 = 6\) of those intervals: \((0,3), (0,4), (0,5), (0,6)\).  So, it would be fairly easy to compute the number of interval for a given position \(i\), if we knew the first index \(j\) where \(s[i]\ne s[j]\).  Suppose that <code>o</code> is 0 and <code>x</code> is 1.  Then \(s=\texttt{oooxoxo}\) becomes \(s'=0001010\).  If \(s'[i]\) is 0, we want the next greater integer (<a href="monotonic_stack.html#ID-E4C9A18D-FC2B-4C1D-A040-1A94C39F9F63">Problem: Next greater integer in unsorted array</a>).  Otherwise, we want next smaller integer (<a href="monotonic_stack.html#ID-135D43F0-78FA-43E4-821F-509439B633D1">Problem: Next smaller in unsorted array</a>).  The following solution solves the problem using this idea.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|s|)\).</li>
+<li>Space complexity: \(O(|s|)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-C++"><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;algorithm&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;set&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;string.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;vector&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;stack&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;assert.h&gt;</span>
+
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+
+<span style="font-weight: bold;">#define</span> <span style="font-weight: bold; font-style: italic;">ll</span> <span style="font-weight: bold; text-decoration: underline;">long</span> <span style="font-weight: bold; text-decoration: underline;">long</span>
+
+<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold;">compute_next</span>(<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; text-decoration: underline;">char</span> <span style="font-weight: bold; font-style: italic;">c</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">ans</span>(s.size(), -1);
+  <span style="font-weight: bold; text-decoration: underline;">stack</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">st</span>;
+
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; s.size(); i++) {
+    <span style="font-weight: bold;">if</span> (s[i] != c) {
+      st.push(i);
+      <span style="font-weight: bold;">continue</span>;
+    }
+    <span style="font-weight: bold;">while</span> (!st.empty()) {
+      ans[st.top()] = i;
+      st.pop();
+    }
+  }
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+
+<span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold;">solve</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>, <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">s</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">nx</span> = compute_next(s, <span style="font-style: italic;">'x'</span>);
+  <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">no</span> = compute_next(s, <span style="font-style: italic;">'o'</span>);
+
+  <span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">ans</span> = 0;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; n; i++) {
+    <span style="font-weight: bold;">if</span> (s[i] == <span style="font-style: italic;">'x'</span> &amp;&amp; no[i] != -1) {
+      ans += n - no[i];
+    }
+    <span style="font-weight: bold;">if</span> (s[i] == <span style="font-style: italic;">'o'</span> &amp;&amp; nx[i] != -1) {
+      ans += n - nx[i];
+    }
+  }
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  assert(compute_next(<span style="font-style: italic;">"x"</span>, <span style="font-style: italic;">'o'</span>) == (<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;{-1}));
+  assert(compute_next(<span style="font-style: italic;">"xx"</span>, <span style="font-style: italic;">'o'</span>) == (<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;{-1, -1}));
+  assert(compute_next(<span style="font-style: italic;">"xo"</span>, <span style="font-style: italic;">'o'</span>) == (<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;{+1, -1}));
+  assert(compute_next(<span style="font-style: italic;">"ox"</span>, <span style="font-style: italic;">'o'</span>) == (<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;{-1, -1}));
+  assert(compute_next(<span style="font-style: italic;">"ox"</span>, <span style="font-style: italic;">'x'</span>) == (<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;{+1, -1}));
+  assert(compute_next(<span style="font-style: italic;">"ooxxoo"</span>, <span style="font-style: italic;">'x'</span>) == (<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;{2, 2, -1, -1, -1, -1}));
+  assert(compute_next(<span style="font-style: italic;">"ooxxoo"</span>, <span style="font-style: italic;">'o'</span>) == (<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;{-1, -1, 4, 4, -1, -1}));
+
+  assert(solve(4, <span style="font-style: italic;">"ooxo"</span>) == 5);
+  assert(solve(5, <span style="font-style: italic;">"oxoxo"</span>) == 10);
+  assert(solve(5, <span style="font-style: italic;">"ooooo"</span>) == 0);
+  assert(solve(7, <span style="font-style: italic;">"xxoooxx"</span>) == 16);
+
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>;
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">s</span>;
+  cin &gt;&gt; n &gt;&gt; s;
+  cout &lt;&lt; solve(n, s);
+  <span style="font-weight: bold;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</body>
+</html>

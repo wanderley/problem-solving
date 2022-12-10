@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 65. Valid Number</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 65. Valid Number</h1>
+<p>
+<a href="https://leetcode.com/problems/valid-number/">Problem Statement</a>: Give a string, return if it is a valid number given parsing rules.
+</p>
+
+<div id="outline-container-org413c5f3" class="outline-2">
+<h2 id="org413c5f3"><a href="brute_force.html#ID-EC1C87C8-A221-4823-9EF5-BEC706B2EEA5">Brute Force</a></h2>
+<div class="outline-text-2" id="text-org413c5f3">
+<p>
+This is a problem to test if you are capable of implementing a program with complex rules.  There is no big challenge besides carefully implementing the rules.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s):
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_digit</span>(d):
+        <span style="font-weight: bold;">return</span> d &gt;= <span style="font-style: italic;">"0"</span> <span style="font-weight: bold;">and</span> d &lt;= <span style="font-style: italic;">"9"</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_signal</span>(s):
+        <span style="font-weight: bold;">return</span> s == <span style="font-style: italic;">"+"</span> <span style="font-weight: bold;">or</span> s == <span style="font-style: italic;">"-"</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">all_digits</span>(s):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(s) == 0:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> s:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_digit(d):
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_integer</span>(s):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(s) == 0:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">return</span> (is_signal(s[0]) <span style="font-weight: bold;">and</span> all_digits(s[1:])) <span style="font-weight: bold;">or</span> all_digits(s)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_decimal</span>(s):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(s) == 0 <span style="font-weight: bold;">or</span> <span style="font-style: italic;">"."</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> s:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> is_signal(s[0]):
+            s = s[1:]
+        parts = s.split(<span style="font-style: italic;">"."</span>)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(parts) != 2:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(parts[0]) == 0:
+            <span style="font-weight: bold;">return</span> all_digits(parts[1])
+        <span style="font-weight: bold;">return</span> all_digits(parts[0]) <span style="font-weight: bold;">and</span> (<span style="font-weight: bold;">len</span>(parts[1]) == 0 <span style="font-weight: bold;">or</span> all_digits(parts[1]))
+
+    s = s.lower()
+    <span style="font-weight: bold;">if</span> <span style="font-style: italic;">"e"</span> <span style="font-weight: bold;">in</span> s:
+        parts = s.split(<span style="font-style: italic;">"e"</span>)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(parts) != 2:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">return</span> (is_decimal(parts[0]) <span style="font-weight: bold;">or</span> is_integer(parts[0])) <span style="font-weight: bold;">and</span> is_integer(parts[1])
+
+    <span style="font-weight: bold;">return</span> is_decimal(s) <span style="font-weight: bold;">or</span> is_integer(s)
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"2"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"0089"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"-0.1"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"+3.14"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"4."</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"-.9"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"2e10"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"-90E3"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"3e+7"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"+6e-1"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"53.5e93"</span>)
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"-123.456e789"</span>)
+
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"abc"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"1a"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"1e"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"e3"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"99e2.5"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"--6"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"-+3"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"95a54e53"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> solve(<span style="font-style: italic;">"0.."</span>)
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isNumber</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">regular expression: ^([+-]?\d+|[+-]?(\d+[.]|\d+[.]\d+|[.]\d+))([eE][+-]?\d+)?$</span>
+        <span style="font-weight: bold;">return</span> solve(s)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

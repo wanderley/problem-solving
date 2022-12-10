@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stack</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Stack</h1>
+
+<div id="outline-container-org231e5f7" class="outline-2">
+<h2 id="org231e5f7">Max Stack</h2>
+<div class="outline-text-2" id="text-org231e5f7">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">MaxStack</span>:
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.freq = {}
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">stack</span> = []
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">pq</span> = []
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">push</span>(<span style="font-weight: bold;">self</span>, x: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">self</span>.freq[<span style="font-weight: bold; font-style: italic;">x</span>] = <span style="font-weight: bold;">self</span>.freq.get(x, 0) + 1
+        <span style="font-weight: bold;">self</span>.stack.append((x, <span style="font-weight: bold;">self</span>.freq[x]))
+        heappush(<span style="font-weight: bold;">self</span>.pq, (-x, -<span style="font-weight: bold;">self</span>.freq[x]))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">pop</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; font-style: italic;">_</span> = <span style="font-weight: bold;">self</span>.stack.pop()
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">freq</span>[<span style="font-weight: bold; font-style: italic;">x</span>] -= 1
+        <span style="font-weight: bold;">self</span>._clean_up()
+        <span style="font-weight: bold;">return</span> x
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">top</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.stack[-1][0]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">peekMax</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> -<span style="font-weight: bold;">self</span>.pq[0][0]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">popMax</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; font-style: italic;">_</span> = heappop(<span style="font-weight: bold;">self</span>.pq)
+        <span style="font-weight: bold; font-style: italic;">x</span> = -x
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">freq</span>[<span style="font-weight: bold; font-style: italic;">x</span>] -= 1
+        <span style="font-weight: bold;">self</span>._clean_up()
+        <span style="font-weight: bold;">return</span> x
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_clean_up</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.stack) &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.freq[<span style="font-weight: bold;">self</span>.stack[-1][0]] != <span style="font-weight: bold;">self</span>.stack[-1][1]:
+            <span style="font-weight: bold;">self</span>.stack.pop()
+
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.pq) &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.freq[-<span style="font-weight: bold;">self</span>.pq[0][0]] != -<span style="font-weight: bold;">self</span>.pq[0][1]:
+            heappop(<span style="font-weight: bold;">self</span>.pq)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

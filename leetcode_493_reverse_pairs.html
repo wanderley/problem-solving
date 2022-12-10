@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 493. Reverse Pairs</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 493. Reverse Pairs</h1>
+<ul class="org-ul">
+<li><a href="can_we_reuse_or_extend_a_solution_from_a_sub_problem_to_solve_the_next_sub_problem_more_efficiently.html#ID-26656051-E32D-42FE-9315-05ADB46A1A82">Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?</a>  The number of reverse pairs in the last element is zero.  We will have only one reverse pair if \(a[n-2] > 2 \times a[n-1]\).  On iteration \(i\), be \(b\) an array with numbers \(2 \times a[i+1], ... 2 \times a[n-1]\).  The problem is then finding the number of number in \(b\) that are smaller than \(a[i]\).  After processing \(i\), we can add \(2 \times a[i]\) to the list and continue to the next index.  Time complexity is \(O(n \times \log n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">reversePairs</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        sl = SortedList()
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> num <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">reversed</span>(nums):
+            <span style="font-weight: bold; font-style: italic;">p</span> = sl.bisect_left(num)
+            <span style="font-weight: bold; font-style: italic;">ans</span> += p
+            sl.add(num * 2)
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().reversePairs([1, 3, 2, 3, 1]) == 2
+<span style="font-weight: bold;">assert</span> Solution().reversePairs([2, 4, 3, 5, 1]) == 3
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Other way to solve this problem is to implement a <a href="merge_sort.html#ID-1A99D477-2FF8-481E-80B4-735122D0A8D7">Merge Sort</a> and count the number of swaps was done.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).</li>
+</ul>
+</div>
+</body>
+</html>

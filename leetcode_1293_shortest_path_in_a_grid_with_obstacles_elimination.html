@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1293. Shortest Path in a Grid with Obstacles Elimination</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1293. Shortest Path in a Grid with Obstacles Elimination</h1>
+<ul class="org-ul">
+<li><a href="mistake_picked_the_wrong_data_structure.html#ID-8E8E98F9-335A-4279-B523-549FD9025A0C">Mistake: Picked the wrong data structure</a>:  A priority queue was unnecessary to solve the problem.</li>
+</ul>
+
+<p>
+<a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Yes.  The problem becomes do a <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a> starting from node \((0, 0)\) and ending on \((n-1, m-1)\).  Time and space complexity is \(O(N \times M \times K)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">shortestPath</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(grid[0])
+
+        <span style="font-weight: bold; font-style: italic;">queue</span> = []
+        <span style="font-weight: bold; font-style: italic;">vis</span> = [[[<span style="font-weight: bold; text-decoration: underline;">False</span>] * (k + 1) <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M)] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+
+        queue.append((0, 1 <span style="font-weight: bold;">if</span> grid[0][0] == 1 <span style="font-weight: bold;">else</span> 0, 0, 0))
+        <span style="font-weight: bold;">for</span> d, c, i, j <span style="font-weight: bold;">in</span> queue:
+            <span style="font-weight: bold;">if</span> c &gt; <span style="font-weight: bold; font-style: italic;">k</span>:
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold;">if</span> vis[i][j][c]:
+                <span style="font-weight: bold;">continue</span>
+            vis[i][j][<span style="font-weight: bold; font-style: italic;">c</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+            <span style="font-weight: bold;">if</span> i == N - 1 <span style="font-weight: bold;">and</span> j == M - 1:
+                <span style="font-weight: bold;">return</span> d
+
+            <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                nd = d + 1
+                nc = c + (1 <span style="font-weight: bold;">if</span> grid[i][j] == 1 <span style="font-weight: bold;">else</span> 0)
+                <span style="font-weight: bold;">if</span> 0 &lt;= di + i &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= dj + j &lt; M <span style="font-weight: bold;">and</span> nc &lt;= k:
+                    queue.append((nd, nc, di + i, dj + j))
+
+        <span style="font-weight: bold;">return</span> -1
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().shortestPath([[0, 0, 0], [1, 1, 0], [0, 0, 0], [0, 1, 1], [0, 0, 0]], 1)
+    == 6
+)
+<span style="font-weight: bold;">assert</span> Solution().shortestPath([[0, 1, 1], [1, 1, 1], [1, 0, 0]], 1) == -1
+</pre>
+</div>
+</div>
+</body>
+</html>

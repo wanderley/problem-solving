@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1289. Minimum Falling Path Sum II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1289. Minimum Falling Path Sum II</h1>
+<ul class="org-ul">
+<li><a href="mistake_incorrect_evaluation_of_solution_s_viability.html#ID-DA951820-DBB5-4A7F-9401-DF5860EFAB8A">Mistake: Incorrect evaluation of solution's viability</a>.  First solution was \(O(n^4)\) which was solution after manual test with \(100 \times 100\) grid.</li>
+<li><a href="blackbox_you_solved_a_similar_problem.html#ID-37AF9679-42D1-4A85-9927-2A590268AD87">Blackbox: You solved a similar problem</a>,  where you had a fast way to pick the best result from the left and right (<a href="leetcode_1563_stone_game_v.html#ID-D00AC85C-A22C-4946-B379-812595D8387B">Leetcode: 1563. Stone Game V</a>).</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  The best path that ends on \((i, j)\) is either one path that ended on its left or its right.  Be \(left(j)\) the minimum path that ended on any of \((i-1, 0), (i-1, 1), .., (i-1, j)\) cells, and \(right(j)\) the minimum path that ended on any of \((i-1, j+1), (i-1, j+2), .., (i-1, M-1)\).  Given that, we can compute \(dp[i][j]=grid[i][j]+min(left[j-1], right[j+1])\).  Time and space complexity is \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minFallingPathSum</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(grid[0])
+
+        <span style="font-weight: bold;">if</span> N == 1 <span style="font-weight: bold;">and</span> M == 1:
+            <span style="font-weight: bold;">return</span> grid[0][0]
+
+        dp = [[<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * M <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        left = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * M
+        right = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * M
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> i == 0:
+                    dp[i][<span style="font-weight: bold; font-style: italic;">j</span>] = grid[i][j]
+                    <span style="font-weight: bold;">continue</span>
+
+                dp[i][<span style="font-weight: bold; font-style: italic;">j</span>] = grid[i][j]
+                <span style="font-weight: bold;">if</span> j == 0:
+                    dp[i][<span style="font-weight: bold; font-style: italic;">j</span>] += right[j + 1]
+                <span style="font-weight: bold;">elif</span> j == M - 1:
+                    dp[i][<span style="font-weight: bold; font-style: italic;">j</span>] += left[j - 1]
+                <span style="font-weight: bold;">else</span>:
+                    dp[i][<span style="font-weight: bold; font-style: italic;">j</span>] += <span style="font-weight: bold;">min</span>(left[j - 1], right[j + 1])
+
+            <span style="font-weight: bold;">if</span> i &lt; M - 1:
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                    left[<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold;">min</span>(dp[i][j], <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>) <span style="font-weight: bold;">if</span> j == 0 <span style="font-weight: bold;">else</span> left[j - 1])
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M - 1, -1, -1):
+                    right[<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold;">min</span>(
+                        dp[i][j], <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>) <span style="font-weight: bold;">if</span> j == M - 1 <span style="font-weight: bold;">else</span> right[j + 1]
+                    )
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>(dp[N - 1][j] <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M))
+
+
+<span style="font-weight: bold;">assert</span> Solution().minFallingPathSum([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == 13
+<span style="font-weight: bold;">assert</span> Solution().minFallingPathSum([[7]]) == 7
+</pre>
+</div>
+</div>
+</body>
+</html>

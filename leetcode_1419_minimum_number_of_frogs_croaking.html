@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1419. Minimum Number of Frogs Croaking</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1419. Minimum Number of Frogs Croaking</h1>
+
+<div id="outline-container-org58428bf" class="outline-2">
+<h2 id="org58428bf">Patterns</h2>
+<div class="outline-text-2" id="text-org58428bf">
+<ul class="org-ul">
+<li><a href="pattern_optimization_problem_to_find_minimum_maximum_number_of_x_to_cover_y.html#ID-45D8FD21-992F-4073-8EC6-7695FAA0E3AB">Pattern: Optimization problem to find minimum/maximum number of X to cover Y</a>.</li>
+
+<li><a href="pattern_problem_allows_an_operation_agent_thing_to_be_used_multiple_times.html#ID-8AC0BCE3-B400-477D-B4F0-F56E6BD308A3">Pattern: Problem allows an operation/agent/thing to be used multiple times</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org125cde4" class="outline-2">
+<h2 id="org125cde4">Prompts</h2>
+<div class="outline-text-2" id="text-org125cde4">
+<ul class="org-ul">
+<li><a href="can_we_solve_the_problem_using_a_greedy_approach.html#ID-1CA3366B-D045-4BF4-9E39-DFA5131EF937">Can we solve the problem using a greedy approach?</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb04c52a" class="outline-2">
+<h2 id="orgb04c52a">Solution</h2>
+<div class="outline-text-2" id="text-orgb04c52a">
+<p>
+The fact that one frog can croak multiple times means that two independent croaks can be performed by the same frog.  For example, one frog can produce "croakcroak" while two frogs are required to produce "crcroakoakcroak" ("aabbbbbaaaaaaaa" or "aabbbbbaaabbbbb" where \(a\) and \(b\) represents two frogs).  Thus, we can postpone the decision to add one frog to the answer iff all other frogs are in busy croaking.  Doing so, the algorithm is making a locally optimal choice (<a href="greedy_algorithm.html#ID-FFC75108-C74E-44B1-9B60-B3A22B15E617">Greedy algorithm</a>).
+</p>
+
+<p>
+The solution consists on iterating over input letters counting how many frogs are busy on each letter "c", "r", "o", "a" and "k".  If the next letter is a "c", we only add a new frog if at least one frog finished a "k" letter.  After processing all letters, the number of frogs on the letter "k" is the final answer iff there is no frog stuck on any other letter.  Time complexity is \(O(n)\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minNumberOfFrogs</span>(<span style="font-weight: bold;">self</span>, croakOfFrogs: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        c = Counter()
+        <span style="font-weight: bold; font-style: italic;">p</span> = {<span style="font-weight: bold; font-style: italic;">a</span>: b <span style="font-weight: bold;">for</span> a, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(<span style="font-style: italic;">"roak"</span>, <span style="font-style: italic;">"croak"</span>)}
+        <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> croakOfFrogs:
+            c[<span style="font-weight: bold; font-style: italic;">x</span>] += 1
+            <span style="font-weight: bold;">if</span> x == <span style="font-style: italic;">"c"</span>:
+                c[<span style="font-style: italic;">"k"</span>] -= 1 <span style="font-weight: bold;">if</span> c[<span style="font-style: italic;">"k"</span>] <span style="font-weight: bold;">else</span> 0
+            <span style="font-weight: bold;">elif</span> c[p[x]]:
+                c[<span style="font-weight: bold; font-style: italic;">p</span>[x]] -= 1
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">return</span> -1
+        <span style="font-weight: bold;">return</span> c[<span style="font-style: italic;">"k"</span>] <span style="font-weight: bold;">if</span> c[<span style="font-style: italic;">"k"</span>] == c.total() <span style="font-weight: bold;">else</span> -1
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2455. Average Value of Even Numbers That Are Divisible by Three</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2455. Average Value of Even Numbers That Are Divisible by Three</h1>
+
+<div id="outline-container-org0de00eb" class="outline-2">
+<h2 id="org0de00eb">Understand the problem</h2>
+<div class="outline-text-2" id="text-org0de00eb">
+<p>
+Find the median of numbers divisible by 2 and 3.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaf657c2" class="outline-2">
+<h2 id="orgaf657c2">Devise the plan</h2>
+<div class="outline-text-2" id="text-orgaf657c2">
+<p>
+Filter numbers divisible by 6 and compute their average.  Time and space complexity is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-orgdbeba46" class="outline-3">
+<h3 id="orgdbeba46">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgdbeba46">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">averageValue</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        xs = [n <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums <span style="font-weight: bold;">if</span> n % 2 == 0 <span style="font-weight: bold;">and</span> n % 3 == 0]
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> xs:
+            <span style="font-weight: bold;">return</span> 0
+        <span style="font-weight: bold;">return</span> floor(<span style="font-weight: bold;">sum</span>(xs) / <span style="font-weight: bold;">len</span>(xs))
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

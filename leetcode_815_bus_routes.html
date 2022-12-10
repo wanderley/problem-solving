@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 815. Bus Routes</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 815. Bus Routes</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>. Did not think about <code>source = target</code> case.</li>
+
+<li><a href="mistake_incorrect_evaluation_of_solution_s_viability.html#ID-DA951820-DBB5-4A7F-9401-DF5860EFAB8A">Mistake: Incorrect evaluation of solution's viability</a>.  Thought that <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a> alternating between bus and stop would pass in the time limit.</li>
+
+<li><a href="pattern_find_shortest_path_on_directed_acyclic_graph.html#ID-A32AAFD2-5569-4417-8085-04005F85A435">Pattern: Find shortest path on a graph</a>.</li>
+
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Stops are vertices and they are connected if there is a route that connect them.  Create a map from stops to routes and them perform a <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a> starting on <code>source</code>.  Time and space complexity is \(O(n \times m)\).</li>
+</ul>
+
+<p>
+Solution building the Build adjacency matrix:
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numBusesToDestination</span>(
+        <span style="font-weight: bold;">self</span>, routes: List[List[<span style="font-weight: bold;">int</span>]], source: <span style="font-weight: bold;">int</span>, target: <span style="font-weight: bold;">int</span>
+    ) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> source == target:
+            <span style="font-weight: bold;">return</span> 0
+
+        stops = {}
+        <span style="font-weight: bold;">for</span> bus, r <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(routes):
+            <span style="font-weight: bold;">for</span> stop <span style="font-weight: bold;">in</span> r:
+                stops.setdefault(stop, [])
+                stops[stop].append(bus)
+
+        vis = [<span style="font-weight: bold; text-decoration: underline;">False</span>] * <span style="font-weight: bold;">len</span>(routes)
+        adj = [<span style="font-weight: bold;">set</span>() <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(routes))]
+        <span style="font-weight: bold;">for</span> _, bus <span style="font-weight: bold;">in</span> stops.items():
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(bus)):
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i + 1, <span style="font-weight: bold;">len</span>(bus)):
+                    adj[bus[i]].add(bus[j])
+                    adj[bus[j]].add(bus[i])
+
+        queue = [(b, 1) <span style="font-weight: bold;">for</span> b <span style="font-weight: bold;">in</span> stops.get(source, [])]
+        <span style="font-weight: bold;">for</span> u, steps <span style="font-weight: bold;">in</span> queue:
+            <span style="font-weight: bold;">if</span> target <span style="font-weight: bold;">in</span> routes[u]:
+                <span style="font-weight: bold;">return</span> steps
+            <span style="font-weight: bold;">if</span> vis[u]:
+                <span style="font-weight: bold;">continue</span>
+            vis[<span style="font-weight: bold; font-style: italic;">u</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> adj[u]:
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> vis[v]:
+                    queue.append((v, steps + 1))
+        <span style="font-weight: bold;">return</span> -1
+
+
+<span style="font-weight: bold;">assert</span> Solution().numBusesToDestination([[1, 2, 7], [3, 6, 7]], 1, 6) == 2
+<span style="font-weight: bold;">assert</span> (
+    Solution().numBusesToDestination(
+        [[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], 15, 12
+    )
+    == -1
+)
+</pre>
+</div>
+
+<p>
+Without building the adjacency matrix:
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numBusesToDestination</span>(
+        <span style="font-weight: bold;">self</span>, routes: List[List[<span style="font-weight: bold;">int</span>]], source: <span style="font-weight: bold;">int</span>, target: <span style="font-weight: bold;">int</span>
+    ) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> source == target:
+            <span style="font-weight: bold;">return</span> 0
+
+        stops = {}
+        <span style="font-weight: bold;">for</span> bus, r <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(routes):
+            <span style="font-weight: bold;">for</span> stop <span style="font-weight: bold;">in</span> r:
+                stops.setdefault(stop, [])
+                stops[stop].append(bus)
+
+        vis = [<span style="font-weight: bold; text-decoration: underline;">False</span>] * <span style="font-weight: bold;">len</span>(routes)
+        queue = [(source, 0)]
+        <span style="font-weight: bold;">for</span> u, steps <span style="font-weight: bold;">in</span> queue:
+            <span style="font-weight: bold;">if</span> u == target:
+                <span style="font-weight: bold;">return</span> steps
+            <span style="font-weight: bold;">for</span> bus <span style="font-weight: bold;">in</span> stops.get(u, []):
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> vis[bus]:
+                    vis[<span style="font-weight: bold; font-style: italic;">bus</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                    <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> routes[bus]:
+                        queue.append((v, steps + 1))
+        <span style="font-weight: bold;">return</span> -1
+
+
+<span style="font-weight: bold;">assert</span> Solution().numBusesToDestination([[1, 2, 7], [3, 6, 7]], 1, 6) == 2
+<span style="font-weight: bold;">assert</span> (
+    Solution().numBusesToDestination(
+        [[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], 15, 12
+    )
+    == -1
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

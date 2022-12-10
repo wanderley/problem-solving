@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 357. Count Numbers with Unique Digits</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 357. Count Numbers with Unique Digits</h1>
+
+<div id="outline-container-orgabd1467" class="outline-2">
+<h2 id="orgabd1467">Brute-Force Search</h2>
+<div class="outline-text-2" id="text-orgabd1467">
+<p>
+The brute-force approach consists on iterating over all numbers between 0 and \(x\) and counting ones that have only unique digits.  The following algorithm has time complexity of \(x \times 16\) which is \(16\times10^8 = 1,600,000,000\) in the worst-case scenario.  The 16 factor comes from the fact that each number needs to be decomposed on digits twice.
+</p>
+
+<pre class="example">
+None
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org41d5b24" class="outline-2">
+<h2 id="org41d5b24">Dynamic Programming</h2>
+<div class="outline-text-2" id="text-org41d5b24">
+<p>
+This problem can be solved using <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a>.  The numbers are generated digit while the used digits are kept on a set to avoid the same digit to be used twice.  It also needs to keep an extra variable to flag when the digit zero can be used, since the leading zeros aren't count as digits in the number.  There are \(x \times 2^{10} \times 2 \leq 8 \times 2^{10} \times 2 = 2^{14} = 16\,384\) different possible states, where \(x\) is the number of digits to be generated, \(2^10\) is the number of possible ways to select digits that are used in the number, and finally 2 for the zero flag.  The following algorithm has time complexity of \(O(2^{14} \times 10)\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org06931f6" class="outline-2">
+<h2 id="org06931f6"><a href="math.html#ID-DBDF96ED-7731-40F0-BC12-C6B6C29FEF42">Math</a></h2>
+<div class="outline-text-2" id="text-org06931f6">
+<p>
+Be \(f(x)\) the number of numbers with unique digits less or equal to \(x\).  We have that \(f(0)=1\), \(f(1)=10\), \(f(2)=9\times9\) because there are 9 candidates for the first digit (\(1..9\)) and 9 candidates for the second digit (excluding the digit used in the first digit).  For \(f(3)=z + f(2)\) where \(z\) is the number of number with unique digits and exactly 3 digits.  There are 9 candidates for the first digit of \(z\), 9 for the second because 0 can be used but the number used on the first digit needs to be excluded, and finally 8 for the third.  The same process can be applied when \(x\geq4\).  The following algorithm has time complexity of \(O(x)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">count</span>(x):
+    <span style="font-weight: bold;">if</span> x == 0:
+        <span style="font-weight: bold;">return</span> 1
+
+    ans = 9
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(10 - x + 1, 10):
+        ans = ans * i
+    <span style="font-weight: bold;">return</span> ans + count(x - 1)
+
+
+<span style="font-weight: bold;">assert</span> count(3) == 739
+<span style="font-weight: bold;">assert</span> count(8) == 2345851
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countNumbersWithUniqueDigits</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> count(n)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

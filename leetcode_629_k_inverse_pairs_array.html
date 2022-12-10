@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 629. K Inverse Pairs Array</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 629. K Inverse Pairs Array</h1>
+<ul class="org-ul">
+<li><a href="blackbox_you_solved_a_similar_problem.html#ID-37AF9679-42D1-4A85-9927-2A590268AD87">Blackbox: You solved a similar problem</a> where the solution was to construct the solution from the last move to the first one (<a href="leetcode_312_burst_balloons.html#ID-AE256719-D28F-4CF0-A027-73E79E6EF5C4">Leetcode: 312. Burst Balloons</a>).</li>
+
+<li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  Be \(a\) an empty array where we will fill with permutation of \(0..(n-1)\).  Pick a position \(i\) to put the number 1.  How many inversions will it create?  The answer is \(i\), since all \(i\) numbers on \(0..(i-1)\) are greater than \(a[i]\).  After doing the same with 2, we can notice that the position of 1 doesn't affect if we consider that it was excluded from the array.  In other words, we try to put 2 in an empty array with \(n-1\) positions.  The following solution implements this strategy that we can compute part of it using a suffix sum.  Time complexity is \(O(n \times k)\) and space complexity is \(O(k)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">kInversePairs</span>(<span style="font-weight: bold;">self</span>, N: <span style="font-weight: bold;">int</span>, K: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        MOD = 10**9 + 7
+
+        <span style="font-weight: bold; font-style: italic;">right</span> = [0] * (K + 1)
+        <span style="font-weight: bold; font-style: italic;">right</span>[0] = 1
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(2, N + 1):
+            <span style="font-weight: bold; font-style: italic;">cur</span> = [0] * (K + 1)
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(K, -1, -1):
+                <span style="font-weight: bold; font-style: italic;">cur</span>[<span style="font-weight: bold; font-style: italic;">k</span>] = right[k - <span style="font-weight: bold;">min</span>(n, k + 1) + 1] - (
+                    right[k + 1] <span style="font-weight: bold;">if</span> k + 1 &lt;= K <span style="font-weight: bold;">else</span> 0
+                )
+                <span style="font-weight: bold;">if</span> k &lt; <span style="font-weight: bold; font-style: italic;">K</span>:
+                    cur[<span style="font-weight: bold; font-style: italic;">k</span>] = cur[k] + cur[k + 1]
+                <span style="font-weight: bold; font-style: italic;">cur</span>[<span style="font-weight: bold; font-style: italic;">k</span>] = cur[k] % MOD
+            <span style="font-weight: bold; font-style: italic;">right</span> = cur
+
+        <span style="font-weight: bold;">return</span> right[K]
+
+
+<span style="font-weight: bold;">assert</span> Solution().kInversePairs(3, 0) == 1
+<span style="font-weight: bold;">assert</span> Solution().kInversePairs(3, 1) == 2
+</pre>
+</div>
+</div>
+</body>
+</html>

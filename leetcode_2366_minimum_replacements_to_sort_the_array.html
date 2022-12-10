@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2366. Minimum Replacements to Sort the Array</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2366. Minimum Replacements to Sort the Array</h1>
+<ul class="org-ul">
+<li><a href="mistake_did_not_try_hard_to_solve_alternative_problem.html#ID-AC9291C6-4C72-4143-80F2-0D414EF7B681">Mistake: Did not try hard to solve alternative problem</a>.  I should have spent more times thinking on ways to find a close formula.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  We will never split the last number of the array.  For the other numbers, we want to split them close as possible to the current bound.  Time complexity is \(O(n)\) and space is \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumReplacement</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold; font-style: italic;">cur</span> = nums[-1]
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 2, -1, -1):
+            <span style="font-weight: bold;">if</span> nums[i] &lt;= <span style="font-weight: bold; font-style: italic;">cur</span>:
+                cur = nums[i]
+            <span style="font-weight: bold;">elif</span> cur == 1:
+                ans += nums[i] - 1
+            <span style="font-weight: bold;">else</span>:
+                j = (nums[i] + cur - 1) // cur
+                ans += j - 1
+                cur = nums[i] // j
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().minimumReplacement([3, 9, 3]) == 2
+<span style="font-weight: bold;">assert</span> Solution().minimumReplacement([1, 2, 3, 4, 5]) == 0
+</pre>
+</div>
+</div>
+</body>
+</html>

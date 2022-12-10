@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 564. Find the Closest Palindrome</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 564. Find the Closest Palindrome</h1>
+<ul class="org-ul">
+<li><a href="pattern_search_for_closest_number_of_some_kind.html#ID-05007800-BCCC-415E-A4D3-7B69ABC73588">Pattern: Search for closest number of some kind</a>.  Generate all closest palindromes and pick the optimal one: closest palindrome with less digits is "999&#x2026;", with more digits "100..001" and others can be generate by summing or subtracting one from the middle digits.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Build a palindrome with the input number by splitting it and them combining the first part in reverse order.  The answer will be doing this but adding +1, +0 or -1 to the split part.  Time and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">nearestPalindromic</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        inum = <span style="font-weight: bold;">int</span>(num)
+        <span style="font-weight: bold;">if</span> inum &lt;= 10:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">str</span>(inum - 1)
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(num)
+        <span style="font-weight: bold; font-style: italic;">c</span> = <span style="font-weight: bold;">set</span>([<span style="font-weight: bold;">int</span>(<span style="font-style: italic;">"9"</span> * (N - 1)), <span style="font-weight: bold;">int</span>(<span style="font-style: italic;">"1"</span> + (<span style="font-style: italic;">"0"</span> * (N - 1)) + <span style="font-style: italic;">"1"</span>)])
+        <span style="font-weight: bold;">for</span> e <span style="font-weight: bold;">in</span> 0, 1:
+            <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> +1, 0, -1:
+                <span style="font-weight: bold; font-style: italic;">p</span> = <span style="font-weight: bold;">str</span>(<span style="font-weight: bold;">int</span>(num[:N // 2 + e]) + d)
+                c.add(<span style="font-weight: bold;">int</span>(p[:-1] + p[::-1]))
+                c.add(<span style="font-weight: bold;">int</span>(p + p[::-1]))
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(c):
+            <span style="font-weight: bold;">if</span> x == inum:
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">abs</span>(ans - inum) &gt; <span style="font-weight: bold;">abs</span>(x - inum):
+                ans = x
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">str</span>(ans)
+</pre>
+</div>
+</div>
+</body>
+</html>

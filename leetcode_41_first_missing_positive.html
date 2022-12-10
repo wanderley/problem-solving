@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 41. First Missing Positive</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 41. First Missing Positive</h1>
+<p>
+<a href="https://leetcode.com/problems/first-missing-positive/">Problem Statement</a>: Given an unsorted array \(nums\), return the smallest missing positive integer.  The restriction is that the algorithm should have time complexity of \(O(n)\) and space complexity of \(O(1)\).
+</p>
+
+<p>
+The hint about the time complexity made me to focus on what decision I could take while processing each element of the array.  By any mean, this is the wrong way to think, but I got some wrong ideas before finding the right one.
+</p>
+
+<p>
+<b>Wrong idea 1:</b> Suppose that \(\text{nums}=[3, 2, 1]\).  What about if we track the intervals created after iterating over each element.  After we pass through number 3, we know that the answer is either \(1..2\) or \(4\).  After the number \(2\), the intervals become \(1..1\) and \(4\).  After the number \(1\), we know that the solution needs to be \(4\).  The idea works for this example, but it doesn't for \(\text{nums}=[5, 4, 2, 1]\).  I tried to fix this idea, but it would require extra memory to do.
+</p>
+
+<p>
+<b>Wrong idea 2:</b> After the failure tentative, I started to ponder what is the relationship between the answer and the numbers on the array.  For example, the answer is \(3\) if the input is \([5, 4, 2, 1]\).  Is there a way to discover this number using a formula?  I tried without success to find the number by looking to the sum of the numbers in the array.  For the example, the sum of the array is \(12\) while \(1+2+3+4+5=15\), so \(15-12=3\) which is the number missing in the array.  Note that it is using the sum \(1+2+...+(n+1)\) to find the missing number and not \(1+...+n\).  The problem is that the array can have negative numbers and numbers greater than or equal to \(n\).  Those numbers are useless to this idea and having more than one of those would make the difference of the sums to represent multiple numbers.  Failed, but this observation led me to the right idea.
+</p>
+
+<p>
+Suppose that the array is \([5, 4, 2, 1]\).  The answer should be 1 if 1 isn't in the array.  The answer should be 2 if 2 isn't in the array and so on.  In both cases, these numbers are contained in the array.  <a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  For example, suppose that the array is sorted: \([1, 2, 4, 5]\).  If there is 1 in the array, it should be in the first position, 2 should be in the second position and so on.  The first position of the array that breaks this assertion is the answer.  In this example, the number 4 is in the third position.  So, 3 is the answer that we are looking for.  We can't use <code>sort</code> since the solution must be \(O(n)\) and the sort would make it \(O(n\log n)\).  But that is not the only problem.  Suppose that the array is \([5, -1, 2, 1]\).  The sorted array is \([-1, 1, 2, 5]\) and the suggested solution would return 1, since -1 is sitting on the first position.  The conclusion here is that we don't really want to sort the array, but re-arrange its elements in a way that the idea works.  For the second example, we would like the array to re-arranged as follow: \([1, 2, -1, 5]\) or \([1, 2, 5, -1]\).  The position of -1 and 5 doesn't matter, but 1 should be on the first position and 2 should on the second position.  To do so, we can iterating over each number and either skip it if there is no "right" place for it in the array (e.g. -1 and 5 in the last example), or swap it with the number that sits on its position.  Let's run this process on the input \([5, -1, 2, 1]\).
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Input</td>
+<td class="org-left">Output</td>
+<td class="org-left">Explanation</td>
+</tr>
+
+<tr>
+<td class="org-left">\([\underline{5}, -1, 2, 1]\)</td>
+<td class="org-left">\([\underline{5}, -1, 2, 1]\)</td>
+<td class="org-left">Nothing to do.</td>
+</tr>
+
+<tr>
+<td class="org-left">\([5, \underline{-1}, 2, 1]\)</td>
+<td class="org-left">\([5, \underline{-1}, 2, 1]\)</td>
+<td class="org-left">Nothing to do.</td>
+</tr>
+
+<tr>
+<td class="org-left">\([5, -1, \underline{2}, 1]\)</td>
+<td class="org-left">\([5, \underline{2}, -1, 1]\)</td>
+<td class="org-left">Swap 2 with -1.</td>
+</tr>
+
+<tr>
+<td class="org-left">\([5, 2, -1, \underline{1}]\)</td>
+<td class="org-left">\([\underline{1}, 2, -1, 5]\)</td>
+<td class="org-left">Swap 1 with 5.</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Is there an edge case for this solution?  Suppose that the array is \([4, 0, 1, 2]\).  If we swap 4 and 2 and move to the next index, we would have the array as \([2, 0, 1, 4]\).  The problem here is that 2 wouldn't have a chance to be moved to its position.  So, the swap operation should be applied as many times is necessary, until the number of the source position is either one that should be skipped or the correct number.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Input</td>
+<td class="org-left">Output</td>
+<td class="org-left">Explanation</td>
+</tr>
+
+<tr>
+<td class="org-left">\([\underline4, 0, 1, 2]\)</td>
+<td class="org-left">\([2, 0, 1, \underline4]\)</td>
+<td class="org-left">Swap 4 with 2.</td>
+</tr>
+
+<tr>
+<td class="org-left">\([\underline2, 0, 1, 4]\)</td>
+<td class="org-left">\([0, \underline2, 1, 4]\)</td>
+<td class="org-left">Swap 2 with 0.</td>
+</tr>
+
+<tr>
+<td class="org-left">\([\underline0, 2, 1, 4]\)</td>
+<td class="org-left">\([\underline0, 2, 1, 4]\)</td>
+<td class="org-left">Nothing to do.</td>
+</tr>
+
+<tr>
+<td class="org-left">\([0, 2, \underline1, 4]\)</td>
+<td class="org-left">\([\underline1, 2, 0, 4]\)</td>
+<td class="org-left">Swap 1 with 0.</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The last edge case is when you swap two equal numbers: \([1, 1]\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\)</li>
+<li>Space complexity: \(O(1)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(nums):
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">swap</span>(i):
+        <span style="font-weight: bold; font-style: italic;">v</span> = nums[i]
+        <span style="font-weight: bold;">if</span> v &lt;= 0 <span style="font-weight: bold;">or</span> v &gt; <span style="font-weight: bold;">len</span>(nums) <span style="font-weight: bold;">or</span> v == i + 1:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> nums[i] == nums[v - 1]:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold; font-style: italic;">nums</span>[<span style="font-weight: bold; font-style: italic;">i</span>], <span style="font-weight: bold; font-style: italic;">nums</span>[v - 1] = nums[v - 1], v
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(nums)):
+        <span style="font-weight: bold;">while</span> swap(i):
+            <span style="font-weight: bold;">pass</span>
+    <span style="font-weight: bold;">for</span> i, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(nums):
+        <span style="font-weight: bold;">if</span> v != i + 1:
+            <span style="font-weight: bold;">return</span> i + 1
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>(nums) + 1
+
+
+<span style="font-weight: bold;">assert</span> solve([1, 2, 0]) == 3
+<span style="font-weight: bold;">assert</span> solve([3, 4, -1, 1]) == 2
+<span style="font-weight: bold;">assert</span> solve([7, 8, 9, 11, 12]) == 1
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">firstMissingPositive</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(nums)
+</pre>
+</div>
+</div>
+</body>
+</html>

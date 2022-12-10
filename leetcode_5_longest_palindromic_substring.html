@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 5. Longest Palindromic Substring</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 5. Longest Palindromic Substring</h1>
+<p>
+<a href="https://leetcode.com/problems/longest-palindromic-substring/">Problem Statement</a>: Given a string \(s\) of length \(n\), return a longest palindromic substring in \(s\).
+</p>
+
+<p>
+A naive solution consists searching for the longest palindromic substring on all possible substrings.  There are \(n^2\) substrings, and it takes at most \(n/2\) iterations to check if each one of them is a palindrome or not.  The total time complexity for this approach is \(O(n^3)\) which is too slow given the problem's constraints.
+</p>
+
+<p>
+A palindromic substring can be seen as a particular interval on \(s\).  A prompt that come in mind is: <a href="how_could_you_find_the_optimal_interval_knowing_a_tiny_part_of_it.html#ID-29DB5011-3209-4B10-BAA5-823D1ADB9F47">How could we find the optimal interval knowing a tiny part of it?</a>  What tiny part of the longest palindromic substring would be useful to reconstruct it?  The position of its center!  Reconstructing a longest palindromic substring from its center is easy because we just need to check if the right side match with the left side reversed.  This process consumes \(O(n)\).  We don't know such position, but we can test all of them!  There are at most \(2\times n\) possible centers: \(n\) if the longest palindromic substring has an odd length and other \(n\) if it has an even length.  For each one of them from left to right, we can generate the longest palindromic and check if it is longer than the longest that we discovered so far.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n^2)\)</li>
+<li>Space complexity: \(O(1)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s):
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">longest_palindrome</span>(i, j=<span style="font-weight: bold; text-decoration: underline;">None</span>):
+        <span style="font-weight: bold;">if</span> j <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            j = i
+        <span style="font-weight: bold;">while</span> i &gt;= 0 <span style="font-weight: bold;">and</span> j &lt; <span style="font-weight: bold;">len</span>(s) <span style="font-weight: bold;">and</span> s[i] == s[j]:
+            i -= 1
+            j += 1
+
+        <span style="font-weight: bold;">return</span> s[i + 1 : j]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">pick_best</span>(a, b):
+        <span style="font-weight: bold;">return</span> a <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(a) &gt; <span style="font-weight: bold;">len</span>(b) <span style="font-weight: bold;">else</span> b
+
+    ans = <span style="font-style: italic;">""</span>
+    <span style="font-weight: bold;">for</span> i, c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(s):
+        ans = pick_best(ans, longest_palindrome(i))
+        <span style="font-weight: bold;">if</span> i + 1 &lt; <span style="font-weight: bold;">len</span>(s):
+            ans = pick_best(ans, longest_palindrome(i, i + 1))
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"babad"</span>) <span style="font-weight: bold;">in</span> [<span style="font-style: italic;">"bab"</span>, <span style="font-style: italic;">"aba"</span>]
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"cbbd"</span>) == <span style="font-style: italic;">"bb"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">""</span>) == <span style="font-style: italic;">""</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"abc"</span>) <span style="font-weight: bold;">in</span> [<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>, <span style="font-style: italic;">"c"</span>]
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">longestPalindrome</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> solve(s)
+</pre>
+</div>
+</div>
+</body>
+</html>

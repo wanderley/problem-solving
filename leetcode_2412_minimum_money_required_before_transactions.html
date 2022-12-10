@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2412. Minimum Money Required Before Transactions</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2412. Minimum Money Required Before Transactions</h1>
+<ul class="org-ul">
+<li><a href="pattern_find_optimal_arrangement.html#ID-F431A436-0E2F-42F4-9EB9-13A82272F944">Pattern: Find optimal arrangement</a>.  After find the optimal arrangement for the transactions, the problem becomes finding the smallest value that satisfy it with a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>.  All values with negative net comes first.  And number with the same net should have the ones with higher cost first, so it forces more money to be used early on.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cmp_to_key
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumMoney</span>(<span style="font-weight: bold;">self</span>, transactions: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_positive</span>(a):
+            <span style="font-weight: bold;">return</span> a[0] &lt; a[1]
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">compare</span>(a, b):
+            <span style="font-weight: bold;">if</span> is_positive(a) <span style="font-weight: bold;">and</span> is_positive(b):
+                <span style="font-weight: bold;">return</span> b[0] - a[0]
+            <span style="font-weight: bold;">if</span> is_positive(a):
+                <span style="font-weight: bold;">return</span> +1
+            <span style="font-weight: bold;">if</span> is_positive(b):
+                <span style="font-weight: bold;">return</span> -1
+            <span style="font-weight: bold;">if</span> a[1] != b[1]:
+                <span style="font-weight: bold;">return</span> a[1] - b[1]
+            <span style="font-weight: bold;">return</span> b[0] - a[0]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">check</span>(money):
+            <span style="font-weight: bold;">for</span> cost, cash <span style="font-weight: bold;">in</span> transactions:
+                <span style="font-weight: bold;">if</span> money &lt; <span style="font-weight: bold; font-style: italic;">cost</span>:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+                money = money - cost + cash
+            <span style="font-weight: bold;">return</span> money &gt;= 0
+
+        transactions.sort(key=cmp_to_key(compare))
+        lo = 0
+        ans = hi = <span style="font-weight: bold;">sum</span>(c <span style="font-weight: bold;">for</span> c, _ <span style="font-weight: bold;">in</span> transactions)
+
+        <span style="font-weight: bold;">while</span> lo &lt; hi:
+            mid = lo + (hi - lo) // 2
+            <span style="font-weight: bold;">if</span> check(mid):
+                hi = mid
+                ans = mid
+            <span style="font-weight: bold;">else</span>:
+                lo = mid + 1
+
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

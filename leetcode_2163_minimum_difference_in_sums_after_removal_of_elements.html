@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2163. Minimum Difference in Sums After Removal of Elements</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2163. Minimum Difference in Sums After Removal of Elements</h1>
+<ul class="org-ul">
+<li><a href="pattern_find_optimal_partition_of_array.html#ID-4060A2EA-09E8-4E05-922D-8340AAF60F44">Pattern: Find optimal partition of array</a>.  Partition the given array in two subarrays \(ln=a[0..i]\) and \(rn=a[(i+1)..(n-1)]\) such that \(\sum l[i] - \sum r[j]\) is the smallest possible after removing elements from \(l\) and \(r\) to make them have exactly \(n\) elements.  Due the optimization function, we want to remove the greatest elements from \(l\) and the smaller elements from \(r\) to make both have exactly \(n\) elements.  To solve the problem, we can first compute \(l(i)\) and \(r(i)\) which is the best left and right sum ending on \(i\).  This can be done by keeping two sorted list while processing the indexes from the left to right and right to left respectively.  Time complexity is \(O(n \log n)\) with space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumDifference</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">M</span> = N // 3
+
+        <span style="font-weight: bold; font-style: italic;">left</span> = []
+        <span style="font-weight: bold; font-style: italic;">left_sum</span> = 0
+        <span style="font-weight: bold; font-style: italic;">dpl</span> = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * N
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(2 * M):
+            <span style="font-weight: bold; font-style: italic;">left_sum</span> += nums[i]
+            heappush(left, -nums[i])
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(left) &gt; <span style="font-weight: bold; font-style: italic;">M</span>:
+                left_sum -= -heappop(left)
+            <span style="font-weight: bold;">if</span> i &gt;= M - 1:
+                <span style="font-weight: bold; font-style: italic;">dpl</span>[<span style="font-weight: bold; font-style: italic;">i</span>] = left_sum
+
+        <span style="font-weight: bold; font-style: italic;">right</span> = []
+        <span style="font-weight: bold; font-style: italic;">right_sum</span> = 0
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, M - 1, -1):
+            <span style="font-weight: bold; font-style: italic;">right_sum</span> += nums[i]
+            heappush(right, nums[i])
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(right) &gt; <span style="font-weight: bold; font-style: italic;">M</span>:
+                right_sum -= heappop(right)
+            <span style="font-weight: bold;">if</span> N - i &gt;= M - 1:
+                <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">min</span>(ans, dpl[i - 1] - right_sum)
+
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

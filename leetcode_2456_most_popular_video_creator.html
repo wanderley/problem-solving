@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2456. Most Popular Video Creator</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2456. Most Popular Video Creator</h1>
+
+<div id="outline-container-orgae62dbe" class="outline-2">
+<h2 id="orgae62dbe">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgae62dbe">
+<p>
+Find the creators with max total views and their respective creation most viewed.  Views of a single creation don't aggregate if they appear multiple times in the report.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc38148a" class="outline-2">
+<h2 id="orgc38148a">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgc38148a">
+<p>
+<a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a> Yes! Compute the popularity while keeping track of the creation most viewed.
+</p>
+</div>
+
+<div id="outline-container-org0e2c93a" class="outline-3">
+<h3 id="org0e2c93a">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org0e2c93a">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">mostPopularCreator</span>(
+        <span style="font-weight: bold;">self</span>, creators: List[<span style="font-weight: bold;">str</span>], ids: List[<span style="font-weight: bold;">str</span>], views: List[<span style="font-weight: bold;">int</span>]
+    ) -&gt; List[List[<span style="font-weight: bold;">str</span>]]:
+        <span style="font-weight: bold; font-style: italic;">popularity</span> = Counter()
+        <span style="font-weight: bold; font-style: italic;">total_views</span> = defaultdict(Counter)
+        <span style="font-weight: bold;">for</span> c, i, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(creators, ids, views):
+            <span style="font-weight: bold; font-style: italic;">popularity</span>[<span style="font-weight: bold; font-style: italic;">c</span>] += v
+            total_views[c][<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">max</span>(total_views[c][i], v)
+        <span style="font-weight: bold; font-style: italic;">maxp</span> = <span style="font-weight: bold;">max</span>(popularity.values())
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> popularity:
+            <span style="font-weight: bold;">if</span> popularity[c] &lt; <span style="font-weight: bold; font-style: italic;">maxp</span>:
+                <span style="font-weight: bold;">continue</span>
+            maxv = <span style="font-weight: bold;">max</span>(total_views[c].values())
+            ans.append([c, <span style="font-weight: bold;">min</span>(i <span style="font-weight: bold;">for</span> i, v <span style="font-weight: bold;">in</span> total_views[c].items() <span style="font-weight: bold;">if</span> v == maxv)])
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #012: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #012: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 1 hour 18 minutes 58 seconds</li>
+<li>Time Allotted: 2 hours</li>
+<li>Completed: July 7, 2022 11:20 AM</li>
+<li>Score: 5.82</li>
+</ul>
+
+<div id="outline-container-org43ed8c5" class="outline-2">
+<h2 id="org43ed8c5">Leetcode: 392. Is Subsequence</h2>
+<div class="outline-text-2" id="text-org43ed8c5">
+<p>
+<a href="https://leetcode.com/problems/is-subsequence/">Problem Statement</a>
+</p>
+
+<p>
+Keep a pointer \(i\) for the last letter matched on \(s\) while iterating on letters of \(t\).  If \(i=|s|\) after iterating over all letters of \(t\), then \(s\) is a subsequence of \(t\).  Time complexity is \(O(|s|)\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isSubsequence</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, t: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        i = 0
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> t:
+            <span style="font-weight: bold;">if</span> i &lt; <span style="font-weight: bold;">len</span>(s) <span style="font-weight: bold;">and</span> c == s[i]:
+                i += 1
+        <span style="font-weight: bold;">return</span> i == <span style="font-weight: bold;">len</span>(s)
+
+
+<span style="font-weight: bold;">assert</span> Solution().isSubsequence(<span style="font-style: italic;">"abc"</span>, <span style="font-style: italic;">"ahbgdc"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> Solution().isSubsequence(<span style="font-style: italic;">"axc"</span>, <span style="font-style: italic;">"ahbgdc"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfd6e10d" class="outline-2">
+<h2 id="orgfd6e10d">Leetcode: 221. Maximal Square</h2>
+<div class="outline-text-2" id="text-orgfd6e10d">
+<p>
+<a href="https://leetcode.com/problems/maximal-square/">Problem Statement</a>
+</p>
+
+<p>
+<a href="can_we_define_the_problem_in_terms_of_continuous_sums.html#ID-02D11D2D-72DB-4E18-8843-56A90935B5EC">Can we define the problem in terms of continuous sums?</a>  We can check if a squared sub-matrix sums up to square of its sizes.  A <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> can help to find the size of the largest squared sub-matrix with all ones.  The time complexity is \(O(n \times m \times \log(\max(n, m)^2))\) and space is \(O(n \times m)\).  Note that this problem has a similar solution of <a href="practice_010_leetcode.html#ID-A2E67F80-1104-4549-BF6E-747F4C618296">Leetcode: 1314. Matrix Block Sum</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximalSquare</span>(<span style="font-weight: bold;">self</span>, matrix: List[List[<span style="font-weight: bold;">str</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        n = <span style="font-weight: bold;">len</span>(matrix)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(matrix[0])
+        <span style="font-weight: bold; font-style: italic;">a</span> = [[0] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            <span style="font-weight: bold; font-style: italic;">s</span> = 0
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                <span style="font-weight: bold; font-style: italic;">s</span> += <span style="font-weight: bold;">int</span>(matrix[i][j])
+                a[i][<span style="font-weight: bold; font-style: italic;">j</span>] = s
+                <span style="font-weight: bold;">if</span> i &gt; 0:
+                    a[i][<span style="font-weight: bold; font-style: italic;">j</span>] += a[i - 1][j]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">area</span>(i, j):
+            <span style="font-weight: bold;">if</span> i &lt; 0 <span style="font-weight: bold;">or</span> j &lt; 0:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">return</span> a[i][j]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find_square</span>(side):
+            <span style="font-weight: bold; font-style: italic;">square</span> = side * side
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                    <span style="font-weight: bold; font-style: italic;">s</span> = area(i, j)
+                    <span style="font-weight: bold; font-style: italic;">s</span> -= area(i - side, j)
+                    <span style="font-weight: bold; font-style: italic;">s</span> -= area(i, j - side)
+                    <span style="font-weight: bold; font-style: italic;">s</span> += area(i - side, j - side)
+                    <span style="font-weight: bold;">if</span> s == square:
+                        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+        s = 0
+        e = <span style="font-weight: bold;">min</span>(n, m) * <span style="font-weight: bold;">min</span>(n, m)
+        <span style="font-weight: bold;">while</span> s + 1 &lt; e:
+            mid = s + (e - s) // 2
+            <span style="font-weight: bold;">if</span> find_square(mid):
+                s = mid
+            <span style="font-weight: bold;">else</span>:
+                e = mid - 1
+        <span style="font-weight: bold;">if</span> find_square(e):
+            <span style="font-weight: bold;">return</span> e * e
+        <span style="font-weight: bold;">return</span> s * s
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().maximalSquare(
+        [
+            [<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"0"</span>],
+            [<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>],
+            [<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>],
+            [<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>],
+        ]
+    )
+    == 4
+)
+<span style="font-weight: bold;">assert</span> Solution().maximalSquare([[<span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"1"</span>], [<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>]]) == 1
+<span style="font-weight: bold;">assert</span> Solution().maximalSquare([[<span style="font-style: italic;">"0"</span>]]) == 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc5a0d72" class="outline-2">
+<h2 id="orgc5a0d72">Leetcode: 1153. String Transforms Into Another String</h2>
+<div class="outline-text-2" id="text-orgc5a0d72">
+<p>
+<a href="https://leetcode.com/problems/string-transforms-into-another-string/">Problem Statement</a>
+</p>
+
+<p>
+What is the smallest instances of the problem and how they can help you understand the rules of the problem?  It is impossible to transform \(s=cc\) to \(q=bd\), since the position of \(c\)'s in \(s\) should have the same value in \(q\).  It is \(s=abc\) and \(q=bca\), but it wouldn't be possible if all letters were used by \(q\) since there is no letter to use as transition.  The time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">canConvert</span>(<span style="font-weight: bold;">self</span>, str1: <span style="font-weight: bold;">str</span>, str2: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">if</span> str1 == str2:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+        m = {}
+        <span style="font-weight: bold;">for</span> a, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(str1, str2):
+            <span style="font-weight: bold;">if</span> m.get(a, b) != b:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+            m[<span style="font-weight: bold; font-style: italic;">a</span>] = b
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">set</span>(str2)) != 26
+
+
+<span style="font-weight: bold;">assert</span> Solution().canConvert(<span style="font-style: italic;">"aabcc"</span>, <span style="font-style: italic;">"ccdee"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> Solution().canConvert(<span style="font-style: italic;">"leetcode"</span>, <span style="font-style: italic;">"codeleet"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

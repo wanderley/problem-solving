@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1473. Paint House III</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1473. Paint House III</h1>
+<ul class="org-ul">
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  If there is only one house, the answer is either 0 if it is painted or the cost of the cheapest color.  If there are two house, you can increase the number of neighborhoods by painting the second house in a different color than the first house, or keep the same number of neighborhoods by painting it with the same color.  Therefore, we can define the problem in terms of \(h\) the current house that you are painting, \(c\) the color that you want to use in this house and \(t\) the number of neighborhoods that you are allowed to create.  Time and space complexity is \(O(n^2 \times m)\) where \(n\) is the number of houses and \(m\) is the number of colors.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minCost</span>(
+        <span style="font-weight: bold;">self</span>, houses: List[<span style="font-weight: bold;">int</span>], cost: List[List[<span style="font-weight: bold;">int</span>]], m: <span style="font-weight: bold;">int</span>, n: <span style="font-weight: bold;">int</span>, target: <span style="font-weight: bold;">int</span>
+    ) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(houses)
+        <span style="font-weight: bold; font-style: italic;">C</span> = <span style="font-weight: bold;">len</span>(cost[0])
+
+        <span style="font-weight: bold; font-style: italic;">dp</span> = [[[<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * C <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(target + 1)] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold; font-style: italic;">left</span> = [[<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * C <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(target + 1)]
+        <span style="font-weight: bold; font-style: italic;">right</span> = [[<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * C <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(target + 1)]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, -1, -1):
+            <span style="font-weight: bold;">if</span> i == N - 1:
+                <span style="font-weight: bold;">if</span> houses[i] == 0:
+                    <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(C):
+                        dp[i][1][c] = cost[i][c]
+                <span style="font-weight: bold;">else</span>:
+                    dp[i][1][houses[i] - 1] = 0
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">for</span> t <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, target + 1):
+                    <span style="font-weight: bold;">if</span> houses[i] == 0:
+                        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(C):
+                            dp[i][t][c] = cost[i][c] + <span style="font-weight: bold;">min</span>(
+                                dp[i + 1][t][c], left[t - 1][c], right[t - 1][c]
+                            )
+
+                    <span style="font-weight: bold;">else</span>:
+                        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(C):
+                            <span style="font-weight: bold;">if</span> c == houses[i] - 1:
+                                dp[i][t][c] = <span style="font-weight: bold;">min</span>(
+                                    dp[i + 1][t][c], left[t - 1][c], right[t - 1][c]
+                                )
+
+            <span style="font-weight: bold;">for</span> t <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, target + 1):
+                <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(C):
+                    left[t][c] = (
+                        <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>) <span style="font-weight: bold;">if</span> c == 0 <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">min</span>(left[t][c - 1], dp[i][t][c - 1])
+                    )
+                <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(C - 1, -1, -1):
+                    right[t][c] = (
+                        <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+                        <span style="font-weight: bold;">if</span> c == C - 1
+                        <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">min</span>(right[t][c + 1], dp[i][t][c + 1])
+                    )
+
+        ans = <span style="font-weight: bold;">min</span>(dp[0][target][c] <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(C))
+        <span style="font-weight: bold;">return</span> -1 <span style="font-weight: bold;">if</span> ans == <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>) <span style="font-weight: bold;">else</span> ans
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().minCost(
+        [0, 0, 0, 0, 0], [[1, 10], [10, 1], [10, 1], [1, 10], [5, 1]], 5, 2, 3
+    )
+    == 9
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().minCost(
+        [0, 2, 1, 2, 0], [[1, 10], [10, 1], [10, 1], [1, 10], [5, 1]], 5, 2, 3
+    )
+    == 11
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().minCost(
+        [3, 1, 2, 3], [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]], 4, 3, 3
+    )
+    == -1
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

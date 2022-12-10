@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Longest Increasing Subsequence</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Longest Increasing Subsequence</h1>
+<p>
+Given an integer array \(a\), return the length of the longest strictly increasing subsequence.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity is \(O(n \log n)\).</li>
+<li>Space complexity is \(O(k)\) where \(k\) is the size of the longest strictly increasing subsequence.</li>
+</ul>
+
+<p>
+<b>Solution:</b> Be \(s\) the longest strictly increasing subsequence in \(a[0..(i-1)]\).  If \(a[i]>s[-1]\), then we can extend the sequence with \(a[i]\).  Be \(k\) such that \(seq[k-1] < a[i] \leq seq[k]\)  We can assign \(a[i]\) to \(s[k]\) what increases the chance for us to expend the sequence with the further numbers.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">lis</span>(a):
+    <span style="font-weight: bold; font-style: italic;">seq</span> = []
+    <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">a</span>:
+        k = bisect_left(seq, n)
+        <span style="font-weight: bold;">if</span> k == <span style="font-weight: bold;">len</span>(seq):
+            seq.append(n)
+        <span style="font-weight: bold;">else</span>:
+            seq[<span style="font-weight: bold; font-style: italic;">k</span>] = n
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>(seq)
+
+
+<span style="font-weight: bold;">assert</span> lis([10, 9, 2, 5, 3, 7, 101, 18]) == 4
+<span style="font-weight: bold;">assert</span> lis([0, 1, 0, 3, 2, 3]) == 4
+<span style="font-weight: bold;">assert</span> lis([7, 7, 7, 7, 7, 7, 7]) == 1
+</pre>
+</div>
+</div>
+</body>
+</html>

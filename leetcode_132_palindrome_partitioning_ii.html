@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 132. Palindrome Partitioning II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 132. Palindrome Partitioning II</h1>
+<ul class="org-ul">
+<li><a href="blackbox_the_dependent_problem_needs_to_be_optimized.html#ID-EC7DFA39-8E96-4EF7-9297-FAEE2ABF0849">Blackbox: The dependent problem needs to be optimized</a>.  Noticed that I had to be able to query if \((i,j)\) is a palindrome in \(O(1)\).</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Build a matrix \(p[i,j]\) which is \(True\) if \(s[i...j]\) is a palindrome and \(False\) otherwise.  With that done, we can compute \(dp[i]\) which is the minimum number of cuts to make \(s[i...(n-1)]\) palindromes.  To do that, we pick the best \(j\) where \(p[i,j]=True\) and \(1 + dp[j]\) is minimum.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minCut</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(s)
+
+        <span style="font-weight: bold; font-style: italic;">is_palindrome</span> = [[<span style="font-weight: bold; text-decoration: underline;">False</span>] * N <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold; font-style: italic;">i</span> = k
+            <span style="font-weight: bold; font-style: italic;">j</span> = k
+            <span style="font-weight: bold;">while</span> 0 &lt;= i <span style="font-weight: bold;">and</span> j &lt; N <span style="font-weight: bold;">and</span> s[i] == s[j] <span style="font-weight: bold;">and</span> is_palindrome[i][j] == <span style="font-weight: bold; text-decoration: underline;">False</span>:
+                is_palindrome[i][j] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                i -= 1
+                j += 1
+        <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1):
+            <span style="font-weight: bold;">if</span> s[k] != s[k + 1]:
+                <span style="font-weight: bold;">continue</span>
+            i = k
+            j = k + 1
+            <span style="font-weight: bold;">while</span> 0 &lt;= i <span style="font-weight: bold;">and</span> j &lt; N <span style="font-weight: bold;">and</span> s[i] == s[j] <span style="font-weight: bold;">and</span> is_palindrome[i][j] == <span style="font-weight: bold; text-decoration: underline;">False</span>:
+                is_palindrome[i][j] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                i -= 1
+                j += 1
+
+        dp = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * N
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, -1, -1):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, N):
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_palindrome[i][j]:
+                    <span style="font-weight: bold;">continue</span>
+                <span style="font-weight: bold;">if</span> j + 1 == N:
+                    dp[i] = <span style="font-weight: bold;">min</span>(dp[i], 0)
+                <span style="font-weight: bold;">else</span>:
+                    dp[i] = <span style="font-weight: bold;">min</span>(dp[i], 1 + dp[j + 1])
+        <span style="font-weight: bold;">return</span> dp[0]
+
+
+<span style="font-weight: bold;">assert</span> Solution().minCut(<span style="font-style: italic;">"aab"</span>) == 1
+<span style="font-weight: bold;">assert</span> Solution().minCut(<span style="font-style: italic;">"a"</span>) == 0
+<span style="font-weight: bold;">assert</span> Solution().minCut(<span style="font-style: italic;">"ab"</span>) == 1
+</pre>
+</div>
+</div>
+</body>
+</html>

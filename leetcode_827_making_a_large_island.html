@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 827. Making A Large Island</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 827. Making A Large Island</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  Did not test for world without any island.</li>
+
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Island cells are vertices and they are connected if they are 4-directional neighbor.  The problem becomes finding all connected component and then testing which 0-cell would create the largest component.  Time and space complexity are \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> defaultdict
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">largestIsland</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">D</span> = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+        <span style="font-weight: bold; font-style: italic;">counter</span> = defaultdict(<span style="font-weight: bold;">int</span>)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j, key):
+            <span style="font-weight: bold; font-style: italic;">counter</span>[<span style="font-weight: bold; font-style: italic;">key</span>] += 1
+            grid[i][<span style="font-weight: bold; font-style: italic;">j</span>] = key
+            <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">D</span>:
+                ni = i + di
+                <span style="font-weight: bold; font-style: italic;">nj</span> = j + dj
+                <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; N <span style="font-weight: bold;">and</span> grid[ni][nj] == 1:
+                    dfs(ni, nj, key)
+
+        <span style="font-weight: bold; font-style: italic;">cur</span> = 2
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold;">if</span> grid[i][j] == 1:
+                    dfs(i, j, cur)
+                    <span style="font-weight: bold; font-style: italic;">cur</span> += 1
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">max</span>(counter.values()) <span style="font-weight: bold;">if</span> counter <span style="font-weight: bold;">else</span> 0
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold;">if</span> grid[i][j] == 0:
+                    <span style="font-weight: bold; font-style: italic;">candidates</span> = <span style="font-weight: bold;">set</span>()
+                    <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">D</span>:
+                        ni = i + di
+                        <span style="font-weight: bold; font-style: italic;">nj</span> = j + dj
+                        <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; N <span style="font-weight: bold;">and</span> grid[ni][nj] != 0:
+                            candidates.add(grid[ni][nj])
+                    <span style="font-weight: bold; font-style: italic;">cur</span> = 1
+                    <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">candidates</span>:
+                        cur += counter[c]
+                    <span style="font-weight: bold;">if</span> cur &gt; <span style="font-weight: bold; font-style: italic;">ans</span>:
+                        ans = cur
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().largestIsland([[1, 0], [0, 1]]) == 3
+<span style="font-weight: bold;">assert</span> Solution().largestIsland([[1, 1], [1, 0]]) == 4
+<span style="font-weight: bold;">assert</span> Solution().largestIsland([[1, 1], [1, 1]]) == 4
+</pre>
+</div>
+</div>
+</body>
+</html>

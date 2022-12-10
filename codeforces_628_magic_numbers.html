@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Codeforces: 628. Magic Numbers</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Codeforces: 628. Magic Numbers</h1>
+<p>
+Brute force won't work because it would require iterating over \(10^{2000}\) numbers in order to count the d-magic number.  Be \(k\) the number of digits that need to be generated.
+</p>
+
+<p>
+Suppose that \(i\) digits (\(a_1, a_2, ..., a_i\) where \(a_1\) is the left-most digit of the generated number) were already generated.  We know that if \(i=k\), \(\left(a_1\times 10^{k}+a_2\times 10^{k-1}+...+a_k\times 10^{0}) \mod m = 0\), \(a_o \neq d\) for \(o=1,3,5,\dots\) and \(a_e = d\) for \(e=2,4,\dots\) then the generated number is a d-magic number and should be counted.  From <a href="horner_s_rule.html#ID-D67C891B-7BF8-46AA-BC78-E88F9A14246D">Horner's rule</a>, we know that
+</p>
+
+\begin{align*}
+  a_1\times 10^{k} & +a_2\times 10^{k-1}+...+a_k\times 10^{0} \\
+  &= a_k + 10 \times\left(a_{k-1} + 10 \times \left(a_{k-2} + 10 \times \left(\dots\right)\right)\right).
+\end{align*}
+
+<p>
+As \(x + y \mod m = \big(\left(x \mod m\right) + \left(y \mod m\right)\big) \mod m\), we can compute the modulo of the generated number as each digit is generated.  This means that we don't need to store the generated digits, while making sure that the generated number is a d-magic number and on the end checking if the rest of its division by \(m\) is zero.
+</p>
+
+<p>
+The following recursion uses this idea, but doesn't pass to the judge due a limit of recursion calls.  Besides that, I wrote this code without using an important information about the problem.  The numbers \(a\) and \(b\) have same number of digits while \(a<=b\).  This restriction would simplify a lot the code by removing the logic to determine if a given index is even or not.  I will leave it here since the code end up to be interesting.
+</p>
+
+<p>
+To avoid problem with recursion and memory limit, the solution was implemented in C++ as follow.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp"><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;string&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cstring&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cassert&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+
+<span style="font-weight: bold;">#define</span> <span style="font-weight: bold;">c2i</span>(<span style="font-weight: bold; font-style: italic;">v</span>) v - <span style="font-style: italic;">'0'</span>
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">MOD</span> = 1e9 + 7;
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">dp</span>[2001][2][2000];
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">count</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">m</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">d</span>, <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">a</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">N</span> = a.size();
+  memset(dp, 0, <span style="font-weight: bold;">sizeof</span>(dp));
+
+  dp[0][0][0] = 1;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; N; i++) {
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ai</span> = c2i(a[i]);
+    <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">smaller</span> = 0; smaller &lt; 2; smaller++) {
+      <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; m; j++) {
+        <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">c</span> = 0; c &lt;= (smaller ? 9 : ai); c++) {
+          <span style="font-weight: bold;">if</span> ((i % 2) == 0 &amp;&amp; c == d)
+            <span style="font-weight: bold;">continue</span>;
+          <span style="font-weight: bold;">if</span> ((i % 2) == 1 &amp;&amp; c != d)
+            <span style="font-weight: bold;">continue</span>;
+          <span style="font-weight: bold;">if</span> (i == 0 &amp;&amp; c == 0)
+            <span style="font-weight: bold;">continue</span>;
+          <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">nsmaller</span> = (smaller || c &lt; ai) ? 1 : 0;
+          <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">nj</span> = (j * 10 + c) % m;
+          dp[i+1][nsmaller][nj] = (
+            dp[i+1][nsmaller][nj] +
+            dp[i][smaller][j]
+          ) % MOD;
+        }
+      }
+    }
+  }
+
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ans</span> = 0;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">smaller</span> = 0; smaller &lt; 2; smaller++) {
+    ans += dp[N][smaller][0];
+    ans %= MOD;
+  }
+
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">is_magic</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">m</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">d</span>, <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">a</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">mod</span> = 0;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; a.size(); i++) {
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ai</span> = c2i(a[i]);
+    mod = (mod * 10 + ai) % m;
+    <span style="font-weight: bold;">if</span> ((i % 2) == 0 &amp;&amp; ai == d) {
+      <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">false</span>;
+    }
+    <span style="font-weight: bold;">if</span> ((i % 2) == 1 &amp;&amp; ai != d) {
+      <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">false</span>;
+    }
+  }
+  <span style="font-weight: bold;">return</span> mod == 0;
+}
+
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">solve</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">m</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">d</span>, <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">b</span>) {
+  <span style="font-weight: bold;">return</span> (
+    count(m, d, b) - count(m, d, a) + MOD + (is_magic(m, d, a) ? 1 : 0)
+  ) % MOD;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">m</span>, <span style="font-weight: bold; font-style: italic;">d</span>;
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span>;
+
+  assert(solve(2, 6, <span style="font-style: italic;">"10"</span>, <span style="font-style: italic;">"99"</span>) == 8);
+  assert(solve(2, 0, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"9"</span>) == 4);
+  assert(solve(19, 7, <span style="font-style: italic;">"1000"</span>, <span style="font-style: italic;">"9999"</span>) == 6);
+
+  cin &gt;&gt; m &gt;&gt; d &gt;&gt; a &gt;&gt; b;
+  cout &lt;&lt; solve(m, d, a, b);
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</body>
+</html>

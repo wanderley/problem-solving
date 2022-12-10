@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LightOJ: Investigation</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">LightOJ: Investigation</h1>
+<p>
+We have to count how many numbers between \(a\) and \(b\) are divisible by \(k\) and the sum of their digits are also divisible by \(k\), where \(1 \leq a \leq b \leq 2^{31}\) and \(0 < k < 10000\).  Note that the answer is always 0 if \(k\) is greater than 90, since \(b \leq 2^{31} = 2147483648\) has at most 10 digits and the sum of digits of any candidate will not exceed 90 and will never be divisible for \(k\) greater than 90.
+</p>
+
+<p>
+The slow solution consists on counting all numbers in the interval if the satisfy the conditions.  In order to solve the problem, we have to count the number without generating all them.  To do so, we have to use two properties of the <a href="modulo_operation.html#ID-13A69495-CA30-40DC-A722-B0327FB06D2D">modulo operation</a>:
+</p>
+
+<ol class="org-ol">
+<li>\(a + b \mod k = (a \mod k) + (b \mod k) \mod k\), and</li>
+<li>\(a \times b \mod k = (a \mod k) \times (b \mod k) \mod k\).</li>
+</ol>
+
+<p>
+Be \(p\) and \(q\) digits of a candidate that satisfy the conditions.  For example, \(p=[1,7]\) and \(q=[0, 2]\) and \(k=3\).  From the above properties, we know that
+</p>
+
+<p>
+\[
+  \left(\sum_{0 \leq i \leq |p|}p[i] \mod k + \sum_{0 \leq j \leq |q|}q[j] \mod k\right) \mod k
+  =
+  \left(\sum_{0 \leq i \leq |p|}p[i] + \sum_{0 \leq j \leq |q|}q[j]\right) \mod k
+\]
+</p>
+
+<p>
+The same applies for the digits multiplied by their respective powers of 10.  This means that keeping the modulo of the partial sum of digits and the modulo of the partial generated number are enough to check if we could generate or not a valid number, since both should be zero when there are no more digits to generate.  With this observation, we can solve the problem using <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a> strategy.  The state consists on the digit to be generated, a flag to indicate if the current generated number is smaller or not the original number, the sum of the digits generated so far and the rest of division of the digits multiplied by their respective powers of 10 generated so far.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;stdio.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;string.h&gt;</span>
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">mem</span>[10][2][100][100];
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">digits</span>[11];
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ndigits</span> = 0;
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">K</span>;
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">rec</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">smaller</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">mod</span>) {
+  <span style="font-weight: bold;">if</span> (i == ndigits) {
+    <span style="font-weight: bold;">return</span> s == 0 &amp;&amp; mod == 0 ? 1 : 0;
+  }
+  <span style="font-weight: bold;">if</span> (mem[i][smaller][s][mod] != -1) {
+    <span style="font-weight: bold;">return</span> mem[i][smaller][s][mod];
+  }
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">limit</span> = smaller == 1 ? 9 : digits[i];
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ret</span> = 0;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">d</span> = 0; d &lt;= limit; d++) {
+    ret += rec(
+      i + 1,
+      smaller == 1 || d &lt; digits[i] ? 1 : 0,
+      (s + d) % K,
+      (mod * 10 + d) % K
+    );
+  }
+  <span style="font-weight: bold;">return</span> mem[i][smaller][s][mod] = ret;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">solve</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span>) {
+  ndigits = 0;
+  digits[0] = 0;
+  <span style="font-weight: bold;">while</span> (a &gt; 0) {
+    digits[ndigits++] = a % 10;
+    a = a / 10;
+  }
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; ndigits / 2; i++) {
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">tmp</span> = digits[i];
+    digits[i] = digits[ndigits - i - 1];
+    digits[ndigits - i - 1] = tmp;
+  }
+  memset(mem, -1, <span style="font-weight: bold;">sizeof</span>(mem));
+  <span style="font-weight: bold;">return</span> rec(0, 0, 0, 0);
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">t</span>;
+  scanf(<span style="font-style: italic;">"%d"</span>, &amp;t);
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">c</span> = 1; c &lt;= t; c++) {
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span>, <span style="font-weight: bold; font-style: italic;">ret</span>;
+    scanf(<span style="font-style: italic;">"%d %d %d"</span>, &amp;a, &amp;b, &amp;K);
+    ret = K &gt; 100 ? 0 : solve(b) - solve(a - 1);
+    printf(<span style="font-style: italic;">"Case %d: %d\n"</span>, c, ret);
+  }
+}
+</pre>
+</div>
+</div>
+</body>
+</html>

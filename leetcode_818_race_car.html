@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 818. Race Car</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 818. Race Car</h1>
+<ul class="org-ul">
+<li><a href="mistake_bug_caused_by_incorrect_assumption.html#ID-298CCCF3-C9A7-4FEC-BE7B-17CF0F67332C">Mistake: Bug caused by incorrect assumption</a>.  Started to look for prunes and added one to avoid numbers greater than <code>target</code>.</li>
+<li><a href="mistake_failed_to_consider_different_strategies_to_solve_the_problem.html#ID-3C649CC4-0609-4686-96C3-5F774F9C0292">Mistake: Failed to consider different strategies to solve the problem</a>.  Came up with <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a> and didn't ask myself if I could solve the problem using <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a>.</li>
+<li><a href="mistake_missing_inspection_of_test_cases.html#ID-27524F0A-5DA2-4768-8897-2934633CB62F">Mistake: Missing inspection of test cases</a>.  The test case <code>5</code> gave a hint which I didn't see because I rushed to code the BFS.</li>
+</ul>
+
+<p>
+<a href="can_we_simplify_the_problem_which_keeping_it_the_same.html#ID-F19C9539-EE46-41EE-8DEF-24C3076C6DC2">Can we simplify the problem while keeping it the same?</a>  As in <a href="leetcode_1675_minimize_deviation_in_array.html#ID-BAC379CA-7A9C-4C8D-BD4D-EAE1745A22AC">Leetcode: 1675. Minimize Deviation in Array</a>, we can reduce the number of different operations by thinking on the problem to get from \(0\) to \(i\) only doing forward moves.  \(dp[i]\) is the number of steps to get from \(0\) to \(i\) starting with speed 1.  The best way to get close to \(i\) is to accelerate as much as possible.  Be \(j\) the closest position to \(i\) that we can get accelerating \(t\) times at speed \(s\).  If \(i=j\), the solution is \(dp[i]=t\).  Otherwise, \(j<i\) and you can either go back to \(k\) accelerating \(p\) times and then try to go to \(i\) or accelerate one more time and then go back to \(i\).  Therefore, \(dp[i]=min(t + 1 + p + 1 + dp[i - (j - k)], t + 1 + dp[t + s - i] + 1)\) for all \(k\).  In summary, the idea is to define the search-space as distances from \(0\) to \(i\) where \(0 \leq i \leq target\).  Space complexity is \(O(target)\) and time complexity is \(O(target \times \log(target))\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">racecar</span>(<span style="font-weight: bold;">self</span>, target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        dp = [0] * (target + 1)
+        <span style="font-weight: bold; font-style: italic;">dp</span>[0] = 0
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">stops</span>(target):
+            <span style="font-weight: bold; font-style: italic;">pos</span> = 0
+            <span style="font-weight: bold; font-style: italic;">speed</span> = 1
+            <span style="font-weight: bold; font-style: italic;">steps</span> = 0
+            <span style="font-weight: bold;">yield</span> (pos, speed, steps)
+            <span style="font-weight: bold;">while</span> pos + speed &lt;= <span style="font-weight: bold; font-style: italic;">i</span>:
+                pos += speed
+                <span style="font-weight: bold; font-style: italic;">speed</span> *= 2
+                <span style="font-weight: bold; font-style: italic;">steps</span> += 1
+                <span style="font-weight: bold;">yield</span> (pos, speed, steps)
+
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, target + 1):
+            *_, (<span style="font-weight: bold; font-style: italic;">pos</span>, <span style="font-weight: bold; font-style: italic;">speed</span>, <span style="font-weight: bold; font-style: italic;">steps</span>) = stops(i)
+            <span style="font-weight: bold;">if</span> pos == i:
+                dp[<span style="font-weight: bold; font-style: italic;">i</span>] = steps
+                <span style="font-weight: bold;">continue</span>
+
+            dp[<span style="font-weight: bold; font-style: italic;">i</span>] = steps + 1 + dp[(pos + speed) - i] + 1
+            <span style="font-weight: bold;">for</span> rpos, _, rsteps <span style="font-weight: bold;">in</span> stops(pos):
+                dp[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">min</span>(dp[i], steps + 1 + rsteps + 1 + dp[i - (pos - rpos)])
+
+        <span style="font-weight: bold;">return</span> dp[target]
+
+<span style="font-weight: bold;">assert</span> Solution().racecar(3) == 2
+<span style="font-weight: bold;">assert</span> Solution().racecar(6) == 5
+
+</pre>
+</div>
+
+<p>
+<a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a> solution starts by doing as much <code>A</code> as possible and them searching for the optimal path:
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">racecar</span>(<span style="font-weight: bold;">self</span>, target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        seen = <span style="font-weight: bold;">set</span>()
+
+        <span style="font-weight: bold; font-style: italic;">pos</span> = 0
+        <span style="font-weight: bold; font-style: italic;">speed</span> = 1
+        <span style="font-weight: bold; font-style: italic;">steps</span> = 0
+        <span style="font-weight: bold;">while</span> pos + speed &lt;= <span style="font-weight: bold; font-style: italic;">target</span>:
+            pos += speed
+            <span style="font-weight: bold; font-style: italic;">speed</span> *= 2
+            <span style="font-weight: bold; font-style: italic;">steps</span> += 1
+
+        <span style="font-weight: bold; font-style: italic;">queue</span> = [(pos, speed, steps)]
+        <span style="font-weight: bold;">for</span> pos, speed, steps <span style="font-weight: bold;">in</span> queue:
+            <span style="font-weight: bold;">if</span> pos == target:
+                <span style="font-weight: bold;">return</span> steps
+
+            <span style="font-weight: bold;">if</span> (pos, speed) <span style="font-weight: bold;">in</span> seen:
+                <span style="font-weight: bold;">continue</span>
+            seen.add((pos, speed))
+
+            queue.append((pos + speed, speed * 2, steps + 1))
+            <span style="font-weight: bold;">if</span> speed &gt; 0:
+                queue.append((pos, -1, steps + 1))
+            <span style="font-weight: bold;">else</span>:
+                queue.append((pos, +1, steps + 1))
+
+
+<span style="font-weight: bold;">assert</span> Solution().racecar(3) == 2
+<span style="font-weight: bold;">assert</span> Solution().racecar(6) == 5
+</pre>
+</div>
+</div>
+</body>
+</html>

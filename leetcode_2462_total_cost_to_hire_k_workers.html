@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2462. Total Cost to Hire K Workers</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2462. Total Cost to Hire K Workers</h1>
+
+<div id="outline-container-orgda1f8f4" class="outline-2">
+<h2 id="orgda1f8f4">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgda1f8f4">
+<p>
+Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the cost of picking \(k\) integers from \(a\) as following:
+</p>
+
+<ol class="org-ol">
+<li>pick \(i\) such that \(a[i]\) is minimum and \(i \leq m\) or \(n - m \leq i\);</li>
+<li>remove \(i\) from the array and continue the process.</li>
+</ol>
+</div>
+
+<div id="outline-container-orge9e7705" class="outline-3">
+<h3 id="orge9e7705">Useful prompts</h3>
+<div class="outline-text-3" id="text-orge9e7705">
+<ul class="org-ul">
+<li><a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org99c02b3" class="outline-2">
+<h2 id="org99c02b3">Devise a plan</h2>
+<div class="outline-text-2" id="text-org99c02b3">
+<p>
+On every turn, the array reduces in one.  Because of that, we have to efficiently resize the pool of candidates to pick.  To do so, we keep a priority queue with the candidates to pick.  After removing the best candidate from the pool, we add the next one from the left or the right depending on each side the best candidate is.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-org78cc753" class="outline-3">
+<h3 id="org78cc753">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org78cc753">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">totalCost</span>(<span style="font-weight: bold;">self</span>, costs: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>, candidates: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(costs)
+        <span style="font-weight: bold; font-style: italic;">pq</span> = []
+        <span style="font-weight: bold; font-style: italic;">left</span>, <span style="font-weight: bold; font-style: italic;">right</span> = candidates, <span style="font-weight: bold;">max</span>(candidates, N - candidates) - 1
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(left):
+            heappush(pq, (costs[i], i))
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, right, -1):
+            heappush(pq, (costs[i], i))
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k):
+            <span style="font-weight: bold; font-style: italic;">c</span>, <span style="font-weight: bold; font-style: italic;">i</span> = heappop(pq)
+            <span style="font-weight: bold; font-style: italic;">ans</span> += c
+            <span style="font-weight: bold;">if</span> left &gt; right:
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold;">if</span> i &lt; <span style="font-weight: bold; font-style: italic;">left</span>:
+                heappush(pq, (costs[left], left))
+                left += 1
+            <span style="font-weight: bold;">elif</span> i &gt; <span style="font-weight: bold; font-style: italic;">right</span>:
+                heappush(pq, (costs[right], right))
+                right -= 1
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

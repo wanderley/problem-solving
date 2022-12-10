@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 210. Course Schedule II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 210. Course Schedule II</h1>
+
+<div id="outline-container-org0345afb" class="outline-2">
+<h2 id="org0345afb">Patterns</h2>
+<div class="outline-text-2" id="text-org0345afb">
+<ul class="org-ul">
+<li><a href="directed_acyclic_graph.html#ID-81260E21-C442-48DE-A414-CA7B83F2C404">Directed Acyclic Graph</a>.</li>
+
+<li><a href="pattern_ordering_problem.html#ID-106D2C06-9633-40A5-9BA7-E3CE17A0C784">Pattern: Ordering problem</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org44a9bc9" class="outline-2">
+<h2 id="org44a9bc9">Prompts</h2>
+<div class="outline-text-2" id="text-org44a9bc9">
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a>  <a href="topological_sort.html#ID-80122A2F-3B84-48B1-B10D-6ACEE4373298">Topological Sort</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgeef4b3e" class="outline-2">
+<h2 id="orgeef4b3e">Solution</h2>
+<div class="outline-text-2" id="text-orgeef4b3e">
+<p>
+Build the graph of dependencies and then run <a href="topological_sort.html#ID-80122A2F-3B84-48B1-B10D-6ACEE4373298">Topological Sort</a> to find the order of courses to take.  Time complexity is \(O(n)\) and space is \(O(m)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findOrder</span>(<span style="font-weight: bold;">self</span>, numCourses: <span style="font-weight: bold;">int</span>, prerequisites: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        A = {<span style="font-weight: bold; font-style: italic;">u</span>: [] <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(numCourses)}
+        in_degree = [0] * numCourses
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">prerequisites</span>:
+            A[v].append(u)
+            in_degree[<span style="font-weight: bold; font-style: italic;">u</span>] += 1
+
+        <span style="font-weight: bold; font-style: italic;">queue</span> = [u <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(numCourses) <span style="font-weight: bold;">if</span> in_degree[u] == 0]
+        ans = []
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> queue:
+            ans.append(u)
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> A[u]:
+                in_degree[v] -= 1
+                <span style="font-weight: bold;">if</span> in_degree[v] == 0:
+                    queue.append(v)
+        <span style="font-weight: bold;">return</span> ans <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(ans) == numCourses <span style="font-weight: bold;">else</span> []
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

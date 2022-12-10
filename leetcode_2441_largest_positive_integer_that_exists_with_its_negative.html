@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2441. Largest Positive Integer That Exists With Its Negative</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2441. Largest Positive Integer That Exists With Its Negative</h1>
+
+<div id="outline-container-org41b35b2" class="outline-2">
+<h2 id="org41b35b2">Understand the problem</h2>
+<div class="outline-text-2" id="text-org41b35b2">
+<p>
+Given an array \(a\), find the largest integer \(k\) such that \(-k\) is also in \(a\).
+</p>
+</div>
+
+<div id="outline-container-orga83fe4f" class="outline-3">
+<h3 id="orga83fe4f">Useful prompts</h3>
+<div class="outline-text-3" id="text-orga83fe4f">
+<ul class="org-ul">
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9a60d95" class="outline-2">
+<h2 id="org9a60d95">Devise a plan</h2>
+<div class="outline-text-2" id="text-org9a60d95">
+<p>
+Use a <code>set</code> to store numbers of \(a\) and for each one \(x\) from the largest to the smaller, check if \(-x\) is also in the set.
+</p>
+</div>
+
+<div id="outline-container-orgb03cae1" class="outline-3">
+<h3 id="orgb03cae1">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgb03cae1">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findMaxK</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        seen = <span style="font-weight: bold;">set</span>(nums)
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(nums, reverse=<span style="font-weight: bold; text-decoration: underline;">True</span>):
+            <span style="font-weight: bold;">if</span> -n <span style="font-weight: bold;">in</span> seen:
+                <span style="font-weight: bold;">return</span> n
+        <span style="font-weight: bold;">return</span> -1
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

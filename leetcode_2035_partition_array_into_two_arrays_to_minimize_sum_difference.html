@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2035. Partition Array Into Two Arrays to Minimize Sum Difference</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2035. Partition Array Into Two Arrays to Minimize Sum Difference</h1>
+<ul class="org-ul">
+<li>Blackbox: Split the input.  We have to split the array in the half and its size is \(2 \times n\) with \(1 \leq n \leq 15\).  My intuition focused on the fact that \(2^15\) isn't too much to compute.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Generate all possible sums with \(0, 1, 2, ..., n / 2\) numbers for the first half of the array.  Do the same for the other side.  Suppose that we picked \(A\) numbers from the first half.  We have to pick \(B\) numbers from the other side to build a valid array where \(|B|=n/2-|A|\).  For each \(a\) in \(A\), we can find the number in \(B\) closest as possible to \(S/2-a\) using <a href="binary_search.html#ID-5CDA0F71-AED2-47E7-9BB4-3B66EA8B85BF">Find index of first greater in sorted array</a> algorithm, since it will be the one that minimize the difference between the two final arrays.  Time complexity is \(O(2^15 \times \log(2^15))\) and space is \(O(2^15)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> bisect <span style="font-weight: bold;">import</span> bisect_left
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumDifference</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">M</span> = N // 2
+
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">min</span>(n <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums)
+        <span style="font-weight: bold; font-style: italic;">nums</span> = [m + n <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums]
+        <span style="font-weight: bold; font-style: italic;">S</span> = <span style="font-weight: bold;">sum</span>(nums)
+
+        <span style="font-weight: bold; font-style: italic;">a</span> = [<span style="font-weight: bold;">set</span>() <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M + 1)]
+        <span style="font-weight: bold; font-style: italic;">b</span> = [<span style="font-weight: bold;">set</span>() <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M + 1)]
+
+        a[0].add(0)
+        b[0].add(0)
+
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums[:M]:
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M - 1, -1, -1):
+                <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> a[i]:
+                    a[i + 1].add(k + n)
+
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums[M:]:
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M - 1, -1, -1):
+                <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> b[i]:
+                    b[i + 1].add(k + n)
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M + 1):
+            <span style="font-weight: bold; font-style: italic;">a</span>[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">sorted</span>(a[i])
+            <span style="font-weight: bold; font-style: italic;">b</span>[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">sorted</span>(b[i])
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M + 1):
+            <span style="font-weight: bold; font-style: italic;">j</span> = M - i
+            <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">a</span>[i]:
+                t = S // 2 - p
+                <span style="font-weight: bold; font-style: italic;">m</span> = bisect_left(b[j], t)
+                <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">max</span>(0, m - 1), <span style="font-weight: bold;">min</span>(m + 1, <span style="font-weight: bold;">len</span>(b[j]))):
+                    <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">min</span>(ans, <span style="font-weight: bold;">abs</span>(S - 2 * (p + b[j][k])))
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().minimumDifference([3, 9, 7, 3]) == 2
+<span style="font-weight: bold;">assert</span> Solution().minimumDifference([-36, 36]) == 72
+<span style="font-weight: bold;">assert</span> Solution().minimumDifference([2, -1, 0, 4, -2, -9]) == 0
+</pre>
+</div>
+</div>
+</body>
+</html>

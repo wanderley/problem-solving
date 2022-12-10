@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #009: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #009: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 2 hours</li>
+<li>Time Allotted: 2 hours</li>
+<li>Completed: July 5, 2022 9:51 PM</li>
+<li>Score: 3.12 (solved only the first two, but got the right idea for the last one)</li>
+</ul>
+
+<div id="outline-container-org902d24b" class="outline-2">
+<h2 id="org902d24b">Leetcode: 205. Isomorphic Strings</h2>
+<div class="outline-text-2" id="text-org902d24b">
+<p>
+<a href="https://leetcode.com/problems/isomorphic-strings/">Problem Statement</a>
+</p>
+
+<p>
+Retrospective: I didn't spend much planing the algorithm and jumped to writing the code what ended on "Wrong Answer" verdict.  After that, I carefully planned the algorithm from scratch and got the right solution.  Takeaway: don't jump to code (even for easy problems) before planing what you are going to do.
+</p>
+
+<p>
+The solution consists on keeping track of the letters on \(s\) associated with letters in \(t\) and vice-versa while you validate \(s\).  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isIsomorphic</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, t: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        st = {}
+        <span style="font-weight: bold; font-style: italic;">ts</span> = {}
+        <span style="font-weight: bold;">for</span> a, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(s, t):
+            <span style="font-weight: bold;">if</span> st.get(a, b) != <span style="font-weight: bold; font-style: italic;">b</span>:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+            <span style="font-weight: bold;">if</span> ts.get(b, a) != <span style="font-weight: bold; font-style: italic;">a</span>:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+            st[<span style="font-weight: bold; font-style: italic;">a</span>] = b
+            <span style="font-weight: bold; font-style: italic;">ts</span>[<span style="font-weight: bold; font-style: italic;">b</span>] = a
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+
+<span style="font-weight: bold;">assert</span> Solution().isIsomorphic(<span style="font-style: italic;">"egg"</span>, <span style="font-style: italic;">"add"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> Solution().isIsomorphic(<span style="font-style: italic;">"foo"</span>, <span style="font-style: italic;">"bar"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> Solution().isIsomorphic(<span style="font-style: italic;">"paper"</span>, <span style="font-style: italic;">"title"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org862b109" class="outline-2">
+<h2 id="org862b109">Leetcode: 855. Exam Room</h2>
+<div class="outline-text-2" id="text-org862b109">
+<p>
+<a href="https://leetcode.com/problems/exam-room/">Problem Statement</a>
+</p>
+
+<p>
+Retrospective: I didn't see the \(O(n^2)\) solution which was way easier to code: you iterate over the used seats and compute their mid seats.  By the other hand, I am happy that I could focus and find the correct a data structure to solve the queries in \(O(\log n)\).  Takeaway: sometimes the data-structure is a combination of multiple data-structures (e.g. set and priority queue).
+</p>
+
+<p>
+Be \(n\) the number of queries.  To solve this problem efficiently, we have to build a data-structure that is able to insert, remove intervals and query the interval where the middle point is far as possible from its extreme points.  For the query operation, we can keep the interval in a <a href="priority_queue.html#ID-FCBEA48C-CFF6-43C4-B430-BCD00E245D22">Priority-Queue</a> which is sorted by the distance of the middle point to their extremes.  That allow us to know the seat to return on <code>seat</code> in time \(O(1)\).  It takes \(O(\log n)\) to insert new interval on the priority-queue, but there is no efficiently way to remove the items from anywhere in the queue.  To make this operation efficient, we keep a set of <b>current</b> intervals and use it to clean-up the queue when querying the best interval.  It is done by poping from the queue all outdated intervals until the top is an up-to-date interval (i.e. contained in the set).  The lookup operation in a set is \(O(1)\), and the amortized time for finding the best interval is \(O(\log n)\) due the clean-up operation.  The last trick part to solve is how to merge two intervals when a seat becomes free again.  To do that, we keep two maps: one for intervals that end on the number \(p\) and one for the intervals that start on the number \(p\).  With these maps, we can quickly find the interval to merge and delete then from the queue and set and later add the new one.  Space complexity is \(O(n)\).  Time complexity is \(O(\log n)\) for both operations <code>seat</code> and <code>leave</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+
+<span style="font-weight: bold; font-style: italic;">V</span> = 0
+<span style="font-weight: bold; font-style: italic;">S</span> = 1
+<span style="font-weight: bold; font-style: italic;">E</span> = 2
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">ExamRoom</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>):
+        <span style="font-weight: bold;">self</span>.n = n
+
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">l</span> = {}
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">r</span> = {}
+
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">i</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">pq</span> = []
+
+        <span style="font-weight: bold;">self</span>._insert(0, n - 1)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">seat</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.i) &gt; 0
+
+        <span style="font-weight: bold; font-style: italic;">i</span> = <span style="font-weight: bold;">self</span>._pop()
+        <span style="font-weight: bold;">if</span> i[S] == 0 <span style="font-weight: bold;">and</span> i[E] != 0:
+            <span style="font-weight: bold;">self</span>._insert(1, i[E])
+            <span style="font-weight: bold;">return</span> 0
+
+        <span style="font-weight: bold;">if</span> i[E] == <span style="font-weight: bold;">self</span>.n - 1 <span style="font-weight: bold;">and</span> i[S] != <span style="font-weight: bold;">self</span>.n - 1:
+            <span style="font-weight: bold;">self</span>._insert(i[S], i[E] - 1)
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.n - 1
+
+        m = i[S] + (i[E] - i[S]) // 2
+        <span style="font-weight: bold;">self</span>._insert(i[S], m - 1)
+        <span style="font-weight: bold;">self</span>._insert(m + 1, i[E])
+        <span style="font-weight: bold;">return</span> m
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">leave</span>(<span style="font-weight: bold;">self</span>, p: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        s = e = p
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.l.get(p - 1):
+            s = <span style="font-weight: bold;">self</span>.l[p - 1][S]
+            <span style="font-weight: bold;">self</span>._delete(<span style="font-weight: bold;">self</span>.l[p - 1])
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.r.get(p + 1):
+            e = <span style="font-weight: bold;">self</span>.r[p + 1][E]
+            <span style="font-weight: bold;">self</span>._delete(<span style="font-weight: bold;">self</span>.r[p + 1])
+        <span style="font-weight: bold;">self</span>._insert(s, e)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_insert</span>(<span style="font-weight: bold;">self</span>, s, e):
+        i = (-<span style="font-weight: bold;">self</span>._value(s, e), s, e)
+        <span style="font-weight: bold;">self</span>.l[e] = i
+        <span style="font-weight: bold;">self</span>.r[s] = i
+        <span style="font-weight: bold;">self</span>.i.add(i)
+        heappush(<span style="font-weight: bold;">self</span>.pq, i)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_pop</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">remove outdated intervals</span>
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">self</span>.pq[0] <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.i:
+            heappop(<span style="font-weight: bold;">self</span>.pq)
+        <span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.pq) &gt;= <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.i)
+
+        i = heappop(<span style="font-weight: bold;">self</span>.pq)
+        <span style="font-weight: bold;">self</span>._delete(i)
+        <span style="font-weight: bold;">return</span> i
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_delete</span>(<span style="font-weight: bold;">self</span>, i):
+        <span style="font-weight: bold;">self</span>.l[i[E]] = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">self</span>.r[i[S]] = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">self</span>.i.remove(i)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_value</span>(<span style="font-weight: bold;">self</span>, s, e):
+        <span style="font-weight: bold;">if</span> s == 0:
+            <span style="font-weight: bold;">return</span> e
+        <span style="font-weight: bold;">if</span> e == <span style="font-weight: bold;">self</span>.n - 1:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.n - s - 1
+        <span style="font-weight: bold;">return</span> (s + (e - s) // 2) - s
+
+
+e = ExamRoom(10)
+<span style="font-weight: bold;">assert</span> e.seat() == 0
+<span style="font-weight: bold;">assert</span> e.seat() == 9
+<span style="font-weight: bold;">assert</span> e.seat() == 4
+<span style="font-weight: bold;">assert</span> e.seat() == 2
+<span style="font-weight: bold;">assert</span> e.leave(4) == <span style="font-weight: bold; text-decoration: underline;">None</span>
+<span style="font-weight: bold;">assert</span> e.seat() == 5
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfdb1545" class="outline-2">
+<h2 id="orgfdb1545">Leetcode: 394. Decode String</h2>
+<div class="outline-text-2" id="text-orgfdb1545">
+<p>
+<a href="https://leetcode.com/problems/decode-string/">Problem Statement</a>
+</p>
+
+<p>
+The core observation on this problem is that we have to decode the pattern from bottom to up.  This can be done by keeping a <a href="stack.html#ID-06D27BC1-DFDC-4063-B3A9-7074FD5E13B3">Stack</a> that contains either a number or a string which needs to be duplicated.  As the input is always valid, it is guaranteed that after a <code>]</code>, we will have a string in the top followed by a number.  Note that we suppose that a new char is always appended to the top of the stack.  Then, we duplicate the string as much is needed and add the result back to the queue.  Space complexity is \(O(n)\).  Time complexity is \(O(w)\) where \(w \leq 10^5\) is the size of the final string.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">decodeString</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">value</span>(c):
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">int</span>(c) <span style="font-weight: bold;">if</span> c <span style="font-weight: bold;">in</span> <span style="font-style: italic;">"0123456789"</span> <span style="font-weight: bold;">else</span> c
+
+        stack = []
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> s:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(stack) == 0:
+                <span style="font-weight: bold;">assert</span> c != <span style="font-style: italic;">"]"</span>
+                stack.append(value(c))
+                <span style="font-weight: bold;">continue</span>
+
+            <span style="font-weight: bold;">if</span> c == <span style="font-style: italic;">"["</span>:
+                stack.append(<span style="font-style: italic;">""</span>)
+                <span style="font-weight: bold;">continue</span>
+
+            <span style="font-weight: bold;">if</span> c == <span style="font-style: italic;">"]"</span>:
+                <span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">len</span>(stack) &gt;= 2
+                <span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">isinstance</span>(stack[-2], <span style="font-weight: bold;">int</span>), stack
+                <span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">isinstance</span>(stack[-1], <span style="font-weight: bold;">str</span>)
+                v = stack[-1] * stack[-2]
+                stack.pop()
+                stack.pop()
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">isinstance</span>(stack[-1], <span style="font-weight: bold;">str</span>):
+                    stack[-1] = stack[-1] + v
+                <span style="font-weight: bold;">else</span>:
+                    stack.append(v)
+                <span style="font-weight: bold;">continue</span>
+
+            <span style="font-weight: bold;">else</span>:
+                v = value(c)
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">isinstance</span>(v, <span style="font-weight: bold;">int</span>) <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">isinstance</span>(stack[-1], <span style="font-weight: bold;">int</span>):
+                    stack[-1] = stack[-1] * 10 + v
+                <span style="font-weight: bold;">elif</span> <span style="font-weight: bold;">isinstance</span>(v, <span style="font-weight: bold;">str</span>) <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">isinstance</span>(stack[-1], <span style="font-weight: bold;">str</span>):
+                    stack[-1] = stack[-1] + v
+                <span style="font-weight: bold;">else</span>:
+                    stack.append(v)
+
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(stack)
+
+
+<span style="font-weight: bold;">assert</span> Solution().decodeString(<span style="font-style: italic;">"3[a]2[bc]"</span>) == <span style="font-style: italic;">"aaabcbc"</span>
+<span style="font-weight: bold;">assert</span> Solution().decodeString(<span style="font-style: italic;">"3[a2[c]]"</span>) == <span style="font-style: italic;">"accaccacc"</span>
+<span style="font-weight: bold;">assert</span> Solution().decodeString(<span style="font-style: italic;">"2[abc]3[cd]ef"</span>) == <span style="font-style: italic;">"abcabccdcdcdef"</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

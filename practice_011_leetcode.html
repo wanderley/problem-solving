@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #011: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #011: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 36 minutes 17 seconds</li>
+<li>Time Allotted: 2 hours</li>
+<li>Completed: July 6, 2022 10:34 PM</li>
+<li>Score: 8.12</li>
+</ul>
+
+<div id="outline-container-org5233191" class="outline-2">
+<h2 id="org5233191">Leetcode: 830. Positions of Large Groups</h2>
+<div class="outline-text-2" id="text-org5233191">
+<p>
+<a href="https://leetcode.com/problems/positions-of-large-groups/">Problem Statement</a>
+</p>
+
+<p>
+Keep two pointers to mark the begin and end indexes of a string with copies of the same letter.  This will be enough to list all intervals requested by the problem.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">largeGroupPositions</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold; font-style: italic;">i</span> = 0
+        <span style="font-weight: bold;">for</span> j, c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(s):
+            <span style="font-weight: bold;">if</span> c != s[i]:
+                <span style="font-weight: bold;">if</span> j - i &gt;= 3:
+                    ans.append([i, j - 1])
+                <span style="font-weight: bold; font-style: italic;">i</span> = j
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(s) - i &gt;= 3:
+            ans.append([i, <span style="font-weight: bold;">len</span>(s) - 1])
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().largeGroupPositions(<span style="font-style: italic;">"abbxxxxzzy"</span>) == [[3, 6]]
+<span style="font-weight: bold;">assert</span> Solution().largeGroupPositions(<span style="font-style: italic;">"abc"</span>) == []
+<span style="font-weight: bold;">assert</span> Solution().largeGroupPositions(<span style="font-style: italic;">"abcdddeeeeaabbbcd"</span>) == [[3, 5], [6, 9], [12, 14]]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf98e308" class="outline-2">
+<h2 id="orgf98e308">Leetcode: 894. All Possible Full Binary Trees</h2>
+<div class="outline-text-2" id="text-orgf98e308">
+<p>
+<a href="https://leetcode.com/problems/all-possible-full-binary-trees/">Problem Statement</a>
+</p>
+
+<p>
+<a href="can_we_divide_the_search_space_in_two_parts_and_combine_solutions_from_both_sides_to_solve_the_original_problem.html#ID-31D0B1E0-6881-478A-8F48-160BCFD94F31">Can we divide the search-space in two parts and combine solutions from both sides to solve the original problem?</a>  The answer is yes.  For \(n=0\), there are zero possible trees.  For \(n=1\), there is only one with one node.  For \(n>1\), we can split \(n=a+b-1\) and compute all possible trees with \(a\) and \(b\) nodes and combine them with a new root to create an unique tree with \(n\) nodes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for a binary tree node.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class TreeNode:</span>
+<span style="font-weight: bold; font-style: italic;">#     </span><span style="font-weight: bold; font-style: italic;">def __init__(self, val=0, left=None, right=None):</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.val = val</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.left = left</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.right = right</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">allPossibleFBT</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>) -&gt; List[Optional[TreeNode]]:
+        <span style="font-weight: bold;">if</span> n == 0:
+            <span style="font-weight: bold;">return</span> []
+        <span style="font-weight: bold;">if</span> n == 1:
+            <span style="font-weight: bold;">return</span> [TreeNode()]
+
+        ans = []
+        <span style="font-weight: bold;">for</span> l <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, n - 1):
+            r = n - l - 1
+            lt = <span style="font-weight: bold;">self</span>.allPossibleFBT(l)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(lt) == 0:
+                <span style="font-weight: bold;">continue</span>
+            rt = <span style="font-weight: bold;">self</span>.allPossibleFBT(r)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(rt) == 0:
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold;">for</span> ln <span style="font-weight: bold;">in</span> lt:
+                <span style="font-weight: bold;">for</span> rn <span style="font-weight: bold;">in</span> rt:
+                    ans.append(TreeNode(val=0, left=ln, right=rn))
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgdbe4196" class="outline-2">
+<h2 id="orgdbe4196">Leetcode: 1463. Cherry Pickup II</h2>
+<div class="outline-text-2" id="text-orgdbe4196">
+<p>
+<a href="https://leetcode.com/problems/cherry-pickup-ii/">Problem Statement</a>
+</p>
+
+<p>
+We can describe the problem using the following recurrence: \(f(i, a, b)\) is \(0\) if \(i == n\), otherwise it will be the cherries collected by each robot plus the best possible moves for both of them.  The problem-space has \(O(n \times m^2)\) nodes and require \(O(1)\) to compute each one of them.  So, the time and space complexity is \(O(n \times m^2)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">cherryPickup</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        n = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(grid[0])
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">neighbours</span>(j):
+            <span style="font-weight: bold;">for</span> dj <span style="font-weight: bold;">in</span> [-1, +0, +1]:
+                <span style="font-weight: bold;">if</span> 0 &lt;= j + dj &lt; m:
+                    <span style="font-weight: bold;">yield</span> j + dj
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, a, b):
+            <span style="font-weight: bold;">if</span> i == n:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">if</span> a &gt; b:
+                <span style="font-weight: bold;">return</span> dfs(i, b, a)
+            base = grid[i][a]
+            <span style="font-weight: bold;">if</span> a != b:
+                base += grid[i][b]
+
+            best = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">for</span> na <span style="font-weight: bold;">in</span> neighbours(a):
+                <span style="font-weight: bold;">for</span> nb <span style="font-weight: bold;">in</span> neighbours(b):
+                    v = dfs(i + 1, na, nb)
+                    <span style="font-weight: bold;">if</span> best <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> best &lt; v:
+                        best = v
+            <span style="font-weight: bold;">return</span> base + best
+
+        <span style="font-weight: bold;">return</span> dfs(0, 0, m - 1)
+
+
+<span style="font-weight: bold;">assert</span> Solution().cherryPickup([[3, 1, 1], [2, 5, 1], [1, 5, 5], [2, 1, 1]]) == 24
+<span style="font-weight: bold;">assert</span> (
+    Solution().cherryPickup(
+        [
+            [1, 0, 0, 0, 0, 0, 1],
+            [2, 0, 0, 0, 0, 3, 0],
+            [2, 0, 9, 0, 0, 0, 0],
+            [0, 3, 0, 5, 4, 0, 0],
+            [1, 0, 2, 3, 0, 0, 6],
+        ]
+    )
+    == 28
+)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

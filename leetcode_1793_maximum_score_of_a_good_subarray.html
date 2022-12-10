@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1793. Maximum Score of a Good Subarray</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1793. Maximum Score of a Good Subarray</h1>
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  The problem asks to find indexes \(i\) and \(j\) such that \(i \leq k \leq j\), but the optimal choice can have the minimum value in \(i\) or \(j\).  Therefore, we can try to find the best \(j\) by supposing that \(i\) the is minimum one and the do the same fixing \(j\).  To do so, we need a data structure (two sorted lists) that we could query \(j\) in logarithm time.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumScore</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(solve(nums, k), solve(<span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">reversed</span>(nums)), <span style="font-weight: bold;">len</span>(nums) - k - 1))
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(nums, k):
+    <span style="font-weight: bold; font-style: italic;">right</span> = []
+    <span style="font-weight: bold; font-style: italic;">cur</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"+inf"</span>)
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k, <span style="font-weight: bold;">len</span>(nums)):
+        <span style="font-weight: bold; font-style: italic;">cur</span> = <span style="font-weight: bold;">min</span>(cur, nums[i])
+        right.append((i, cur))
+
+    <span style="font-weight: bold; font-style: italic;">a</span> = SortedList(right, key=<span style="font-weight: bold;">lambda</span> e: -e[1])
+    c0 = SortedList([], key=<span style="font-weight: bold;">lambda</span> e: e[1])
+    c1 = SortedList([], key=<span style="font-weight: bold;">lambda</span> e: -e[0])
+
+    ans = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+    cur = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"+inf"</span>)
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k, -1, -1):
+        cur = <span style="font-weight: bold;">min</span>(cur, nums[i])
+        <span style="font-weight: bold;">while</span> a <span style="font-weight: bold;">and</span> a[0][1] &gt;= cur:
+            e = a.pop(0)
+            c0.add(e)
+            c1.add(e)
+        <span style="font-weight: bold;">while</span> c0 <span style="font-weight: bold;">and</span> c0[0][1] &lt; cur:
+            e = c0.pop(0)
+            c1.discard(e)
+        <span style="font-weight: bold;">if</span> c1 <span style="font-weight: bold;">and</span> cur * (c1[0][0] - i + 1) &gt; ans:
+            ans = cur * (c1[0][0] - i + 1)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+<span style="font-weight: bold;">assert</span> Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumScore</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(solve(nums, k), solve(<span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">reversed</span>(nums)), <span style="font-weight: bold;">len</span>(nums) - k - 1))
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(nums, k):
+    <span style="font-weight: bold; font-style: italic;">right</span> = []
+    <span style="font-weight: bold; font-style: italic;">cur</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"+inf"</span>)
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k, <span style="font-weight: bold;">len</span>(nums)):
+        <span style="font-weight: bold; font-style: italic;">cur</span> = <span style="font-weight: bold;">min</span>(cur, nums[i])
+        <span style="font-weight: bold;">if</span> right <span style="font-weight: bold;">and</span> right[-1][1] == cur:
+            right[-1][0] = i
+        <span style="font-weight: bold;">else</span>:
+            right.append([i, cur])
+    right.sort(key=<span style="font-weight: bold;">lambda</span> e: e[1], reverse=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+
+    j = 0
+    ans = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+    cur = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"+inf"</span>)
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k, -1, -1):
+        cur = <span style="font-weight: bold;">min</span>(cur, nums[i])
+        <span style="font-weight: bold;">while</span> j &lt; <span style="font-weight: bold;">len</span>(right) <span style="font-weight: bold;">and</span> right[j][1] &gt; cur:
+            j += 1
+        <span style="font-weight: bold;">if</span> j == <span style="font-weight: bold;">len</span>(right):
+            ans = <span style="font-weight: bold;">max</span>(ans, cur * (<span style="font-weight: bold;">len</span>(nums) - i))
+        <span style="font-weight: bold;">else</span>:
+            ans = <span style="font-weight: bold;">max</span>(ans, cur * (right[j <span style="font-weight: bold;">if</span> right[j][1] == cur <span style="font-weight: bold;">else</span> j - 1][0] - i + 1))
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+<span style="font-weight: bold;">assert</span> Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  Suppose the input is \(3,4,5\).  If we start from \(4\), we would expand the interval first to \(5\) and then to \(3\) to make sure that we would consider the minimum \(4\) times its max range.  If the input is \(5, 4, 3\), we would like to expand first to the left and then to the right.  Starting from \(k\), we have only two choices to make to expand the interval: expand to the direction that maximizes the minimum value.  Time complexity is \(O(n)\) and space is \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumScore</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        i = <span style="font-weight: bold; font-style: italic;">j</span> = k
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; font-style: italic;">m</span> = nums[k]
+
+        <span style="font-weight: bold;">while</span> i &gt; 0 <span style="font-weight: bold;">or</span> j &lt; <span style="font-weight: bold;">len</span>(nums) - 1:
+            <span style="font-weight: bold;">if</span> i == 0:
+                j += 1
+            <span style="font-weight: bold;">elif</span> j == <span style="font-weight: bold;">len</span>(nums) - 1:
+                i -= 1
+            <span style="font-weight: bold;">elif</span> nums[i - 1] &lt; nums[j + 1]:
+                j += 1
+            <span style="font-weight: bold;">else</span>:
+                i -= 1
+            m = <span style="font-weight: bold;">min</span>(m, nums[i], nums[j])
+            ans = <span style="font-weight: bold;">max</span>(ans, m * (j - i + 1))
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().maximumScore([1, 4, 3, 7, 4, 5], 3) == 15
+<span style="font-weight: bold;">assert</span> Solution().maximumScore([5, 5, 4, 5, 4, 1, 1, 1], 0) == 20
+</pre>
+</div>
+</div>
+</body>
+</html>

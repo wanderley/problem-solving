@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #028: Leetcode - Bucket Sort</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #028: Leetcode - Bucket Sort</h1>
+
+<div id="outline-container-org84903ff" class="outline-2">
+<h2 id="org84903ff">Leetcode: 220. Contains Duplicate III</h2>
+<div class="outline-text-2" id="text-org84903ff">
+<p>
+<a href="https://leetcode.com/problems/contains-duplicate-iii/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="mistake_did_not_try_hard_to_solve_alternative_problem.html#ID-AC9291C6-4C72-4143-80F2-0D414EF7B681">Mistake: Did not try hard to solve alternative problem</a>.  Thought that I would need linear time to check values in the adjacent buckets, but it is not the case because each bucket has at most one element.</li>
+
+<li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  If the last \(k\) elements are sorted and we want to add a new element.  We first remove the \(i-k-1\) element from our data structure inspired on <a href="bucket_sort.html#ID-B2345736-5C27-421B-BDDC-F247687A2B0E">Bucket Sort</a>, and then we ask "is there a element x in the data structure where \(nums[i]-x \leq t\) or $x - nums[i] &le; t?".  To answer this question, our data structure can keep the numbers in buckets of size \(t\) (e.g. $[0..t], [t+1&#x2026;2*t+2], &#x2026;$).  Time complexity is \(O(n)\) and space is \(O(k)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">containsNearbyAlmostDuplicate</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>, t: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">minv</span> = <span style="font-weight: bold;">min</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">groups</span> = {}
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">key</span>(i):
+            <span style="font-weight: bold;">return</span> (nums[i] - minv) // (t + 1)
+
+        <span style="font-weight: bold;">for</span> i, n <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(nums):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(groups) == k + 1:
+                <span style="font-weight: bold;">del</span> groups[key(i - k - 1)]
+            <span style="font-weight: bold; font-style: italic;">j</span> = key(i)
+            <span style="font-weight: bold;">if</span> j <span style="font-weight: bold;">in</span> groups:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">if</span> j - 1 <span style="font-weight: bold;">in</span> groups <span style="font-weight: bold;">and</span> (n - groups[j - 1]) &lt;= t:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">if</span> j + 1 <span style="font-weight: bold;">in</span> groups <span style="font-weight: bold;">and</span> (groups[j + 1] - n) &lt;= <span style="font-weight: bold; font-style: italic;">t</span>:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            groups[j] = n
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  If the last \(k\) elements are sorted (using <a href="bucket_sort.html#ID-B2345736-5C27-421B-BDDC-F247687A2B0E">Bucket Sort</a>) and we want to add a new element.  Instead of storing the numbers in bucket as in the previous item, we can keep a list of sorted numbers and check the previous greater and next smaller numbers to see if they are \(t\) from the current number.  Time complexity is \(O(n \log k)\) and space is \(O(k)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">containsNearbyAlmostDuplicate</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>, t: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">l</span> = SortedList()
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(l) == k + 1:
+                l.remove(nums[i - k - 1])
+            <span style="font-weight: bold;">if</span> nums[i] <span style="font-weight: bold;">in</span> l:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(l) &gt; 0:
+                <span style="font-weight: bold; font-style: italic;">j</span> = l.bisect_left(nums[i])
+                <span style="font-weight: bold; font-style: italic;">left</span> = l[j] <span style="font-weight: bold;">if</span> j &lt; <span style="font-weight: bold;">len</span>(l) <span style="font-weight: bold;">and</span> l[j] &lt;= nums[i] <span style="font-weight: bold;">else</span> l[j - 1]
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">abs</span>(left - nums[i]) &lt;= <span style="font-weight: bold; font-style: italic;">t</span>:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+                j = l.bisect_right(nums[i])
+                <span style="font-weight: bold; font-style: italic;">right</span> = l[j] <span style="font-weight: bold;">if</span> j &lt; <span style="font-weight: bold;">len</span>(l) <span style="font-weight: bold;">else</span> l[j - 1]
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">abs</span>(right - nums[i]) &lt;= t:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+            l.add(nums[i])
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd503b34" class="outline-2">
+<h2 id="orgd503b34">Leetcode: 347. Top K Frequent Elements</h2>
+<div class="outline-text-2" id="text-orgd503b34">
+<p>
+<a href="https://leetcode.com/problems/top-k-frequent-elements/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Suppose that we have all numbers sorted by their frequency.  The problem becomes getting the \(k\) largest one.  As any number can appear at most \(n\) times, we can sort them using <a href="bucket_sort.html#ID-B2345736-5C27-421B-BDDC-F247687A2B0E">Bucket Sort</a> in linear time.  Time and space complexity are \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> Counter
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">topKFrequent</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        N = <span style="font-weight: bold;">len</span>(nums)
+
+        <span style="font-weight: bold; font-style: italic;">c</span> = Counter(nums)
+        <span style="font-weight: bold; font-style: italic;">f</span> = [[] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N + 1)]
+        <span style="font-weight: bold;">for</span> n, i <span style="font-weight: bold;">in</span> c.items():
+            f[i].append(n)
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N, -1, -1):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(ans) == k:
+                <span style="font-weight: bold;">break</span>
+            ans.extend(f[i][: k - <span style="font-weight: bold;">len</span>(ans)])
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().topKFrequent([1, 1, 1, 2, 2, 3], 2) == [1, 2]
+<span style="font-weight: bold;">assert</span> Solution().topKFrequent([1], 1) == [1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org58d1f5b" class="outline-2">
+<h2 id="org58d1f5b">Leetcode: 451. Sort Characters By Frequency</h2>
+<div class="outline-text-2" id="text-org58d1f5b">
+<p>
+<a href="https://leetcode.com/problems/sort-characters-by-frequency/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Sort all letters in bucket (<a href="bucket_sort.html#ID-B2345736-5C27-421B-BDDC-F247687A2B0E">Bucket Sort</a>) by frequency and them build the answer using the buckets.  Time and space complexity are \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> Counter
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">frequencySort</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        N = <span style="font-weight: bold;">len</span>(s)
+        <span style="font-weight: bold; font-style: italic;">cnt</span> = Counter(s)
+        <span style="font-weight: bold; font-style: italic;">f</span> = [[] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N + 1)]
+        <span style="font-weight: bold;">for</span> k, v <span style="font-weight: bold;">in</span> cnt.items():
+            f[v].append(k)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-style: italic;">""</span>
+        <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N, -1, -1):
+            <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">f</span>[v]:
+                ans += x * v
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().frequencySort(<span style="font-style: italic;">"tree"</span>) == <span style="font-style: italic;">"eetr"</span>
+<span style="font-weight: bold;">assert</span> Solution().frequencySort(<span style="font-style: italic;">"cccaaa"</span>) == <span style="font-style: italic;">"cccaaa"</span>
+<span style="font-weight: bold;">assert</span> Solution().frequencySort(<span style="font-style: italic;">"Aabb"</span>) == <span style="font-style: italic;">"bbAa"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc9f3018" class="outline-2">
+<h2 id="orgc9f3018">Leetcode: 692. Top K Frequent Words</h2>
+<div class="outline-text-2" id="text-orgc9f3018">
+<p>
+<a href="https://leetcode.com/problems/top-k-frequent-words/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Sort all words by frequency using <a href="bucket_sort.html#ID-B2345736-5C27-421B-BDDC-F247687A2B0E">Bucket Sort</a> and then build the answer using the buckets.  Time complexity is \(O(n \times log b)\) where \(b\) is the size of bigger bucket, and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> Counter
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">topKFrequent</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>], K: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        N = <span style="font-weight: bold;">len</span>(words)
+        <span style="font-weight: bold; font-style: italic;">c</span> = Counter(words)
+        <span style="font-weight: bold; font-style: italic;">f</span> = [[] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N + 1)]
+        <span style="font-weight: bold;">for</span> k, v <span style="font-weight: bold;">in</span> c.items():
+            f[v].append(k)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N, -1, -1):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(ans) == K:
+                <span style="font-weight: bold;">break</span>
+            ans.extend(<span style="font-weight: bold;">sorted</span>(f[i])[: K - <span style="font-weight: bold;">len</span>(ans)])
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().topKFrequent([<span style="font-style: italic;">"i"</span>, <span style="font-style: italic;">"love"</span>, <span style="font-style: italic;">"leetcode"</span>, <span style="font-style: italic;">"i"</span>, <span style="font-style: italic;">"love"</span>, <span style="font-style: italic;">"coding"</span>], 2) == [
+    <span style="font-style: italic;">"i"</span>,
+    <span style="font-style: italic;">"love"</span>,
+]
+<span style="font-weight: bold;">assert</span> Solution().topKFrequent(
+    [<span style="font-style: italic;">"the"</span>, <span style="font-style: italic;">"day"</span>, <span style="font-style: italic;">"is"</span>, <span style="font-style: italic;">"sunny"</span>, <span style="font-style: italic;">"the"</span>, <span style="font-style: italic;">"the"</span>, <span style="font-style: italic;">"the"</span>, <span style="font-style: italic;">"sunny"</span>, <span style="font-style: italic;">"is"</span>, <span style="font-style: italic;">"is"</span>], 4
+) == [<span style="font-style: italic;">"the"</span>, <span style="font-style: italic;">"is"</span>, <span style="font-style: italic;">"sunny"</span>, <span style="font-style: italic;">"day"</span>]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0b7bc42" class="outline-2">
+<h2 id="org0b7bc42">Leetcode: 912. Sort an Array</h2>
+<div class="outline-text-2" id="text-org0b7bc42">
+<p>
+<a href="https://leetcode.com/problems/sort-an-array/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sortArray</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">M</span> = 50_000 * 2
+        <span style="font-weight: bold; font-style: italic;">c</span> = [0 <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M + 1)]
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums:
+            <span style="font-weight: bold; font-style: italic;">c</span>[n + 50_000] += 1
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(0, M + 1):
+            <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(c[i]):
+                ans.append(i - 50_000)
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().sortArray([5, 2, 3, 1]) == [1, 2, 3, 5]
+<span style="font-weight: bold;">assert</span> Solution().sortArray([5, 1, 1, 2, 0, 0]) == [0, 0, 1, 1, 2, 5]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

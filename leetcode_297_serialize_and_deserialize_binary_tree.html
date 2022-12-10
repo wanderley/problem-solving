@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 297. Serialize and Deserialize Binary Tree</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 297. Serialize and Deserialize Binary Tree</h1>
+<ul class="org-ul">
+<li><a href="pattern_traverse_trees.html#ID-768F4C3F-EEAA-429B-886F-0435CEC7DACD">Pattern: Traverse paths on tree</a>.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for a binary tree node.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class TreeNode(object):</span>
+<span style="font-weight: bold; font-style: italic;">#     </span><span style="font-weight: bold; font-style: italic;">def __init__(self, x):</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.val = x</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.left = None</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.right = None</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Codec</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">serialize</span>(<span style="font-weight: bold;">self</span>, root):
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(node):
+            <span style="font-weight: bold;">if</span> node <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"None"</span>
+            <span style="font-weight: bold;">return</span> f<span style="font-style: italic;">"</span>{node.val}<span style="font-style: italic;">,</span>{dfs(node.left)}<span style="font-style: italic;">,</span>{dfs(node.right)}<span style="font-style: italic;">"</span>
+
+        <span style="font-weight: bold;">return</span> dfs(root)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">deserialize</span>(<span style="font-weight: bold;">self</span>, data):
+        vals = [<span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">if</span> v == <span style="font-style: italic;">"None"</span> <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">int</span>(v) <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> data.split(<span style="font-style: italic;">","</span>)]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i):
+            <span style="font-weight: bold;">if</span> vals[i] <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                <span style="font-weight: bold;">return</span> i + 1, <span style="font-weight: bold; text-decoration: underline;">None</span>
+            u = vals[i]
+            <span style="font-weight: bold; font-style: italic;">j</span>, <span style="font-weight: bold; font-style: italic;">left</span> = dfs(i + 1)
+            <span style="font-weight: bold; font-style: italic;">j</span>, <span style="font-weight: bold; font-style: italic;">right</span> = dfs(j)
+            <span style="font-weight: bold;">return</span> j, TreeNode(u, left, right)
+
+        <span style="font-weight: bold;">return</span> dfs(0)[1]
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Your Codec object will be instantiated and called as such:</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">ser = Codec()</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">deser = Codec()</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">ans = deser.deserialize(ser.serialize(root))</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 212. Word Search II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 212. Word Search II</h1>
+<p>
+<a href="https://leetcode.com/problems/word-search-ii/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="mistake_high_constant_factor_in_the_implementation.html#ID-56B18554-8EDB-44AF-B72A-8FD307B2980C">Mistake: High constant factor in the implementation</a>.  Did not implement any prune to the backtracking.</li>
+
+<li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  The problem requires backtracking the board to find words.  Instead of look up the words on a list, we create a <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a> with all words on the dictionary and backtrack while we traverse the tree.  Words found are removed from the tree to avoid finding the same word over and over again.  Time complexity is \(O(4 \times 10 \times n^2)\), and space complexity is \(O(\sum|word[i]|)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findWords</span>(<span style="font-weight: bold;">self</span>, board: List[List[<span style="font-weight: bold;">str</span>]], words: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        N = <span style="font-weight: bold;">len</span>(board)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(board[0])
+
+        <span style="font-weight: bold; font-style: italic;">root</span> = {}
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">words</span>:
+            node = root
+            <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">w</span>:
+                node.setdefault(c, {})
+                node = node[c]
+            <span style="font-weight: bold; font-style: italic;">node</span>[<span style="font-style: italic;">"$"</span>] = w
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">set</span>()
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j, node):
+            <span style="font-weight: bold;">if</span> node.get(<span style="font-style: italic;">"$"</span>):
+                ans.add(node[<span style="font-style: italic;">"$"</span>])
+                <span style="font-weight: bold;">del</span> node[<span style="font-style: italic;">"$"</span>]
+
+            <span style="font-weight: bold; font-style: italic;">c</span> = board[i][j]
+            board[i][<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-style: italic;">"*"</span>
+            <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]:
+                <span style="font-weight: bold; font-style: italic;">ni</span> = di + i
+                <span style="font-weight: bold; font-style: italic;">nj</span> = dj + j
+                <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; M <span style="font-weight: bold;">and</span> board[ni][nj] <span style="font-weight: bold;">in</span> node:
+                    dfs(ni, nj, node[board[ni][nj]])
+                    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(node[board[ni][nj]]) == 0:
+                        <span style="font-weight: bold;">del</span> node[board[ni][nj]]
+            board[i][<span style="font-weight: bold; font-style: italic;">j</span>] = c
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> board[i][j] <span style="font-weight: bold;">in</span> root:
+                    dfs(i, j, root[board[i][j]])
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">list</span>(ans)
+
+
+<span style="font-weight: bold;">assert</span> Solution().findWords(
+    [
+        [<span style="font-style: italic;">"o"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"n"</span>],
+        [<span style="font-style: italic;">"e"</span>, <span style="font-style: italic;">"t"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"e"</span>],
+        [<span style="font-style: italic;">"i"</span>, <span style="font-style: italic;">"h"</span>, <span style="font-style: italic;">"k"</span>, <span style="font-style: italic;">"r"</span>],
+        [<span style="font-style: italic;">"i"</span>, <span style="font-style: italic;">"f"</span>, <span style="font-style: italic;">"l"</span>, <span style="font-style: italic;">"v"</span>],
+    ],
+    [<span style="font-style: italic;">"oath"</span>, <span style="font-style: italic;">"pea"</span>, <span style="font-style: italic;">"eat"</span>, <span style="font-style: italic;">"rain"</span>],
+) == [<span style="font-style: italic;">"eat"</span>, <span style="font-style: italic;">"oath"</span>]
+<span style="font-weight: bold;">assert</span> Solution().findWords([[<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>], [<span style="font-style: italic;">"c"</span>, <span style="font-style: italic;">"d"</span>]], [<span style="font-style: italic;">"abcb"</span>]) == []
+</pre>
+</div>
+</div>
+</body>
+</html>

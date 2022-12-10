@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2301. Match Substring After Replacement</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2301. Match Substring After Replacement</h1>
+<p>
+<a href="https://leetcode.com/problems/match-substring-after-replacement/">Problem Statement</a>: Given two strings \(s, p\) and a list of pairs \(m\), determine if there is an index \(i\) such that \(s[i+j] = p[j]\) or there is \(k\) where \(m[k]=(p[j], s[i])\), for \(0 \leq j < |p|\).
+</p>
+
+<p>
+We can <a href="search_substring_in_string_using_brute_force.html#ID-E3CBBE60-D8DC-453F-9C52-0AB0359B6957">Search substring in string using brute-force</a>, which is match \(p\) with all substrings \(s[0...], s[1...], s[2...]\).  To match each character efficiently, we can use a hash set \(m\) to store the possible substitution as pair \((o, n)\) where \(o\) and \(n\) are characters.  As it can be done in \(O(1)\), the problem can be solved in quadratic time.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|s| \times |p|)\).</li>
+<li>Space complexity: \(O(|p|)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, sub, mappings):
+    <span style="font-weight: bold; font-style: italic;">valid_pairs</span> = <span style="font-weight: bold;">set</span>()
+    <span style="font-weight: bold;">for</span> f, t <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">mappings</span>:
+        valid_pairs.add((f, t))
+
+
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(s)):
+        j = 0
+        <span style="font-weight: bold;">while</span> (
+            i + j &lt; <span style="font-weight: bold;">len</span>(s)
+            <span style="font-weight: bold;">and</span> j &lt; <span style="font-weight: bold;">len</span>(sub)
+            <span style="font-weight: bold;">and</span> (s[i + j] == sub[j] <span style="font-weight: bold;">or</span> (sub[j], s[i + j]) <span style="font-weight: bold;">in</span> valid_pairs)
+        ):
+            j += 1
+        <span style="font-weight: bold;">if</span> j == <span style="font-weight: bold;">len</span>(sub):
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"fool3e7bar"</span>, <span style="font-style: italic;">"leet"</span>, [[<span style="font-style: italic;">"e"</span>, <span style="font-style: italic;">"3"</span>], [<span style="font-style: italic;">"t"</span>, <span style="font-style: italic;">"7"</span>], [<span style="font-style: italic;">"t"</span>, <span style="font-style: italic;">"8"</span>]]) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"fooleetbar"</span>, <span style="font-style: italic;">"f00l"</span>, [[<span style="font-style: italic;">"o"</span>, <span style="font-style: italic;">"0"</span>]]) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> (
+    solve(
+        <span style="font-style: italic;">"Fool33tbaR"</span>,
+        <span style="font-style: italic;">"leetd"</span>,
+        [[<span style="font-style: italic;">"e"</span>, <span style="font-style: italic;">"3"</span>], [<span style="font-style: italic;">"t"</span>, <span style="font-style: italic;">"7"</span>], [<span style="font-style: italic;">"t"</span>, <span style="font-style: italic;">"8"</span>], [<span style="font-style: italic;">"d"</span>, <span style="font-style: italic;">"b"</span>], [<span style="font-style: italic;">"p"</span>, <span style="font-style: italic;">"b"</span>]],
+    )
+    == <span style="font-weight: bold; text-decoration: underline;">True</span>
+)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">matchReplacement</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, sub: <span style="font-weight: bold;">str</span>, mappings: List[List[<span style="font-weight: bold;">str</span>]]) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">return</span> solve(s, sub, mappings)
+</pre>
+</div>
+</div>
+</body>
+</html>

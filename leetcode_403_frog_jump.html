@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 403. Frog Jump</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 403. Frog Jump</h1>
+<ul class="org-ul">
+<li><a href="mistake_misread_the_problem.html#ID-192401C2-DA6F-4496-B530-89A3546712FD">Mistake: Misread the problem</a> and tried to solve using a wrong DP approach.</li>
+
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Stones are vertices and two stones are connected if the frog can jump between them.  The problem becomes search a path from the start position to the end using a <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a>.  Time and space complexity are \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">canCross</span>(<span style="font-weight: bold;">self</span>, stones: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">bool</span>:
+        N = <span style="font-weight: bold;">len</span>(stones)
+        <span style="font-weight: bold; font-style: italic;">S</span> = {<span style="font-weight: bold; font-style: italic;">stones</span>[i]: i <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)}
+        seen = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold; font-style: italic;">queue</span> = [(0, 1)]
+        <span style="font-weight: bold;">for</span> i, k <span style="font-weight: bold;">in</span> queue:
+            <span style="font-weight: bold;">if</span> i == N - 1:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> [-1, 0, +1] <span style="font-weight: bold;">if</span> i &gt; 0 <span style="font-weight: bold;">else</span> [0]:
+                v = stones[i] + k + d
+                <span style="font-weight: bold;">if</span> v <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> S:
+                    <span style="font-weight: bold;">continue</span>
+                j = S[v]
+                <span style="font-weight: bold;">if</span> (j, k + d) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                    seen.add((j, k + d))
+                    queue.append((j, k + d))
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

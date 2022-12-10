@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 753. Cracking the Safe</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 753. Cracking the Safe</h1>
+<ul class="org-ul">
+<li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Find the smallest string which contains all possible string with \(n\) digits where each digit is between \(0\) and \(k-1\).  I don't know how to prove (even though I saw a relationship with <a href="eulerian_path_in_directed_graph.html#ID-BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9">Eulerian path in Directed Graph</a>), it is always possible to create such string where each new digit covers a new possible string.  Therefore, we can try all possibilities with a basic prune (i.e. stop if the current answer is greater than the best one so far).  Time complexity is \(O(X \times k)\) where \(X\) is the size of the final string.  Space complexity is \(O(X)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">crackSafe</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        M = k**n
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bt</span>(cur, words):
+            <span style="font-weight: bold;">nonlocal</span> ans
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(words) == <span style="font-weight: bold; font-style: italic;">M</span>:
+                ans = cur
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k):
+                new = cur + <span style="font-weight: bold;">str</span>(d)
+                <span style="font-weight: bold; font-style: italic;">word</span> = new[-n:]
+                <span style="font-weight: bold;">if</span> word <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> words:
+                    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(word) == n:
+                        words.add(word)
+                    bt(new, words)
+                    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(word) == n:
+                        words.discard(word)
+
+        bt(<span style="font-style: italic;">""</span>, <span style="font-weight: bold;">set</span>())
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().crackSafe(1, 2) == <span style="font-style: italic;">"10"</span>
+<span style="font-weight: bold;">assert</span> Solution().crackSafe(2, 2) == <span style="font-style: italic;">"01100"</span>
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>A solution with <a href="eulerian_path_in_directed_graph.html#ID-BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9">Eulerian path in Directed Graph</a> is possible using <a href="https://en.wikipedia.org/wiki/De_Bruijn_sequence#Example_using_de_Bruijn_graph">Bruijin graph</a>, where vertices are prefix of size \(n-1\) and edges are label with \(k\) digits to form the next word.  Time and space complexity are \(O(k^n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">crackSafe</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        st = [<span style="font-style: italic;">"0"</span> * n]
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>(st)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">adj</span>(u):
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k):
+                <span style="font-weight: bold; font-style: italic;">v</span> = (u + <span style="font-weight: bold;">str</span>(i))[-<span style="font-weight: bold; font-style: italic;">n</span>:]
+                <span style="font-weight: bold;">if</span> v <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                    <span style="font-weight: bold;">return</span> v
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        words = []
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">st</span>:
+            u = adj(st[-1])
+            <span style="font-weight: bold;">if</span> u <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                words.append(st.pop())
+                <span style="font-weight: bold;">continue</span>
+            seen.add(u)
+            st.append(u)
+        words.reverse()
+
+        res = words[0]
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">words</span>[1:]:
+            res += w[-1]
+        <span style="font-weight: bold;">return</span> res
+
+
+<span style="font-weight: bold;">assert</span> Solution().crackSafe(1, 2) == <span style="font-style: italic;">"10"</span>
+<span style="font-weight: bold;">assert</span> Solution().crackSafe(2, 2) == <span style="font-style: italic;">"01100"</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

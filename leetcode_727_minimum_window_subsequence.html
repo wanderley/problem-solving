@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 727. Minimum Window Subsequence</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 727. Minimum Window Subsequence</h1>
+<ul class="org-ul">
+<li><a href="mistake_high_constant_factor_in_the_implementation.html#ID-56B18554-8EDB-44AF-B72A-8FD307B2980C">Mistake: High constant factor in the implementation</a>.</li>
+
+<li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  Find the smallest index \(f(i,j)=k\) where \(s[i:k]\) has \(t[j:]\) as subsequence.  The problem becomes getting the minimum between \(f(i,0)\).  Time complexity is \(O(n \times m)\) and space is \(O(m)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minWindow</span>(<span style="font-weight: bold;">self</span>, s1: <span style="font-weight: bold;">str</span>, s2: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        N = <span style="font-weight: bold;">len</span>(s1)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(s2)
+
+        <span style="font-weight: bold; font-style: italic;">cur</span> = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * (M + 1)
+        <span style="font-weight: bold; font-style: italic;">cur</span>[<span style="font-weight: bold; font-style: italic;">M</span>] = N
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, -1, -1):
+            <span style="font-weight: bold; font-style: italic;">new</span> = [<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * (M + 1)
+            <span style="font-weight: bold; font-style: italic;">new</span>[<span style="font-weight: bold; font-style: italic;">M</span>] = i
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> s1[i] == s2[j]:
+                    new[j] = cur[j + 1]
+                <span style="font-weight: bold;">else</span>:
+                    new[j] = cur[j]
+
+            j = new[0]
+            <span style="font-weight: bold;">if</span> j &lt;= N <span style="font-weight: bold;">and</span> (ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> (j - i) &lt;= <span style="font-weight: bold;">len</span>(ans)):
+                ans = s1[i:j]
+            cur = new
+
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span> <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">else</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().minWindow(<span style="font-style: italic;">"abcdebdde"</span>, <span style="font-style: italic;">"bde"</span>) == <span style="font-style: italic;">"bcde"</span>
+<span style="font-weight: bold;">assert</span> Solution().minWindow(<span style="font-style: italic;">"jmeqksfrsdcmsiwvaovztaqenprpvnbstl"</span>, <span style="font-style: italic;">"u"</span>) == <span style="font-style: italic;">""</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

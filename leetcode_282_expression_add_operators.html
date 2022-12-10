@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 282. Expression Add Operators</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 282. Expression Add Operators</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  Didn't even try to write down edge cases.</li>
+
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  The length of \(num\) is at most 10 what means that there are 8 positions where we can decide to not put an operator or put \(+,-,\times\).  So, there are \(8^4\) possible expressions.  Generate all them avoiding operands with leading zero and compute their value on the end.  Time complexity is \(O(4^n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addOperators</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">str</span>, target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">valid</span>(exp):
+            value = 0
+            <span style="font-weight: bold;">for</span> e <span style="font-weight: bold;">in</span> exp.replace(<span style="font-style: italic;">"-"</span>, <span style="font-style: italic;">"+-"</span>).split(<span style="font-style: italic;">"+"</span>):
+                <span style="font-weight: bold; font-style: italic;">cur</span> = 1
+                <span style="font-weight: bold;">for</span> m <span style="font-weight: bold;">in</span> e.split(<span style="font-style: italic;">"*"</span>):
+                    <span style="font-weight: bold; font-style: italic;">cur</span> *= <span style="font-weight: bold;">int</span>(m)
+                <span style="font-weight: bold; font-style: italic;">value</span> += cur
+            <span style="font-weight: bold;">return</span> value == target
+
+        ans = []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bt</span>(i, leading, exp):
+            <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(num):
+                <span style="font-weight: bold;">if</span> valid(exp):
+                    ans.append(exp)
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">for</span> o <span style="font-weight: bold;">in</span> <span style="font-style: italic;">"*"</span>, <span style="font-style: italic;">"+"</span>, <span style="font-style: italic;">"-"</span>:
+                bt(i + 1, num[i] == <span style="font-style: italic;">"0"</span>, exp + o + num[i])
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> leading:
+                bt(i + 1, <span style="font-weight: bold; text-decoration: underline;">False</span>, exp + num[i])
+
+        bt(1, num[0] == <span style="font-style: italic;">"0"</span>, num[0])
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().addOperators(<span style="font-style: italic;">"123"</span>, 6) == [<span style="font-style: italic;">"1*2*3"</span>, <span style="font-style: italic;">"1+2+3"</span>]
+<span style="font-weight: bold;">assert</span> Solution().addOperators(<span style="font-style: italic;">"232"</span>, 8) == [<span style="font-style: italic;">"2*3+2"</span>, <span style="font-style: italic;">"2+3*2"</span>]
+<span style="font-weight: bold;">assert</span> Solution().addOperators(<span style="font-style: italic;">"3456237490"</span>, 9191) == []
+</pre>
+</div>
+</div>
+</body>
+</html>

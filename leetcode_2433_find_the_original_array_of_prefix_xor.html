@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2433. Find The Original Array of Prefix Xor</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2433. Find The Original Array of Prefix Xor</h1>
+
+<div id="outline-container-org15d6fdb" class="outline-2">
+<h2 id="org15d6fdb">Understand the problem</h2>
+<div class="outline-text-2" id="text-org15d6fdb">
+<p>
+Given an array \(p\), find an array \(a\) given that \(p_0=a_0\), \(p_1=a_0 \oplus a_1\) and so on.
+</p>
+</div>
+
+<div id="outline-container-org00f12f4" class="outline-3">
+<h3 id="org00f12f4">Useful prompts</h3>
+<div class="outline-text-3" id="text-org00f12f4">
+<ul class="org-ul">
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org01977c5" class="outline-2">
+<h2 id="org01977c5">Devise a plan</h2>
+<div class="outline-text-2" id="text-org01977c5">
+<p>
+Since \(p_i = p_{i-1} \oplus a_i\), then \(a_i=p_{i-1} \oplus p_i\).
+</p>
+</div>
+
+<div id="outline-container-orge6e1f3b" class="outline-3">
+<h3 id="orge6e1f3b">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orge6e1f3b">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">hardestWorker</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, logs: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        ans = (logs[0][0], logs[0][1])
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, <span style="font-weight: bold;">len</span>(logs)):
+            <span style="font-weight: bold; font-style: italic;">cur</span> = logs[i][1] - logs[i - 1][1]
+            <span style="font-weight: bold;">if</span> cur &gt; ans[1] <span style="font-weight: bold;">or</span> cur == ans[1] <span style="font-weight: bold;">and</span> logs[i][0] &lt; ans[0]:
+                ans = (logs[i][0], cur)
+        <span style="font-weight: bold;">return</span> ans[0]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

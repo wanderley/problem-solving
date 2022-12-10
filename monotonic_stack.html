@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Monotonic Stack</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Monotonic Stack</h1>
+<p>
+Monotonic Stack is a stack where all elements from bottom to top are in increase or decrease other.  In a Mono-decrease stack has the smaller element on the top and the greater on the bottom.  The reverse is true for a Mono-increase stack.
+</p>
+
+
+<div id="orge477371" class="figure">
+<p><img src="assets/2022-06-11_11-32-49_screenshot.png" alt="2022-06-11_11-32-49_screenshot.png" />
+</p>
+</div>
+
+<p>
+In the classic game Hanoi Tower, the player needs to move discs from one pin to other without putting a bigger disc on top of a smaller one.  The towers are Mono-decrease stacks.
+</p>
+
+<div id="outline-container-org3f0b63d" class="outline-2">
+<h2 id="org3f0b63d">Problem: Next greater integer in unsorted array</h2>
+<div class="outline-text-2" id="text-org3f0b63d">
+<p>
+Given array \(a\) with \(n\) integers, return an array \(r\) where \(r[i]=j\) is the smallest value such that \(a[j] > a[i]\) and \(j>i\), or \(r[i]=-1\) if there is no such \(j\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\)</li>
+<li>Space complexity: \(O(n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">next_greater</span>(a):
+    <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">stack</span> = deque(maxlen=<span style="font-weight: bold;">len</span>(a))
+    <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(a):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> a[stack[-1]] &lt; x:
+            ans[<span style="font-weight: bold; font-style: italic;">stack</span>[-1]] = i
+            stack.pop()
+        stack.append(i)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> next_greater([1]) == [-1]
+<span style="font-weight: bold;">assert</span> next_greater([1, 2, 3]) == [1, 2, -1]
+<span style="font-weight: bold;">assert</span> next_greater([1, 3, 2]) == [1, -1, -1]
+<span style="font-weight: bold;">assert</span> next_greater([3, 2, 1]) == [-1, -1, -1]
+<span style="font-weight: bold;">assert</span> next_greater([3, 1, 2]) == [-1, 2, -1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc7758dd" class="outline-2">
+<h2 id="orgc7758dd">Problem: Next smaller in unsorted array</h2>
+<div class="outline-text-2" id="text-orgc7758dd">
+<p>
+Given array \(a\) with \(n\) integers, return an array \(r\) where \(r[i]=j\) is the smallest value such that \(a[j] < a[i]\) and \(j>i\), or \(r[i]=-1\) if there is no such \(j\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\)</li>
+<li>Space complexity: \(O(n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">next_smaller</span>(a):
+      <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * <span style="font-weight: bold;">len</span>(a)
+      <span style="font-weight: bold; font-style: italic;">stack</span> = deque(maxlen=<span style="font-weight: bold;">len</span>(a))
+      <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(a):
+            <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> a[stack[-1]] &gt; x:
+                  ans[<span style="font-weight: bold; font-style: italic;">stack</span>[-1]] = i
+                  stack.pop()
+            stack.append(i)
+      <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> next_smaller([1]) == [-1]
+<span style="font-weight: bold;">assert</span> next_smaller([1, 2, 3]) == [-1, -1, -1]
+<span style="font-weight: bold;">assert</span> next_smaller([1, 3, 2]) == [-1,  2, -1]
+<span style="font-weight: bold;">assert</span> next_smaller([3, 2, 1]) == [ 1,  2, -1]
+<span style="font-weight: bold;">assert</span> next_smaller([3, 1, 2]) == [ 1, -1, -1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0e62506" class="outline-2">
+<h2 id="org0e62506">Problem: Previous greater integer in unsorted array</h2>
+<div class="outline-text-2" id="text-org0e62506">
+<p>
+Given array \(a\) with \(n\) integers, return an array \(r\) where \(r[i]=j\) is the greatest value such that \(a[j] > a[i]\) and \(j<i\), or \(r[i]=-1\) if there is no such \(j\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\)</li>
+<li>Space complexity: \(O(n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">prev_greater</span>(a):
+    <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">stack</span> = deque(maxlen=<span style="font-weight: bold;">len</span>(a))
+    <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(a):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> a[stack[-1]] &lt; x:
+            stack.pop()
+        ans[<span style="font-weight: bold; font-style: italic;">i</span>] = -1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(stack) == 0 <span style="font-weight: bold;">else</span> stack[-1]
+        stack.append(i)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> prev_greater([1]) == [-1]
+<span style="font-weight: bold;">assert</span> prev_greater([1, 2, 3]) == [-1, -1, -1]
+<span style="font-weight: bold;">assert</span> prev_greater([1, 3, 2]) == [-1, -1,  1]
+<span style="font-weight: bold;">assert</span> prev_greater([3, 2, 1]) == [-1,  0,  1]
+<span style="font-weight: bold;">assert</span> prev_greater([3, 1, 2]) == [-1,  0,  0]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org816d887" class="outline-2">
+<h2 id="org816d887">Problem: Previous smaller integer in unsorted array</h2>
+<div class="outline-text-2" id="text-org816d887">
+<p>
+Given array \(a\) with \(n\) integers, return an array \(r\) where \(r[i]=j\) is the greatest value such that \(a[j] < a[i]\) and \(j<i\), or \(r[i]=-1\) if there is no such \(j\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\)</li>
+<li>Space complexity: \(O(n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">prev_smaller</span>(a):
+    <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">stack</span> = deque(maxlen=<span style="font-weight: bold;">len</span>(a))
+    <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(a):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> a[stack[-1]] &gt; x:
+            stack.pop()
+        ans[<span style="font-weight: bold; font-style: italic;">i</span>] = -1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(stack) == 0 <span style="font-weight: bold;">else</span> stack[-1]
+        stack.append(i)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> prev_smaller([1]) == [-1]
+<span style="font-weight: bold;">assert</span> prev_smaller([1, 2, 3]) == [-1,  0,  1]
+<span style="font-weight: bold;">assert</span> prev_smaller([1, 3, 2]) == [-1,  0,  0]
+<span style="font-weight: bold;">assert</span> prev_smaller([3, 2, 1]) == [-1, -1, -1]
+<span style="font-weight: bold;">assert</span> prev_smaller([3, 1, 2]) == [-1, -1,  1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org20de3ed" class="outline-2">
+<h2 id="org20de3ed">Problem: Next <i>smallest</i> greater or equal integer in unsorted array</h2>
+<div class="outline-text-2" id="text-org20de3ed">
+<p>
+Given array \(a\) with \(n\) integers, return an array \(r\) where \(r[i]=j\) where \(a[j] \geq a[i]\), \(j>i\), \(a[j]\) is the smallest possible value, and \(j\) is the smallest possible value, or \(r[i]=-1\) if there is no such \(j\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n \log n)\)</li>
+<li>Space complexity: \(O(n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">next_smallest_greater_or_equal</span>(a):
+      <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(a)
+      <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * n
+      <span style="font-weight: bold; font-style: italic;">stack</span> = deque(maxlen=n)
+      <span style="font-weight: bold;">for</span> _, i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(<span style="font-weight: bold;">zip</span>(a, <span style="font-weight: bold;">range</span>(n))):
+            <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> stack[-1] &lt; i:
+                  ans[<span style="font-weight: bold; font-style: italic;">stack</span>[-1]] = i
+                  stack.pop()
+            stack.append(i)
+      <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> next_smallest_greater_or_equal([1]) == [-1]
+<span style="font-weight: bold;">assert</span> next_smallest_greater_or_equal([1, 2, 3]) == [ 1,  2, -1]
+<span style="font-weight: bold;">assert</span> next_smallest_greater_or_equal([1, 3, 2]) == [ 2, -1, -1]
+<span style="font-weight: bold;">assert</span> next_smallest_greater_or_equal([3, 2, 1]) == [-1, -1, -1]
+<span style="font-weight: bold;">assert</span> next_smallest_greater_or_equal([3, 1, 2]) == [-1,  2, -1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org13f1556" class="outline-2">
+<h2 id="org13f1556">Problem: Next <i>greatest</i> smaller or equal integer in unsorted array</h2>
+<div class="outline-text-2" id="text-org13f1556">
+<p>
+Given array \(a\) with \(n\) integers, return an array \(r\) where \(r[i]=j\) where \(a[j] \leq a[i]\), \(j>i\), \(a[j]\) is the largest possible value, and \(j\) is the smallest possible value, or \(r[i]=-1\) if there is no such \(j\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n \log n)\)</li>
+<li>Space complexity: \(O(n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">next_greatest_smaller_or_equal</span>(a):
+      <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(a)
+      <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * n
+      <span style="font-weight: bold; font-style: italic;">stack</span> = deque(maxlen=n)
+      <span style="font-weight: bold;">for</span> _, i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(<span style="font-weight: bold;">zip</span>(<span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">lambda</span> v: -v, a), <span style="font-weight: bold;">range</span>(n))):
+            <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> stack[-1] &lt; i:
+                  ans[<span style="font-weight: bold; font-style: italic;">stack</span>[-1]] = i
+                  stack.pop()
+            stack.append(i)
+      <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> next_greatest_smaller_or_equal([1]) == [-1]
+<span style="font-weight: bold;">assert</span> next_greatest_smaller_or_equal([1, 2, 3]) == [-1, -1, -1]
+<span style="font-weight: bold;">assert</span> next_greatest_smaller_or_equal([1, 3, 2]) == [-1,  2, -1]
+<span style="font-weight: bold;">assert</span> next_greatest_smaller_or_equal([3, 2, 1]) == [ 1,  2, -1]
+<span style="font-weight: bold;">assert</span> next_greatest_smaller_or_equal([3, 1, 2]) == [ 2, -1, -1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org53bf156" class="outline-2">
+<h2 id="org53bf156">References</h2>
+<div class="outline-text-2" id="text-org53bf156">
+<ul class="org-ul">
+<li><a href="https://liuzhenglaichn.gitbook.io/algorithm/monotonic-stack">Monotonic Stack</a> by <a href="https://github.com/lzl124631x">Richard Liu</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

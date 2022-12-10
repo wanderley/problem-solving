@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 749. Contain Virus</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 749. Contain Virus</h1>
+<p>
+<a href="https://leetcode.com/problems/contain-virus/">Problem Statement</a>
+</p>
+
+<p>
+The complexity of the problem is due to the amount of code that you have to write instead an insight that you have to come up.  Find each cluster (infected cells and cells to be infected by the cluster in the next turn) of virus using a <a href="depth_first_search.html#ID-212DBFC3-FE3C-493E-86A6-42FF3F82CD53">Depth-first search</a>.  Sort the cluster and pick the one with most cells to be infected.  Each step of this process will consume \(O(n \times m)\).  So, the algorithm will be \(O(n \times m \times k)\) where \(k\) is the maximum number of rounds: \(k \leq (n \times m) / 9\) (maximum number of clusters).  Therefore, the time complexity is \(O(n^2 \times m^2)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">containVirus</span>(<span style="font-weight: bold;">self</span>, infected: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        n = <span style="font-weight: bold;">len</span>(infected)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(infected[0])
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">neighbours</span>(i, j):
+            <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> [(+0, +1), (+0, -1), (+1, +0), (-1, +0)]:
+                <span style="font-weight: bold;">if</span> 0 &lt;= i + di &lt; n <span style="font-weight: bold;">and</span> 0 &lt;= j + dj &lt; m:
+                    <span style="font-weight: bold;">yield</span> (i + di, j + dj)
+
+        <span style="font-weight: bold; font-style: italic;">vis</span> = [[<span style="font-weight: bold; text-decoration: underline;">False</span>] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+        <span style="font-weight: bold; font-style: italic;">walled</span> = [[<span style="font-weight: bold; text-decoration: underline;">False</span>] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find_cluster</span>(cluster, i, j):
+            <span style="font-weight: bold;">if</span> vis[i][j] <span style="font-weight: bold;">or</span> walled[i][j]:
+                <span style="font-weight: bold;">return</span> cluster
+
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> infected[i][j]:
+                cluster[<span style="font-style: italic;">"will_infect"</span>].add((i, j))
+                <span style="font-weight: bold;">return</span> cluster
+
+            cluster[<span style="font-style: italic;">"infected"</span>].add((i, j))
+            vis[i][<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">for</span> ni, nj <span style="font-weight: bold;">in</span> neighbours(i, j):
+                find_cluster(cluster, ni, nj)
+            <span style="font-weight: bold;">return</span> cluster
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; text-decoration: underline;">True</span>:
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                    vis[i][<span style="font-weight: bold; font-style: italic;">j</span>] = <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+            <span style="font-weight: bold; font-style: italic;">clusters</span> = []
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                    <span style="font-weight: bold;">if</span> vis[i][j] <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">not</span> infected[i][j] <span style="font-weight: bold;">or</span> walled[i][j]:
+                        <span style="font-weight: bold;">continue</span>
+                    clusters.append(
+                        find_cluster({<span style="font-style: italic;">"infected"</span>: <span style="font-weight: bold;">set</span>(), <span style="font-style: italic;">"will_infect"</span>: <span style="font-weight: bold;">set</span>()}, i, j)
+                    )
+
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(clusters) == 0:
+                <span style="font-weight: bold;">break</span>
+
+            <span style="font-weight: bold; font-style: italic;">clusters</span> = <span style="font-weight: bold;">sorted</span>(clusters, key=<span style="font-weight: bold;">lambda</span> c: <span style="font-weight: bold;">len</span>(c[<span style="font-style: italic;">"will_infect"</span>]))
+            walls = 0
+            <span style="font-weight: bold;">for</span> i, j <span style="font-weight: bold;">in</span> clusters[-1][<span style="font-style: italic;">"will_infect"</span>]:
+                <span style="font-weight: bold;">for</span> ni, nj <span style="font-weight: bold;">in</span> neighbours(i, j):
+                    <span style="font-weight: bold;">if</span> (ni, nj) <span style="font-weight: bold;">in</span> clusters[-1][<span style="font-style: italic;">"infected"</span>]:
+                        walls += 1
+            ans += walls
+            <span style="font-weight: bold;">for</span> i, j <span style="font-weight: bold;">in</span> clusters[-1][<span style="font-style: italic;">"infected"</span>]:
+                walled[i][j] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+            <span style="font-weight: bold;">for</span> cluster <span style="font-weight: bold;">in</span> clusters[:-1]:
+                <span style="font-weight: bold;">for</span> i, j <span style="font-weight: bold;">in</span> cluster[<span style="font-style: italic;">"will_infect"</span>]:
+                    infected[i][j] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().containVirus(
+        [
+            [0, 1, 0, 0, 0, 0, 0, 1],
+            [0, 1, 0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+        ]
+    )
+    == 10
+)
+<span style="font-weight: bold;">assert</span> Solution().containVirus([[1, 1, 1], [1, 0, 1], [1, 1, 1]]) == 4
+<span style="font-weight: bold;">assert</span> (
+    Solution().containVirus(
+        [
+            [1, 1, 1, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 1, 1, 1, 1, 1],
+            [1, 1, 1, 0, 0, 0, 0, 0, 0],
+        ]
+    )
+    == 13
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().containVirus(
+        [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ]
+    )
+    == 56
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 528. Random Pick with Weight</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 528. Random Pick with Weight</h1>
+
+<div id="outline-container-org73423ac" class="outline-2">
+<h2 id="org73423ac">Patterns</h2>
+<div class="outline-text-2" id="text-org73423ac">
+<ul class="org-ul">
+<li><a href="pattern_cumulative_sum.html#ID-0679DF6C-5271-409F-A4EF-AD92EE1C3036">Pattern: Cumulative Sum</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgff9956a" class="outline-2">
+<h2 id="orgff9956a">Prompts</h2>
+<div class="outline-text-2" id="text-orgff9956a">
+<dl class="org-dl">
+<dt><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a></dt><dd>Compute the accumulate probability of picking any of \(0..i\) elements using <a href="prefix_sum.html#ID-6C76A007-72FB-4495-904F-CC3407193847">Prefix Sum</a>.</dd>
+
+<dt><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a></dt><dd><a href="weighted_sample.html#ID-880741CF-6D5A-4E40-9EDD-AF23283D6A91">Weighted Sample</a>.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org940d5db" class="outline-2">
+<h2 id="org940d5db">Solution</h2>
+<div class="outline-text-2" id="text-org940d5db">
+<p>
+Compute the accumulate probability of picking any of \(0..i\) elements and use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the index of one random element.  Time complexity is \(O(n)\) for pre-processing and \(O(\log n)\) to answer each query.  Space complexity is \(O(n)\) to store the accumulated probabilities.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, w: List[<span style="font-weight: bold;">int</span>]):
+        s = <span style="font-weight: bold;">sum</span>(w)
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">a</span> = <span style="font-weight: bold;">list</span>(accumulate([x / s <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> w]))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">pickIndex</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        r = random.random()
+        <span style="font-weight: bold; font-style: italic;">start</span>, <span style="font-weight: bold; font-style: italic;">end</span>, <span style="font-weight: bold; font-style: italic;">ans</span> = 0, <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.a) - 1, <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">while</span> start &lt;= <span style="font-weight: bold; font-style: italic;">end</span>:
+            mid = start + (end - start) // 2
+            <span style="font-weight: bold;">if</span> r &lt;= <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">a</span>[mid]:
+                <span style="font-weight: bold; font-style: italic;">ans</span>, <span style="font-weight: bold; font-style: italic;">end</span> = mid, mid - 1
+            <span style="font-weight: bold;">else</span>:
+                start = mid + 1
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1000. Minimum Cost to Merge Stones</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1000. Minimum Cost to Merge Stones</h1>
+<ul class="org-ul">
+<li><a href="pattern_find_optimal_partition_of_array.html#ID-4060A2EA-09E8-4E05-922D-8340AAF60F44">Pattern: Find optimal partition of array</a>.  If the input has only one number, the answer is 0.  If there are less than \(K\) numbers, the answer is -1.  If there are exactly \(K\) numbers, the answer is \(sum(stones)\).  Otherwise, we have to first find optimal partition of the array in exactly \(K\) parts and them merge them.  Time complexity is \(O(n^4)\) and space is \(O(n^3)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">mergeStones</span>(<span style="font-weight: bold;">self</span>, stones: List[<span style="font-weight: bold;">int</span>], K: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(stones)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">g</span>(i, j, k):
+            <span style="font-weight: bold; font-style: italic;">n</span> = j - i + 1
+            <span style="font-weight: bold;">if</span> k == 1:
+                <span style="font-weight: bold;">return</span> f(i, j)
+            <span style="font-weight: bold;">assert</span> k &gt; 0
+            ans = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+            <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, j):
+                <span style="font-weight: bold;">if</span> p == i:
+                    ans = <span style="font-weight: bold;">min</span>(ans, g(p + 1, j, k - 1))
+                <span style="font-weight: bold;">else</span>:
+                    ans = <span style="font-weight: bold;">min</span>(ans, f(i, p) + g(p + 1, j, k - 1))
+            <span style="font-weight: bold;">return</span> ans
+
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">f</span>(i, j):
+            n = j - i + 1
+            <span style="font-weight: bold;">if</span> n == 1:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">if</span> n &lt; K:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+            <span style="font-weight: bold;">if</span> n == K:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">sum</span>(stones[i:j+1])
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">sum</span>(stones[i:j+1]) + g(i, j, K)
+
+        ans = f(0, N - 1)
+        <span style="font-weight: bold;">return</span> -1 <span style="font-weight: bold;">if</span> ans == <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>) <span style="font-weight: bold;">else</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

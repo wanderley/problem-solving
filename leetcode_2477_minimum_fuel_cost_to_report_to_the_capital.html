@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2477. Minimum Fuel Cost to Report to the Capital</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2477. Minimum Fuel Cost to Report to the Capital</h1>
+
+<div id="outline-container-org7b2efa8" class="outline-2">
+<h2 id="org7b2efa8">Patterns</h2>
+<div class="outline-text-2" id="text-org7b2efa8">
+<ul class="org-ul">
+<li><a href="pattern_tree_problem.html#ID-63791EB8-1E2A-41D3-AFCE-1511EFAE55AC">Pattern: Tree Problem</a>.</li>
+
+<li><a href="pattern_optimization_problem_to_find_minimum_maximum_number_of_x_to_cover_y.html#ID-45D8FD21-992F-4073-8EC6-7695FAA0E3AB">Pattern: Optimization problem to find minimum/maximum number of X to cover Y</a>.</li>
+
+<li><a href="pattern_problem_allows_making_optimal_local_decisions.html#ID-63F5032C-75D7-4D9E-A558-914218193D0B">Pattern: Problem allows making optimal local decisions</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org97b6ea6" class="outline-2">
+<h2 id="org97b6ea6">Prompts</h2>
+<div class="outline-text-2" id="text-org97b6ea6">
+<ul class="org-ul">
+<li><a href="can_we_solve_the_problem_using_a_greedy_approach.html#ID-1CA3366B-D045-4BF4-9E39-DFA5131EF937">Can we solve the problem using a greedy approach?</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgce783ef" class="outline-2">
+<h2 id="orgce783ef">Solution</h2>
+<div class="outline-text-2" id="text-orgce783ef">
+<p>
+Let's explore this problem looking the cities in a particular order: leaf cities to the capital.  A leaf city has only one connection to a city that we call parent.  The representative must use one car to move up to the parent city.  Note that there is no other option for moving representatives from a leaf city to the capital, we must move them <i>first</i> to the parent city.  Suppose that you moved all representatives from leaf cities to their respective parent cities.  You end up with either one city (the capital) or a tree with new leaves.  Now, the problem is bit different since you have to move all representatives that got to the new leaf cities and their own representative.  Luckily, we can easily do that by accumulating two values: the total cost to move the child cities up and the total number of representatives on those cities.  There is no other way to process the leaf cities, since they don't have other routes to the capital instead going to their parent cities.  Therefore, this order of processing is the optimal one.  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumFuelCost</span>(<span style="font-weight: bold;">self</span>, roads: List[List[<span style="font-weight: bold;">int</span>]], seats: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(roads) + 1
+        <span style="font-weight: bold; font-style: italic;">A</span> = [[] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">roads</span>:
+            A[u].append(v)
+            A[v].append(u)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(u, p):
+            <span style="font-weight: bold; font-style: italic;">total</span>, <span style="font-weight: bold; font-style: italic;">count</span> = 0, 1
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">A</span>[u]:
+                <span style="font-weight: bold;">if</span> v != <span style="font-weight: bold; font-style: italic;">p</span>:
+                    <span style="font-weight: bold; font-style: italic;">ecost</span>, <span style="font-weight: bold; font-style: italic;">ecount</span> = dfs(v, u)
+                    <span style="font-weight: bold; font-style: italic;">total</span> += ecost
+                    <span style="font-weight: bold; font-style: italic;">count</span> += ecount
+            <span style="font-weight: bold;">if</span> u == 0:
+                <span style="font-weight: bold;">return</span> total
+            <span style="font-weight: bold;">return</span> total + ceil(count / seats), count
+
+        <span style="font-weight: bold;">return</span> dfs(0, <span style="font-weight: bold; text-decoration: underline;">None</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

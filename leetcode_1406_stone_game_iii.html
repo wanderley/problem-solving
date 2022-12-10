@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1406. Stone Game III</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1406. Stone Game III</h1>
+<p>
+Problem statement can be found <a href="https://leetcode.com/problems/stone-game-iii/">here</a>.
+</p>
+
+<div id="outline-container-org666fa43" class="outline-2">
+<h2 id="org666fa43">Linear solution</h2>
+<div class="outline-text-2" id="text-org666fa43">
+<p>
+This is an example of a classic <a href="min_max_problem.html#ID-4A2206E8-074B-4CDB-BD5B-01DE3C901C15">Min-Max Problem</a>.  Alice and Bob wants to maximize their score, which means that Alice wants to maximize the difference of their scores, while Bob wants to minimize it.  Be \(a\) the array of stone values with \(n\) elements.  Be \(f(A, i)\) and \(f(B, i)\) the max and min score difference that Alice and Bob can make starting on the $i$-th stone, respectively.  By the rules of the game, we know that
+</p>
+
+\begin{align*}
+f(A, i)  = & \max_{i \leq j \leq min(|a|, i + 2)} f(B, j+1) + \sum_{i\leq k \leq j } a[k] \\
+f(B, i)  = & \min_{i \leq j \leq min(|a|, i + 2)} f(A, j+1) + \sum_{i\leq k \leq j } a[k].
+\end{align*}
+</div>
+
+<div id="outline-container-orgf67db61" class="outline-3">
+<h3 id="orgf67db61">Memoization</h3>
+<div class="outline-text-3" id="text-orgf67db61">
+<ul class="org-ul">
+<li>Time Complexity: \(O(n)\)</li>
+<li>Space Complexity: \(O(n)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve_rec</span>(a):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">Alice</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(player, i):
+        <span style="font-weight: bold;">if</span> i == n:
+            <span style="font-weight: bold;">return</span> 0
+        ac = 0
+        op = <span style="font-weight: bold;">max</span> <span style="font-weight: bold;">if</span> player <span style="font-weight: bold;">is</span> Alice <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">min</span>
+        ans = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, <span style="font-weight: bold;">min</span>(n, i + 3)):
+            ac += a[j] <span style="font-weight: bold;">if</span> player <span style="font-weight: bold;">is</span> Alice <span style="font-weight: bold;">else</span> -a[j]
+            v = ac + rec(<span style="font-weight: bold;">not</span> player, j + 1)
+            ans = op(ans <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">else</span> v, v)
+        <span style="font-weight: bold;">return</span> ans
+
+    ans = rec(Alice, 0)
+    <span style="font-weight: bold;">if</span> ans &gt; 0:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Alice"</span>
+    <span style="font-weight: bold;">elif</span> ans &lt; 0:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Bob"</span>
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Tie"</span>
+
+<span style="font-weight: bold;">assert</span> solve_rec([1,2,3,7]) == <span style="font-style: italic;">"Bob"</span>
+<span style="font-weight: bold;">assert</span> solve_rec([1,2,3,-9]) == <span style="font-style: italic;">"Alice"</span>
+<span style="font-weight: bold;">assert</span> solve_rec([1,2,3,6]) == <span style="font-style: italic;">"Tie"</span>
+<span style="font-weight: bold;">assert</span> solve_rec([1,2,3,-1,-2,-3,7]) == <span style="font-style: italic;">"Alice"</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">stoneGameIII</span>(<span style="font-weight: bold;">self</span>, stoneValue: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> solve_rec(stoneValue)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org723fd0e" class="outline-3">
+<h3 id="org723fd0e">Dynamic Programming</h3>
+<div class="outline-text-3" id="text-org723fd0e">
+<ul class="org-ul">
+<li>Time Complexity: \(O(n)\)</li>
+<li>Space Complexity: \(O(1)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(a):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">dp</span> = [[<span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n + 1)] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(2)]
+    <span style="font-weight: bold; font-style: italic;">Alice</span> = 0
+    <span style="font-weight: bold; font-style: italic;">Bob</span> = 1
+    dp[Alice][<span style="font-weight: bold; font-style: italic;">n</span>] = dp[Bob][<span style="font-weight: bold; font-style: italic;">n</span>] = 0
+
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n-1, -1, -1):
+        <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(2):
+            <span style="font-weight: bold; font-style: italic;">ac</span> = 0
+            <span style="font-weight: bold; font-style: italic;">op</span> = <span style="font-weight: bold;">max</span> <span style="font-weight: bold;">if</span> k <span style="font-weight: bold;">is</span> Alice <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">min</span>
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, <span style="font-weight: bold;">min</span>(n, i + 3)):
+                <span style="font-weight: bold; font-style: italic;">ac</span> += a[j] <span style="font-weight: bold;">if</span> k <span style="font-weight: bold;">is</span> Alice <span style="font-weight: bold;">else</span> -a[j]
+                <span style="font-weight: bold; font-style: italic;">nk</span> = (k + 1) % 2
+                <span style="font-weight: bold; font-style: italic;">v</span> = ac + dp[nk][j + 1]
+                dp[k][<span style="font-weight: bold; font-style: italic;">i</span>] = op(dp[k][i] <span style="font-weight: bold;">if</span> dp[k][i] <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">else</span> v, v)
+
+    <span style="font-weight: bold;">if</span> dp[Alice][0] &gt; 0:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Alice"</span>
+    <span style="font-weight: bold;">elif</span> dp[Alice][0] &lt; 0:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Bob"</span>
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Tie"</span>
+
+<span style="font-weight: bold;">assert</span> solve([1,2,3,7]) == <span style="font-style: italic;">"Bob"</span>
+<span style="font-weight: bold;">assert</span> solve([1,2,3,-9]) == <span style="font-style: italic;">"Alice"</span>
+<span style="font-weight: bold;">assert</span> solve([1,2,3,6]) == <span style="font-style: italic;">"Tie"</span>
+<span style="font-weight: bold;">assert</span> solve([1,2,3,-1,-2,-3,7]) == <span style="font-style: italic;">"Alice"</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">stoneGameIII</span>(<span style="font-weight: bold;">self</span>, stoneValue: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> solve(stoneValue)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

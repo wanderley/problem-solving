@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FenwickTree</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">FenwickTree</h1>
+<p>
+Reference: <a href="https://cp-algorithms.com/data_structures/fenwick.html#finding-sum-in-one-dimensional-array">Algorithms for Competitive Programming: Fenwick Tree</a>
+</p>
+
+<div id="outline-container-orgaebed99" class="outline-2">
+<h2 id="orgaebed99">Prefix Sum</h2>
+<div class="outline-text-2" id="text-orgaebed99">
+</div>
+<div id="outline-container-org76ffeb3" class="outline-3">
+<h3 id="org76ffeb3">Python</h3>
+<div class="outline-text-3" id="text-org76ffeb3">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FenwickTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n):
+        <span style="font-weight: bold;">self</span>.n = n
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">bit</span> = [0] * n
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sum</span>(<span style="font-weight: bold;">self</span>, r, l=<span style="font-weight: bold; text-decoration: underline;">None</span>):
+        <span style="font-weight: bold;">if</span> l <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span>(l) - <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span>(r - 1)
+        ret = 0
+        <span style="font-weight: bold;">while</span> r &gt;= 0:
+            ret += <span style="font-weight: bold;">self</span>.bit[r]
+            r = (r &amp; (r + 1)) - 1
+        <span style="font-weight: bold;">return</span> ret
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, idx, delta):
+        <span style="font-weight: bold;">while</span> idx &lt; <span style="font-weight: bold;">self</span>.n:
+            <span style="font-weight: bold;">self</span>.bit[<span style="font-weight: bold; font-style: italic;">idx</span>] += delta
+            idx = idx | (idx + 1)
+
+f = FenwickTree(10)
+<span style="font-weight: bold;">assert</span> f.<span style="font-weight: bold;">sum</span>(0, 9) == 0
+f.add(9, 1)
+<span style="font-weight: bold;">assert</span> f.<span style="font-weight: bold;">sum</span>(9) == 1
+<span style="font-weight: bold;">assert</span> f.<span style="font-weight: bold;">sum</span>(8) == 0
+<span style="font-weight: bold;">assert</span> f.<span style="font-weight: bold;">sum</span>(0, 9) == 1
+f.add(8, -1)
+<span style="font-weight: bold;">assert</span> f.<span style="font-weight: bold;">sum</span>(0, 9) == 0
+<span style="font-weight: bold;">assert</span> f.<span style="font-weight: bold;">sum</span>(0, 8) == -1
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1f7269a" class="outline-3">
+<h3 id="org1f7269a">C++</h3>
+<div class="outline-text-3" id="text-org1f7269a">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">FenwickTree</span> {
+    <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">bit</span>;  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">binary indexed tree</span>
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>;
+
+    <span style="font-weight: bold;">FenwickTree</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>) {
+        <span style="font-weight: bold;">this</span>-&gt;n = n;
+        bit.assign(n, 0);
+    }
+
+    <span style="font-weight: bold;">FenwickTree</span>(<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">a</span>) : FenwickTree(a.size()) {
+        <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">size_t</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; a.size(); i++)
+            add(i, <span style="font-weight: bold; text-decoration: underline;">a</span>[i]);
+    }
+
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">sum</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">r</span>) {
+        <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ret</span> = 0;
+        <span style="font-weight: bold;">for</span> (; r &gt;= 0; r = (r &amp; (r + 1)) - 1)
+            ret += bit[r];
+        <span style="font-weight: bold;">return</span> ret;
+    }
+
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">sum</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">l</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">r</span>) {
+        <span style="font-weight: bold;">return</span> sum(r) - sum(l - 1);
+    }
+
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">idx</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">delta</span>) {
+        <span style="font-weight: bold;">for</span> (; idx &lt; n; idx = idx | (idx + 1))
+            bit[idx] += delta;
+    }
+};
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf52086e" class="outline-3">
+<h3 id="orgf52086e">Problem: Count number of interval intersections</h3>
+<div class="outline-text-3" id="text-orgf52086e">
+</div>
+</div>
+</div>
+<div id="outline-container-org33220f1" class="outline-2">
+<h2 id="org33220f1">Min/Max</h2>
+<div class="outline-text-2" id="text-org33220f1">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FenwickTreeMin</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n):
+        <span style="font-weight: bold;">self</span>.n = n
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">inf</span> = 10**9
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">bit</span> = [<span style="font-weight: bold;">self</span>.inf] * n
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">getmin</span>(<span style="font-weight: bold;">self</span>, r):
+        <span style="font-weight: bold; font-style: italic;">ret</span> = <span style="font-weight: bold;">self</span>.inf
+        <span style="font-weight: bold;">while</span> r &gt;= 0:
+            <span style="font-weight: bold; font-style: italic;">ret</span> = <span style="font-weight: bold;">min</span>(ret, <span style="font-weight: bold;">self</span>.bit[r])
+            <span style="font-weight: bold; font-style: italic;">r</span> = (r &amp; (r + 1)) - 1
+        <span style="font-weight: bold;">return</span> ret
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update</span>(<span style="font-weight: bold;">self</span>, idx, val):
+        <span style="font-weight: bold;">while</span> idx &lt; <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">n</span>:
+            <span style="font-weight: bold;">self</span>.bit[<span style="font-weight: bold; font-style: italic;">idx</span>] = <span style="font-weight: bold;">min</span>(<span style="font-weight: bold;">self</span>.bit[idx], val)
+            <span style="font-weight: bold; font-style: italic;">idx</span> = idx | (idx + 1)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FenwickTreeMax</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n):
+        <span style="font-weight: bold;">self</span>.n = n
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">inf</span> = -(10**9)
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">bit</span> = [<span style="font-weight: bold;">self</span>.inf] * n
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">getmax</span>(<span style="font-weight: bold;">self</span>, r):
+        <span style="font-weight: bold; font-style: italic;">ret</span> = <span style="font-weight: bold;">self</span>.inf
+        <span style="font-weight: bold;">while</span> r &gt;= 0:
+            <span style="font-weight: bold; font-style: italic;">ret</span> = <span style="font-weight: bold;">max</span>(ret, <span style="font-weight: bold;">self</span>.bit[r])
+            <span style="font-weight: bold; font-style: italic;">r</span> = (r &amp; (r + 1)) - 1
+        <span style="font-weight: bold;">return</span> ret
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update</span>(<span style="font-weight: bold;">self</span>, idx, val):
+        <span style="font-weight: bold;">while</span> idx &lt; <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">n</span>:
+            <span style="font-weight: bold;">self</span>.bit[<span style="font-weight: bold; font-style: italic;">idx</span>] = <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">self</span>.bit[idx], val)
+            <span style="font-weight: bold; font-style: italic;">idx</span> = idx | (idx + 1)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

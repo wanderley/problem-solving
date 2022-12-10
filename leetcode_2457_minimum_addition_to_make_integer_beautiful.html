@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2457. Minimum Addition to Make Integer Beautiful</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2457. Minimum Addition to Make Integer Beautiful</h1>
+
+
+<div id="outline-container-org994f8a6" class="outline-2">
+<h2 id="org994f8a6">Understand the problem</h2>
+<div class="outline-text-2" id="text-org994f8a6">
+<p>
+Given two integers \(n\) and \(t\), find the smallest \(x\) which sum of digits of \(n + x\) is at most \(t\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org57ccc56" class="outline-2">
+<h2 id="org57ccc56">Solution</h2>
+<div class="outline-text-2" id="text-org57ccc56">
+<p>
+<i>Best explanation I have so far</i>:  <a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  We construct \(x\) from right to left, by making sure that \(x_0+n_0=x_1+n_1=...=10\).  So, we always minimize the difference of \(d(n+x)\) and \(t\) for each number.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">makeIntegerBeautiful</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        c = n
+        <span style="font-weight: bold; font-style: italic;">p</span> = 10
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">sum</span>(<span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(c))) &gt; <span style="font-weight: bold; font-style: italic;">target</span>:
+            c = (c // p + 1) * p
+            <span style="font-weight: bold; font-style: italic;">p</span> = p * 10
+        <span style="font-weight: bold;">return</span> c - n
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Counting valid pairs using Brute Force</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Counting valid pairs using Brute Force</h1>
+
+<div id="outline-container-org31e3c6e" class="outline-2">
+<h2 id="org31e3c6e">Prompts / Hints</h2>
+<div class="outline-text-2" id="text-org31e3c6e">
+<ul class="org-ul">
+<li><b>How can you group the values to make easy to avoid counting invalid pairs?</b>
+
+<ul class="org-ul">
+<li>Each element should be only in one group.</li>
+
+<li>Elements of the same group should create an invalid pair.</li>
+</ul></li>
+
+<li><b>Do the problem's constraints allows the computation of the intersection of the groups?</b>
+
+<ul class="org-ul">
+<li>Be \(n\) the number of groups and \(m\) the time to compute the intersection of two groups.  The problem's constraints should allow an solution of \(O(n \times m)\).</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org84aa2bf" class="outline-2">
+<h2 id="org84aa2bf">Method</h2>
+<div class="outline-text-2" id="text-org84aa2bf">
+<ol class="org-ol">
+<li>Compute all groups</li>
+<li>Start counter equals to 0.</li>
+<li>For each pair of groups \(A\) and \(B\), sums to the counter \(|A \setminus (A \cap B)| \times |B \setminus (A \cap B)|\).</li>
+</ol>
+</div>
+</div>
+</div>
+</body>
+</html>

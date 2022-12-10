@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2435. Paths in Matrix Whose Sum Is Divisible by K</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2435. Paths in Matrix Whose Sum Is Divisible by K</h1>
+
+<div id="outline-container-orgd798c48" class="outline-2">
+<h2 id="orgd798c48">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgd798c48">
+<p>
+Count the number of paths from \((0,0)\) to \((n-1,m-1)\) (on  <a href="directed_acyclic_graph.html#ID-81260E21-C442-48DE-A414-CA7B83F2C404">Directed Acyclic Graph</a>) where the path goes down-right and has sum module \(k\).
+</p>
+</div>
+
+<div id="outline-container-org372c244" class="outline-3">
+<h3 id="org372c244">Useful prompots</h3>
+<div class="outline-text-3" id="text-org372c244">
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org722a59d" class="outline-2">
+<h2 id="org722a59d">Devise a plan</h2>
+<div class="outline-text-2" id="text-org722a59d">
+<p>
+Modeling as a graph problem, a cell connected to the one directly to the left and top.  So, this is an <a href="directed_acyclic_graph.html#ID-81260E21-C442-48DE-A414-CA7B83F2C404">Directed Acyclic Graph</a> and we can compute the number of paths using <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a>.  For each cell and each \(0 \leq x < k\), store the number of paths that reached that cell such that sum of the paths is \(x\) module \(k\).  Time complexity is \(O(n \times m \times k)\) and space is \(O(n \times m \times k)\).
+</p>
+</div>
+
+<div id="outline-container-org7de87b8" class="outline-3">
+<h3 id="org7de87b8">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org7de87b8">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numberOfPaths</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        MOD = 10**9 + 7
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(grid[0])
+        <span style="font-weight: bold; font-style: italic;">dp</span> = [[Counter() <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M)] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        dp[0][0] = Counter([grid[0][0] % k])
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                <span style="font-weight: bold;">if</span> i == 0 <span style="font-weight: bold;">and</span> j == 0:
+                    <span style="font-weight: bold;">continue</span>
+                t = Counter() <span style="font-weight: bold;">if</span> i == 0 <span style="font-weight: bold;">else</span> dp[i - 1][j]
+                l = Counter() <span style="font-weight: bold;">if</span> j == 0 <span style="font-weight: bold;">else</span> dp[i][j - 1]
+                <span style="font-weight: bold;">for</span> x, c <span style="font-weight: bold;">in</span> (t + l).items():
+                    dp[i][j][(x + grid[i][j]) % k] = (
+                        dp[i][j][(x + grid[i][j]) % k] + c
+                    ) % MOD
+        <span style="font-weight: bold;">return</span> dp[N - 1][M - 1][0]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

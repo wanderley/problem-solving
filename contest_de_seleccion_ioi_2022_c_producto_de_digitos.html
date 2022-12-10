@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contest de seleccion IOI 2022: C. Producto de Digitos</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Contest de seleccion IOI 2022: C. Producto de Digitos</h1>
+<p>
+<a href="https://contest.yandex.ru/contest/38353/download/">Problem Statement</a>: Given integers \(n\) and \(b\), count how many integers \(x\) exists where \(1 \leq x \leq n\), \(x - P(x) = b\) and \(P(x)\) is the product of the digits of \(x\).
+</p>
+
+<p>
+A straight forward observation is that \(x - P(x)\) is counted only for one possible \(b\).  In other words, its value does not depend on the input.  Is there any interesting property of \(x-P(x)\) that we can use to solve the problem?  Let's take a look on \(x - P(x)\) for \(0 \leq x \leq 30\) using the following snippet.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> <span style="font-weight: bold;">reduce</span>
+<span style="font-weight: bold;">from</span> operator <span style="font-weight: bold;">import</span> mul
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">p</span>(n):
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">reduce</span>(mul, <span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(n)))
+
+<span style="font-weight: bold;">return</span> (
+    [(<span style="font-style: italic;">"x"</span>, <span style="font-style: italic;">"px"</span>, <span style="font-style: italic;">"x - p(x)"</span>)] +
+    [(x, p(x), x - p(x)) <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(51)]
+)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">x</td>
+<td class="org-right">px</td>
+<td class="org-right">x - p(x)</td>
+</tr>
+
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">3</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">4</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">5</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-right">6</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-right">7</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">8</td>
+<td class="org-right">8</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">9</td>
+<td class="org-right">9</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">10</td>
+<td class="org-right">0</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">11</td>
+<td class="org-right">1</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">12</td>
+<td class="org-right">2</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">13</td>
+<td class="org-right">3</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">14</td>
+<td class="org-right">4</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">15</td>
+<td class="org-right">5</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">16</td>
+<td class="org-right">6</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">17</td>
+<td class="org-right">7</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">18</td>
+<td class="org-right">8</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">19</td>
+<td class="org-right">9</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">20</td>
+<td class="org-right">0</td>
+<td class="org-right">20</td>
+</tr>
+
+<tr>
+<td class="org-right">21</td>
+<td class="org-right">2</td>
+<td class="org-right">19</td>
+</tr>
+
+<tr>
+<td class="org-right">22</td>
+<td class="org-right">4</td>
+<td class="org-right">18</td>
+</tr>
+
+<tr>
+<td class="org-right">23</td>
+<td class="org-right">6</td>
+<td class="org-right">17</td>
+</tr>
+
+<tr>
+<td class="org-right">24</td>
+<td class="org-right">8</td>
+<td class="org-right">16</td>
+</tr>
+
+<tr>
+<td class="org-right">25</td>
+<td class="org-right">10</td>
+<td class="org-right">15</td>
+</tr>
+
+<tr>
+<td class="org-right">26</td>
+<td class="org-right">12</td>
+<td class="org-right">14</td>
+</tr>
+
+<tr>
+<td class="org-right">27</td>
+<td class="org-right">14</td>
+<td class="org-right">13</td>
+</tr>
+
+<tr>
+<td class="org-right">28</td>
+<td class="org-right">16</td>
+<td class="org-right">12</td>
+</tr>
+
+<tr>
+<td class="org-right">29</td>
+<td class="org-right">18</td>
+<td class="org-right">11</td>
+</tr>
+
+<tr>
+<td class="org-right">30</td>
+<td class="org-right">0</td>
+<td class="org-right">30</td>
+</tr>
+
+<tr>
+<td class="org-right">31</td>
+<td class="org-right">3</td>
+<td class="org-right">28</td>
+</tr>
+
+<tr>
+<td class="org-right">32</td>
+<td class="org-right">6</td>
+<td class="org-right">26</td>
+</tr>
+
+<tr>
+<td class="org-right">33</td>
+<td class="org-right">9</td>
+<td class="org-right">24</td>
+</tr>
+
+<tr>
+<td class="org-right">34</td>
+<td class="org-right">12</td>
+<td class="org-right">22</td>
+</tr>
+
+<tr>
+<td class="org-right">35</td>
+<td class="org-right">15</td>
+<td class="org-right">20</td>
+</tr>
+
+<tr>
+<td class="org-right">36</td>
+<td class="org-right">18</td>
+<td class="org-right">18</td>
+</tr>
+
+<tr>
+<td class="org-right">37</td>
+<td class="org-right">21</td>
+<td class="org-right">16</td>
+</tr>
+
+<tr>
+<td class="org-right">38</td>
+<td class="org-right">24</td>
+<td class="org-right">14</td>
+</tr>
+
+<tr>
+<td class="org-right">39</td>
+<td class="org-right">27</td>
+<td class="org-right">12</td>
+</tr>
+
+<tr>
+<td class="org-right">40</td>
+<td class="org-right">0</td>
+<td class="org-right">40</td>
+</tr>
+
+<tr>
+<td class="org-right">41</td>
+<td class="org-right">4</td>
+<td class="org-right">37</td>
+</tr>
+
+<tr>
+<td class="org-right">42</td>
+<td class="org-right">8</td>
+<td class="org-right">34</td>
+</tr>
+
+<tr>
+<td class="org-right">43</td>
+<td class="org-right">12</td>
+<td class="org-right">31</td>
+</tr>
+
+<tr>
+<td class="org-right">44</td>
+<td class="org-right">16</td>
+<td class="org-right">28</td>
+</tr>
+
+<tr>
+<td class="org-right">45</td>
+<td class="org-right">20</td>
+<td class="org-right">25</td>
+</tr>
+
+<tr>
+<td class="org-right">46</td>
+<td class="org-right">24</td>
+<td class="org-right">22</td>
+</tr>
+
+<tr>
+<td class="org-right">47</td>
+<td class="org-right">28</td>
+<td class="org-right">19</td>
+</tr>
+
+<tr>
+<td class="org-right">48</td>
+<td class="org-right">32</td>
+<td class="org-right">16</td>
+</tr>
+
+<tr>
+<td class="org-right">49</td>
+<td class="org-right">36</td>
+<td class="org-right">13</td>
+</tr>
+
+<tr>
+<td class="org-right">50</td>
+<td class="org-right">0</td>
+<td class="org-right">50</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The result is 0 if \(x\) has only one digit or contains at least one digit 0.  The result is 10 if \(x\) has two digits.  Besides that, there are some repetitions as in \(x=49\) and \(x=27\) which means that for \(n=49\) and \(b=13\) we should return at least 2.  <a href="what_is_the_upper_lower_bound_for_the_expected_result.html#ID-326FB8B4-49C8-479C-960D-F0F50F11BDC9">What is the upper/lower bound for the expected result?</a>  This question is interesting because it the answer is <b>the output can be a very large number that we can't iterate to compute</b>, or <b>the output is computable number</b>.  The former implies that we have to find some sort of formula or an algorithm with logarithmic complexity, while the later means that there is a way to compute the answer in a reasonable way.  So, the question becomes: How many different \(x-P(x)\) exist?
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> <span style="font-weight: bold;">reduce</span>, cache
+<span style="font-weight: bold;">from</span> operator <span style="font-weight: bold;">import</span> mul
+
+<span style="font-weight: bold; text-decoration: underline;">@cache</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">p</span>(n):
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">reduce</span>(mul, <span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(n)))
+
+<span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>({x - p(x) <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(10**7)})
+</pre>
+</div>
+
+<pre class="example">
+6953658
+</pre>
+
+
+<p>
+That is a big number which would require either a formula to compute or a logarithmic algorithm.  Looking to the results of \(x-P(x)\), the problem seems unlikely to be solved with a formula.  Why?  This \(P(x)\) depends on the digits of \(x\) and how would a close formula handle this property?  Wait.  What do we know about \(P(x)\)?  It is a number smaller than \(x\).  It can be the same for different \(x\), for example \(x=123\) or \(x=321\) has the same \(P(x)=6\).  How many different \(P(x)\) exist?
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> <span style="font-weight: bold;">reduce</span>, cache
+<span style="font-weight: bold;">from</span> operator <span style="font-weight: bold;">import</span> mul
+
+<span style="font-weight: bold; text-decoration: underline;">@cache</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">p</span>(n):
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">reduce</span>(mul, <span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(n)))
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">count_p</span>(n):
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>({p(x) <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)})
+
+<span style="font-weight: bold;">return</span> [
+    (<span style="font-style: italic;">"interval"</span>, <span style="font-style: italic;">"# of distinct P(x)"</span>),
+    (<span style="font-style: italic;">"$0...10^4$"</span>, count_p(10**4)),
+    (<span style="font-style: italic;">"$0...10^5$"</span>, count_p(10**5)),
+    (<span style="font-style: italic;">"$0...10^6$"</span>, count_p(10**6)),
+    (<span style="font-style: italic;">"$0...10^7$"</span>, count_p(10**7)),
+    (<span style="font-style: italic;">"$0...10^8$"</span>, count_p(10**8)),
+]
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">interval</td>
+<td class="org-right"># of distinct P(x)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(0...10^4\)</td>
+<td class="org-right">226</td>
+</tr>
+
+<tr>
+<td class="org-left">\(0...10^5\)</td>
+<td class="org-right">442</td>
+</tr>
+
+<tr>
+<td class="org-left">\(0...10^6\)</td>
+<td class="org-right">785</td>
+</tr>
+
+<tr>
+<td class="org-left">\(0...10^7\)</td>
+<td class="org-right">1297</td>
+</tr>
+
+<tr>
+<td class="org-left">\(0...10^8\)</td>
+<td class="org-right">2026</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+There are not many of them, but how could we generate them efficiently?  For that, we can use <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a> to go over all possible numbers \(x\) and compute \(P(x)\) of each one of them.  The function <code>rec</code> try all possible digits for the $i$-th digit and returns all \(P(x)\) that could be generated so far.  With all possible \(P(x)\) generated, we can iterate over each one of them, say \(z\) and count those where \(z+b<n\) and \(p(z)=z+b\).  The first inequality comes from the fact that we can compute \(x\) knowing \(b\) and \(P(x)\), since \(x-P(x)=b\).  The second equation checks if the \(x\) derived from \(P(x)\) is a valid \(x\) one.
+</p>
+
+<p>
+With \(k\) being the number of different values of \(P(x)\):
+</p>
+<ul class="org-ul">
+<li>Time complexity: \(O(k)\)</li>
+<li>Space complexity: \(O(k)\)</li>
+</ul>
+
+<div id="outline-container-org9653453" class="outline-2">
+<h2 id="org9653453">Python solution</h2>
+<div class="outline-text-2" id="text-org9653453">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache, <span style="font-weight: bold;">reduce</span>
+<span style="font-weight: bold;">from</span> operator <span style="font-weight: bold;">import</span> mul
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">gen</span>(n):
+    <span style="font-weight: bold; font-style: italic;">digits</span> = <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(n)))
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(i, is_smaller, is_first_digit):
+        <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(digits):
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">set</span>([1] <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_first_digit <span style="font-weight: bold;">else</span> [])
+
+        ans = <span style="font-weight: bold;">set</span>()
+        lim = 9 <span style="font-weight: bold;">if</span> is_smaller <span style="font-weight: bold;">else</span> digits[i]
+        <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(lim + 1):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> rec(
+                i + 1, is_smaller <span style="font-weight: bold;">or</span> (k &lt; digits[i]), is_first_digit <span style="font-weight: bold;">and</span> k == 0
+            ):
+                <span style="font-weight: bold;">if</span> is_first_digit <span style="font-weight: bold;">and</span> k == 0:
+                    ans.add(j)
+                <span style="font-weight: bold;">else</span>:
+                    ans.add(k * j)
+        <span style="font-weight: bold;">return</span> ans
+
+    <span style="font-weight: bold;">return</span> rec(0, <span style="font-weight: bold; text-decoration: underline;">False</span>, <span style="font-weight: bold; text-decoration: underline;">True</span>)
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">p</span>(n):
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">reduce</span>(mul, <span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">int</span>, <span style="font-weight: bold;">str</span>(n)))
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(n, b):
+    ans = 0
+    <span style="font-weight: bold;">for</span> px <span style="font-weight: bold;">in</span> gen(n):
+        <span style="font-weight: bold;">if</span> b + px &lt;= n <span style="font-weight: bold;">and</span> p(b + px) == px:
+            ans += 1
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve(99999999999, 502) == 12
+<span style="font-weight: bold;">assert</span> solve(999, 434) == 2
+<span style="font-weight: bold;">assert</span> solve(255, 15) == 2
+<span style="font-weight: bold;">assert</span> solve(9999999999, 1) == 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfba31d5" class="outline-2">
+<h2 id="orgfba31d5">C++ solution</h2>
+<div class="outline-text-2" id="text-orgfba31d5">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;set&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;vector&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cstdio&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;algorithm&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;string.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;assert.h&gt;</span>
+
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+
+<span style="font-weight: bold;">#define</span> <span style="font-weight: bold; font-style: italic;">ll</span> <span style="font-weight: bold; text-decoration: underline;">long</span> <span style="font-weight: bold; text-decoration: underline;">long</span>
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">vis</span>[12][2][2];
+<span style="font-weight: bold; text-decoration: underline;">set</span>&lt;ll&gt; <span style="font-weight: bold; font-style: italic;">memo</span>[12][2][2];
+<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">digits</span>;
+
+<span style="font-weight: bold; text-decoration: underline;">set</span>&lt;ll&gt; <span style="font-weight: bold;">gen</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">is_smaller</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">is_first</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">set</span>&lt;ll&gt; <span style="font-weight: bold; font-style: italic;">ans</span>;
+  <span style="font-weight: bold;">if</span> (i == digits.size()) {
+    <span style="font-weight: bold;">if</span> (!is_first) {
+      ans.insert(1);
+    }
+    <span style="font-weight: bold;">return</span> ans;
+  }
+  <span style="font-weight: bold;">if</span> (vis[i][is_smaller][is_first]) {
+    <span style="font-weight: bold;">return</span> memo[i][is_smaller][is_first];
+  }
+
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">lim</span> = is_smaller ? 9 : digits[i];
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">k</span> = 0; k &lt;= lim; k++) {
+    <span style="font-weight: bold; text-decoration: underline;">set</span>&lt;ll&gt; <span style="font-weight: bold; font-style: italic;">cur</span> = gen(i + 1, is_smaller || (k &lt; digits[i]), is_first &amp;&amp; k == 0);
+    <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">set</span>&lt;ll&gt;::<span style="font-weight: bold; text-decoration: underline;">iterator</span> <span style="font-weight: bold; font-style: italic;">it</span> = cur.begin(); it != cur.end(); it++) {
+      <span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">j</span> = *it;
+      ans.insert(is_first &amp;&amp; k == 0 ? j : k * j);
+    }
+  }
+  memo[i][is_smaller][is_first] = ans;
+  vis[i][is_smaller][is_first] = 1;
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold;">p</span>(<span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">x</span>) {
+  <span style="font-weight: bold;">if</span> (x &lt; 10) {
+    <span style="font-weight: bold;">return</span> x;
+  }
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ans</span> = 1;
+  <span style="font-weight: bold;">while</span> (x &gt; 0) {
+    ans *= (x % 10);
+    x = x / 10;
+  }
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold;">to_digits</span>(<span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">n</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">digits</span>;
+
+  <span style="font-weight: bold;">if</span> (n &lt; 10) {
+    digits.push_back(n);
+    <span style="font-weight: bold;">return</span> digits;
+  }
+  <span style="font-weight: bold;">while</span> (n &gt; 0) {
+    digits.push_back(n % 10);
+    n = n / 10;
+  }
+  reverse(digits.begin(), digits.end());
+  <span style="font-weight: bold;">return</span> digits;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">solve</span>(<span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">n</span>, <span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">b</span>) {
+  memset(vis, 0, <span style="font-weight: bold;">sizeof</span>(vis));
+  digits = to_digits(n);
+
+  <span style="font-weight: bold; text-decoration: underline;">set</span>&lt;<span style="font-weight: bold; text-decoration: underline;">ll</span>&gt; <span style="font-weight: bold; font-style: italic;">candidates</span> = gen(0, 0, 1);
+
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">ans</span> = 0;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">set</span>&lt;<span style="font-weight: bold; text-decoration: underline;">ll</span>&gt;::<span style="font-weight: bold; text-decoration: underline;">iterator</span> <span style="font-weight: bold; font-style: italic;">it</span> = candidates.begin(); it != candidates.end(); it++) {
+    <span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">px</span> = *it;
+    <span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">x</span> = b + px;
+    <span style="font-weight: bold;">if</span> (x &lt;= n &amp;&amp; p(x) == px) {
+      ans++;
+    }
+  }
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+
+  assert(solve(99999999999, 502) == 12);
+  assert(solve(999, 434) == 2);
+  assert(solve(255, 15) == 2);
+  assert(solve(9999999999, 1) == 0);
+
+  <span style="font-weight: bold; text-decoration: underline;">ll</span> <span style="font-weight: bold; font-style: italic;">n</span>, <span style="font-weight: bold; font-style: italic;">b</span>;
+  scanf(<span style="font-style: italic;">"%lld %lld"</span>, &amp;n, &amp;b);
+  to_digits(n);
+  printf(<span style="font-style: italic;">"%d\n"</span>, solve(n, b));
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

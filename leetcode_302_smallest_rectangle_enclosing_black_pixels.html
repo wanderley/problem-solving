@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 302. Smallest Rectangle Enclosing Black Pixels</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 302. Smallest Rectangle Enclosing Black Pixels</h1>
+<ul class="org-ul">
+<li><a href="mistake_misread_the_problem.html#ID-192401C2-DA6F-4496-B530-89A3546712FD">Mistake: Misread the problem</a>. Missed the restriction of the time complexity.</li>
+
+<li><a href="can_we_state_the_problem_as_result_of_multiple_searches.html#ID-3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE">Can we state the problem as result of multiple searches?</a>  Do a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the first and last row and column.  Time complexity is \(O(n \log n + m \log m)\) and space is \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minArea</span>(<span style="font-weight: bold;">self</span>, image: List[List[<span style="font-weight: bold;">str</span>]], x: <span style="font-weight: bold;">int</span>, y: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(image)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(image[0])
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">first</span>(lo, hi, chk):
+            <span style="font-weight: bold;">while</span> lo &lt; <span style="font-weight: bold; font-style: italic;">hi</span>:
+                m = lo + (hi - lo) // 2
+                <span style="font-weight: bold;">if</span> chk(m):
+                    <span style="font-weight: bold; font-style: italic;">hi</span> = m
+                <span style="font-weight: bold;">else</span>:
+                    lo = m + 1
+            <span style="font-weight: bold;">return</span> lo <span style="font-weight: bold;">if</span> chk(lo) <span style="font-weight: bold;">else</span> lo + 1
+
+        <span style="font-weight: bold; font-style: italic;">l</span> = first(0, y, <span style="font-weight: bold;">lambda</span> j: <span style="font-weight: bold;">any</span>(image[i][j] == <span style="font-style: italic;">"1"</span> <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)))
+        r = first(y, M - 1, <span style="font-weight: bold;">lambda</span> j: <span style="font-weight: bold;">all</span>(image[i][j] == <span style="font-style: italic;">"0"</span> <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)))
+        u = first(0, x, <span style="font-weight: bold;">lambda</span> i: <span style="font-style: italic;">"1"</span> <span style="font-weight: bold;">in</span> image[i])
+        d = first(x, N - 1, <span style="font-weight: bold;">lambda</span> i: <span style="font-style: italic;">"1"</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> image[i])
+
+        <span style="font-weight: bold;">return</span> (l - r) * (u - d)
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().minArea(
+        [[<span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>], [<span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>], [<span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>, <span style="font-style: italic;">"0"</span>]], 0, 2
+    )
+    == 6
+)
+<span style="font-weight: bold;">assert</span> Solution().minArea([[<span style="font-style: italic;">"1"</span>]], 0, 0) == 1
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2147. Number of Ways to Divide a Long Corridor</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2147. Number of Ways to Divide a Long Corridor</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  Missed smallest edge cases possible (i.e. one letter).</li>
+
+<li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  We can trim the plants on both extremes since no section will be created between them.</li>
+
+<li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Be \(p_0, p_1, ..., p_k\) the number of plants between the first two seats and the next two and so on.  The problem becomes computing \(p_0 \times p_1 \times ... \times p_k \mod 10^9 + 7\).  Time complexity is \(O(n)\) and space is \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numberOfWays</span>(<span style="font-weight: bold;">self</span>, corridor: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        M = 10**9 + 7
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(corridor)
+        <span style="font-weight: bold; font-style: italic;">i</span> = 0
+        <span style="font-weight: bold;">while</span> i &lt; N <span style="font-weight: bold;">and</span> corridor[i] == <span style="font-style: italic;">"P"</span>:
+            i += 1
+        ans = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">while</span> i &lt; N:
+            cnt = 0
+            <span style="font-weight: bold;">while</span> i &lt; N <span style="font-weight: bold;">and</span> corridor[i] == <span style="font-style: italic;">"P"</span>:
+                i += 1
+                cnt += 1
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">break</span>
+            <span style="font-weight: bold;">assert</span> corridor[i] == <span style="font-style: italic;">"S"</span>
+            i += 1
+            <span style="font-weight: bold;">while</span> i &lt; N <span style="font-weight: bold;">and</span> corridor[i] == <span style="font-style: italic;">"P"</span>:
+                i += 1
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">assert</span> corridor[i] == <span style="font-style: italic;">"S"</span>
+            <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                ans = 1
+            ans = (ans * (cnt + 1)) % M
+            i += 1
+        <span style="font-weight: bold;">return</span> 0 <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">else</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().numberOfWays(<span style="font-style: italic;">"SSPPSPS"</span>) == 3
+<span style="font-weight: bold;">assert</span> Solution().numberOfWays(<span style="font-style: italic;">"PPSPSP"</span>) == 1
+<span style="font-weight: bold;">assert</span> Solution().numberOfWays(<span style="font-style: italic;">"S"</span>) == 0
+</pre>
+</div>
+</div>
+</body>
+</html>

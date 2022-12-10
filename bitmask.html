@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bitmask</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Bitmask</h1>
+
+<div id="outline-container-orgbc99956" class="outline-2">
+<h2 id="orgbc99956">Iterate over all submasks</h2>
+<div class="outline-text-2" id="text-orgbc99956">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">submasks</span>(mask):
+    <span style="font-weight: bold; font-style: italic;">submask</span> = mask
+    <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">submask</span>:
+        <span style="font-weight: bold;">yield</span> submask
+        submask = (submask - 1) &amp; mask
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

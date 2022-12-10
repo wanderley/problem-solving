@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 140. Word Break II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 140. Word Break II</h1>
+<ul class="org-ul">
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  Generate all possible answers using a <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a> to optimize the search for the current word.  Time and space complexity are \(2^n\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">wordBreak</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, wordDict: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        ans = []
+
+        <span style="font-weight: bold; font-style: italic;">root</span> = {}
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">wordDict</span>:
+            node = root
+            <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">w</span>:
+                node.setdefault(c, {})
+                node = node[c]
+            <span style="font-weight: bold; font-style: italic;">node</span>[<span style="font-style: italic;">"$"</span>] = w
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bt</span>(i, cur):
+            <span style="font-weight: bold;">nonlocal</span> ans
+            <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(s):
+                ans.append(cur)
+            node = root
+            <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold;">len</span>(s) <span style="font-weight: bold;">and</span> s[i] <span style="font-weight: bold;">in</span> node:
+                node = node[s[i]]
+                i += 1
+                <span style="font-weight: bold;">if</span> <span style="font-style: italic;">"$"</span> <span style="font-weight: bold;">in</span> node:
+                    bt(i, cur + (<span style="font-style: italic;">" "</span> <span style="font-weight: bold;">if</span> cur <span style="font-weight: bold;">else</span> <span style="font-style: italic;">""</span>) + node[<span style="font-style: italic;">"$"</span>])
+
+        bt(0, <span style="font-style: italic;">""</span>)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

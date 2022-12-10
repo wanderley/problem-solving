@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 10. Regular Expression Matching</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 10. Regular Expression Matching</h1>
+<p>
+<a href="https://leetcode.com/problems/regular-expression-matching/solution/">Problem Statement</a>: Given two string \(s\) and a pattern \(p\), return if \(s\) matches \(p\).  Note that \(p\) contains English letters, <code>'.'</code> and <code>'*'</code> (Kleene start).  The character <code>'.'</code> can be matched with any other character.
+</p>
+
+<div id="outline-container-org35bb9a6" class="outline-2">
+<h2 id="org35bb9a6">Simulating all transitions</h2>
+<div class="outline-text-2" id="text-org35bb9a6">
+<p>
+Let's use an example to explain the idea (kind of how I saw the solution).  Suppose that \(s=aabb\) and \(p=aa*a.*\).  Be \(i\) the position on \(s\) that was matched so far, and \(j\) the position on the pattern that we are matching \(s_i\) against.  initially \(i=j=0\).  as \(s_i=p_i\), we can move forward in \(s\) and \(p\) by adding one to \(i\) and \(j\).  Now, \(s_1=a\), \(p_1=a\) and \(p_1\) is a zero or more pattern.  If we match \(s_1\) with \(p_1\), we won't be able to match the rest of \(s\) because \(p_3\) must be matched with an letter a in \(s\) and \(s_1\) is the last one.  Even thought we can't perform this match, it isn't always true for other inputs (e.g. \(s=aaabb\) and \(p=aa*a.*\)).  The conclusion is that we have to branch the matching every time that \(p_j\) is a Kleene star.   In this example, we would have to try matching \(s_1\) with \(p_1\) and \(s_1\) with \(p_3\) (we have to jump the <code>*</code>).  So, for every \(i\), we have to keep a set of position \(js\) to match \(s_i\) against.  After performing all matches, we would be able to generate the new \(js\) to match \(s_{i+1}\) against.  The following code implements this idea.
+</p>
+
+<p>
+With \(N\) and \(M\) being the length of \(s\) and \(p\) respectively,
+</p>
+<ul class="org-ul">
+<li>Time complexity: \(O(N\times M)\), since <code>transition</code> is \((M)\) and <code>js</code> has at most \(N\) elements on every iteration of the loop.</li>
+<li>Space complexity: \(O(N + M^2)\). The function <code>transition</code> uses \(O(M^2)\) space since it stores a list of \(M\) values for each position \(j\).  The variable \(js\) contains at most \(N\) values.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, p):
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_zero_or_more</span>(j):
+        <span style="font-weight: bold;">return</span> p[j + 1 : j + 2] == <span style="font-style: italic;">"*"</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">expand</span>(j):
+        <span style="font-style: italic;">"""Return list of all consecutives zero or more patterns starting on j."""</span>
+        ans = [j]
+        k = 0
+        <span style="font-weight: bold;">while</span> k &lt; <span style="font-weight: bold;">len</span>(ans):
+            <span style="font-weight: bold;">if</span> is_zero_or_more(ans[k]):
+                ans.append(ans[k] + 2)
+            k += 1
+        <span style="font-weight: bold;">return</span> ans
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">transition</span>(j):
+        <span style="font-weight: bold;">if</span> j == <span style="font-weight: bold;">len</span>(p):
+            <span style="font-weight: bold;">return</span> []
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_zero_or_more(j):
+            <span style="font-weight: bold;">return</span> expand(j + 1)
+        <span style="font-weight: bold;">return</span> [j] + expand(j + 2)
+
+    <span style="font-weight: bold; font-style: italic;">i</span>, <span style="font-weight: bold; font-style: italic;">js</span> = 0, [0] <span style="font-weight: bold;">if</span> p[1:2] != <span style="font-style: italic;">"*"</span> <span style="font-weight: bold;">else</span> [0] + expand(2)
+    <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold;">len</span>(s) <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">len</span>(js) &gt; 0:
+        next_js = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> js:
+            <span style="font-weight: bold;">if</span> j == <span style="font-weight: bold;">len</span>(p):
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold;">assert</span> p[j] != <span style="font-style: italic;">"*"</span>
+            <span style="font-weight: bold;">if</span> p[j] == <span style="font-style: italic;">"."</span> <span style="font-weight: bold;">or</span> p[j] == s[i]:
+                next_js.update(transition(j))
+
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(next_js) &gt; 0:
+            i += 1
+        js = next_js
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>(p) <span style="font-weight: bold;">in</span> js <span style="font-weight: bold;">and</span> i == <span style="font-weight: bold;">len</span>(s)
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"a"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"a*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"ab"</span>, <span style="font-style: italic;">".*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aabb"</span>, <span style="font-style: italic;">"a.*b"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aabb"</span>, <span style="font-style: italic;">"a.*bc"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">".*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaaaaaaaaaaaaaaaaaaa"</span>, <span style="font-style: italic;">".*.*.*.*.*.*.*.*.*.*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">".*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"b"</span>, <span style="font-style: italic;">".*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaa"</span>, <span style="font-style: italic;">".*aaa"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaa"</span>, <span style="font-style: italic;">"ab*ac*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"ab*c*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"mississippi"</span>, <span style="font-style: italic;">"mis*is*p*."</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaabaaaababcbccbaab"</span>, <span style="font-style: italic;">"c*c*.*c*a*..*c*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isMatch</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, p: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">return</span> solve(s, p)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgeb20c7d" class="outline-2">
+<h2 id="orgeb20c7d"><a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a></h2>
+<div class="outline-text-2" id="text-orgeb20c7d">
+<p>
+We would like to compute a function \(f(i,j)\) that is true if it is possible to match \(s\) starting on \(i\) with \(p\) starting on \(j\), and false otherwise.  To do so, we have to try matching \(s_i\) with \(p_j\) if possible, and also skipping zero or more pattern.  The following code implements using top-down approach.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, p):
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">match</span>(i, j):
+        <span style="font-weight: bold;">return</span> p[j] == <span style="font-style: italic;">"."</span> <span style="font-weight: bold;">or</span> s[i] == p[j]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_zero_or_more</span>(j):
+        <span style="font-weight: bold;">return</span> p[j + 1 : j + 2] == <span style="font-style: italic;">"*"</span>
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j):
+        <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(s):
+            <span style="font-weight: bold;">return</span> j == <span style="font-weight: bold;">len</span>(p) <span style="font-weight: bold;">or</span> (is_zero_or_more(j) <span style="font-weight: bold;">and</span> dfs(i, j + 2))
+        <span style="font-weight: bold;">if</span> j == <span style="font-weight: bold;">len</span>(p):
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+        <span style="font-weight: bold;">assert</span> p[j] != <span style="font-style: italic;">"*"</span>
+        <span style="font-weight: bold;">if</span> is_zero_or_more(j):
+            <span style="font-weight: bold;">return</span> dfs(i, j + 2) <span style="font-weight: bold;">or</span> (
+                match(i, j) <span style="font-weight: bold;">and</span> (dfs(i + 1, j) <span style="font-weight: bold;">or</span> dfs(i + 1, j + 2))
+            )
+        <span style="font-weight: bold;">elif</span> match(i, j):
+            <span style="font-weight: bold;">return</span> dfs(i + 1, j + 1)
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+    <span style="font-weight: bold;">return</span> dfs(0, 0)
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"a"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"a*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"ab"</span>, <span style="font-style: italic;">".*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aabb"</span>, <span style="font-style: italic;">"a.*b"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aabb"</span>, <span style="font-style: italic;">"a.*bc"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">".*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaaaaaaaaaaaaaaaaaaa"</span>, <span style="font-style: italic;">".*.*.*.*.*.*.*.*.*.*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">".*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"b"</span>, <span style="font-style: italic;">".*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaa"</span>, <span style="font-style: italic;">".*aaa"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaa"</span>, <span style="font-style: italic;">"ab*ac*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"ab*c*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"mississippi"</span>, <span style="font-style: italic;">"mis*is*p*."</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaabaaaababcbccbaab"</span>, <span style="font-style: italic;">"c*c*.*c*a*..*c*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isMatch</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, p: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">return</span> solve(s, p)
+</pre>
+</div>
+
+<p>
+Sometimes, top-down approach doesn't work due stack limit.  So, it is a good training to also write a bottom-up solution.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, p):
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">match</span>(i, j):
+        <span style="font-weight: bold;">return</span> p[j] == <span style="font-style: italic;">"."</span> <span style="font-weight: bold;">or</span> s[i] == p[j]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_zero_or_more</span>(j):
+        <span style="font-weight: bold;">return</span> p[j + 1 : j + 2] == <span style="font-style: italic;">"*"</span>
+
+    dp = [[<span style="font-weight: bold; text-decoration: underline;">False</span> <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(p) + 1)] <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(s) + 1)]
+    <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(p), -1, -1):
+        dp[<span style="font-weight: bold;">len</span>(s)][j] = j == <span style="font-weight: bold;">len</span>(p) <span style="font-weight: bold;">or</span> (is_zero_or_more(j) <span style="font-weight: bold;">and</span> dp[<span style="font-weight: bold;">len</span>(s)][j + 2])
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(s) - 1, -1, -1):  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">reversed(range(len(s))):</span>
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(p) - 1, -1, -1):  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">reversed(range(len(p))):</span>
+            <span style="font-weight: bold;">if</span> is_zero_or_more(j):
+                dp[i][j] = dp[i][j + 2] <span style="font-weight: bold;">or</span> (
+                    match(i, j) <span style="font-weight: bold;">and</span> (dp[i + 1][j] <span style="font-weight: bold;">or</span> dp[i + 1][j + 2])
+                )
+            <span style="font-weight: bold;">elif</span> match(i, j):
+                dp[i][j] = dp[i + 1][j + 1]
+    <span style="font-weight: bold;">return</span> dp[0][0]
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"a"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"a*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"ab"</span>, <span style="font-style: italic;">".*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aabb"</span>, <span style="font-style: italic;">"a.*b"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aabb"</span>, <span style="font-style: italic;">"a.*bc"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">".*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaaaaaaaaaaaaaaaaaaa"</span>, <span style="font-style: italic;">".*.*.*.*.*.*.*.*.*.*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">".*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"b"</span>, <span style="font-style: italic;">".*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaa"</span>, <span style="font-style: italic;">".*aaa"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaa"</span>, <span style="font-style: italic;">"ab*ac*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"ab*c*a"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"mississippi"</span>, <span style="font-style: italic;">"mis*is*p*."</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"aaabaaaababcbccbaab"</span>, <span style="font-style: italic;">"c*c*.*c*a*..*c*"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isMatch</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, p: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">return</span> solve(s, p)
+</pre>
+</div>
+
+<p>
+Both, implementations have
+</p>
+
+<ul class="org-ul">
+<li>time complexity: \(O(N \times N)\), and</li>
+<li>space complexity: \(O(N \times N)\).</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

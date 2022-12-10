@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 778. Swim in Rising Water</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 778. Swim in Rising Water</h1>
+<ul class="org-ul">
+<li><a href="blackbox_you_solved_a_similar_problem.html#ID-37AF9679-42D1-4A85-9927-2A590268AD87">Blackbox: You solved a similar problem</a> with increasing paths on grid and sorting the cells was useful.</li>
+
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  This is a variation of <a href="shortest_path_in_a_graph_problem.html#ID-8BACB101-3C8B-47CA-9AB1-89D52F85F6DA">Shortest Path in a Graph Problem</a> and can be solved using <a href="dijkstra_algorithm.html#ID-3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A">Dijkstra Algorithm</a>.  Instead of adding up to compute the distance, we take the vertices with greatest value in the path so far.</li>
+
+<li>Time complexity is \(O(n^2 \log n)\) and space is \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">swimInWater</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>((grid[0][0], 0, 0))
+        <span style="font-weight: bold; font-style: italic;">pq</span> = [(grid[0][0], 0, 0)]
+
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">pq</span>:
+            <span style="font-weight: bold; font-style: italic;">t</span>, <span style="font-weight: bold; font-style: italic;">i</span>, <span style="font-weight: bold; font-style: italic;">j</span> = heappop(pq)
+
+            <span style="font-weight: bold;">if</span> i == N - 1 <span style="font-weight: bold;">and</span> j == N - 1:
+                <span style="font-weight: bold;">return</span> t
+
+            <span style="font-weight: bold;">for</span> ni, nj <span style="font-weight: bold;">in</span> [[i, j + 1], [i, j - 1], [i + 1, j], [i - 1, j]]:
+                <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; N <span style="font-weight: bold;">and</span> (ni, nj) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                    seen.add((ni, nj))
+                    heappush(pq, (<span style="font-weight: bold;">max</span>(grid[ni][nj], t), ni, nj))
+
+
+<span style="font-weight: bold;">assert</span> Solution().swimInWater([[0, 2], [1, 3]]) == 3
+<span style="font-weight: bold;">assert</span> (
+    Solution().swimInWater(
+        [
+            [0, 1, 2, 3, 4],
+            [24, 23, 22, 21, 5],
+            [12, 13, 14, 15, 16],
+            [11, 17, 18, 19, 20],
+            [10, 9, 8, 7, 6],
+        ]
+    )
+    == 16
+)
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Other solution is to build the graph using <a href="union_find.html#ID-23A4E36E-24D3-40F8-AA20-32C0DB1E36F6">Union-Find</a> from the smaller cells to the bigger cells and stop when \((0, 0)\) is connected with \((n-1, m-1)\).  Time complexity is \(O(n \times m \times \log (n \times m))\) and space is \(O(n \times m)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">swimInWater</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(grid[0])
+        <span style="font-weight: bold; font-style: italic;">D</span> = [[+1, +0], [-1, +0], [+0, +1], [+0, -1]]
+
+        <span style="font-weight: bold; font-style: italic;">p</span> = {}
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(u):
+            p.setdefault(u, u)
+            <span style="font-weight: bold;">if</span> p[u] != <span style="font-weight: bold; font-style: italic;">u</span>:
+                p[<span style="font-weight: bold; font-style: italic;">u</span>] = find(p[u])
+            <span style="font-weight: bold;">return</span> p[u]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">union</span>(u, v):
+            <span style="font-weight: bold; font-style: italic;">p</span>[find(u)] = p[find(v)]
+
+        <span style="font-weight: bold;">for</span> t, i, j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>((grid[i][j], i, j) <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N) <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M)):
+            <span style="font-weight: bold;">for</span> di, dj <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">D</span>:
+                <span style="font-weight: bold; font-style: italic;">ni</span>, <span style="font-weight: bold; font-style: italic;">nj</span> = i + di, j + dj
+                <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; M <span style="font-weight: bold;">and</span> grid[ni][nj] &lt;= t:
+                    union((i, j), (ni, nj))
+            <span style="font-weight: bold;">if</span> find((0, 0)) == find((N - 1, M - 1)):
+                <span style="font-weight: bold;">return</span> t
+</pre>
+</div>
+</div>
+</body>
+</html>

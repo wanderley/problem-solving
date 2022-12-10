@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2172. Maximum AND Sum of Array</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2172. Maximum AND Sum of Array</h1>
+<ul class="org-ul">
+<li><a href="mistake_did_not_consider_different_approaches.html#ID-477B8042-5F3E-4814-9F0B-C49485B85A64">Mistake: Did not consider different approaches</a>.  I got stuck on representing only the used numbers in the bitmask.</li>
+
+<li><a href="what_are_the_different_ways_to_represent_the_search_space.html#ID-13025164-D62A-450B-AA2F-332E097F7A16">What are the different ways to represent the search-space?</a>  The first way that came to mind was \((k, s)\) where \(k\) is the next slot to fill up and \(s\) is the set of used numbers.  Space is \(O(k \times 2^n)\) and time complexity is \(O(k \times 2^n \times n^2)\).   As \(k\) is <b>small</b>, the best way to represent the search-space is \((i, p, q)\) where \(i\) is the number that I want to place, \(p\) is a set of slots that has one position (left position) used and \(q\) is a set of slots that have one position (right position) used.  Space is \(O(n \times 2^k \times 2^k)\) and times complexity is \(O(n^2 \times 2^k \times 2^k)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumANDSum</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], numSlots: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, f, s):
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">return</span> 0
+            ans = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(numSlots):
+                c = nums[i] &amp; (j + 1)
+                <span style="font-weight: bold;">if</span> f &amp; (1 &lt;&lt; j) == 0:
+                    ans = <span style="font-weight: bold;">max</span>(ans, c + dfs(i + 1, f | (1 &lt;&lt; j), s))
+                <span style="font-weight: bold;">elif</span> s &amp; (1 &lt;&lt; j) == 0:
+                    ans = <span style="font-weight: bold;">max</span>(ans, c + dfs(i + 1, f, s | (1 &lt;&lt; j)))
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0, 0, 0)
+
+
+<span style="font-weight: bold;">assert</span> Solution().maximumANDSum([1, 2, 3, 4, 5, 6], 3) == 9
+<span style="font-weight: bold;">assert</span> Solution().maximumANDSum([1, 3, 10, 4, 7, 1], 9) == 24
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumANDSum</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], numSlots: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, used):
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">return</span> 0
+
+            ans = 0
+            cur = used
+            b = 1
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, numSlots + 1):
+                slot = cur % 3
+                cur = cur // 3
+                <span style="font-weight: bold;">if</span> slot &lt; 2:
+                    ans = <span style="font-weight: bold;">max</span>(ans, (nums[i] &amp; k) + dfs(i + 1, used + b))
+                b = b * 3
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0, 0)
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #020: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #020: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 1 hour 11 minutes 18 seconds</li>
+<li>Time Allotted: 1 hour 30 minutes</li>
+<li>Completed: July 11, 2022 10:25 AM</li>
+<li>Score: 7.43</li>
+</ul>
+
+<div id="outline-container-org5c5702c" class="outline-2">
+<h2 id="org5c5702c">Leetcode: 657. Robot Return to Origin</h2>
+<div class="outline-text-2" id="text-org5c5702c">
+<p>
+<a href="https://leetcode.com/problems/robot-return-to-origin/">Problem Statement</a>
+</p>
+
+<p>
+Simulate the robot by adding or subtracting one from its axes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">judgeCircle</span>(<span style="font-weight: bold;">self</span>, moves: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        y = <span style="font-weight: bold; font-style: italic;">x</span> = 0
+        <span style="font-weight: bold;">for</span> m <span style="font-weight: bold;">in</span> moves:
+            <span style="font-weight: bold;">if</span> m == <span style="font-style: italic;">"R"</span>:
+                x += 1
+            <span style="font-weight: bold;">elif</span> m == <span style="font-style: italic;">"L"</span>:
+                x -= 1
+            <span style="font-weight: bold;">elif</span> m == <span style="font-style: italic;">"U"</span>:
+                y += 1
+            <span style="font-weight: bold;">elif</span> m == <span style="font-style: italic;">"D"</span>:
+                y -= 1
+        <span style="font-weight: bold;">return</span> y == 0 <span style="font-weight: bold;">and</span> x == 0
+
+
+<span style="font-weight: bold;">assert</span> Solution().judgeCircle(<span style="font-style: italic;">"UD"</span>) == <span style="font-weight: bold; text-decoration: underline;">True</span>
+<span style="font-weight: bold;">assert</span> Solution().judgeCircle(<span style="font-style: italic;">"LL"</span>) == <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb71b974" class="outline-2">
+<h2 id="orgb71b974">Leetcode: 809. Expressive Words</h2>
+<div class="outline-text-2" id="text-orgb71b974">
+<p>
+<a href="https://leetcode.com/problems/expressive-words/">Problem Statement</a>
+</p>
+
+<p>
+Use <a href="stack.html#ID-06D27BC1-DFDC-4063-B3A9-7074FD5E13B3">Stack</a> to find the groups and them compare them to see if they are valid.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">expressiveWords</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, words: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">group</span>(s):
+            stack = []
+            <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> s:
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(stack) == 0 <span style="font-weight: bold;">or</span> stack[-1][0] != c:
+                    stack.append([c, 1])
+                <span style="font-weight: bold;">else</span>:
+                    stack[-1][1] += 1
+            <span style="font-weight: bold;">return</span> stack
+
+        gs = group(s)
+        ans = 0
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> words:
+            gw = group(w)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(gs) != <span style="font-weight: bold;">len</span>(gw):
+                <span style="font-weight: bold;">continue</span>
+            i = 0
+            <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold;">len</span>(gs):
+                <span style="font-weight: bold;">if</span> gs[i][0] != gw[i][0]:
+                    <span style="font-weight: bold;">break</span>
+                <span style="font-weight: bold;">if</span> gs[i][1] &lt; gw[i][1]:
+                    <span style="font-weight: bold;">break</span>
+                <span style="font-weight: bold;">if</span> gw[i][1] &lt; gs[i][1] <span style="font-weight: bold;">and</span> gs[i][1] &lt; 3:
+                    <span style="font-weight: bold;">break</span>
+                i += 1
+            ans += 1 <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(gs) <span style="font-weight: bold;">else</span> 0
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().expressiveWords(<span style="font-style: italic;">"heeellooo"</span>, [<span style="font-style: italic;">"hello"</span>, <span style="font-style: italic;">"hi"</span>, <span style="font-style: italic;">"helo"</span>]) == 1
+<span style="font-weight: bold;">assert</span> Solution().expressiveWords(<span style="font-style: italic;">"zzzzzyyyyy"</span>, [<span style="font-style: italic;">"zzyy"</span>, <span style="font-style: italic;">"zy"</span>, <span style="font-style: italic;">"zyy"</span>]) == 3
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org82aef2c" class="outline-2">
+<h2 id="org82aef2c">Leetcode: 947. Most Stones Removed with Same Row or Column</h2>
+<div class="outline-text-2" id="text-org82aef2c">
+<p>
+<a href="https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/">Problem Statement</a>
+</p>
+
+<p>
+<a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Yes, the stones are vertices and two are connected if they share the same row or column.  For each connected component, we won't be able to pick one stone.  Therefore, the answer is the number of vertices minus the number of components.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">removeStones</span>(<span style="font-weight: bold;">self</span>, stones: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(stones)
+
+        <span style="font-weight: bold; font-style: italic;">comps</span> = []
+        <span style="font-weight: bold; font-style: italic;">vis</span> = [<span style="font-weight: bold; text-decoration: underline;">False</span>] * N
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(u):
+            <span style="font-weight: bold; font-style: italic;">vis</span>[<span style="font-weight: bold; font-style: italic;">u</span>] = <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold; font-style: italic;">ans</span> = 1
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> vis[v] <span style="font-weight: bold;">and</span> (
+                    stones[v][0] == stones[u][0] <span style="font-weight: bold;">or</span> stones[v][1] == stones[u][1]
+                ):
+                    find(v)
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = N
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold; font-style: italic;">vis</span>[i]:
+                <span style="font-weight: bold;">continue</span>
+            find(i)
+            ans -= 1
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().removeStones([[0, 0], [0, 1], [1, 0], [1, 2], [2, 1], [2, 2]]) == 5
+<span style="font-weight: bold;">assert</span> Solution().removeStones([[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]]) == 3
+<span style="font-weight: bold;">assert</span> Solution().removeStones([[0, 0]]) == 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge2597a7" class="outline-2">
+<h2 id="orge2597a7"><a href="leetcode_329_longest_increasing_path_in_a_matrix.html#ID-D178FB4C-1257-41C6-A386-E7BF78FDC62A">Leetcode: 329. Longest Increasing Path in a Matrix</a></h2>
+</div>
+</div>
+</body>
+</html>

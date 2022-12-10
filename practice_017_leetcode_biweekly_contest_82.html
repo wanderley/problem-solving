@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #017: Leetcode Biweekly Contest 82</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #017: Leetcode Biweekly Contest 82</h1>
+<ul class="org-ul">
+<li>Time Spent: 1 hour 30 minutes</li>
+<li>Time Allotted: 1 hour 30 minutes</li>
+<li>Completed: July 9, 2022 9:00 AM</li>
+<li>Score: 1/4</li>
+</ul>
+
+<div id="outline-container-orge20d940" class="outline-2">
+<h2 id="orge20d940">Leetcode: 2331. Evaluate Boolean Binary Tree</h2>
+<div class="outline-text-2" id="text-orge20d940">
+<p>
+<a href="https://leetcode.com/problems/evaluate-boolean-binary-tree/">Problem Statement</a>
+</p>
+
+<p>
+Traverse the full binary tree applying the rule.  Time complexity is \(O(n)\) and space is \(O(maxDepth)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for a binary tree node.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class TreeNode:</span>
+<span style="font-weight: bold; font-style: italic;">#     </span><span style="font-weight: bold; font-style: italic;">def __init__(self, val=0, left=None, right=None):</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.val = val</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.left = left</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.right = right</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">evaluateTree</span>(<span style="font-weight: bold;">self</span>, root: Optional[TreeNode]) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">if</span> root.val == 0:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> root.val == 1:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">if</span> root.val == 2:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.evaluateTree(root.left) <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">self</span>.evaluateTree(root.right)
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.evaluateTree(root.left) <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.evaluateTree(root.right)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org704f0af" class="outline-2">
+<h2 id="org704f0af">Leetcode: 2332. The Latest Time to Catch a Bus</h2>
+<div class="outline-text-2" id="text-org704f0af">
+<p>
+<a href="https://leetcode.com/problems/the-latest-time-to-catch-a-bus/">Problem Statement</a>
+</p>
+
+<p>
+Retrospective: Simplify the problem by generating the possible candidates and them pick between them!
+</p>
+
+<p>
+<a href="can_you_first_generate_all_candidates_and_then_pick_the_best_one.html#ID-638547C6-7305-4AA8-A57B-D570C1C323DD">Can we first generate all candidates and then pick the best one?</a>  Generate numbers that represent either a real ticket and the possible new one.  Then, simulate the problem and keep track of the last possible candidate to pick a bus.  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">latestTimeCatchTheBus</span>(<span style="font-weight: bold;">self</span>, b: List[<span style="font-weight: bold;">int</span>], p: List[<span style="font-weight: bold;">int</span>], c: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        b = <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">sorted</span>(b))
+        <span style="font-weight: bold; font-style: italic;">p</span> = <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">sorted</span>(p))
+
+        <span style="font-weight: bold; font-style: italic;">u</span> = <span style="font-weight: bold;">set</span>(p)
+        <span style="font-weight: bold; font-style: italic;">t</span> = [(s, <span style="font-weight: bold; text-decoration: underline;">True</span>) <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> p]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(p)):
+            <span style="font-weight: bold;">if</span> p[i] - 1 <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> u:
+                u.add(p[i] - 1)
+                t.append((p[i] - 1, <span style="font-weight: bold; text-decoration: underline;">False</span>))
+            <span style="font-weight: bold;">if</span> p[i] + 1 <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> u <span style="font-weight: bold;">and</span> p[i] + 1 &lt;= b[-1]:
+                u.add(p[i] + 1)
+                t.append((p[i] + 1, <span style="font-weight: bold; text-decoration: underline;">False</span>))
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(b)):
+            <span style="font-weight: bold;">if</span> b[i] <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">u</span>:
+                t.append((b[i], <span style="font-weight: bold; text-decoration: underline;">False</span>))
+        t = <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">sorted</span>(t))
+
+        <span style="font-weight: bold; font-style: italic;">i</span> = 0
+        <span style="font-weight: bold; font-style: italic;">j</span> = 0
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold;">len</span>(b) <span style="font-weight: bold;">and</span> j &lt; <span style="font-weight: bold;">len</span>(t):
+            <span style="font-weight: bold; font-style: italic;">k</span> = 0
+            <span style="font-weight: bold;">while</span> k &lt; c <span style="font-weight: bold;">and</span> j &lt; <span style="font-weight: bold;">len</span>(t) <span style="font-weight: bold;">and</span> t[j][0] &lt;= b[i]:
+                <span style="font-weight: bold;">if</span> t[j][1] == <span style="font-weight: bold; text-decoration: underline;">False</span>:
+                    ans = t[j][0]
+                <span style="font-weight: bold;">else</span>:
+                    k += 1
+                j += 1
+            i += 1
+
+        <span style="font-weight: bold;">return</span> ans
+
+<span style="font-weight: bold;">assert</span> Solution().latestTimeCatchTheBus([10,20], [2,17,18,19], 2) == 16
+<span style="font-weight: bold;">assert</span> Solution().latestTimeCatchTheBus([20,30,10], [19,13,26,4,25,11,21], 2) == 20
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3142179" class="outline-2">
+<h2 id="org3142179">Leetcode: 2333. Minimum Sum of Squared Difference</h2>
+<div class="outline-text-2" id="text-org3142179">
+<p>
+<a href="https://leetcode.com/problems/minimum-sum-of-squared-difference/">Problem Statement</a>
+</p>
+
+<p>
+<a href="can_we_simplify_the_problem_which_keeping_it_the_same.html#ID-F19C9539-EE46-41EE-8DEF-24C3076C6DC2">Can we simplify the problem while keeping it the same?</a>  We can substitute \(nums_1\) and \(nums_2\) by \(a[i]=\mbox{abs}(nums_1[i], nums_2[i])\).  With that, the problem continues the same: modify any elements of \(a\) by \(+1\) or \(-1\) at most \(k=k_1+k_2\).  The key to make this process efficient is to group \(a[i]\) with \(a[j]\) if \(a[i]=a[j]\).  To do so, we have to pick the biggest \(a[i]\) and reduce it until there is no more operations left.  This can generate a new number smaller than the previous one or two numbers if we couldn't reduce them all, but we will never have more than \(10^5\) numbers in the process.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minSumSquareDiff</span>(<span style="font-weight: bold;">self</span>, a: List[<span style="font-weight: bold;">int</span>], b: List[<span style="font-weight: bold;">int</span>], k1: <span style="font-weight: bold;">int</span>, k2: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        n = <span style="font-weight: bold;">len</span>(a)
+        <span style="font-weight: bold; font-style: italic;">k</span> = k1 + k2
+
+        <span style="font-weight: bold; font-style: italic;">c</span> = {}
+        <span style="font-weight: bold; font-style: italic;">p</span> = []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">push</span>(v, cnt=1):
+            <span style="font-weight: bold;">if</span> v <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> c:
+                heappush(p, -v)
+                c[<span style="font-weight: bold; font-style: italic;">v</span>] = cnt
+            <span style="font-weight: bold;">else</span>:
+                c[<span style="font-weight: bold; font-style: italic;">v</span>] += cnt
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">pop</span>():
+            v = -heappop(p)
+            cnt = c[v]
+            c.pop(v)
+            <span style="font-weight: bold;">return</span> (v, cnt)
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            push(<span style="font-weight: bold;">abs</span>(a[i] - b[i]))
+
+        <span style="font-weight: bold;">while</span> k &gt; 0 <span style="font-weight: bold;">and</span> p[0] != 0:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(p) == 1:
+                v, cnt = pop()
+                d = <span style="font-weight: bold;">min</span>(v, k // cnt)
+                <span style="font-weight: bold;">if</span> d &gt; 0:
+                    push(v - d, cnt)
+                    k -= d * cnt
+                <span style="font-weight: bold;">else</span>:
+                    push(v - 1, k)
+                    push(v, cnt - k)
+                    k -= k
+            <span style="font-weight: bold;">else</span>:
+                v, cnt = pop()
+                d = <span style="font-weight: bold;">min</span>(v, k // cnt, <span style="font-weight: bold;">abs</span>(v + p[0]))
+                <span style="font-weight: bold;">if</span> d &gt; 0:
+                    push(v - d, cnt)
+                    k -= d * cnt
+                <span style="font-weight: bold;">else</span>:
+                    push(v - 1, k)
+                    push(v, cnt - k)
+                    k -= k
+
+        ans = 0
+        <span style="font-weight: bold;">for</span> v, c <span style="font-weight: bold;">in</span> c.items():
+            ans += v * v * c
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().minSumSquareDiff([1, 2, 3, 4], [2, 10, 20, 19], 0, 0) == 579
+<span style="font-weight: bold;">assert</span> Solution().minSumSquareDiff([1, 4, 10, 12], [5, 8, 6, 9], 1, 1) == 43
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfe6c11e" class="outline-2">
+<h2 id="orgfe6c11e">Leetcode: 2334. Subarray With Elements Greater Than Varying Threshold</h2>
+<div class="outline-text-2" id="text-orgfe6c11e">
+<p>
+<a href="https://leetcode.com/problems/subarray-with-elements-greater-than-varying-threshold/">Problem Statement</a>
+</p>
+
+<p>
+<a href="how_can_we_find_the_solution_knowing_part_of_it.html#ID-DD73E390-3303-40F8-9CE1-D1ED048D9588">How can we find the solution knowing part of it?</a>  Suppose that we know the largest value \(k\) contained the in the solution of the problem.  We can find the subarray by extending the subarray with \(k\) to left (<a href="monotonic_stack.html#ID-9F9827A4-93A9-43AF-8E45-673A1A315E44">Problem: Previous greater integer in unsorted array</a>) and right (<a href="monotonic_stack.html#ID-E4C9A18D-FC2B-4C1D-A040-1A94C39F9F63">Problem: Next greater integer in unsorted array</a>) while they are smaller than \(k\).  This process can be solved efficiently with \(O(n)\) pre-processing and \(O(1)\) to query.  We don't know \(k\), but we can try all possible ones.  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> math <span style="font-weight: bold;">import</span> floor
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">prev_greater</span>(a):
+    <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">stack</span> = []
+    <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(a):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> a[stack[-1]] &lt; <span style="font-weight: bold; font-style: italic;">x</span>:
+            stack.pop()
+        ans[<span style="font-weight: bold; font-style: italic;">i</span>] = -1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(stack) == 0 <span style="font-weight: bold;">else</span> stack[-1]
+        stack.append(i)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">next_greater</span>(a):
+    <span style="font-weight: bold; font-style: italic;">ans</span> = [<span style="font-weight: bold;">len</span>(a)] * <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">stack</span> = []
+    <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(a):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) &gt; 0 <span style="font-weight: bold;">and</span> a[stack[-1]] &lt; <span style="font-weight: bold; font-style: italic;">x</span>:
+            ans[stack.pop()] = i
+        stack.append(i)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">validSubarraySize</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], t: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        a = [floor(t / v) + 1 <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> nums]
+        <span style="font-weight: bold;">for</span> p, x, n <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(prev_greater(a), a, next_greater(a)):
+            <span style="font-weight: bold; font-style: italic;">s</span> = p + 1
+            <span style="font-weight: bold; font-style: italic;">e</span> = n - 1
+            <span style="font-weight: bold;">if</span> e - s + 1 &gt;= x:
+                <span style="font-weight: bold;">return</span> e - s + 1
+        <span style="font-weight: bold;">return</span> -1
+
+
+<span style="font-weight: bold;">assert</span> Solution().validSubarraySize([1, 3, 4, 3, 1], 6) == 3
+<span style="font-weight: bold;">assert</span> Solution().validSubarraySize([6, 5, 6, 5, 8], 7) == 5
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

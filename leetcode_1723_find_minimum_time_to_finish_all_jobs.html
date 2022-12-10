@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1723. Find Minimum Time to Finish All Jobs</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1723. Find Minimum Time to Finish All Jobs</h1>
+<ul class="org-ul">
+<li><a href="mistake_did_not_consider_different_approaches.html#ID-477B8042-5F3E-4814-9F0B-C49485B85A64">Mistake: Did not consider different approaches</a> and got stuck on the Dynamic Programming solution.</li>
+
+<li><a href="pattern_find_optimal_subset_of_small_set.html#ID-FEEE596A-DFF4-4B02-8995-1BCF70A76410">Pattern: Find optimal subset of small set</a>.  Use <a href="brute_force.html#ID-EC1C87C8-A221-4823-9EF5-BEC706B2EEA5">Brute Force</a> to assign each job to a worker and prune the search with the current maximum working time for the updated job.  To make the search faster, sort the input in decreasing order.</li>
+
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  The most important prune is to make sure that a job is assigned as the first job of a work only once.  Time complexity is \(O(n^k)\) but the prunes makes the solution faster than <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a>.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumTimeRequired</span>(<span style="font-weight: bold;">self</span>, jobs: List[<span style="font-weight: bold;">int</span>], K: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(jobs)
+        jobs.sort(reverse=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+        load = [0] * N
+        ans = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bt</span>(i, cur):
+            <span style="font-weight: bold;">nonlocal</span> ans
+            <span style="font-weight: bold;">if</span> cur &gt;= ans:
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">if</span> i == N:
+                ans = <span style="font-weight: bold;">min</span>(ans, cur)
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(K):
+                load[<span style="font-weight: bold; font-style: italic;">j</span>] += jobs[i]
+                <span style="font-weight: bold;">if</span> load[j] &lt; ans:
+                    bt(i + 1, <span style="font-weight: bold;">max</span>(cur, load[j]))
+                load[<span style="font-weight: bold; font-style: italic;">j</span>] -= jobs[i]
+                <span style="font-weight: bold;">if</span> load[j] == 0:
+                    <span style="font-weight: bold;">break</span>
+
+        bt(0, 0)
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().minimumTimeRequired([3, 2, 3], 3) == 3
+<span style="font-weight: bold;">assert</span> Solution().minimumTimeRequired([1, 2, 4, 7, 8], 2) == 11
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  The search-space is defined by \((k, S)\) where \(k\) is the number of workers used so far and \(S\) represents the completed jobs.  Time and space complexity is \(O(k \times 2^n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumTimeRequired</span>(<span style="font-weight: bold;">self</span>, jobs: List[<span style="font-weight: bold;">int</span>], K: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        S = <span style="font-weight: bold;">sum</span>(jobs)
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(jobs)
+        <span style="font-weight: bold; font-style: italic;">M</span> = 2**N
+
+        <span style="font-weight: bold; font-style: italic;">cost</span> = [0] * M
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold;">if</span> i &amp; (1 &lt;&lt; j):
+                    <span style="font-weight: bold; font-style: italic;">cost</span>[<span style="font-weight: bold; font-style: italic;">i</span>] += jobs[j]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">submasks</span>(mask):
+            <span style="font-weight: bold; font-style: italic;">submask</span> = mask
+            <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">submask</span>:
+                <span style="font-weight: bold;">yield</span> submask
+                submask = (submask - 1) &amp; mask
+
+        <span style="font-weight: bold; font-style: italic;">dp</span> = [[<span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)] * M <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(K + 1)]
+        <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(K, -1, -1):
+            <span style="font-weight: bold;">if</span> k == K:
+                dp[k][M - 1] = 0
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">for</span> used <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                    allowed = (M - 1) ^ used
+                    cur = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"inf"</span>)
+                    <span style="font-weight: bold;">for</span> new <span style="font-weight: bold;">in</span> submasks(allowed):
+                        <span style="font-weight: bold;">if</span> cost[new] &lt; cur:
+                            cur = <span style="font-weight: bold;">min</span>(cur, <span style="font-weight: bold;">max</span>(cost[new], dp[k + 1][used | new]))
+                    dp[k][<span style="font-weight: bold; font-style: italic;">used</span>] = cur
+        <span style="font-weight: bold;">return</span> dp[0][0]
+
+
+<span style="font-weight: bold;">assert</span> Solution().minimumTimeRequired([3, 2, 3], 3) == 3
+<span style="font-weight: bold;">assert</span> Solution().minimumTimeRequired([1, 2, 4, 7, 8], 2) == 11
+</pre>
+</div>
+</div>
+</body>
+</html>

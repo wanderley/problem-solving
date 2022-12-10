@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2449. Minimum Number of Operations to Make Arrays Similar</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2449. Minimum Number of Operations to Make Arrays Similar</h1>
+
+<div id="outline-container-orgcaf649c" class="outline-2">
+<h2 id="orgcaf649c">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgcaf649c">
+<p>
+Given two integer arrays \(a\) and \(t\).  Transform \(a\) in \(t\) by performing any number of times and operation: pick \(i\) and \(j\) and do \(a[i] += 2\) and \(a[j] -= 2\).
+</p>
+</div>
+
+<div id="outline-container-org610fc2f" class="outline-3">
+<h3 id="org610fc2f">Useful prompts</h3>
+<div class="outline-text-3" id="text-org610fc2f">
+<ul class="org-ul">
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org762ad33" class="outline-2">
+<h2 id="org762ad33">Devise a plan</h2>
+<div class="outline-text-2" id="text-org762ad33">
+<p>
+There are two important properties on this problem:
+</p>
+
+<ol class="org-ol">
+<li>You can't change the parity of a number in \(a\), and</li>
+<li>The smallest number in \(a\) should become the smallest number in \(t\).</li>
+</ol>
+
+<p>
+You can prove (2) by contradiction and (1) comes from the property of the operation.  Given these properties, split even from odd numbers of \(a\) and \(t\) and sort them in non-decreasing order (<a href="pattern_answer_query_on_sorted_data.html#ID-A18543C4-83BC-40F1-A243-B85FD935FAC0">Pattern: Answer query on sorted data</a>).  For each in \(a_even[i]\) count the number of operations necessary to transform it on \(t_even[i]\).  You will have count it twice since removing two from one number means that you put on in other.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-org8e6f236" class="outline-3">
+<h3 id="org8e6f236">Carry out a plan</h3>
+<div class="outline-text-3" id="text-org8e6f236">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">makeSimilar</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], target: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        nums.sort()
+        target.sort()
+        <span style="font-weight: bold;">if</span> nums == target:
+            <span style="font-weight: bold;">return</span> 0
+        ei = [n <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums <span style="font-weight: bold;">if</span> n % 2 == 0]
+        oi = [n <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> nums <span style="font-weight: bold;">if</span> n % 2 == 1]
+        et = [n <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> target <span style="font-weight: bold;">if</span> n % 2 == 0]
+        ot = [n <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> target <span style="font-weight: bold;">if</span> n % 2 == 1]
+
+        ans = 0
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(ei)):
+            ans += <span style="font-weight: bold;">abs</span>(ei[i] - et[i]) // 2
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(oi)):
+            ans += <span style="font-weight: bold;">abs</span>(oi[i] - ot[i]) // 2
+        <span style="font-weight: bold;">return</span> ans // 2
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

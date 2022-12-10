@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 496. Next Greater Element I</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 496. Next Greater Element I</h1>
+<p>
+<a href="https://leetcode.com/problems/next-greater-element-i/">Problem Statement</a>: Given two arrays \(q\) (queries) and \(v\) (values) with unique integers, return for each query \(i\) the next greater integer of \(b[j]\) where \(b[j]=q[i]\) or -1 if it doesn't exist.
+</p>
+
+<p>
+As the problem asks for a solution \(O(|q|+|v|)\), we must compute all next greater elements of \(v\) in \(O(|v|)\) and use them to answer to each query.  From the definition of the problem, if \(|q|=1\) then the return value should be \([-1]\) since there is no next greater element.  The same is true for any last integer on \(v\).  Suppose that we are processing \(v[0]\) and \(v[0]>v[1]\).  At this point, we don't know the answer.  Be \(i\) the first index where \(v[i]>v[0]\) and \(j\) the first index where \(v[j]>v[1]\).  If \(i=j\), we know that \(i\) is the answer not only for \(v[0]\) and \(v[1]\) but for all indexes from 0 to \(i-1\), since \(v[0]>v[1]>...>v[i-1]\).  Otherwise, \(i\) must be greater than \(j\), so only some of the integer in \(v[1..(j-1)]\) found their next greater integer.  We can keep the unanswered integers in a stack (<a href="monotonic_stack.html#ID-E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5">Monotonic Stack</a>), and pop all of then that are lesser than the number being processed;  on the end, we can add the current number to the stack and continue to process the next one.  To answer the queries efficiently, we can use a dictionary from integers in \(b\) to next greater integer.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|q| + |v|)\)</li>
+<li>Space complexity: \(O(|v|)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(nums1, nums2):
+    <span style="font-weight: bold; font-style: italic;">greaters</span> = {}
+    <span style="font-weight: bold; font-style: italic;">stack</span> = deque(maxlen=<span style="font-weight: bold;">len</span>(nums2))
+    <span style="font-weight: bold;">for</span> num <span style="font-weight: bold;">in</span> nums2:
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(stack) <span style="font-weight: bold;">and</span> stack[-1] &lt; num:
+            greaters[stack.pop()] = num
+        stack.append(num)
+
+    <span style="font-weight: bold;">return</span> [greaters.get(num, -1) <span style="font-weight: bold;">for</span> num <span style="font-weight: bold;">in</span> nums1]
+
+
+<span style="font-weight: bold;">assert</span> solve([4,1,2], [1,3,4,2]) == [-1,3,-1]
+<span style="font-weight: bold;">assert</span> solve([2,4], [1,2,3,4]) == [3,-1]
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">nextGreaterElement</span>(<span style="font-weight: bold;">self</span>, nums1: List[<span style="font-weight: bold;">int</span>], nums2: List[<span style="font-weight: bold;">int</span>]) -&gt; List[<span style="font-weight: bold;">int</span>]:
+        <span style="font-weight: bold;">return</span> solve(nums1, nums2)
+</pre>
+</div>
+</div>
+</body>
+</html>

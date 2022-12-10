@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2446. Determine if Two Events Have Conflict</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2446. Determine if Two Events Have Conflict</h1>
+
+<div id="outline-container-org56b0a40" class="outline-2">
+<h2 id="org56b0a40">Understand the problem</h2>
+<div class="outline-text-2" id="text-org56b0a40">
+<p>
+Determine if two segments intersect.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga9d5b49" class="outline-2">
+<h2 id="orga9d5b49">Devise a plan</h2>
+<div class="outline-text-2" id="text-orga9d5b49">
+<p>
+If two segments intersect, then they have a point \(x\) in common which \(s_1[0] \leq x s_1[1]\) and \(s_2[0] \leq x s_2[1]\).  Therefore, \(\max(s_1[0], s_2[0]) \leq x\) and \(x \leq \min(s_1[1], s_2[1])\).  To answer the question, we can just check if \(\max(s_1[0], s_2[0]) \leq \min(s_1[1], s_2[1])\).
+</p>
+</div>
+
+<div id="outline-container-org8ee51bb" class="outline-3">
+<h3 id="org8ee51bb">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org8ee51bb">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">haveConflict</span>(<span style="font-weight: bold;">self</span>, event1: List[<span style="font-weight: bold;">str</span>], event2: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(event1[0], event2[0]) &lt;= <span style="font-weight: bold;">min</span>(event1[1], event2[1])
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2439. Minimize Maximum of Array</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2439. Minimize Maximum of Array</h1>
+
+<div id="outline-container-org027ebc9" class="outline-2">
+<h2 id="org027ebc9">Understand the problem</h2>
+<div class="outline-text-2" id="text-org027ebc9">
+<p>
+Given an array of integers which you can do operations to transfer 1 from any positive number to its right-neighbor, compute the minimum possible values after performing any number of operations.
+</p>
+</div>
+
+<div id="outline-container-orgf7abae1" class="outline-3">
+<h3 id="orgf7abae1">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgf7abae1">
+<ul class="org-ul">
+<li><a href="can_we_state_the_problem_as_a_searching_problem.html#ID-60DEC3A8-810C-41E3-96E3-98145F4AAC3F">Can we state the problem as a searching problem?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5a268ee" class="outline-2">
+<h2 id="org5a268ee">Devise a plan</h2>
+<div class="outline-text-2" id="text-org5a268ee">
+<p>
+For a given input, suppose that we know the answer and it is \(x\) (<a href="pattern_search_validate.html#ID-B39B7723-9DCB-4C18-BE7D-51086F1F2A81">Pattern: Search &amp; Validate</a>).  We can go from left to right applying operations to make each number less than \(x\).  For example, \(a=[3,2,9]\) and \(x=5\). We can apply the following operations: \([3,6,5] \rightarrow [4,5,5]\).  After the first operation, we changed \(a[2]\) from \(9\) to \(5\) what left \(4\) remained which was added to \(a[1]\).  When the remainder is negative, we can set it to zero, since there is no way to transfer values from right to left.  On the end, if the remainder is zero, we know that \(x\) was a valid answer.  If \(x\) is an optimal answer, then \(x+1\) is also a valid answer and \(x-1\) is an invalid answer.  So, a value \(y\) between \(0\) and \(\sum a[i]\), we have that it is invalid if \(y<x\) and valid otherwise.  We can use this property and use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the optimal value \(x\).  Time complexity is \(O(n \times \log \sum a[i])\) and space is \(O(1)\).
+</p>
+</div>
+
+<div id="outline-container-org830c6d2" class="outline-3">
+<h3 id="org830c6d2">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org830c6d2">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimizeArrayValue</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">valid</span>(x):
+            <span style="font-weight: bold; font-style: italic;">r</span> = 0
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 1, -1, -1):
+                <span style="font-weight: bold; font-style: italic;">nr</span> = (nums[i] + r) - x
+                <span style="font-weight: bold;">if</span> nr &lt; 0:
+                    <span style="font-weight: bold; font-style: italic;">r</span> = 0
+                <span style="font-weight: bold;">else</span>:
+                    r = nr
+            <span style="font-weight: bold;">return</span> r == 0
+
+        start = 0
+        end = <span style="font-weight: bold;">sum</span>(nums)
+        ans = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">while</span> start &lt;= end:
+            mid = start + (end - start) // 2
+            <span style="font-weight: bold;">if</span> valid(mid):
+                ans = mid
+                end = mid - 1
+            <span style="font-weight: bold;">else</span>:
+                start = mid + 1
+
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

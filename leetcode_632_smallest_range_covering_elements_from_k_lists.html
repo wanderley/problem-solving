@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 632. Smallest Range Covering Elements from K Lists</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 632. Smallest Range Covering Elements from K Lists</h1>
+<ul class="org-ul">
+<li><a href="mistake_failed_to_recognize_known_problem.html#ID-CCCF9587-5365-4BB0-B0D3-8FC82D55E781">Mistake: Failed to recognize known problem</a></li>
+</ul>
+
+<p>
+<a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  This problem is similar to <a href="leetcode_23_merge_k_sorted_lists.html#ID-02D2E665-4FC5-45C7-A1BF-E7CE82E67B05">Leetcode: 23. Merge k Sorted Lists</a>.  The difference is that we have to keep the maximum of the next candidates while we remove one by one from the smaller to the greater.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">smallestRange</span>(<span style="font-weight: bold;">self</span>, nums: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        pq = []
+        <span style="font-weight: bold;">for</span> i, ns <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(nums):
+            heappush(pq, (ns[0], 0, i))
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">best</span>(a, b):
+            <span style="font-weight: bold; font-style: italic;">sa</span> = a[1] - a[0]
+            <span style="font-weight: bold; font-style: italic;">sb</span> = b[1] - b[0]
+            <span style="font-weight: bold;">if</span> sa &lt; sb <span style="font-weight: bold;">or</span> (sa == sb <span style="font-weight: bold;">and</span> a[0] &lt; b[0]):
+                <span style="font-weight: bold;">return</span> a
+            <span style="font-weight: bold;">return</span> b
+
+        ans = [<span style="font-weight: bold;">min</span>(ns[0] <span style="font-weight: bold;">for</span> ns <span style="font-weight: bold;">in</span> nums), <span style="font-weight: bold;">max</span>(ns[0] <span style="font-weight: bold;">for</span> ns <span style="font-weight: bold;">in</span> nums)]
+        upper_bound = ans[1]
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; text-decoration: underline;">True</span>:
+            <span style="font-weight: bold; font-style: italic;">v</span>, <span style="font-weight: bold; font-style: italic;">k</span>, <span style="font-weight: bold; font-style: italic;">i</span> = heappop(pq)
+            ans = best(ans, [v, upper_bound])
+
+            nk = k + 1
+            <span style="font-weight: bold;">if</span> nk == <span style="font-weight: bold;">len</span>(nums[i]):
+                <span style="font-weight: bold;">break</span>
+            nv = nums[i][nk]
+            upper_bound = <span style="font-weight: bold;">max</span>(upper_bound, nv)
+
+            heappush(pq, (nv, nk, i))
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().smallestRange(
+    [[4, 10, 15, 24, 26], [0, 9, 12, 20], [5, 18, 22, 30]]
+) == [20, 24]
+<span style="font-weight: bold;">assert</span> Solution().smallestRange([[1, 2, 3], [1, 2, 3], [1, 2, 3]]) == [1, 1]
+</pre>
+</div>
+
+<p>
+<a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a>  Yes, if the input was a list.  <a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  In this case, we want to pre-process to use a sliding window.  Be \(l\) a list of pairs \((a, b)\) sorted by \(a\) where \(a\) is a number of the list \(nums[b]\).  A valid solution for the original problem is a subsequence of \(l\) where there is at least one number from each list in \(nums\).  We can start our window with the first element and slide it to the right.  After we add a new item to the window, we can remove the left-most elements that have at least one more element from the same list in the window.  While doing this, we can update the best interval found so far.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">smallestRange</span>(<span style="font-weight: bold;">self</span>, nums: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        horizon = []
+        <span style="font-weight: bold;">for</span> i, ns <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(nums):
+            <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">ns</span>:
+                horizon.append((n, i))
+        horizon.sort()
+
+        covered = [0] * <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">total_covered</span> = 0
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">best</span>(a, b):
+            <span style="font-weight: bold; font-style: italic;">sa</span> = a[1] - a[0]
+            <span style="font-weight: bold; font-style: italic;">sb</span> = b[1] - b[0]
+            <span style="font-weight: bold;">if</span> sa &lt; sb <span style="font-weight: bold;">or</span> (sa == sb <span style="font-weight: bold;">and</span> a[0] &lt; b[0]):
+                <span style="font-weight: bold;">return</span> a
+            <span style="font-weight: bold;">return</span> b
+
+        ans = [horizon[0][0], horizon[-1][0]]
+        i = 0
+        covered[horizon[0][1]] = 1
+        total_covered = 1
+
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, <span style="font-weight: bold;">len</span>(horizon)):
+            <span style="font-weight: bold; font-style: italic;">jv</span>, <span style="font-weight: bold; font-style: italic;">jk</span> = horizon[j]
+            total_covered += 1 <span style="font-weight: bold;">if</span> covered[jk] == 0 <span style="font-weight: bold;">else</span> 0
+            covered[jk] += 1
+
+            <span style="font-weight: bold;">while</span> covered[horizon[i][1]] &gt; 1:
+                covered[horizon[i][1]] -= 1
+                i += 1
+
+            <span style="font-weight: bold;">if</span> total_covered == <span style="font-weight: bold;">len</span>(nums):
+                <span style="font-weight: bold; font-style: italic;">iv</span>, <span style="font-weight: bold; font-style: italic;">ik</span> = horizon[i]
+                ans = best(ans, [iv, jv])
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().smallestRange(
+    [[4, 10, 15, 24, 26], [0, 9, 12, 20], [5, 18, 22, 30]]
+) == [20, 24]
+<span style="font-weight: bold;">assert</span> Solution().smallestRange([[1, 2, 3], [1, 2, 3], [1, 2, 3]]) == [1, 1]
+</pre>
+</div>
+</div>
+</body>
+</html>

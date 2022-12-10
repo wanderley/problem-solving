@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1237. Find Positive Integer Solution for a Given Equation</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1237. Find Positive Integer Solution for a Given Equation</h1>
+<p>
+<a href="https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/">Problem Statement</a>
+</p>
+
+<p>
+The \(O(X \times Y)\) solution consists on trying all possible values of \(x\) and \(y\).  If we fix \(x\), we only need to search up to the first \(y\) where \(f(x, y) = z\):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findSolution</span>(<span style="font-weight: bold;">self</span>, customfunction: <span style="font-style: italic;">'CustomFunction'</span>, z: <span style="font-weight: bold;">int</span>) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, 1001, 1):
+            <span style="font-weight: bold;">for</span> y <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, 1001, 1):
+                <span style="font-weight: bold; font-style: italic;">r</span> = customfunction.f(x, y)
+                <span style="font-weight: bold;">if</span> r == z:
+                    ans.append([x, y])
+                <span style="font-weight: bold;">if</span> r &gt;= z:
+                    <span style="font-weight: bold;">break</span>
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+
+<p>
+The \(O(X \times \log(Y))\) solution consists on search \(y\) using a binary-search instead of iterating over all possible values of \(y\):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findSolution</span>(<span style="font-weight: bold;">self</span>, customfunction: <span style="font-style: italic;">'CustomFunction'</span>, z: <span style="font-weight: bold;">int</span>) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, 1001, 1):
+            <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; font-style: italic;">e</span> = 1, 1000
+            <span style="font-weight: bold;">while</span> s &lt;= <span style="font-weight: bold; font-style: italic;">e</span>:
+                y = s + (e - s) // 2
+                <span style="font-weight: bold; font-style: italic;">r</span> = customfunction.f(x, y)
+                <span style="font-weight: bold;">if</span> r == z:
+                    ans.append([x, y])
+                    <span style="font-weight: bold;">break</span>
+                <span style="font-weight: bold;">elif</span> r &gt; z:
+                    e = y - 1
+                <span style="font-weight: bold;">else</span>:
+                    s = y + 1
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+
+<p>
+There is a solution that uses the propriety of \(f\) to find all pairs required by the problem: \(f(x, y) < f(x, y + 1)\) and \(f(x, y) < f(x + 1, y)\).  Starting from \(x=1\) and \(y=1000\), if \(f(x, y) > z\) then our best guess is to continue our search on \(f(x, y - 1)\), since \(f(x+1, y-1)\) and \(f(x+1,y)\) are greater than \(f(x,y)\).  If \(f(x, y) < z\), the search continues on \(f(x + 1, y)\) since \(f(x-1, y)\) is smaller than \(f(x,y)\).  Finally, if \(f(x, y) = z\), then we found one pair and can continue the search on \(f(x + 1, y + 1)\), since \(f(x+1,y)>f(x,y)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findSolution</span>(<span style="font-weight: bold;">self</span>, customfunction: <span style="font-style: italic;">'CustomFunction'</span>, z: <span style="font-weight: bold;">int</span>) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold; font-style: italic;">x</span> = 1
+        <span style="font-weight: bold; font-style: italic;">y</span> = 1000
+        <span style="font-weight: bold;">while</span> x &lt;= 1000 <span style="font-weight: bold;">and</span> y &gt; 0:
+            <span style="font-weight: bold; font-style: italic;">r</span> = customfunction.f(x, y)
+            <span style="font-weight: bold;">if</span> r &gt; <span style="font-weight: bold; font-style: italic;">z</span>:
+                y -= 1
+            <span style="font-weight: bold;">elif</span> r &lt; <span style="font-weight: bold; font-style: italic;">z</span>:
+                x += 1
+            <span style="font-weight: bold;">else</span>:
+                ans.append([x, y])
+                x += 1
+                <span style="font-weight: bold; font-style: italic;">y</span> -= 1
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

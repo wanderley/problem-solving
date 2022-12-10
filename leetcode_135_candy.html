@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 135. Candy</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 135. Candy</h1>
+<ul class="org-ul">
+<li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  Sort a list of pairs \((v, i)\) in increasing order where \(ratings[i]=v\).  For each child in order, assign its candy as describe in the rules.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">candy</span>(<span style="font-weight: bold;">self</span>, r: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(r)
+        <span style="font-weight: bold; font-style: italic;">low</span> = [1] * N
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> v, i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(<span style="font-weight: bold;">zip</span>(r, <span style="font-weight: bold;">range</span>(N))):
+            <span style="font-weight: bold; font-style: italic;">c</span> = []
+            <span style="font-weight: bold;">if</span> i - 1 &gt;= 0 <span style="font-weight: bold;">and</span> r[i - 1] &lt; v:
+                c.append(low[i - 1] + 1)
+            <span style="font-weight: bold;">if</span> i + 1 &lt; N <span style="font-weight: bold;">and</span> r[i + 1] &lt; v:
+                c.append(low[i + 1] + 1)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold; font-style: italic;">c</span>:
+                low[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">max</span>(c)
+            <span style="font-weight: bold; font-style: italic;">ans</span> += low[i]
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().candy([1, 0, 2]) == 5
+<span style="font-weight: bold;">assert</span> Solution().candy([1, 2, 2]) == 4
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_a_line_chart.html#ID-6E896F0D-AB58-4C26-A685-8A74D775BD71">Can we formulate the problem as a line chart?</a>  We want to assign \(1+2+..+k\) when we see a spike and \(p+(p-1)+...+1\) when we see a drop.  If a spike is followed by a drop, we want to get \(max(k, p)\) for that child.  Time and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">candy</span>(<span style="font-weight: bold;">self</span>, r: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(r)
+
+        <span style="font-weight: bold; font-style: italic;">cand</span> = [1] * N
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, N):
+            <span style="font-weight: bold;">if</span> r[i] &gt; <span style="font-weight: bold; font-style: italic;">r</span>[i - 1]:
+                cand[<span style="font-weight: bold; font-style: italic;">i</span>] = cand[i - 1] + 1
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N - 2, -1, -1):
+            <span style="font-weight: bold;">if</span> r[i] &gt; <span style="font-weight: bold; font-style: italic;">r</span>[i + 1]:
+                cand[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">max</span>(cand[i], cand[i + 1] + 1)
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">sum</span>(cand)
+
+
+<span style="font-weight: bold;">assert</span> Solution().candy([1, 0, 2]) == 5
+<span style="font-weight: bold;">assert</span> Solution().candy([1, 2, 2]) == 4
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2276. Count Integers in Intervals</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2276. Count Integers in Intervals</h1>
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a>  We can model as adding and counting intervals of 1 in a <a href="segment_tree_from_one_dimensional_array.html#ID-8564CEB1-3E95-4A34-B888-0BCE6D6504B8">Lazy Segment Tree</a>.  The trick to pass the time constraint is to also implement lazy propagation (i.e. only create the children when necessary).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">SegTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, start, end):
+        <span style="font-weight: bold;">self</span>.start = start
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">end</span> = end
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">left</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">right</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">value</span> = 0
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">pending</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update</span>(<span style="font-weight: bold;">self</span>, start, end, force=<span style="font-weight: bold; text-decoration: underline;">False</span>):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.start &gt; end <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">self</span>.end &lt; start:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.value == <span style="font-weight: bold;">self</span>.end - <span style="font-weight: bold;">self</span>.start + 1:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">if</span> start &lt;= <span style="font-weight: bold;">self</span>.start <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.end &lt;= end:
+            <span style="font-weight: bold;">self</span>.left = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">self</span>.right = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">self</span>.value = <span style="font-weight: bold;">self</span>.end - <span style="font-weight: bold;">self</span>.start + 1
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> force <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.pending <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.value == 0:
+            <span style="font-weight: bold;">self</span>.pending = (start, end)
+            <span style="font-weight: bold;">self</span>.value = <span style="font-weight: bold;">min</span>(<span style="font-weight: bold;">self</span>.end, end) - <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">self</span>.start, start) + 1
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">self</span>._extend()
+        <span style="font-weight: bold;">self</span>.left.update(start, end)
+        <span style="font-weight: bold;">self</span>.right.update(start, end)
+        <span style="font-weight: bold;">self</span>.value = <span style="font-weight: bold;">self</span>.left.value + <span style="font-weight: bold;">self</span>.right.value
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_extend</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.pending:
+            start, end = <span style="font-weight: bold;">self</span>.pending
+            <span style="font-weight: bold;">self</span>.pending = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">self</span>.value = 0
+            <span style="font-weight: bold;">self</span>.update(start, end, <span style="font-weight: bold; text-decoration: underline;">True</span>)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            m = <span style="font-weight: bold;">self</span>.start + (<span style="font-weight: bold;">self</span>.end - <span style="font-weight: bold;">self</span>.start) // 2
+            <span style="font-weight: bold;">self</span>.left = SegTree(<span style="font-weight: bold;">self</span>.start, m)
+            <span style="font-weight: bold;">self</span>.right = SegTree(m + 1, <span style="font-weight: bold;">self</span>.end)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">print</span>(<span style="font-weight: bold;">self</span>, level=0):
+        <span style="font-weight: bold;">print</span>(<span style="font-style: italic;">" "</span> * level, (<span style="font-weight: bold;">self</span>.start, <span style="font-weight: bold;">self</span>.end), <span style="font-weight: bold;">self</span>.value, <span style="font-weight: bold;">self</span>.pending)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left:
+            <span style="font-weight: bold;">self</span>.left.<span style="font-weight: bold;">print</span>(level + 1)
+            <span style="font-weight: bold;">self</span>.right.<span style="font-weight: bold;">print</span>(level + 1)
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">CountIntervals</span>:
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.st = SegTree(0, 10**9)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, left: <span style="font-weight: bold;">int</span>, right: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">self</span>.st.update(left, right)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">count</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.st.value
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>We can use a sorted interval list to solve the problem in \(O(n \log n)\) where \(n\) is the number of queries.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">CountIntervals</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.segs = []
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">value</span> = 0
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, left: <span style="font-weight: bold;">int</span>, right: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        i = bisect_left(<span style="font-weight: bold;">self</span>.segs, left, key=<span style="font-weight: bold;">lambda</span> e: e[0])
+        j = i = i - (1 <span style="font-weight: bold;">if</span> i &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.segs[i - 1][1] &gt;= left <span style="font-weight: bold;">else</span> 0)
+        <span style="font-weight: bold;">while</span> j &lt; <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.segs) <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.segs[j][0] &lt;= right:
+            <span style="font-weight: bold;">self</span>.value -= <span style="font-weight: bold;">self</span>.segs[j][1] - <span style="font-weight: bold;">self</span>.segs[j][0] + 1
+            left = <span style="font-weight: bold;">min</span>(left, <span style="font-weight: bold;">self</span>.segs[j][0])
+            right = <span style="font-weight: bold;">max</span>(right, <span style="font-weight: bold;">self</span>.segs[j][1])
+            j += 1
+        <span style="font-weight: bold;">self</span>.value += right - left + 1
+        <span style="font-weight: bold;">self</span>.segs[i:j] = [(left, right)]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">count</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.value
+</pre>
+</div>
+</div>
+</body>
+</html>

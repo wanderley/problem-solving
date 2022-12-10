@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2461. Maximum Sum of Distinct Subarrays With Length K</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2461. Maximum Sum of Distinct Subarrays With Length K</h1>
+
+<div id="outline-container-org7b1b4bc" class="outline-2">
+<h2 id="org7b1b4bc">Understand the problem</h2>
+<div class="outline-text-2" id="text-org7b1b4bc">
+<p>
+Given an integer array \(a\) and an integer \(k\).  Find the maximum subarray sum of all subarrays of length \(k\) with \(k\) distinct values.
+</p>
+</div>
+
+<div id="outline-container-orgf954dc1" class="outline-3">
+<h3 id="orgf954dc1">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgf954dc1">
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a>  Since \(n \leq 10^5\), we have to solve the problem in linear time.  So, a <a href="sliding_window.html#ID-CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2">Sliding Window</a> of size \(k\) can help with that.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6f19d3e" class="outline-2">
+<h2 id="org6f19d3e">Devise a plan</h2>
+<div class="outline-text-2" id="text-org6f19d3e">
+<p>
+Create a window of length \(k\) and slide it from left to right.  For every new valid window (ones that contains \(k\) distinct elements), pick it sum if it greater to the best result so far.  Time complexity is \(O(n)\) and space is \(O(1)\).
+</p>
+</div>
+
+<div id="outline-container-orged86a5b" class="outline-3">
+<h3 id="orged86a5b">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orged86a5b">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumSubarraySum</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+        <span style="font-weight: bold; font-style: italic;">freq</span> = Counter(nums[:k])
+        <span style="font-weight: bold; font-style: italic;">cur</span> = <span style="font-weight: bold;">sum</span>(nums[:k])
+        <span style="font-weight: bold; font-style: italic;">ans</span> = cur <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(freq) == k <span style="font-weight: bold;">else</span> 0
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k, N):
+            <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; font-style: italic;">y</span> = nums[i - k], nums[i]
+            <span style="font-weight: bold; font-style: italic;">cur</span> += y - x
+            <span style="font-weight: bold; font-style: italic;">freq</span>[x] -= 1
+            <span style="font-weight: bold; font-style: italic;">freq</span>[y] += 1
+            <span style="font-weight: bold;">if</span> freq[x] == 0:
+                freq.pop(x)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(freq) == k <span style="font-weight: bold;">and</span> ans &lt; cur:
+                ans = cur
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

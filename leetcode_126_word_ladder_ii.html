@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 126. Word Ladder II</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 126. Word Ladder II</h1>
+<ul class="org-ul">
+<li><a href="pattern_find_all_shortest_path_between_two_vertices_in_a_graph.html#ID-189F5E87-F560-4397-A3E3-AAD465EEBCFB">Pattern: Find all shortest path between two vertices in a graph</a>.  Find the min distance between destination and all other vertices using a <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a>, then generate all shortest path using the acyclic path created by the first search using <a href="depth_first_search.html#ID-212DBFC3-FE3C-493E-86A6-42FF3F82CD53">Depth-first search</a>.  Time and space complexity are \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findLadders</span>(
+        <span style="font-weight: bold;">self</span>, beginWord: <span style="font-weight: bold;">str</span>, endWord: <span style="font-weight: bold;">str</span>, wordList: List[<span style="font-weight: bold;">str</span>]
+    ) -&gt; List[List[<span style="font-weight: bold;">str</span>]]:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_adj</span>(u, v):
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">sum</span>(1 <span style="font-weight: bold;">for</span> a, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(u, v) <span style="font-weight: bold;">if</span> a != b) == 1
+
+        <span style="font-weight: bold; font-style: italic;">A</span> = {w: [] <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> wordList + [beginWord, endWord]}
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> wordList + [endWord]:
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> wordList + [beginWord]:
+                <span style="font-weight: bold;">if</span> u != v <span style="font-weight: bold;">and</span> is_adj(u, v):
+                    A[u].append(v)
+
+        <span style="font-weight: bold; font-style: italic;">dist</span> = {<span style="font-weight: bold; font-style: italic;">w</span>: <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> A}
+        dist[<span style="font-weight: bold; font-style: italic;">endWord</span>] = 0
+        <span style="font-weight: bold; font-style: italic;">queue</span> = [endWord]
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">queue</span>:
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> A[u]:
+                <span style="font-weight: bold;">if</span> dist[v] <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                    dist[<span style="font-weight: bold; font-style: italic;">v</span>] = dist[u] + 1
+                    queue.append(v)
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">wordList</span>:
+            <span style="font-weight: bold;">if</span> u != beginWord <span style="font-weight: bold;">and</span> u <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> A[beginWord] <span style="font-weight: bold;">and</span> is_adj(u, beginWord):
+                A[beginWord].append(u)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(u):
+            <span style="font-weight: bold;">if</span> dist[u] == 0:
+                <span style="font-weight: bold;">return</span> [[u]]
+            ans = []
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> A[u]:
+                <span style="font-weight: bold;">if</span> dist[v] == dist[u] - 1:
+                    ans.extend([u] + p <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> dfs(v))
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(beginWord)
+</pre>
+</div>
+</div>
+</body>
+</html>

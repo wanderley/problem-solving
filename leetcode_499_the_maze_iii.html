@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 499. The Maze III</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 499. The Maze III</h1>
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a>  Find <a href="shortest_path_in_a_graph_problem.html#ID-8BACB101-3C8B-47CA-9AB1-89D52F85F6DA">Shortest Path in a Graph Problem</a> where the path is measure by the distance and then its description.  Time complexity is \(O((n \times m) \times \log (n \times m))\) and space is \(O(n \times m)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> heapq <span style="font-weight: bold;">import</span> heappush, heappop
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findShortestWay</span>(
+        <span style="font-weight: bold;">self</span>, maze: List[List[<span style="font-weight: bold;">int</span>]], ball: List[<span style="font-weight: bold;">int</span>], hole: List[<span style="font-weight: bold;">int</span>]
+    ) -&gt; <span style="font-weight: bold;">str</span>:
+        N = <span style="font-weight: bold;">len</span>(maze)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(maze[0])
+        <span style="font-weight: bold; font-style: italic;">D</span> = {<span style="font-style: italic;">"u"</span>: [-1, +0], <span style="font-style: italic;">"d"</span>: [+1, +0], <span style="font-style: italic;">"l"</span>: [+0, -1], <span style="font-style: italic;">"r"</span>: [+0, +1]}
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">move</span>(d, i, j):
+            <span style="font-weight: bold; font-style: italic;">ni</span> = i + D[d][0]
+            <span style="font-weight: bold; font-style: italic;">nj</span> = j + D[d][1]
+            <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; N <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; M <span style="font-weight: bold;">and</span> maze[ni][nj] == 0:
+                <span style="font-weight: bold;">return</span> (ni, nj)
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        <span style="font-weight: bold; font-style: italic;">pq</span> = [(0, d, ball[0], ball[1]) <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> D]
+        <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>(<span style="font-weight: bold;">tuple</span>(e[1:]) <span style="font-weight: bold;">for</span> e <span style="font-weight: bold;">in</span> pq)
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">pq</span>:
+            <span style="font-weight: bold; font-style: italic;">dist</span>, <span style="font-weight: bold; font-style: italic;">path</span>, <span style="font-weight: bold; font-style: italic;">i</span>, <span style="font-weight: bold; font-style: italic;">j</span> = heappop(pq)
+            <span style="font-weight: bold;">if</span> hole[0] == i <span style="font-weight: bold;">and</span> hole[1] == j:
+                <span style="font-weight: bold;">return</span> path
+
+            nxt = move(path[-1], i, j)
+            <span style="font-weight: bold;">if</span> nxt <span style="font-weight: bold;">and</span> nxt <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                heappush(pq, (dist + 1, path, *nxt))
+                <span style="font-weight: bold;">continue</span>
+
+            <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> <span style="font-style: italic;">"u"</span>, <span style="font-style: italic;">"d"</span>, <span style="font-style: italic;">"l"</span>, <span style="font-style: italic;">"r"</span>:
+                <span style="font-weight: bold;">if</span> (d, i, j) <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> seen:
+                    seen.add((d, i, j))
+                    heappush(pq, (dist, path + d, i, j))
+
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"impossible"</span>
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().findShortestWay(
+        [
+            [0, 0, 0, 0, 0],
+            [1, 1, 0, 0, 1],
+            [0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 1],
+            [0, 1, 0, 0, 0],
+        ],
+        [4, 3],
+        [0, 1],
+    )
+    == <span style="font-style: italic;">"lul"</span>
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().findShortestWay(
+        [
+            [0, 0, 0, 0, 0],
+            [1, 1, 0, 0, 1],
+            [0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 1],
+            [0, 1, 0, 0, 0],
+        ],
+        [4, 3],
+        [3, 0],
+    )
+    == <span style="font-style: italic;">"impossible"</span>
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().findShortestWay(
+        [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0],
+            [0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1],
+        ],
+        [0, 4],
+        [3, 5],
+    )
+    == <span style="font-style: italic;">"dldr"</span>
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

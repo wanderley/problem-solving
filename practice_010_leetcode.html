@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #010: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #010: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 23 minutes 28 seconds</li>
+<li>Time Allotted: 1 hour 30 minutes</li>
+<li>Completed: July 6, 2022 10:04 PM</li>
+<li>Score: 7.35</li>
+</ul>
+
+<div id="outline-container-orgb84ecf5" class="outline-2">
+<h2 id="orgb84ecf5">Leetcode: 989. Add to Array-Form of Integer</h2>
+<div class="outline-text-2" id="text-orgb84ecf5">
+<p>
+<a href="https://leetcode.com/problems/add-to-array-form-of-integer/">Problem Statement</a>
+</p>
+
+<p>
+Simulate the add operation and make sure that you split left-most number in its digits when you are done adding.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addToArrayForm</span>(<span style="font-weight: bold;">self</span>, num: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; List[<span style="font-weight: bold;">int</span>]:
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(num) - 1, -1, -1):
+            <span style="font-weight: bold; font-style: italic;">v</span> = num[i] + k
+            <span style="font-weight: bold; font-style: italic;">num</span>[<span style="font-weight: bold; font-style: italic;">i</span>] = v % 10
+            <span style="font-weight: bold; font-style: italic;">k</span> = v // 10
+        <span style="font-weight: bold; font-style: italic;">pref</span> = []
+        <span style="font-weight: bold;">while</span> k &gt; 0:
+            pref.append(k % 10)
+            <span style="font-weight: bold; font-style: italic;">k</span> = k // 10
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">reversed</span>(pref)) + num
+
+
+<span style="font-weight: bold;">assert</span> Solution().addToArrayForm([1, 2, 0, 0], 34) == [1, 2, 3, 4]
+<span style="font-weight: bold;">assert</span> Solution().addToArrayForm([2, 7, 4], 181) == [4, 5, 5]
+<span style="font-weight: bold;">assert</span> Solution().addToArrayForm([2, 1, 5], 806) == [1, 0, 2, 1]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgec6b0ce" class="outline-2">
+<h2 id="orgec6b0ce">Leetcode: 1314. Matrix Block Sum</h2>
+<div class="outline-text-2" id="text-orgec6b0ce">
+<p>
+<a href="https://leetcode.com/problems/matrix-block-sum/">Problem Statement</a>
+</p>
+
+<p>
+<a href="can_we_define_the_problem_in_terms_of_continuous_sums.html#ID-02D11D2D-72DB-4E18-8843-56A90935B5EC">Can we define the problem in terms of continuous sums?</a>  Be \(s[i][j]\) the sum of all numbers in the sub-matrix \(mat[0..i][0..j]\) inclusive.  With \(s\), we can compute the sum of any rectangular sub-matrix of \(mat\): sum of \(mat[k..i][p..j]\) is \(s[i][j]-s[k-1][j]-s[i][p-1]+s[i-1][j-1]\).  Iterate over all \((i, j)\) of \(mat\) and compute the sum of the sub-matrix (squared) with center \((i, j)\) and length \(2k \times 2k\).  Time and space complexity is \(O(n^2)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">matrixBlockSum</span>(<span style="font-weight: bold;">self</span>, mat: List[List[<span style="font-weight: bold;">int</span>]], k: <span style="font-weight: bold;">int</span>) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(mat)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(mat[0])
+        <span style="font-weight: bold; font-style: italic;">a</span> = [[0] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            <span style="font-weight: bold; font-style: italic;">s</span> = 0
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                <span style="font-weight: bold; font-style: italic;">s</span> += mat[i][j]
+                a[i][<span style="font-weight: bold; font-style: italic;">j</span>] = s
+                <span style="font-weight: bold;">if</span> i &gt; 0:
+                    a[i][<span style="font-weight: bold; font-style: italic;">j</span>] += a[i - 1][j]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sum</span>(i, j):
+            <span style="font-weight: bold;">if</span> 0 &lt;= i &lt; n <span style="font-weight: bold;">and</span> 0 &lt;= j &lt; <span style="font-weight: bold; font-style: italic;">m</span>:
+                <span style="font-weight: bold;">return</span> a[i][j]
+            <span style="font-weight: bold;">return</span> 0
+
+        ans = [[0] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                <span style="font-weight: bold; font-style: italic;">si</span> = <span style="font-weight: bold;">max</span>(i - k, 0)
+                <span style="font-weight: bold; font-style: italic;">sj</span> = <span style="font-weight: bold;">max</span>(j - k, 0)
+                <span style="font-weight: bold; font-style: italic;">ei</span> = <span style="font-weight: bold;">min</span>(i + k, n - 1)
+                <span style="font-weight: bold; font-style: italic;">ej</span> = <span style="font-weight: bold;">min</span>(j + k, m - 1)
+
+                ans[i][<span style="font-weight: bold; font-style: italic;">j</span>] += <span style="font-weight: bold;">sum</span>(ei, ej)
+                ans[i][<span style="font-weight: bold; font-style: italic;">j</span>] -= <span style="font-weight: bold;">sum</span>(si - 1, ej)
+                ans[i][<span style="font-weight: bold; font-style: italic;">j</span>] -= <span style="font-weight: bold;">sum</span>(ei, sj - 1)
+                ans[i][<span style="font-weight: bold; font-style: italic;">j</span>] += <span style="font-weight: bold;">sum</span>(si - 1, sj - 1)
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().matrixBlockSum([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 1) == [
+    [12, 21, 16],
+    [27, 45, 33],
+    [24, 39, 28],
+]
+<span style="font-weight: bold;">assert</span> Solution().matrixBlockSum([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 2) == [
+    [45, 45, 45],
+    [45, 45, 45],
+    [45, 45, 45],
+]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

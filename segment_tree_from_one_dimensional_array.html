@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Segment Tree</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Segment Tree</h1>
+
+<div id="outline-container-org956f411" class="outline-2">
+<h2 id="org956f411"><span class="todo TODO">TODO</span> Write explanation</h2>
+<div class="outline-text-2" id="text-org956f411">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">SegTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n, op):
+        <span style="font-weight: bold;">self</span>.n = n
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">op</span> = op
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">tree</span> = [<span style="font-weight: bold; text-decoration: underline;">None</span>] * (4 * n)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update</span>(<span style="font-weight: bold;">self</span>, pos, val):
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(i, l, r):
+            <span style="font-weight: bold;">if</span> l == r:
+                <span style="font-weight: bold;">self</span>.tree[<span style="font-weight: bold; font-style: italic;">i</span>] = val
+                <span style="font-weight: bold;">return</span>
+
+            m = (l + r) // 2
+            <span style="font-weight: bold;">if</span> pos &lt;= m:
+                rec(i * 2, l, m)
+            <span style="font-weight: bold;">else</span>:
+                rec(i * 2 + 1, m + 1, r)
+
+            <span style="font-weight: bold;">self</span>.tree[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">self</span>._op(<span style="font-weight: bold;">self</span>.tree[i * 2], <span style="font-weight: bold;">self</span>.tree[i * 2 + 1])
+
+        rec(1, 0, <span style="font-weight: bold;">self</span>.n)
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.tree[1]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">query</span>(<span style="font-weight: bold;">self</span>, ql, qr):
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(i, l, r):
+            intersect = l &lt;= ql &lt;= r <span style="font-weight: bold;">or</span> l &lt;= qr &lt;= r
+            <span style="font-weight: bold;">if</span> l &gt; r <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">not</span> intersect:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">if</span> ql &lt;= l &lt;= r &lt;= qr:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.tree[i]
+            m = (l + r) // 2
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>._op(rec(i * 2, l, m), rec(i * 2 + 1, m + 1, r))
+
+        <span style="font-weight: bold;">return</span> rec(1, 0, <span style="font-weight: bold;">self</span>.n)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_op</span>(<span style="font-weight: bold;">self</span>, a, b):
+        <span style="font-weight: bold;">if</span> a <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">and</span> b <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.op(a, b)
+        <span style="font-weight: bold;">if</span> a <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> a
+        <span style="font-weight: bold;">return</span> b
+
+
+st1 = SegTree(3, <span style="font-weight: bold;">lambda</span> a, b: a + b)
+<span style="font-weight: bold;">assert</span> st1.update(3, 1) == 1
+<span style="font-weight: bold;">assert</span> st1.query(0, 3) == 1
+<span style="font-weight: bold;">assert</span> st1.update(1, 2) == 3
+<span style="font-weight: bold;">assert</span> st1.query(0, 2) == 2
+<span style="font-weight: bold;">assert</span> st1.update(0, 1) == 4
+<span style="font-weight: bold;">assert</span> st1.query(0, 3) == 4
+<span style="font-weight: bold;">assert</span> st1.query(0, 0) == 1
+
+
+st2 = SegTree(3, <span style="font-weight: bold;">min</span>)
+<span style="font-weight: bold;">assert</span> st2.update(3, 2) == 2
+<span style="font-weight: bold;">assert</span> st2.query(3, 3) == 2
+<span style="font-weight: bold;">assert</span> st2.update(0, 3) == 2
+<span style="font-weight: bold;">assert</span> st2.query(0, 2) == 3
+<span style="font-weight: bold;">assert</span> st2.update(1, 1) == 1
+<span style="font-weight: bold;">assert</span> st2.query(0, 2) == 1
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf435ccb" class="outline-2">
+<h2 id="orgf435ccb">Lazy Segment Tree</h2>
+<div class="outline-text-2" id="text-orgf435ccb">
+</div>
+</div>
+
+<div id="outline-container-org27ad7f9" class="outline-2">
+<h2 id="org27ad7f9">Lazy Max Segment Tree</h2>
+<div class="outline-text-2" id="text-org27ad7f9">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">SegTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, start, end):
+        <span style="font-weight: bold;">self</span>.start = start
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">end</span> = end
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">left</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">right</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">value</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set</span>(<span style="font-weight: bold;">self</span>, pos, value):
+        <span style="font-weight: bold;">if</span> pos &lt; <span style="font-weight: bold;">self</span>.start <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">self</span>.end &lt; pos:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.start == <span style="font-weight: bold;">self</span>.end:
+            <span style="font-weight: bold;">self</span>.value = value
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">self</span>._extend()
+        <span style="font-weight: bold;">self</span>.left.<span style="font-weight: bold;">set</span>(pos, value)
+        <span style="font-weight: bold;">self</span>.right.<span style="font-weight: bold;">set</span>(pos, value)
+        <span style="font-weight: bold;">self</span>.value = <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">self</span>.left.value, <span style="font-weight: bold;">self</span>.right.value)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">query</span>(<span style="font-weight: bold;">self</span>, start, end):
+        <span style="font-weight: bold;">if</span> end &lt; <span style="font-weight: bold;">self</span>.start <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">self</span>.end &lt; start:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+        <span style="font-weight: bold;">if</span> start &lt;= <span style="font-weight: bold;">self</span>.start <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.end &lt;= end:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.value
+        <span style="font-weight: bold;">self</span>._extend()
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">self</span>.left.query(start, end), <span style="font-weight: bold;">self</span>.right.query(start, end))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_extend</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.start &lt; <span style="font-weight: bold;">self</span>.end:
+            m = <span style="font-weight: bold;">self</span>.start + (<span style="font-weight: bold;">self</span>.end - <span style="font-weight: bold;">self</span>.start) // 2
+            <span style="font-weight: bold;">self</span>.left = SegTree(<span style="font-weight: bold;">self</span>.start, m)
+            <span style="font-weight: bold;">self</span>.right = SegTree(m + 1, <span style="font-weight: bold;">self</span>.end)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">print</span>(<span style="font-weight: bold;">self</span>, level=0):
+        <span style="font-weight: bold;">print</span>(<span style="font-style: italic;">" "</span> * level, <span style="font-style: italic;">"SegTree"</span>, (<span style="font-weight: bold;">self</span>.start, <span style="font-weight: bold;">self</span>.end), <span style="font-weight: bold;">self</span>.value)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left:
+            <span style="font-weight: bold;">self</span>.left.<span style="font-weight: bold;">print</span>(level + 1)
+            <span style="font-weight: bold;">self</span>.right.<span style="font-weight: bold;">print</span>(level + 1)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">sg = SegTree(0, 10)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">sg.set(5, 2)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">sg.set(1, 10)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">assert sg.query(1, 3) == 10</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">assert sg.query(2, 5) == 2</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">sg.print()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

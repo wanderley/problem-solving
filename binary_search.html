@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Binary-search</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Binary-search</h1>
+
+<div id="outline-container-org46cef42" class="outline-2">
+<h2 id="org46cef42">Find index of first greater in sorted array</h2>
+<div class="outline-text-2" id="text-org46cef42">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">index_of_first_greater</span>(a, val):
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(a) == 0:
+        <span style="font-weight: bold;">return</span> 0
+    <span style="font-weight: bold; font-style: italic;">start</span> = 0
+    <span style="font-weight: bold; font-style: italic;">end</span> = <span style="font-weight: bold;">len</span>(a) - 1
+    <span style="font-weight: bold;">while</span> start &lt; <span style="font-weight: bold; font-style: italic;">end</span>:
+        m = start + (end - start) // 2
+        <span style="font-weight: bold;">if</span> val &lt; <span style="font-weight: bold; font-style: italic;">a</span>[m]:
+            end = m
+        <span style="font-weight: bold;">else</span>:
+            start = m + 1
+    <span style="font-weight: bold;">return</span> start <span style="font-weight: bold;">if</span> val &lt; a[start] <span style="font-weight: bold;">else</span> start + 1
+
+<span style="font-weight: bold;">assert</span> index_of_first_greater([1, 10, 10, 20], 2) == 1
+<span style="font-weight: bold;">assert</span> index_of_first_greater([1, 10, 10, 20], 30) == 4
+<span style="font-weight: bold;">assert</span> index_of_first_greater([1, 10, 10, 20], 10) == 3
+<span style="font-weight: bold;">assert</span> index_of_first_greater([], 1) == 0
+<span style="font-weight: bold;">assert</span> index_of_first_greater([10], 10) == 1
+<span style="font-weight: bold;">assert</span> index_of_first_greater([10], 11) == 1
+<span style="font-weight: bold;">assert</span> index_of_first_greater([10], 1) == 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge7ede7c" class="outline-2">
+<h2 id="orge7ede7c">Find index of first greater or equal in sorted array</h2>
+<div class="outline-text-2" id="text-orge7ede7c">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">index_of_first_greater_or_equal</span>(a, val):
+    <span style="font-weight: bold; font-style: italic;">start</span> = 0
+    <span style="font-weight: bold; font-style: italic;">end</span> = <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold;">while</span> start &lt; <span style="font-weight: bold; font-style: italic;">end</span>:
+        m = start + (end - start) // 2
+        <span style="font-weight: bold;">if</span> val &lt;= <span style="font-weight: bold; font-style: italic;">a</span>[m]:
+            end = m
+        <span style="font-weight: bold;">else</span>:
+            start = m + 1
+    <span style="font-weight: bold;">return</span> start
+
+<span style="font-weight: bold;">assert</span> index_of_first_greater_or_equal([1, 10, 10, 20], 2) == 1
+<span style="font-weight: bold;">assert</span> index_of_first_greater_or_equal([1, 10, 10, 20], 30) == 4
+<span style="font-weight: bold;">assert</span> index_of_first_greater_or_equal([1, 10, 10, 20], 10) == 1
+<span style="font-weight: bold;">assert</span> index_of_first_greater_or_equal([], 1) == 0
+<span style="font-weight: bold;">assert</span> index_of_first_greater_or_equal([10], 10) == 0
+<span style="font-weight: bold;">assert</span> index_of_first_greater_or_equal([10], 11) == 1
+<span style="font-weight: bold;">assert</span> index_of_first_greater_or_equal([10], 1) == 0
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

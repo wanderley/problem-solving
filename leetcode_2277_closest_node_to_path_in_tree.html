@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2277. Closest Node to Path in Tree</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2277. Closest Node to Path in Tree</h1>
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a>  For each query \((u, v, p)\), search for \(v\) and \(p\) starting from \(u\) while keeping track of the last both that could reach both of them.  Time and space complexity for each query is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">closestNode</span>(
+        <span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, edges: List[List[<span style="font-weight: bold;">int</span>]], query: List[List[<span style="font-weight: bold;">int</span>]]
+    ) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        A = defaultdict(<span style="font-weight: bold;">list</span>)
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> edges:
+            A[u].append(v)
+            A[v].append(u)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(root, parent, e1, e2):
+            <span style="font-weight: bold;">if</span> root == e1 <span style="font-weight: bold;">or</span> root == e2:
+                <span style="font-weight: bold;">return</span> root
+            found = []
+            <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> A[root]:
+                <span style="font-weight: bold;">if</span> u != parent:
+                    v = dfs(u, root, e1, e2)
+                    <span style="font-weight: bold;">if</span> v <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                        found.append(v)
+            <span style="font-weight: bold;">if</span> found:
+                <span style="font-weight: bold;">return</span> found[0] <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(found) == 1 <span style="font-weight: bold;">else</span> root
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        <span style="font-weight: bold;">return</span> [dfs(q, <span style="font-weight: bold; text-decoration: underline;">None</span>, u, v) <span style="font-weight: bold;">for</span> u, v, q <span style="font-weight: bold;">in</span> query]
+
+
+<span style="font-weight: bold;">assert</span> Solution().closestNode(
+    7, [[0, 1], [0, 2], [0, 3], [1, 4], [2, 5], [2, 6]], [[5, 3, 4], [5, 3, 6]]
+) == [0, 2]
+<span style="font-weight: bold;">assert</span> Solution().closestNode(3, [[0, 1], [1, 2]], [[0, 1, 2]]) == [1]
+<span style="font-weight: bold;">assert</span> Solution().closestNode(3, [[0, 1], [1, 2]], [[0, 0, 0]]) == [0]
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #024: Leetcode Biweekly Contest 83</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #024: Leetcode Biweekly Contest 83</h1>
+
+<div id="outline-container-org7e20fa3" class="outline-2">
+<h2 id="org7e20fa3">Leetcode 2347. Best Poker Hand</h2>
+<div class="outline-text-2" id="text-org7e20fa3">
+<p>
+<a href="https://leetcode.com/problems/best-poker-hand/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  Use the count different ranks and suits to compute the best hand.  Time and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bestHand</span>(<span style="font-weight: bold;">self</span>, ranks: List[<span style="font-weight: bold;">int</span>], suits: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">str</span>:
+        cr = {}
+        <span style="font-weight: bold; font-style: italic;">cs</span> = {}
+        <span style="font-weight: bold;">for</span> r <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">ranks</span>:
+            cr.setdefault(r, 0)
+            cr[<span style="font-weight: bold; font-style: italic;">r</span>] += 1
+        <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">suits</span>:
+            cs.setdefault(s, 0)
+            cs[<span style="font-weight: bold; font-style: italic;">s</span>] += 1
+
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(cs) == 1:
+            <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Flush"</span>
+
+        <span style="font-weight: bold;">if</span> 3 <span style="font-weight: bold;">in</span> cr.values() <span style="font-weight: bold;">or</span> 4 <span style="font-weight: bold;">in</span> cr.values():
+            <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Three of a Kind"</span>
+
+        <span style="font-weight: bold;">if</span> 2 <span style="font-weight: bold;">in</span> cr.values():
+            <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"Pair"</span>
+
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"High Card"</span>
+
+
+<span style="font-weight: bold;">assert</span> Solution().bestHand([13, 2, 3, 1, 9], [<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>]) == <span style="font-style: italic;">"Flush"</span>
+<span style="font-weight: bold;">assert</span> (
+    Solution().bestHand([4, 4, 2, 4, 4], [<span style="font-style: italic;">"d"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>, <span style="font-style: italic;">"c"</span>]) == <span style="font-style: italic;">"Three of a Kind"</span>
+)
+<span style="font-weight: bold;">assert</span> Solution().bestHand([10, 10, 2, 12, 9], [<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"b"</span>, <span style="font-style: italic;">"c"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"d"</span>]) == <span style="font-style: italic;">"Pair"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfafffb1" class="outline-2">
+<h2 id="orgfafffb1">Leetcode 2348. Number of Zero-Filled Subarrays</h2>
+<div class="outline-text-2" id="text-orgfafffb1">
+<p>
+<a href="https://leetcode.com/contest/biweekly-contest-83/problems/number-of-zero-filled-subarrays/">Problem statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  While iterating over the array, keep the size of the zero-subarray ending on the current position.  Increment the array if you find a new zero and add the current size to the answer.  This works because you are increasing the number of previous subarrays in 1.  Time complexity is \(O(n)\) and space is \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">zeroFilledSubarray</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        ans = 0
+        <span style="font-weight: bold; font-style: italic;">cnt</span> = 0
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">nums</span>:
+            <span style="font-weight: bold;">if</span> n != 0:
+                <span style="font-weight: bold; font-style: italic;">cnt</span> = 0
+            <span style="font-weight: bold;">else</span>:
+                cnt += 1
+                <span style="font-weight: bold; font-style: italic;">ans</span> += cnt
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().zeroFilledSubarray([1, 3, 0, 0, 2, 0, 0, 4]) == 6
+<span style="font-weight: bold;">assert</span> Solution().zeroFilledSubarray([0, 0, 0, 2, 0, 0]) == 9
+<span style="font-weight: bold;">assert</span> Solution().zeroFilledSubarray([2, 10, 2019]) == 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6f111d0" class="outline-2">
+<h2 id="org6f111d0">Leetcode 2349. Design a Number Container System</h2>
+<div class="outline-text-2" id="text-org6f111d0">
+<p>
+<a href="https://leetcode.com/problems/design-a-number-container-system/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  We can answer <code>find</code> having the indexes for a given number in a ordered list, and <code>change</code> by using a map to store the value of a given position.  Time complexity is \(O(\log n)\) for each operation and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">NumberContainers</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.indexes = {}
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">values</span> = {}
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">change</span>(<span style="font-weight: bold;">self</span>, index: <span style="font-weight: bold;">int</span>, number: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        cur = <span style="font-weight: bold;">self</span>.values.get(index, <span style="font-weight: bold; text-decoration: underline;">None</span>)
+        <span style="font-weight: bold;">if</span> cur <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">self</span>.indexes[cur].remove(index)
+
+        <span style="font-weight: bold;">self</span>.indexes.setdefault(number, SortedList())
+        <span style="font-weight: bold;">self</span>.indexes[number].add(index)
+        <span style="font-weight: bold;">self</span>.values[<span style="font-weight: bold; font-style: italic;">index</span>] = number
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(<span style="font-weight: bold;">self</span>, number: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> number <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.indexes <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.indexes[number]) == 0:
+            <span style="font-weight: bold;">return</span> -1
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.indexes[number][0]
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Your NumberContainers object will be instantiated and called as such:</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj = NumberContainers()</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj.change(index,number)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">param_2 = obj.find(number)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcb90d51" class="outline-2">
+<h2 id="orgcb90d51">Leetcode 2350. Shortest Impossible Sequence of Rolls</h2>
+<div class="outline-text-2" id="text-orgcb90d51">
+<p>
+<a href="https://leetcode.com/problems/shortest-impossible-sequence-of-rolls/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="mistake_missing_required_invariants.html#ID-3D263A82-52AE-4C90-830D-C533ABAFFF3E">Mistake: Missing required invariants</a>.  I could have solved the problem if I asked myself "What property does a sequence of size 1, 2, .. have to satisfy?"</li>
+
+<li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  To have a sequence of size one, we have to find all number in the array.  Be i the smallest index where \(1,2,..,k\) was found in \(a[0...(i-1)]\).  We will only be able to build all sequences of size two, if we see \(1,2,..,k\) in \(a[i...(n-1)]\).  The problem becomes counting the number of times that the groups of \(1,2,...,k\) appear in the input.  Time complexity is \(O(n)\) and space is \(O(k)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">shortestSequence</span>(<span style="font-weight: bold;">self</span>, rolls: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        cur = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold; font-style: italic;">cnt</span> = 0
+        <span style="font-weight: bold;">for</span> i, r <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(rolls):
+            cur.add(r)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(cur) == <span style="font-weight: bold; font-style: italic;">k</span>:
+                cur = <span style="font-weight: bold;">set</span>()
+                <span style="font-weight: bold; font-style: italic;">cnt</span> += 1
+        <span style="font-weight: bold;">return</span> cnt + 1
+
+
+<span style="font-weight: bold;">assert</span> Solution().shortestSequence([4, 2, 1, 2, 3, 3, 2, 4, 1], 4) == 3
+<span style="font-weight: bold;">assert</span> Solution().shortestSequence([1, 1, 2, 2], 2) == 2
+<span style="font-weight: bold;">assert</span> Solution().shortestSequence([1, 1, 3, 2, 2, 2, 3, 3], 4) == 1
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

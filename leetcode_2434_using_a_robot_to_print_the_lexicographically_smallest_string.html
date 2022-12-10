@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2434. Using a Robot to Print the Lexicographically Smallest String</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2434. Using a Robot to Print the Lexicographically Smallest String</h1>
+
+<div id="outline-container-org0cf40a5" class="outline-2">
+<h2 id="org0cf40a5">Understand the problem</h2>
+<div class="outline-text-2" id="text-org0cf40a5">
+<p>
+<a href="pattern_find_optimal_arrangement.html#ID-F431A436-0E2F-42F4-9EB9-13A82272F944">Pattern: Find optimal arrangement</a> where you can do two operations: (1) remove first char from the input and add to a stack, (2) remove char from stack and put on the answer.  Find the smallest string that can be formed using these rules.
+</p>
+</div>
+
+<div id="outline-container-orgf216fea" class="outline-3">
+<h3 id="orgf216fea">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgf216fea">
+<ul class="org-ul">
+<li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga43ec86" class="outline-2">
+<h2 id="orga43ec86">Devise a plan</h2>
+<div class="outline-text-2" id="text-orga43ec86">
+<p>
+For each char in the input, add it to the answer if there is no char on the right (rest of the string) that comes first than it.  Otherwise, drop all chars from the current stack to the answer while they are smaller than the smaller char to the right.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-org54bcad4" class="outline-3">
+<h3 id="org54bcad4">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org54bcad4">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">robotWithString</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        rest = SortedList(<span style="font-weight: bold;">list</span>(s))
+        <span style="font-weight: bold; font-style: italic;">st</span> = []
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> s:
+            <span style="font-weight: bold;">while</span> st <span style="font-weight: bold;">and</span> st[-1] &lt;= rest[0]:
+                ans.append(st.pop())
+            <span style="font-weight: bold;">if</span> c == rest[0]:
+                ans.append(c)
+                rest.pop(0)
+            <span style="font-weight: bold;">else</span>:
+                st.append(c)
+                rest.remove(c)
+        <span style="font-weight: bold;">while</span> st:
+            ans.append(st.pop())
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(ans)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

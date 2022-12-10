@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #013: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #013: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 50 minutes 9 seconds</li>
+<li>Time Allotted: 2 hours</li>
+<li>Completed: July 7, 2022 2:55 PM</li>
+<li>Score: 6.51</li>
+</ul>
+
+<div id="outline-container-orga6897f5" class="outline-2">
+<h2 id="orga6897f5">Leetcode: 1619. Mean of Array After Removing Some Elements</h2>
+<div class="outline-text-2" id="text-orga6897f5">
+<p>
+<a href="https://leetcode.com/problems/mean-of-array-after-removing-some-elements/">Problem Statement</a>
+</p>
+
+<p>
+Compute the number of elements to exclude, sort the array and remove them from the beginning and end and then compute the average.  Time complexity is \(O(n\times\log(n))\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">trimMean</span>(<span style="font-weight: bold;">self</span>, arr: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">float</span>:
+        arr = <span style="font-weight: bold;">sorted</span>(arr)
+        <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(arr)
+        <span style="font-weight: bold; font-style: italic;">k</span> = <span style="font-weight: bold;">int</span>(n * 0.05)
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">sum</span>(arr[k : n - k]) / (n - (2 * k))
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().trimMean([1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3])
+    == 2.00000
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().trimMean([6, 2, 7, 5, 1, 2, 0, 3, 10, 2, 5, 0, 5, 5, 0, 8, 7, 6, 8, 0])
+    == 4.00000
+)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6b61c83" class="outline-2">
+<h2 id="org6b61c83">Leetcode: 1605. Find Valid Matrix Given Row and Column Sums</h2>
+<div class="outline-text-2" id="text-org6b61c83">
+<p>
+<a href="https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/">Problem Statement</a>
+</p>
+
+<p>
+<a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  Suppose that we know how to pick the number that goes on \((0, 0)\).  After doing so, we would have to appropriately update \(rowSum\) and \(colSum\) by subtracting this value from them.  Note that this is an instance of the same problem, but with less one cell to guess.  What number is that?  \(\min(rowSum[0], colSum[0])\) would make one cell in \((0, 1..n)\) and \((1..m, 0)\) to be zero while keeping \(\sum rowSum[i] = \sum colSum[i]\).  Time and space complexity is \(O(n \times m)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">restoreMatrix</span>(<span style="font-weight: bold;">self</span>, r: List[<span style="font-weight: bold;">int</span>], c: List[<span style="font-weight: bold;">int</span>]) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(r)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(c)
+        <span style="font-weight: bold; font-style: italic;">a</span> = [[0] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                <span style="font-weight: bold; font-style: italic;">v</span> = <span style="font-weight: bold;">min</span>(r[i], c[j])
+                a[i][<span style="font-weight: bold; font-style: italic;">j</span>] = v
+                <span style="font-weight: bold; font-style: italic;">r</span>[<span style="font-weight: bold; font-style: italic;">i</span>] -= v
+                <span style="font-weight: bold; font-style: italic;">c</span>[<span style="font-weight: bold; font-style: italic;">j</span>] -= v
+        <span style="font-weight: bold;">return</span> a
+
+
+<span style="font-weight: bold;">assert</span> Solution().restoreMatrix([3, 8], [4, 7]) == [[3, 0], [1, 7]]
+<span style="font-weight: bold;">assert</span> Solution().restoreMatrix([5, 7, 10], [8, 6, 8]) == [
+    [5, 0, 0],
+    [3, 4, 0],
+    [0, 2, 8],
+]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8e4e20a" class="outline-2">
+<h2 id="org8e4e20a">Leetcode: 1320. Minimum Distance to Type a Word Using Two Fingers</h2>
+<div class="outline-text-2" id="text-org8e4e20a">
+<p>
+<a href="https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/">Problem Statement</a>
+</p>
+
+<p>
+We can solve this problem with <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a> (or <a href="top_down.html#ID-3463A33B-D953-4E75-895D-0BE4AAB16813">Top-down</a>) by representing the problem as \(f(i, ay, ax, by, bx)\) which represents the minimum distance to type a word having the fingers on position \((ay, ax)\) and \((by, bx)\).  The search-space is \(O(n \times 6^4)\) and they are computed in \(O(1)\).  So, the time and space complexity is \(O(n \times 6^4)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumDistance</span>(<span style="font-weight: bold;">self</span>, word: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        n = <span style="font-weight: bold;">len</span>(word)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">coord</span>(c):
+            <span style="font-weight: bold; font-style: italic;">v</span> = <span style="font-weight: bold;">ord</span>(c) - <span style="font-weight: bold;">ord</span>(<span style="font-style: italic;">"A"</span>)
+            <span style="font-weight: bold;">return</span> (v // 6, v % 6)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dist</span>(ay, ax, by, bx):
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">abs</span>(ay - by) + <span style="font-weight: bold;">abs</span>(ax - bx)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, ay, ax, by, bx):
+            <span style="font-weight: bold;">if</span> i == n:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold; font-style: italic;">ny</span>, <span style="font-weight: bold; font-style: italic;">nx</span> = coord(word[i])
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>(
+                dist(ny, nx, ay, ax) + dfs(i + 1, ny, nx, by, bx),
+                dist(ny, nx, by, bx) + dfs(i + 1, ay, ax, ny, nx),
+            )
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>(
+            dfs(0, ay, ax, by, bx)
+            <span style="font-weight: bold;">for</span> ay <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(6)
+            <span style="font-weight: bold;">for</span> ax <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(6)
+            <span style="font-weight: bold;">for</span> by <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(6)
+            <span style="font-weight: bold;">for</span> bx <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(6)
+        )
+
+
+<span style="font-weight: bold;">assert</span> Solution().minimumDistance(<span style="font-style: italic;">"CAKE"</span>) == 3
+<span style="font-weight: bold;">assert</span> Solution().minimumDistance(<span style="font-style: italic;">"HAPPY"</span>) == 6
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

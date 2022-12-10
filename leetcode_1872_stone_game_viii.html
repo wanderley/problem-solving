@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1872. Stone Game VIII</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1872. Stone Game VIII</h1>
+<p>
+Both solution uses the fact that picking \(x>1\) stones (\(0..x\)) and replacing them with their sum is the same as saying that the next player is obligated to pick \(y>x>1\) stones (\(0..y\)).  So, we can first compute <a href="prefix_sum.html#ID-1E82ABF5-661B-47CC-8656-26B50FE472B8">One-dimensional Prefix Sum</a> of the given array and use it quickly compute value that each player is adding to their score.
+</p>
+
+<div id="outline-container-org799517e" class="outline-2">
+<h2 id="org799517e">Quadratic solution</h2>
+<div class="outline-text-2" id="text-org799517e">
+<p>
+Suppose that it is Alice turn to pick a stone and \(i\) stones were already picked.  Since Alice has to take at least two stones, she will pick \(j>i\) stones (\(0..j\)) which maximize the difference of the scores when Bob pick his stones (optimally).  So, for a given \(i\), we can iterate over all positions \(j\) from \(i+1\) to \(|stones|-1\) that maximizes the selection for the given player.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|stones|^2)\)</li>
+<li>Space Complexity: \((|stones|)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(a):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">ac</span> = [a[0]]
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> a[1:]:
+        ac.append(ac[-1] + i)
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(player, i):
+        <span style="font-weight: bold;">if</span> i + 1 &gt;= <span style="font-weight: bold;">len</span>(a):
+            <span style="font-weight: bold;">return</span> 0
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i + 1, <span style="font-weight: bold;">len</span>(a)):
+            <span style="font-weight: bold; font-style: italic;">d</span> = rec(<span style="font-weight: bold;">not</span> player, j)
+            <span style="font-weight: bold; font-style: italic;">v</span> = d + (ac[j] <span style="font-weight: bold;">if</span> player <span style="font-weight: bold;">else</span> -ac[j])
+            <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                ans = v
+            <span style="font-weight: bold;">else</span>:
+                ans = <span style="font-weight: bold;">max</span>(ans, v) <span style="font-weight: bold;">if</span> player <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">min</span>(ans, v)
+        <span style="font-weight: bold;">return</span> ans
+
+    <span style="font-weight: bold;">return</span> rec(<span style="font-weight: bold; text-decoration: underline;">True</span>, 0)
+
+
+<span style="font-weight: bold;">assert</span> solve([-1, 2, -3, 4, -5]) == 5
+<span style="font-weight: bold;">assert</span> solve([7, -6, 5, 10, 5, -2, -6]) == 13, solve([7, -6, 5, 10, 5, -2, -6])
+<span style="font-weight: bold;">assert</span> solve([-10, -12]) == -22
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">stoneGameVIII</span>(<span style="font-weight: bold;">self</span>, stones: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(stones)
+
+
+<span style="font-weight: bold;">assert</span> Solution().stoneGameVIII([-10, -12, -10, -12]) == 12
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org402aadb" class="outline-2">
+<h2 id="org402aadb">Linear solution</h2>
+<div class="outline-text-2" id="text-org402aadb">
+<p>
+To reduce the time complexity, we have to use the fact that at any given position \(i\), the player can take the best of picking the stones at position \(i\) or picking the stones at the position \(i+1\).  Due the restriction of the problem, the player always pick the two left stones.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|stones|)\)</li>
+<li>Space complexity: \(O(|stones|)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(a):
+    <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(a)
+    <span style="font-weight: bold; font-style: italic;">ac</span> = [a[0]]
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> a[1:]:
+        ac.append(ac[-1] + i)
+
+    <span style="font-weight: bold; font-style: italic;">Alice</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold; font-style: italic;">Bob</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rec</span>(player, i):
+        <span style="font-weight: bold;">if</span> i == <span style="font-weight: bold;">len</span>(a) - 1:
+            <span style="font-weight: bold;">return</span> ac[i] <span style="font-weight: bold;">if</span> player <span style="font-weight: bold;">is</span> Alice <span style="font-weight: bold;">else</span> -ac[i]
+
+        <span style="font-weight: bold;">if</span> player <span style="font-weight: bold;">is</span> Alice:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>(ac[i] + rec(Bob, i + 1), rec(Alice, i + 1))
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>(-ac[i] + rec(Alice, i + 1), rec(Bob, i + 1))
+
+    <span style="font-weight: bold;">return</span> rec(<span style="font-weight: bold; text-decoration: underline;">True</span>, 1)
+
+
+<span style="font-weight: bold;">assert</span> solve([-1, 2, -3, 4, -5]) == 5
+<span style="font-weight: bold;">assert</span> solve([7, -6, 5, 10, 5, -2, -6]) == 13
+<span style="font-weight: bold;">assert</span> solve([-10, -12]) == -22
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">stoneGameVIII</span>(<span style="font-weight: bold;">self</span>, stones: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(stones)
+
+
+<span style="font-weight: bold;">assert</span> Solution().stoneGameVIII([-10, -12, -10, -12]) == 12
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

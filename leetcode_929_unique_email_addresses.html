@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 929. Unique Email Addresses</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 929. Unique Email Addresses</h1>
+<p>
+<a href="https://leetcode.com/problems/fruit-into-baskets/">Problem Statement</a>.
+</p>
+
+<p>
+A normalization of the e-mails is needed to count the number of distinct e-mails.  To do so, you can first split the e-mail by <code>@</code> and extract local and domain part.  From the local, you take the prefix before the first <code>+</code> and remove all <code>.</code> from it.  After the normalization, you can remove the duplicates by adding all them to a set.
+</p>
+
+<ul class="org-ul">
+<li>Time and space complexity: \(O(n)\) where \(n\) is the number of e-mails.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numUniqueEmails</span>(<span style="font-weight: bold;">self</span>, emails: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">normalize</span>(email):
+            <span style="font-weight: bold; font-style: italic;">local</span>, <span style="font-weight: bold; font-style: italic;">domain</span> = email.split(<span style="font-style: italic;">"@"</span>)
+            <span style="font-weight: bold; font-style: italic;">base</span> = local.split(<span style="font-style: italic;">"+"</span>)[0].replace(<span style="font-style: italic;">"."</span>, <span style="font-style: italic;">""</span>)
+            <span style="font-weight: bold;">return</span> base + <span style="font-style: italic;">"@"</span> + domain
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">set</span>(<span style="font-weight: bold;">map</span>(normalize, emails)))
+</pre>
+</div>
+</div>
+</body>
+</html>

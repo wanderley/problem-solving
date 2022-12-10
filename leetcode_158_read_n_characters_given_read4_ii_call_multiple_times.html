@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 158. Read N Characters Given read4 II - Call Multiple Times</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 158. Read N Characters Given read4 II - Call Multiple Times</h1>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">The read4 API is already defined for you.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">def read4(buf4: List[str]) -&gt; int:</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.buf = [<span style="font-style: italic;">" "</span>] * 4
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">pos</span> = 0
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">len</span> = 0
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">read</span>(<span style="font-weight: bold;">self</span>, buf: List[<span style="font-weight: bold;">str</span>], n: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        i = 0
+        <span style="font-weight: bold;">while</span> i &lt; n:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.pos == <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">len</span>:
+                <span style="font-weight: bold;">self</span>.buf = [<span style="font-style: italic;">" "</span>] * 4
+                <span style="font-weight: bold;">self</span>.pos = 0
+                <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">len</span> = read4(<span style="font-weight: bold;">self</span>.buf)
+
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">len</span> == 0:
+                <span style="font-weight: bold;">break</span>
+
+            buf[<span style="font-weight: bold; font-style: italic;">i</span>] = <span style="font-weight: bold;">self</span>.buf[<span style="font-weight: bold;">self</span>.pos]
+            <span style="font-weight: bold;">self</span>.pos += 1
+            i += 1
+
+        <span style="font-weight: bold;">return</span> i
+</pre>
+</div>
+</div>
+</body>
+</html>

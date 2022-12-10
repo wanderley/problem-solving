@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 471. Encode String with Shortest Length</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 471. Encode String with Shortest Length</h1>
+<ul class="org-ul">
+<li><a href="mistake_misread_the_problem.html#ID-192401C2-DA6F-4496-B530-89A3546712FD">Mistake: Misread the problem</a>.  The problem doesn't mention that we would have to encode nested strings, but I should have supposed so.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Be \(s\) a string.  The final solution is either finding a substring of \(s\) that can be repeated enough to reconstruct \(s\) or the concatenation of \(p\) and \(q\) where \(p+q=s\).  Time complexity is \(O(n^3)\) and space complexity is \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">encode</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        N = <span style="font-weight: bold;">len</span>(s)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j):
+            <span style="font-weight: bold; font-style: italic;">subs</span> = s[i : j + 1]
+            <span style="font-weight: bold; font-style: italic;">best</span> = subs
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, j):
+                <span style="font-weight: bold; font-style: italic;">npart</span> = k - i + 1
+                <span style="font-weight: bold; font-style: italic;">ncopy</span> = <span style="font-weight: bold;">len</span>(subs) // npart
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(subs) % npart == 0 <span style="font-weight: bold;">and</span> s[i : k + 1] * ncopy == subs:
+                    cur = f<span style="font-style: italic;">"</span>{ncopy}<span style="font-style: italic;">[</span>{dfs(i, k)}<span style="font-style: italic;">]"</span>
+                    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(cur) &lt; <span style="font-weight: bold;">len</span>(best):
+                        best = cur
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, j):
+                cur = dfs(i, k) + dfs(k + 1, j)
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(cur) &lt; <span style="font-weight: bold;">len</span>(best):
+                    best = cur
+            <span style="font-weight: bold;">return</span> best
+
+        <span style="font-weight: bold;">return</span> dfs(0, N - 1)
+
+
+<span style="font-weight: bold;">assert</span> Solution().encode(<span style="font-style: italic;">"aaa"</span>) == <span style="font-style: italic;">"aaa"</span>
+<span style="font-weight: bold;">assert</span> Solution().encode(<span style="font-style: italic;">"aaaaa"</span>) == <span style="font-style: italic;">"5[a]"</span>
+<span style="font-weight: bold;">assert</span> Solution().encode(<span style="font-style: italic;">"aaaaaaaaaa"</span>) == <span style="font-style: italic;">"10[a]"</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">encode</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        N = <span style="font-weight: bold;">len</span>(s)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j):
+            <span style="font-weight: bold;">if</span> i == j:
+                <span style="font-weight: bold;">return</span> s[i]
+            <span style="font-weight: bold;">if</span> i &gt; j:
+                <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>
+            ans = s[i : j + 1]
+            p = (ans + ans).find(ans, 1)
+            k = <span style="font-weight: bold;">len</span>(ans) // p
+            <span style="font-weight: bold;">if</span> k &gt; 1:
+                x = f<span style="font-style: italic;">"</span>{k}<span style="font-style: italic;">[</span>{dfs(i, i + p-1)}<span style="font-style: italic;">]"</span>
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(x) &lt; <span style="font-weight: bold;">len</span>(ans):
+                    ans = x
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, j):
+                x = dfs(i, k) + dfs(k + 1, j)
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(x) &lt; <span style="font-weight: bold;">len</span>(ans):
+                    ans = x
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> dfs(0, N - 1)
+</pre>
+</div>
+</div>
+</body>
+</html>

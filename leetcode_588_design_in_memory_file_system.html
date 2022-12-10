@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 588. Design In-Memory File System</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 588. Design In-Memory File System</h1>
+
+<div id="outline-container-orga6d6711" class="outline-2">
+<h2 id="orga6d6711">Understand the problem</h2>
+<div class="outline-text-2" id="text-orga6d6711">
+<p>
+Given a list of path where some are directories and other are files.  Implement an efficient data structure that allows easily access to each directory to save files and list its content.
+</p>
+</div>
+
+<div id="outline-container-org2abe082" class="outline-3">
+<h3 id="org2abe082">Useful prompts</h3>
+<div class="outline-text-3" id="text-org2abe082">
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
+
+<li><a href="can_we_answer_efficiently_queries_with_one_or_more_data_structures.html#ID-6DEEDEC1-DF98-4030-9730-54CCBC23385C">Can we answer efficiently queries with one or more data-structures?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd0e058b" class="outline-2">
+<h2 id="orgd0e058b">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgd0e058b">
+<p>
+Use <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a> to represent the directory and file paths.  Time complexity is \(O(p)\) to find a node (for <code>mkdir</code>, <code>write</code> and <code>read</code>) where \(p\) is the length of the path, \(O(p + P)\) for <code>ls</code> where the \(P\) is the sum of length of all nodes in a sub-path.
+</p>
+</div>
+
+<div id="outline-container-orge4d4276" class="outline-3">
+<h3 id="orge4d4276">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orge4d4276">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FileSystem</span>:
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.root = {}
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">ls</span>(<span style="font-weight: bold;">self</span>, path: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        node = <span style="font-weight: bold;">self</span>.node(path)
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">"__content__"</span> <span style="font-weight: bold;">in</span> node:
+            <span style="font-weight: bold;">return</span> [path.split(<span style="font-style: italic;">"/"</span>)[-1]]
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">sorted</span>(node.keys()))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">mkdir</span>(<span style="font-weight: bold;">self</span>, path: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">self</span>.node(path)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addContentToFile</span>(<span style="font-weight: bold;">self</span>, filePath: <span style="font-weight: bold;">str</span>, content: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        node = <span style="font-weight: bold;">self</span>.node(filePath)
+        <span style="font-weight: bold; font-style: italic;">node</span>[<span style="font-style: italic;">"__content__"</span>] = node.get(<span style="font-style: italic;">"__content__"</span>, <span style="font-style: italic;">""</span>) + content
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">readContentFromFile</span>(<span style="font-weight: bold;">self</span>, filePath: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.node(filePath).get(<span style="font-style: italic;">"__content__"</span>, <span style="font-style: italic;">""</span>)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">node</span>(<span style="font-weight: bold;">self</span>, path):
+        <span style="font-weight: bold;">if</span> path == <span style="font-style: italic;">"/"</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.root
+        node = <span style="font-weight: bold;">self</span>.root
+        <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> path.split(<span style="font-style: italic;">"/"</span>)[1:]:
+            node = node.setdefault(p, {})
+        <span style="font-weight: bold;">return</span> node
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Your FileSystem object will be instantiated and called as such:</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj = FileSystem()</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">param_1 = obj.ls(path)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj.mkdir(path)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj.addContentToFile(filePath,content)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">param_4 = obj.readContentFromFile(filePath)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

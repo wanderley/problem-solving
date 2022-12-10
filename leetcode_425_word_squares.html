@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 425. Word Squares</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 425. Word Squares</h1>
+<ul class="org-ul">
+<li><a href="mistake_incorrect_evaluation_of_solution_s_viability.html#ID-DA951820-DBB5-4A7F-9401-DF5860EFAB8A">Mistake: Incorrect evaluation of solution's viability</a>.  Spent most of the time trying to reduce the complexity, when the problem required a <a href="backtracking.html#ID-605B3009-7C7C-410A-9361-218A24ED8D8C">Backtracking</a>.</li>
+
+<li><a href="mistake_high_constant_factor_in_the_implementation.html#ID-56B18554-8EDB-44AF-B72A-8FD307B2980C">Mistake: High constant factor in the implementation</a>.  First <a href="backtracking.html#ID-605B3009-7C7C-410A-9361-218A24ED8D8C">Backtracking</a> wasn't optimized enough.</li>
+
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  Generate all possible squares while selecting the next word that match the current prefix so far.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">wordSquares</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>]) -&gt; List[List[<span style="font-weight: bold;">str</span>]]:
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(words)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(words[0])
+
+        <span style="font-weight: bold;">if</span> M == 1:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">set</span>(words))
+
+        pref = {}
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> words:
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M):
+                p = w[0 : i + 1]
+                pref.setdefault(p, <span style="font-weight: bold;">set</span>())
+                pref[p].add(w)
+
+        ans = []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bt</span>(i, cur):
+            <span style="font-weight: bold;">if</span> i == M:
+                ans.append(cur[:])
+                <span style="font-weight: bold;">return</span>
+
+            <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> pref.get(<span style="font-style: italic;">""</span>.join(v[i] <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> cur), []):
+                cur.append(w)
+                bt(i + 1, cur)
+                cur.pop()
+
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> words:
+            bt(1, [w])
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().wordSquares([<span style="font-style: italic;">"area"</span>, <span style="font-style: italic;">"lead"</span>, <span style="font-style: italic;">"wall"</span>, <span style="font-style: italic;">"lady"</span>, <span style="font-style: italic;">"ball"</span>]) == [
+    [<span style="font-style: italic;">"ball"</span>, <span style="font-style: italic;">"area"</span>, <span style="font-style: italic;">"lead"</span>, <span style="font-style: italic;">"lady"</span>],
+    [<span style="font-style: italic;">"wall"</span>, <span style="font-style: italic;">"area"</span>, <span style="font-style: italic;">"lead"</span>, <span style="font-style: italic;">"lady"</span>],
+]
+<span style="font-weight: bold;">assert</span> Solution().wordSquares([<span style="font-style: italic;">"abat"</span>, <span style="font-style: italic;">"baba"</span>, <span style="font-style: italic;">"atan"</span>, <span style="font-style: italic;">"atal"</span>]) == [
+    [<span style="font-style: italic;">"baba"</span>, <span style="font-style: italic;">"abat"</span>, <span style="font-style: italic;">"baba"</span>, <span style="font-style: italic;">"atal"</span>],
+    [<span style="font-style: italic;">"baba"</span>, <span style="font-style: italic;">"abat"</span>, <span style="font-style: italic;">"baba"</span>, <span style="font-style: italic;">"atan"</span>],
+]
+</pre>
+</div>
+</div>
+</body>
+</html>

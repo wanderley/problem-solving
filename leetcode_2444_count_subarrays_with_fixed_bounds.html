@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2444. Count Subarrays With Fixed Bounds</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2444. Count Subarrays With Fixed Bounds</h1>
+
+<div id="outline-container-orgdb32372" class="outline-2">
+<h2 id="orgdb32372">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgdb32372">
+<p>
+Given an array \(a\) and numbers \(minK\) and \(maxK\), return the number of subarrays \(s\) where \(min(s)=minK\) and \(max(s)=maxK\).
+</p>
+</div>
+
+<div id="outline-container-org3b1bb25" class="outline-3">
+<h3 id="org3b1bb25">Useful prompts</h3>
+<div class="outline-text-3" id="text-org3b1bb25">
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0fb5b68" class="outline-2">
+<h2 id="org0fb5b68">Devise a plan</h2>
+<div class="outline-text-2" id="text-org0fb5b68">
+<p>
+If \(a[i] < minK\) or \(a[i] > maxK\), then no subarray that contains \(a[i]\) should be counted.  So, we can split the given array in subarray that contains only elements between \(minK\) and \(maxK\).   For now on, we suppose that \(a\) only contains elements from \(minK\) to \(maxK\).  <a href="pattern_count_subarrays_starting_ending_in_a_position.html#ID-C9DC4E36-0C33-4279-BC4E-8F6CEA6CA34D">Pattern: Count subarrays starting/ending in a position</a>.  For each position \(i\), we find the smallest index \(j\) where \(a[i..j]\) contains at least one value \(minK\) and one value \(maxK\).  The number of subarrays starting on \(i\) is going to be \(|a|-j\).  Time complexity and space \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-org8668cd0" class="outline-3">
+<h3 id="org8668cd0">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org8668cd0">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countSubarrays</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], minK: <span style="font-weight: bold;">int</span>, maxK: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        ans = 0
+        <span style="font-weight: bold;">for</span> t, g <span style="font-weight: bold;">in</span> groupby(nums, key=<span style="font-weight: bold;">lambda</span> n: minK &lt;= n &lt;= maxK):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> t:
+                <span style="font-weight: bold;">continue</span>
+            group = <span style="font-weight: bold;">list</span>(g)
+            lastMin = -1
+            lastMax = -1
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(group) - 1, -1, -1):
+                <span style="font-weight: bold;">if</span> group[i] == minK:
+                    lastMin = i
+                <span style="font-weight: bold;">if</span> group[i] == maxK:
+                    lastMax = i
+                <span style="font-weight: bold;">if</span> lastMin != -1 <span style="font-weight: bold;">and</span> lastMax != -1:
+                    j = <span style="font-weight: bold;">max</span>(lastMin, lastMax)
+                    ans += <span style="font-weight: bold;">len</span>(group) - j
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 32. Longest Valid Parentheses</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 32. Longest Valid Parentheses</h1>
+<p>
+<a href="https://leetcode.com/problems/longest-valid-parentheses/">Problem Statement</a>: Given a string \(s\) with parentheses, return the length of the longest well-formed substring of \(s\).
+</p>
+
+<div id="outline-container-org8407516" class="outline-2">
+<h2 id="org8407516"><a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a></h2>
+<div class="outline-text-2" id="text-org8407516">
+<p>
+Be \(z\) a longest well-formed substring of \(s\).  What do we know about it?  We know that it doesn't starts with a close parentheses, since it is well-formed.  If the second parentheses of \(z\) is a close parentheses, then \(z=\texttt{()}x\) where \(x\) is a well-formed substring of \(s\) and \(|x|\geq0\).  Otherwise, \(z=\texttt{(}y\texttt{)}z\), where \(|y|>0\) and \(|z|\geq 0\).  So, \(z\) can be decomposed in well-formed substring of \(s\).  This observation is the base for the recursion implemented by the following <a href="top_down.html#ID-3463A33B-D953-4E75-895D-0BE4AAB16813">Top-down</a> solution.
+</p>
+
+<ul class="org-ul">
+<li>Time and space complexity: \(O(|s|)\)</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s):
+    <span style="font-weight: bold;">if</span> s == <span style="font-style: italic;">""</span>:
+        <span style="font-weight: bold;">return</span> 0
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_open</span>(i):
+        <span style="font-weight: bold;">return</span> i &lt; <span style="font-weight: bold;">len</span>(s) <span style="font-weight: bold;">and</span> s[i] == <span style="font-style: italic;">"("</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_close</span>(i):
+        <span style="font-weight: bold;">return</span> i &lt; <span style="font-weight: bold;">len</span>(s) <span style="font-weight: bold;">and</span> s[i] == <span style="font-style: italic;">")"</span>
+
+    <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i):
+        <span style="font-weight: bold;">if</span> i &gt;= <span style="font-weight: bold;">len</span>(s):
+            <span style="font-weight: bold;">return</span> 0
+
+        <span style="font-weight: bold;">if</span> is_close(i):
+            <span style="font-weight: bold;">return</span> 0
+
+        <span style="font-weight: bold;">if</span> is_open(i) <span style="font-weight: bold;">and</span> is_close(i + 1):
+            <span style="font-weight: bold;">return</span> 2 + dfs(i + 2)
+
+        <span style="font-weight: bold;">assert</span> is_open(i)
+
+        l = dfs(i + 1)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_close(i + l + 1):
+            <span style="font-weight: bold;">return</span> 0
+
+        <span style="font-weight: bold;">return</span> 2 + l + dfs(i + l + 2)
+
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">max</span>([dfs(i) <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(s))])
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"(()"</span>) == 2
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">")()())"</span>) == 4
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">""</span>) == 0
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"))))((()(("</span>) == 2
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">longestValidParentheses</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(s)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

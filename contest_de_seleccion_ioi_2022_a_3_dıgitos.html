@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contest de seleccion IOI 2022: A. 3 Dıgitos</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Contest de seleccion IOI 2022: A. 3 Dıgitos</h1>
+<p>
+<a href="https://contest.yandex.ru/contest/38353/download/">Problem Statement</a>: Guess a number \(x=x_{1}x_{2}x_{3}\) using at most 16 queries.  The input of a query is a number \(q=y_{1}y_{2}y_3\) where \(y_{1 }_{}\neq y_{2 }_{} \neq y_3\) and the return value is <code>OK</code> if the number was guessed, <code>-1</code> if you exceeded the number of guesses and \(d\) (\(0 \leq d \leq 3\)) an integer representing the number of numbers that you guessed right (not necessarily in order).
+</p>
+
+<p>
+Suppose that we know the digits of \(x\) (\(a,b,c\)), but we don't know the correct order of them.  There is no much better than trying all possible arrangements of digits to guess the number:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">\(abc\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(acb\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(bac\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(bca\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(cab\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(cba\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+As you can see there are 6 of them.  That leaves us with 10 guesses to find those digits.  Note that you can't guess $111, 222, 333, &#x2026;$ (10 queries), because the query must can't have repeated digits on it.  Other alternative is guess distinct consecutive numbers:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">Query Input</td>
+<td class="org-left">Query Output</td>
+</tr>
+
+<tr>
+<td class="org-right">123</td>
+<td class="org-left">\(r_1\)</td>
+</tr>
+
+<tr>
+<td class="org-right">234</td>
+<td class="org-left">\(r_2\)</td>
+</tr>
+
+<tr>
+<td class="org-right">345</td>
+<td class="org-left">\(r_3\)</td>
+</tr>
+
+<tr>
+<td class="org-right">&#x2026;</td>
+<td class="org-left">&#x2026;</td>
+</tr>
+
+<tr>
+<td class="org-right">012</td>
+<td class="org-left">\(r_10\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+What does it mean that \(q(123)=r_1\)?  It means that there are \(r_1\) numbers correct on the query.  So, we can look on it as following.  Suppose that we have an unknown variable for each number \(d_i\) which is either 0 or 1.  Then, we can think about \(q(123)=r_1\) as \(d_1 + d_2 + d_3 = r_1\).
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">\(d_1 + d_2 + d_3 = r_1\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(d_2 + d_3 + d_4 = r_2\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(d_3 + d_4 + d_5 = r_3\)</td>
+</tr>
+
+<tr>
+<td class="org-left">$&#x2026;$</td>
+</tr>
+
+<tr>
+<td class="org-left">\(d_0 + d_1 + d_2 = r_10\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For those queries that return 0, we can put 0 in their respective \(d\) variables.  After that, we can solve the systems of linear equations using the <a href="gaussian_elimination.html#ID-1EB04540-F111-49BF-B21E-1A2B468F5D14">Gaussian elimination</a> or a simple substitution pattern as implemented in the following code.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(10^3)=O(1)\).</li>
+<li>Space complexity: \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-C++"><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;algorithm&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;set&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;string.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;vector&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;assert.h&gt;</span>
+
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+
+<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">local_ans</span>;
+<span style="font-weight: bold; text-decoration: underline;">int</span>    <span style="font-weight: bold; font-style: italic;">local_tentatives</span>;
+<span style="font-weight: bold; text-decoration: underline;">int</span>    <span style="font-weight: bold; font-style: italic;">is_local</span> = 0;
+
+<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold;">query_local</span>(<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">local_ans</span>, <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">ori_nums</span>) {
+  <span style="font-weight: bold;">if</span> (ori_nums == local_ans) {
+    <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"OK"</span>;
+  }
+  <span style="font-weight: bold;">if</span> (local_tentatives == 15) {
+    <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"-1"</span>;
+  }
+
+  assert(ori_nums.size() == 3);
+  assert(ori_nums[0] != ori_nums[1] &amp;&amp;
+         ori_nums[0] != ori_nums[2] &amp;&amp;
+         ori_nums[1] != ori_nums[2]);
+
+  local_tentatives++;
+
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">cnt</span> = <span style="font-style: italic;">"0"</span>;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; ori_nums.size(); i++) {
+    <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; local_ans.size(); j++) {
+      <span style="font-weight: bold;">if</span> (ori_nums[i] == local_ans[j]) {
+        cnt[0]++;
+        <span style="font-weight: bold;">break</span>;
+      }
+    }
+  }
+  <span style="font-weight: bold;">return</span> cnt;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold;">query</span>(<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">nums</span>) {
+  <span style="font-weight: bold;">if</span> (is_local) {
+    <span style="font-weight: bold;">return</span> query_local(local_ans, nums);
+  }
+  cout &lt;&lt; <span style="font-style: italic;">"? "</span> &lt;&lt; nums &lt;&lt; endl &lt;&lt; flush;
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">ans</span>;
+  cin &gt;&gt; ans;
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold;">solve</span>() {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">DISCARDED</span>   = 1;
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">MAYBE</span>       = 2;
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">FOUND</span>       = 3;
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">status</span>[10] = {MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE, MAYBE};
+
+  <span style="font-weight: bold; text-decoration: underline;">char</span>   <span style="font-weight: bold; font-style: italic;">queries</span>[10][4] = {<span style="font-style: italic;">"012"</span>, <span style="font-style: italic;">"123"</span>, <span style="font-style: italic;">"234"</span>, <span style="font-style: italic;">"345"</span>, <span style="font-style: italic;">"456"</span>, <span style="font-style: italic;">"567"</span>, <span style="font-style: italic;">"678"</span>, <span style="font-style: italic;">"789"</span>, <span style="font-style: italic;">"890"</span>, <span style="font-style: italic;">"901"</span>};
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">answers</span>[10];
+
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; 10; i++) {
+    answers[i] = query(queries[i]);
+    <span style="font-weight: bold;">if</span> (answers[i] == <span style="font-style: italic;">"OK"</span> || answers[i] == <span style="font-style: italic;">"-1"</span>) {
+      <span style="font-weight: bold;">return</span> answers[i];
+    }
+    <span style="font-weight: bold;">if</span> (answers[i] == <span style="font-style: italic;">"0"</span>) {
+      <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; 3; j++) {
+        status[queries[i][j] - <span style="font-style: italic;">'0'</span>] = DISCARDED;
+      }
+    }
+  }
+
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">changed</span> = 1;
+  <span style="font-weight: bold;">while</span> (changed) {
+    changed = 0;
+    <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; 10; i++) {
+      <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">cnt_discarded</span> = 0;
+      <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">cnt_found</span>     = 0;
+      <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; 3; j++) {
+        <span style="font-weight: bold;">if</span> (status[queries[i][j] - <span style="font-style: italic;">'0'</span>] == DISCARDED) {
+          cnt_discarded++;
+        }
+        <span style="font-weight: bold;">if</span> (status[queries[i][j] - <span style="font-style: italic;">'0'</span>] == FOUND) {
+          cnt_found++;
+        }
+      }
+      <span style="font-weight: bold;">if</span> (answers[i] == <span style="font-style: italic;">"0"</span>) {
+        <span style="font-weight: bold;">continue</span>;
+      } <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">if</span> (answers[i] == <span style="font-style: italic;">"1"</span> &amp;&amp; cnt_discarded == 2 &amp;&amp; cnt_found != 1) {
+        assert(cnt_found == 0);
+        <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; 3; j++) {
+          <span style="font-weight: bold;">if</span> (status[queries[i][j] - <span style="font-style: italic;">'0'</span>] != DISCARDED) {
+            assert(status[queries[i][j] - <span style="font-style: italic;">'0'</span>] == MAYBE);
+            status[queries[i][j] - <span style="font-style: italic;">'0'</span>] = FOUND;
+            changed = 1;
+          }
+        }
+      } <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">if</span> (answers[i] == <span style="font-style: italic;">"1"</span> &amp;&amp; cnt_discarded != 2 &amp;&amp; cnt_found == 1) {
+        <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; 3; j++) {
+          <span style="font-weight: bold;">if</span> (status[queries[i][j] - <span style="font-style: italic;">'0'</span>] != FOUND) {
+            status[queries[i][j] - <span style="font-style: italic;">'0'</span>] = DISCARDED;
+            changed = 1;
+          }
+        }
+      } <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">if</span> (answers[i] == <span style="font-style: italic;">"2"</span> &amp;&amp; cnt_discarded == 1 &amp;&amp; cnt_found == 1) {
+        <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; 3; j++) {
+          <span style="font-weight: bold;">if</span> (status[queries[i][j] - <span style="font-style: italic;">'0'</span>] == MAYBE) {
+            status[queries[i][j] - <span style="font-style: italic;">'0'</span>] = FOUND;
+            changed = 1;
+          }
+        }
+      }
+    }
+  }
+
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">candidate</span> = <span style="font-style: italic;">"000"</span>;
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">k</span> = 0;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; 10; i++) {
+    <span style="font-weight: bold;">if</span> (status[i] == FOUND) {
+      candidate[k++] = <span style="font-style: italic;">'0'</span> + i;
+    }
+  }
+  assert(k == 3);
+  sort(candidate.begin(), candidate.end());
+
+  <span style="font-weight: bold;">do</span> {
+    <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">ans</span> = query(candidate);
+    <span style="font-weight: bold;">if</span> (ans == <span style="font-style: italic;">"OK"</span> || ans == <span style="font-style: italic;">"-1"</span>) {
+      <span style="font-weight: bold;">return</span> ans;
+    }
+  } <span style="font-weight: bold;">while</span>(next_permutation(candidate.begin(), candidate.end()));
+
+  assert(0);
+  <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"OK"</span>;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold;">solve_local</span>(<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">_ans</span>) {
+  local_ans = _ans;
+  local_tentatives = 0;
+  is_local = 1;
+
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">ans</span> = solve();
+
+  is_local = 0;
+  <span style="font-weight: bold;">return</span> ans;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  assert(query_local(<span style="font-style: italic;">"123"</span>, <span style="font-style: italic;">"123"</span>) == <span style="font-style: italic;">"OK"</span>);
+  assert(query_local(<span style="font-style: italic;">"123"</span>, <span style="font-style: italic;">"321"</span>) == <span style="font-style: italic;">"3"</span>);
+  assert(query_local(<span style="font-style: italic;">"123"</span>, <span style="font-style: italic;">"456"</span>) == <span style="font-style: italic;">"0"</span>);
+
+  assert(solve_local(<span style="font-style: italic;">"789"</span>) == <span style="font-style: italic;">"OK"</span>);
+  assert(solve_local(<span style="font-style: italic;">"149"</span>) == <span style="font-style: italic;">"OK"</span>);
+  assert(solve_local(<span style="font-style: italic;">"248"</span>) == <span style="font-style: italic;">"OK"</span>);
+
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">test</span> = <span style="font-style: italic;">"000"</span>;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; 10; i++) {
+    <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">j</span> = 0; j &lt; 10; j ++) {
+      <span style="font-weight: bold;">if</span> (i == j) <span style="font-weight: bold;">continue</span>;
+      <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">k</span> = 0; k &lt; 10; k ++) {
+        <span style="font-weight: bold;">if</span> (i == k || j == k) <span style="font-weight: bold;">continue</span>;
+        test[0] = <span style="font-style: italic;">'0'</span> + i;
+        test[1] = <span style="font-style: italic;">'0'</span> + j;
+        test[2] = <span style="font-style: italic;">'0'</span> + k;
+        <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">ans</span> = solve_local(test);
+        <span style="font-weight: bold;">if</span> (ans != <span style="font-style: italic;">"OK"</span>) {
+          cout &lt;&lt; <span style="font-style: italic;">"Failed for "</span> &lt;&lt; test &lt;&lt; <span style="font-style: italic;">" "</span> &lt;&lt; ans &lt;&lt; endl;
+        }
+      }
+    }
+  }
+
+  is_local = 0;
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">t</span>;
+  cin &gt;&gt; t;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; t; i++) {
+    <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">ans</span> = solve();
+    <span style="font-weight: bold;">if</span> (ans == <span style="font-style: italic;">"-1"</span>) {
+      <span style="font-weight: bold;">return</span> 0;
+    }
+  }
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</body>
+</html>

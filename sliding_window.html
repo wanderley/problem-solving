@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sliding Window</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Sliding Window</h1>
+
+<div id="outline-container-orge9ddc40" class="outline-2">
+<h2 id="orge9ddc40"><span class="todo TODO">TODO</span> Write template for Sliding Window Average (<a href="https://stackoverflow.com/questions/12636613/how-to-calculate-moving-average-without-keeping-the-count-and-data-total">reference</a>)</h2>
+</div>
+
+<div id="outline-container-org0b1f57a" class="outline-2">
+<h2 id="org0b1f57a">Sliding Window Maximum</h2>
+<div class="outline-text-2" id="text-org0b1f57a">
+<p>
+This implementation uses <a href="monotonic_queue.html#ID-AE7CF4B3-19EF-4C06-AD7A-D37ACB3EFEAE">Monotonic Queue</a> to compute a sliding window maximum of \(n\) elements in \(O(n)\).  The operation <code>add</code> is amortized \(O(1)\), since each element enters once in the <a href="deque.html#ID-D449CB99-E7B7-4B35-AD73-26E996029D93">Deque</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">SlidingWindowMaximum</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, size):
+        <span style="font-weight: bold;">self</span>.size = size
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">window</span> = deque(maxlen=size)
+        <span style="font-weight: bold;">self</span>.index = 0
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, value):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.window) &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.window[0][1] &lt;= <span style="font-weight: bold;">self</span>.index - <span style="font-weight: bold;">self</span>.size:
+            <span style="font-weight: bold;">self</span>.window.popleft()
+
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.window) &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.window[-1][0] &lt;= value:
+            <span style="font-weight: bold;">self</span>.window.pop()
+
+        <span style="font-weight: bold;">self</span>.window.append((value, <span style="font-weight: bold;">self</span>.index))
+        <span style="font-weight: bold;">self</span>.index += 1
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">max</span>()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">max</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.window[0][0]
+
+
+w1 = SlidingWindowMaximum(3)
+<span style="font-weight: bold;">assert</span> w1.add(1) == 1
+<span style="font-weight: bold;">assert</span> w1.add(2) == 2
+<span style="font-weight: bold;">assert</span> w1.add(3) == 3
+<span style="font-weight: bold;">assert</span> w1.add(2) == 3
+<span style="font-weight: bold;">assert</span> w1.add(1) == 3
+<span style="font-weight: bold;">assert</span> w1.add(1) == 2
+<span style="font-weight: bold;">assert</span> w1.add(1) == 1
+<span style="font-weight: bold;">assert</span> w1.add(9) == 9
+<span style="font-weight: bold;">assert</span> w1.add(8) == 9
+<span style="font-weight: bold;">assert</span> w1.add(7) == 9
+<span style="font-weight: bold;">assert</span> w1.add(6) == 8
+
+w2 = SlidingWindowMaximum(1)
+<span style="font-weight: bold;">assert</span> w2.add(9) == 9
+<span style="font-weight: bold;">assert</span> w2.add(8) == 8
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org988feae" class="outline-2">
+<h2 id="org988feae">List of sample problems</h2>
+<div class="outline-text-2" id="text-org988feae">
+<ul class="org-ul">
+<li><a href="https://leetcode.com/tag/sliding-window/">Leetcode's Sliding Window Problems</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

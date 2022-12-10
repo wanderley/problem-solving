@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 920. Number of Music Playlists</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 920. Number of Music Playlists</h1>
+<ul class="org-ul">
+<li><a href="mistake_did_not_consider_different_approaches.html#ID-477B8042-5F3E-4814-9F0B-C49485B85A64">Mistake: Did not consider different approaches</a>.  Got stuck on a recursion using \((i, r)\) the  \(i\) song to play having to play \(r\) required songs.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Suppose that you played \(i\) songs which \(j\) are unique songs.  There are two ways to select the next song: (1) you play one of \(n - j\) new songs, or (2) you play one \(\max(j - k, 0)\) already played songs.  Time and space complexity is \(O(g \times n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numMusicPlaylists</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, goal: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        MOD = 10**9 + 7
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, u):
+            <span style="font-weight: bold;">if</span> i == goal:
+                <span style="font-weight: bold;">return</span> 1 <span style="font-weight: bold;">if</span> u == n <span style="font-weight: bold;">else</span> 0
+            <span style="font-weight: bold;">return</span> ((n - u) * dfs(i + 1, u + 1) + <span style="font-weight: bold;">max</span>(u - k, 0) * dfs(i + 1, u)) % MOD
+
+        <span style="font-weight: bold;">return</span> dfs(0, 0)
+</pre>
+</div>
+</div>
+</body>
+</html>

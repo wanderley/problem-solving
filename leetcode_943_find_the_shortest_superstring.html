@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 943. Find the Shortest Superstring</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 943. Find the Shortest Superstring</h1>
+
+<div id="outline-container-orga9b296b" class="outline-2">
+<h2 id="orga9b296b">Patterns</h2>
+<div class="outline-text-2" id="text-orga9b296b">
+<ul class="org-ul">
+<li><a href="pattern_problem_s_constraints_allow_time_complexity_of_o_2_n_times_x.html#ID-D01DE8B5-6747-477C-9EC1-E8A658F83851">Pattern: Problem's constraints allow time complexity of \(O(2^n \times X)\)</a>.</li>
+
+<li><a href="pattern_problem_s_constraints_play_big_role_on_the_solution.html#ID-8CCAE757-A015-4494-A17E-C6BBFC38F658">Pattern: Problem's constraints play big role on the solution</a>.  One word can only cover a part of any other word in the dictionary.  Therefore, a word always increase the number of covered words in 1 when picking it.</li>
+
+<li><a href="pattern_optimization_problem_to_find_the_smallest_longest_x_that_respect_condition_y.html#ID-E02BB151-F02E-4F91-8F89-03077F4B2C97">Pattern: Optimization problem to find the smallest/longest X that respect condition Y</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org90e19f2" class="outline-2">
+<h2 id="org90e19f2">Solution</h2>
+<div class="outline-text-2" id="text-org90e19f2">
+<p>
+Suppose that we have \(f(i, S)\) that computes the smallest string starting with \(words[i]\) and covering all words not in \(S\).  We can easily solve the original problem by iterating over all words and picking the \(words[j]\) which \(f(j, S \cup {j})\) produces the smallest string.  The problem is how to compute \(f(i, S)\).  If \(S\) contains all words, then \(f(i, S)\) returns \(words[i]\) for all possible values of \(i\).  Note that it also covers the case where \(words\) has only one word.  Otherwise, we have two or more words to cover, and we need to build the smallest string starting with \(words[i]\) that cover all words not in \(S\).  For each word \(j \notin S\), find the longest prefix \(k\) of \(words[j]\) that is a suffix of \(words[i]\).  We have that \(words[i][0..(k-1)]words[j]\) is the smallest string that covers both \(i\) and \(j\).  Therefore, \(words[i][0..k(j)] \cdot f(j, S \cup {j})\) is a candidate solution for all \(j\) that is not in \(S\) and \(f(j, S \cup {j})\).  To pick the solution for \(f(i, S)\), we can iterate over all candidates \(j\) and pick the one that produces the smallest string.  At this point, we have only left the problem to efficiently find the longest suffix of two strings.  This can be done by building a table \(suf\) where \(suf[i][j]\) is the index on \(words[i]\) of the longest suffix.  The search-space of \(f\) contains \(n \times 2 ^ n\) different nodes with \(O(n)\) transitions.  So, the space complexity is \(O(n \times 2^n)\) and time complexity is \(O(n^2 \times 2 ^ n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">shortestSuperstring</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">str</span>:
+        N = <span style="font-weight: bold;">len</span>(words)
+        <span style="font-weight: bold; font-style: italic;">ALL</span> = (1 &lt;&lt; N) - 1
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">k</span>(a, b):
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(words[a]) + 1):
+                <span style="font-weight: bold;">if</span> words[b].startswith(words[a][i:]):
+                    <span style="font-weight: bold;">return</span> i
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(last, used):
+            <span style="font-weight: bold;">if</span> used == ALL:
+                <span style="font-weight: bold;">return</span> words[last]
+            ans = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold;">if</span> (1 &lt;&lt; i) &amp; used == 0:
+                    cur = words[last][: k(last, i)] + dfs(i, used | (1 &lt;&lt; i))
+                    <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">len</span>(ans) &gt; <span style="font-weight: bold;">len</span>(cur):
+                        ans = cur
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>([dfs(i, (1 &lt;&lt; i)) <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)], key=<span style="font-weight: bold;">len</span>)
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().shortestSuperstring([<span style="font-style: italic;">"alex"</span>, <span style="font-style: italic;">"loves"</span>, <span style="font-style: italic;">"leetcode"</span>]) == <span style="font-style: italic;">"alexlovesleetcode"</span>
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().shortestSuperstring([<span style="font-style: italic;">"catg"</span>, <span style="font-style: italic;">"ctaagt"</span>, <span style="font-style: italic;">"gcta"</span>, <span style="font-style: italic;">"ttca"</span>, <span style="font-style: italic;">"atgcatc"</span>])
+    == <span style="font-style: italic;">"gctaagttcatgcatc"</span>
+)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

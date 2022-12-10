@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2156. Find Substring With Given Hash Value</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2156. Find Substring With Given Hash Value</h1>
+<p>
+<a href="https://leetcode.com/problems/find-substring-with-given-hash-value/">Problem Statement</a>: Given a string \(s\) and integers \(p, k\) and \(m\), find the substring \(s'\) with length \(k\) where \((\text{val}(s'[0]) \times p^0 + \text{val}(s'[1]) \times p^1 \times ... \times \text{val}(s'[k-1]) \times p^{k-1}) \mod m\) is \(h\).
+</p>
+
+<p>
+Be \(a=123\) and \(b=231\). In terms of powers of 10, we have that
+</p>
+
+\begin{align*}
+a & = 1 \times 10^2 + 2 \times 10^1 + 3 \times 10^0 \\
+b & = 2 \times 10^2 + 3 \times 10^1 + 1 \times 10^0.
+\end{align*}
+
+<p>
+See that \(b=(a - 1 \times 10^2) \times 10 + 2 \times 10^0\).  This trick is useful in many problems.  As \(a + b \mod c = (a \mod c) + (b \mod c)\) and \(a \times b \mod c = ((a \mod c) \times (b \mod c)) \mod c\) (<a href="modulo_operation.html#ID-13A69495-CA30-40DC-A722-B0327FB06D2D">Modulo Operations</a>), we can use this notation to compute the hash of the string from right to left (<a href="sliding_window.html#ID-CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2">Sliding Window</a>).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, p, m, k, h):
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">value</span>(i):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">ord</span>(s[i]) - <span style="font-weight: bold;">ord</span>(<span style="font-style: italic;">"a"</span>) + 1
+
+    <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">window</span> = 0
+    <span style="font-weight: bold; font-style: italic;">pk</span> = (p**k) % m
+
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(s) - 1, -1, -1):
+        <span style="font-weight: bold; font-style: italic;">window</span> = (window * p + value(i)) % m
+        <span style="font-weight: bold;">if</span> i + k &lt; <span style="font-weight: bold;">len</span>(s):
+            <span style="font-weight: bold; font-style: italic;">window</span> = (window - value(i + k) * pk) % m
+        <span style="font-weight: bold;">if</span> window == h:
+            ans = i
+
+    <span style="font-weight: bold;">return</span> s[ans : ans + k]
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"leetcode"</span>, 7, 20, 2, 0) == <span style="font-style: italic;">"ee"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"fbxzaad"</span>, 31, 100, 3, 32) == <span style="font-style: italic;">"fbx"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"xmmhdakfursinye"</span>, 96, 45, 15, 21) == <span style="font-style: italic;">"xmmhdakfursinye"</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">subStrHash</span>(
+        <span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, power: <span style="font-weight: bold;">int</span>, modulo: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>, hashValue: <span style="font-weight: bold;">int</span>
+    ) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> solve(s, power, modulo, k, hashValue)
+</pre>
+</div>
+</div>
+</body>
+</html>

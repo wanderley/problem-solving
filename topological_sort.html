@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Topological Sort</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Topological Sort</h1>
+
+<div id="outline-container-orgb16ca46" class="outline-2">
+<h2 id="orgb16ca46">Python</h2>
+<div class="outline-text-2" id="text-orgb16ca46">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">topological_sort</span>(edges):
+    <span style="font-weight: bold; font-style: italic;">indegree</span> = {<span style="font-weight: bold; font-style: italic;">u</span>: 0 <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> edges}
+    <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> edges:
+        <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> edges[u]:
+            indegree[<span style="font-weight: bold; font-style: italic;">v</span>] += 1
+    <span style="font-weight: bold; font-style: italic;">queue</span> = [u <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> edges <span style="font-weight: bold;">if</span> indegree[u] == 0]
+    ans = []
+    <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> queue:
+        ans.append(u)
+        <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> edges[u]:
+            indegree[v] -= 1
+            <span style="font-weight: bold;">if</span> indegree[v] == 0:
+                queue.append(v)
+    <span style="font-weight: bold;">return</span> ans <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(ans) == <span style="font-weight: bold;">len</span>(edges) <span style="font-weight: bold;">else</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">topological_sort</span>(<span style="font-weight: bold;">self</span>, edges):
+    <span style="font-weight: bold; font-style: italic;">NOT_VISITED</span> = 1
+    <span style="font-weight: bold; font-style: italic;">OPEN</span> = 2
+    <span style="font-weight: bold; font-style: italic;">CLOSED</span> = 4
+
+    <span style="font-weight: bold; font-style: italic;">status</span> = {<span style="font-weight: bold; font-style: italic;">u</span>: NOT_VISITED <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> edges}
+    ans = []
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(u):
+        <span style="font-weight: bold;">if</span> status[u] == CLOSED:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">if</span> status[u] == OPEN:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+        status[u] = OPEN
+        <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> edges.get(u, []):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> dfs(v):
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+        ans.append(u)
+        status[u] = CLOSED
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> status:
+        <span style="font-weight: bold;">if</span> status[c] == NOT_VISITED:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> dfs(c):
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+    ans.reverse()
+    <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

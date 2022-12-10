@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 273. Integer to English Words</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 273. Integer to English Words</h1>
+<p>
+<a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  This is not a question about efficiently, but if you can organize the solution in a handleable way.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numberToWords</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        ntw = {
+            0: <span style="font-style: italic;">"Zero"</span>,
+            1: <span style="font-style: italic;">"One"</span>,
+            2: <span style="font-style: italic;">"Two"</span>,
+            3: <span style="font-style: italic;">"Three"</span>,
+            4: <span style="font-style: italic;">"Four"</span>,
+            5: <span style="font-style: italic;">"Five"</span>,
+            6: <span style="font-style: italic;">"Six"</span>,
+            7: <span style="font-style: italic;">"Seven"</span>,
+            8: <span style="font-style: italic;">"Eight"</span>,
+            9: <span style="font-style: italic;">"Nine"</span>,
+            10: <span style="font-style: italic;">"Ten"</span>,
+            11: <span style="font-style: italic;">"Eleven"</span>,
+            12: <span style="font-style: italic;">"Twelve"</span>,
+            13: <span style="font-style: italic;">"Thirteen"</span>,
+            14: <span style="font-style: italic;">"Fourteen"</span>,
+            15: <span style="font-style: italic;">"Fifteen"</span>,
+            16: <span style="font-style: italic;">"Sixteen"</span>,
+            17: <span style="font-style: italic;">"Seventeen"</span>,
+            18: <span style="font-style: italic;">"Eighteen"</span>,
+            19: <span style="font-style: italic;">"Nineteen"</span>,
+            20: <span style="font-style: italic;">"Twenty"</span>,
+            30: <span style="font-style: italic;">"Thirty"</span>,
+            40: <span style="font-style: italic;">"Forty"</span>,
+            50: <span style="font-style: italic;">"Fifty"</span>,
+            60: <span style="font-style: italic;">"Sixty"</span>,
+            70: <span style="font-style: italic;">"Seventy"</span>,
+            80: <span style="font-style: italic;">"Eighty"</span>,
+            90: <span style="font-style: italic;">"Ninety"</span>,
+        }
+
+        <span style="font-weight: bold;">if</span> num <span style="font-weight: bold;">in</span> ntw:
+            <span style="font-weight: bold;">return</span> ntw[num]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">convert</span>(n):
+            <span style="font-weight: bold;">if</span> n == 0:
+                <span style="font-weight: bold;">return</span> []
+            <span style="font-weight: bold;">if</span> n <span style="font-weight: bold;">in</span> ntw:
+                <span style="font-weight: bold;">return</span> [ntw[n]]
+            <span style="font-weight: bold;">if</span> n &gt;= 100:
+                <span style="font-weight: bold;">return</span> [ntw[n // 100], <span style="font-style: italic;">"Hundred"</span>] + convert(n % 100)
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">return</span> [ntw[n - (n % 10)]] + convert(n % 10)
+
+        e = [[<span style="font-style: italic;">"Billion"</span>], [<span style="font-style: italic;">"Million"</span>], [<span style="font-style: italic;">"Thousand"</span>], []]
+        ans = []
+        <span style="font-weight: bold;">while</span> num &gt; 0:
+            cur = num % 1000
+            suf = e.pop()
+            <span style="font-weight: bold;">if</span> cur &gt; 0:
+                ans = convert(cur) + suf + ans
+            num = num // 1000
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">" "</span>.join(ans)
+
+
+<span style="font-weight: bold;">assert</span> Solution().numberToWords(123) == <span style="font-style: italic;">"One Hundred Twenty Three"</span>
+<span style="font-weight: bold;">assert</span> Solution().numberToWords(12345) == <span style="font-style: italic;">"Twelve Thousand Three Hundred Forty Five"</span>
+<span style="font-weight: bold;">assert</span> (
+    Solution().numberToWords(1234567)
+    == <span style="font-style: italic;">"One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"</span>
+)
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 402. Remove K Digits</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 402. Remove K Digits</h1>
+<p>
+<a href="https://leetcode.com/problems/remove-k-digits/">Problem Statement</a>: Given a string representing a number \(n\) and an integer \(k\), return the smallest number after removing \(k\) digits from \(n\).
+</p>
+
+<p>
+Suppose that \(k=1\).  What digit should we remove from \(n\) to create the smaller possible number?  If \(n=9123\), we have to remove 9.  If \(n=1834\), we have to remove 8.  If \(n=1892\), we also have to remove 9 resulting in 182, since removing 9 result in 182.  Finally, if \(n=1234\), we have to remove 4.  What is common in all these examples?  We removed the first digit \(i\) where \(n[i]>n[i+1]\) or the last one if \(i\) doesn't exist.  So, we can solve the problem by finding \(i\) and removing it from the number, and repeating the same process more \(k-1\) times.  The time complexity of this solution is \(O(|n| \times k)\) since it spends \(O(|n|)\) to remove one digit and there are \(k\) of them to remove.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">should_keep</span>(nums, i):
+    <span style="font-weight: bold;">if</span> i + 1 == <span style="font-weight: bold;">len</span>(nums):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+    <span style="font-weight: bold;">if</span> nums[i] &lt;= nums[i+1]:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">remove_leading_zeros</span>(nums):
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(nums) &gt; 1 <span style="font-weight: bold;">and</span> nums[0] == <span style="font-style: italic;">"0"</span>:
+        <span style="font-weight: bold;">return</span> remove_leading_zeros(nums[1:])
+    <span style="font-weight: bold;">return</span> nums
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">brute_force</span>(nums, k):
+    <span style="font-weight: bold;">if</span> k == 0:
+        <span style="font-weight: bold;">return</span> remove_leading_zeros(nums)
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(nums) == 1:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"0"</span>
+    i = 0
+    <span style="font-weight: bold;">while</span> should_keep(nums, i):
+        i += 1
+    <span style="font-weight: bold;">return</span> brute_force(nums[0:i] + nums[i+1:], k - 1)
+
+
+<span style="font-weight: bold;">assert</span> brute_force(<span style="font-style: italic;">"1432219"</span>, 3) == <span style="font-style: italic;">"1219"</span>
+<span style="font-weight: bold;">assert</span> brute_force(<span style="font-style: italic;">"10200"</span>, 1) == <span style="font-style: italic;">"200"</span>
+<span style="font-weight: bold;">assert</span> brute_force(<span style="font-style: italic;">"10"</span>, 2) == <span style="font-style: italic;">"0"</span>
+<span style="font-weight: bold;">assert</span> brute_force(<span style="font-style: italic;">"1"</span>, 1) == <span style="font-style: italic;">"0"</span>
+<span style="font-weight: bold;">assert</span> brute_force(<span style="font-style: italic;">"1"</span>, 0) == <span style="font-style: italic;">"1"</span>
+<span style="font-weight: bold;">assert</span> brute_force(<span style="font-style: italic;">"112"</span>, 1) == <span style="font-style: italic;">"11"</span>
+</pre>
+</div>
+
+<p>
+<a href="can_we_reuse_or_extend_a_solution_from_a_sub_problem_to_solve_the_next_sub_problem_more_efficiently.html#ID-26656051-E32D-42FE-9315-05ADB46A1A82">Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?</a>  The previous solution breaks the original problem in smaller ones by removing digit-by-digit.  So, after removing \(k-1\) digits, it is easy to remove the $k$-th one, but the above solution doesn't reuse any computation done so far to remove the $k$-th one quickly.  Then, the question can be rephrased as following: Can we reuse or extend a solution of removing \(k-1\) digits to remove the $k$-th digit more efficiently?  Be \(i\) the index of the first index removed from the input.  We know that \(n[0] \leq n[1] \leq ... \leq n[i]\) and either \(i=|n|\) or \(n[i] > n[i+1]\).  In <code>brute_force</code>  solution, we always start from the index 0 to find the next digit to remove, but it wastes time since we know that the next digit to remove won't be the first \(i\) positions of the current number.  Therefore, we can use this fact to speed up the search for the next digit.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">should_keep</span>(num, i):
+    <span style="font-weight: bold;">if</span> i + 1 &gt;= <span style="font-weight: bold;">len</span>(num):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+    <span style="font-weight: bold;">if</span> num[i] &lt;= num[i+1]:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">remove_leading_zeros</span>(num):
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(num) &gt; 1 <span style="font-weight: bold;">and</span> num[0] == <span style="font-style: italic;">"0"</span>:
+        <span style="font-weight: bold;">return</span> remove_leading_zeros(num[1:])
+    <span style="font-weight: bold;">return</span> num
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve_slow</span>(num, k, i=0):
+    <span style="font-weight: bold;">if</span> k == 0:
+        <span style="font-weight: bold;">return</span> remove_leading_zeros(num)
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(num) == 1:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"0"</span>
+    <span style="font-weight: bold;">while</span> should_keep(num, i):
+        i += 1
+    <span style="font-weight: bold;">return</span> solve_slow(num[0:i] + num[i+1:], k - 1, i - 1)
+
+
+<span style="font-weight: bold;">assert</span> solve_slow(<span style="font-style: italic;">"1432219"</span>, 3) == <span style="font-style: italic;">"1219"</span>
+<span style="font-weight: bold;">assert</span> solve_slow(<span style="font-style: italic;">"10200"</span>, 1) == <span style="font-style: italic;">"200"</span>
+<span style="font-weight: bold;">assert</span> solve_slow(<span style="font-style: italic;">"10"</span>, 2) == <span style="font-style: italic;">"0"</span>
+<span style="font-weight: bold;">assert</span> solve_slow(<span style="font-style: italic;">"1"</span>, 1) == <span style="font-style: italic;">"0"</span>
+<span style="font-weight: bold;">assert</span> solve_slow(<span style="font-style: italic;">"1"</span>, 0) == <span style="font-style: italic;">"1"</span>
+<span style="font-weight: bold;">assert</span> solve_slow(<span style="font-style: italic;">"9991"</span>, 3) == <span style="font-style: italic;">"1"</span>
+<span style="font-weight: bold;">assert</span> solve_slow(<span style="font-style: italic;">"112"</span>, 1) == <span style="font-style: italic;">"11"</span>
+</pre>
+</div>
+
+<p>
+The above solution is an improvement on <code>brute_force</code> solution, but it is still \(O(|n| \times k)\), because slicing strings on Python has time proportional to the length of them.  Looking carefully, you might see that each call of <code>solve_slow</code> splits \(n\) in two parts: the left part has the number on increasing order (<a href="monotonic_stack.html#ID-E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5">Monotonic Stack</a>) and the right part has all the numbers that we still have to process.  If we keep both parts separate, we won't spend a time proportional to the length of their sums to join them.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(num, k):
+    <span style="font-weight: bold; font-style: italic;">ans</span> = deque(maxlen=<span style="font-weight: bold;">len</span>(num))
+    <span style="font-weight: bold;">for</span> digit <span style="font-weight: bold;">in</span> num:
+        <span style="font-weight: bold;">if</span> k == 0:
+            ans.append(digit)
+            <span style="font-weight: bold;">continue</span>
+        <span style="font-weight: bold;">while</span> k &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">len</span>(ans) &gt; 0 <span style="font-weight: bold;">and</span> ans[<span style="font-weight: bold;">len</span>(ans) - 1] &gt; digit:
+            ans.pop()
+            k -= 1
+        ans.append(digit)
+
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">ans is in increasing order and we still have digits to remove</span>
+    <span style="font-weight: bold;">while</span> k &gt; 0 <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">len</span>(ans) &gt; 0:
+        ans.pop()
+        k -= 1
+
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">remove leading zeros</span>
+    <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(ans) &gt; 0 <span style="font-weight: bold;">and</span> ans[0] == <span style="font-style: italic;">"0"</span>:
+        ans.popleft()
+
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(ans) == 0:
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">"0"</span>
+
+    <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(ans)
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1432219"</span>, 3) == <span style="font-style: italic;">"1219"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"10200"</span>, 1) == <span style="font-style: italic;">"200"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"10"</span>, 2) == <span style="font-style: italic;">"0"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1"</span>, 1) == <span style="font-style: italic;">"0"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1"</span>, 0) == <span style="font-style: italic;">"1"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"9991"</span>, 3) == <span style="font-style: italic;">"1"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"112"</span>, 1) == <span style="font-style: italic;">"11"</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">removeKdigits</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">str</span>, k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> solve(num, k)
+</pre>
+</div>
+</div>
+</body>
+</html>

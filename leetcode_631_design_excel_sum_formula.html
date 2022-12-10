@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 631. Design Excel Sum Formula</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 631. Design Excel Sum Formula</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_required_invariants.html#ID-3D263A82-52AE-4C90-830D-C533ABAFFF3E">Mistake: Missing required invariants</a>.  The cache has to be invalidate after <code>set</code> and <code>sum</code>, but I forgot the last one.</li>
+
+<li><a href="pattern_answer_queries_on_online_directed_acyclic_graph.html#ID-117736F8-6CF6-435F-9043-18B8D22EDDE9">Pattern: Answer queries on online directed acyclic graph</a>.  Invalidate a cache for queries every time that the graph changes.</li>
+
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Cells are edges on the graph.  Fixed-value cells don't have any outgoing edges while formula-cells have edges to all cells that need to be summed.  As there is no cicle on the formulas, the graph is an <a href="directed_acyclic_graph.html#ID-81260E21-C442-48DE-A414-CA7B83F2C404">Directed Acyclic Graph</a> what allows us to recursively compute the formulas values using cache to avoid repeating computation.  Time complexity of <code>get</code> and <code>sum</code> is \(O(r^2 \times c^2)\) since there at most \((n \times (n-1))/2\) edges on a <a href="directed_acyclic_graph.html#ID-81260E21-C442-48DE-A414-CA7B83F2C404">Directed Acyclic Graph</a> with \(n\) edges.  As there are \(r \times c\) vertices in the graph, the search-space is at most \(O(r \times c)\) with \(O(r \times c)\) the value of each formula.  Space complexity is \(O(r \times c)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Excel</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, height: <span style="font-weight: bold;">int</span>, width: <span style="font-weight: bold;">str</span>):
+        <span style="font-weight: bold;">self</span>.s = [[0] * 100 <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(100)]
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">cache</span> = {}
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set</span>(<span style="font-weight: bold;">self</span>, row: <span style="font-weight: bold;">int</span>, column: <span style="font-weight: bold;">str</span>, val: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">self</span>.s[row][<span style="font-weight: bold;">self</span>._col2idx(column)] = val
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">cache</span> = {}
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get</span>(<span style="font-weight: bold;">self</span>, row: <span style="font-weight: bold;">int</span>, column: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>._get(row, <span style="font-weight: bold;">self</span>._col2idx(column))
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_get</span>(<span style="font-weight: bold;">self</span>, row, col):
+        v = <span style="font-weight: bold;">self</span>.s[row][col]
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">isinstance</span>(v, <span style="font-weight: bold;">int</span>):
+            <span style="font-weight: bold;">return</span> v
+
+        <span style="font-weight: bold;">if</span> (row, col) <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">cache</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.cache[row, col]
+        v = <span style="font-weight: bold;">self</span>._compute(v)
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">cache</span>[<span style="font-weight: bold; font-style: italic;">row</span>, <span style="font-weight: bold; font-style: italic;">col</span>] = v
+        <span style="font-weight: bold;">return</span> v
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sum</span>(<span style="font-weight: bold;">self</span>, row: <span style="font-weight: bold;">int</span>, column: <span style="font-weight: bold;">str</span>, numbers: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">self</span>.s[row][<span style="font-weight: bold;">self</span>._col2idx(column)] = numbers
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">cache</span> = {}
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.get(row, column)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_compute</span>(<span style="font-weight: bold;">self</span>, numbers):
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">numbers</span>:
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">":"</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> n:
+                ans += <span style="font-weight: bold;">self</span>._get(*<span style="font-weight: bold;">self</span>._s2idxs(n))
+                <span style="font-weight: bold;">continue</span>
+            <span style="font-weight: bold; font-style: italic;">f</span>, <span style="font-weight: bold; font-style: italic;">t</span> = n.split(<span style="font-style: italic;">":"</span>)
+            <span style="font-weight: bold; font-style: italic;">fi</span>, <span style="font-weight: bold; font-style: italic;">fj</span> = <span style="font-weight: bold;">self</span>._s2idxs(f)
+            <span style="font-weight: bold; font-style: italic;">ti</span>, <span style="font-weight: bold; font-style: italic;">tj</span> = <span style="font-weight: bold;">self</span>._s2idxs(t)
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(fi, ti + 1):
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(fj, tj + 1):
+                    <span style="font-weight: bold; font-style: italic;">ans</span> += <span style="font-weight: bold;">self</span>._get(i, j)
+        <span style="font-weight: bold;">return</span> ans
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_col2idx</span>(<span style="font-weight: bold;">self</span>, c):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">ord</span>(c) - <span style="font-weight: bold;">ord</span>(<span style="font-style: italic;">"A"</span>)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_s2idxs</span>(<span style="font-weight: bold;">self</span>, s):
+        <span style="font-weight: bold;">return</span> (<span style="font-weight: bold;">int</span>(s[1:]), <span style="font-weight: bold;">self</span>._col2idx(s[0]))
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Your Excel object will be instantiated and called as such:</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj = Excel(height, width)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">obj.set(row,column,val)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">param_2 = obj.get(row,column)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">param_3 = obj.sum(row,column,numbers)</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

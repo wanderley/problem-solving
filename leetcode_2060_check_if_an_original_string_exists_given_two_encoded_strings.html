@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2060. Check if an Original String Exists Given Two Encoded Strings</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2060. Check if an Original String Exists Given Two Encoded Strings</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  Did not check for <code>ab</code> and <code>aN</code> where <code>N</code> is any number.</li>
+
+<li><a href="mistake_wrong_time_complexity.html#ID-AF523FD7-71A3-44F0-B9F2-E288B8A6EB6D">Mistake: Wrong time complexity</a>.  Thought that the problem was <a href="backtracking.html#ID-605B3009-7C7C-410A-9361-218A24ED8D8C">Backtracking</a> and missed that I could  memoize the params to speed up the solution.</li>
+
+<li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  The search space is defined by \((i, w1, j, w2)\) where \(i\) and \(j\) are the next position to be processed on \(s1\) and \(s2\) respectively after \(w1\) and \(w2\) wild chars are processed.  Space complexity is then \(O(n^2)\) with big constant of since \(w1 \times w2 \leq 999^2\).  With the search space defined, the rest is make sure that all transitions are covered.  Time complexity is \(O(n^2)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">possiblyEquals</span>(<span style="font-weight: bold;">self</span>, s1: <span style="font-weight: bold;">str</span>, s2: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        N = <span style="font-weight: bold;">len</span>(s1)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(s2)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, w1, j, w2):
+            <span style="font-weight: bold;">if</span> w1 &gt; 0 <span style="font-weight: bold;">and</span> w2 &gt; 0:
+                <span style="font-weight: bold;">return</span> dfs(i, w1 - <span style="font-weight: bold;">min</span>(w1, w2), j, w2 - <span style="font-weight: bold;">min</span>(w1, w2))
+            <span style="font-weight: bold;">if</span> w1 &gt; 0 <span style="font-weight: bold;">and</span> j &lt; M <span style="font-weight: bold;">and</span> s2[j].isalpha():
+                <span style="font-weight: bold;">return</span> dfs(i, w1 - 1, j + 1, 0)
+            <span style="font-weight: bold;">if</span> w2 &gt; 0 <span style="font-weight: bold;">and</span> i &lt; N <span style="font-weight: bold;">and</span> s1[i].isalpha():
+                <span style="font-weight: bold;">return</span> dfs(i + 1, 0, j, w2 - 1)
+            <span style="font-weight: bold;">if</span> w1 == 0:
+                <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, <span style="font-weight: bold;">min</span>(i + 3, N)):
+                    <span style="font-weight: bold;">if</span> s1[i:k+1].isdigit():
+                        <span style="font-weight: bold;">if</span> dfs(k+1, <span style="font-weight: bold;">int</span>(s1[i:k+1]), j, w2):
+                            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">if</span> w2 == 0:
+                <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(j, <span style="font-weight: bold;">min</span>(j + 3, M)):
+                    <span style="font-weight: bold;">if</span> s2[j:k+1].isdigit():
+                        <span style="font-weight: bold;">if</span> dfs(i, w1, k+1, <span style="font-weight: bold;">int</span>(s2[j:k+1])):
+                            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold;">if</span> i == N <span style="font-weight: bold;">or</span> j == M:
+                <span style="font-weight: bold;">return</span> i == N <span style="font-weight: bold;">and</span> j == M <span style="font-weight: bold;">and</span> w1 == 0 <span style="font-weight: bold;">and</span> w2 == 0
+            <span style="font-weight: bold;">if</span> s1[i].isalpha() <span style="font-weight: bold;">and</span> s2[j].isalpha():
+                <span style="font-weight: bold;">return</span> dfs(i + 1, 0, j + 1, 0) <span style="font-weight: bold;">if</span> s1[i] == s2[j] <span style="font-weight: bold;">else</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+        <span style="font-weight: bold;">return</span> dfs(0, 0, 0, 0)
+</pre>
+</div>
+</div>
+</body>
+</html>

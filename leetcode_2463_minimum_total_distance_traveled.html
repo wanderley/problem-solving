@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2463. Minimum Total Distance Traveled</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2463. Minimum Total Distance Traveled</h1>
+
+<div id="outline-container-org1d953b0" class="outline-2">
+<h2 id="org1d953b0">Understand the problem</h2>
+<div class="outline-text-2" id="text-org1d953b0">
+<p>
+Given \(n\) moving-points and \(m\) storage-points, find the minimum total distance sum to store all moving-points in the storage-points.  Moving-points are represented by \(r[i]\) which is the coordinate of the point, and \(f[i]=[x, c]\) represents a storage-point in the position \(x\) and capacity \(c\).  Moving-points are moving in constant speed and all you have to decide is what directions they will move: left or right.
+</p>
+</div>
+
+<div id="outline-container-org65846f1" class="outline-3">
+<h3 id="org65846f1">Useful prompts</h3>
+<div class="outline-text-3" id="text-org65846f1">
+<ul class="org-ul">
+<li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  We can sort the moving-points and storage-points from left to right to make it easier to process.</li>
+
+<li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a>  Having the points sorted by position.  We can try to put the moving-points on the storage-points from the left to right, since crossing moving-points won't create optimal solutions (instead of crossing you can send them in opposite directions).</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1d6e16a" class="outline-2">
+<h2 id="org1d6e16a">Devise a plan</h2>
+<div class="outline-text-2" id="text-org1d6e16a">
+<p>
+Sort the moving-points and storage-points from left to right.  Compute \(dfs(i, j, k)\) which is the minimum total sum of putting moving-points \(i..n\) on the storage-points \(j..m\) where \(k\) slots of \(j\) storage-point is already used.
+</p>
+</div>
+
+<div id="outline-container-org017cef1" class="outline-3">
+<h3 id="org017cef1">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org017cef1">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumTotalDistance</span>(<span style="font-weight: bold;">self</span>, robot: List[<span style="font-weight: bold;">int</span>], factory: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        robot.sort()
+        factory.sort()
+        N = <span style="font-weight: bold;">len</span>(robot)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(factory)
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(i, j, k):
+            <span style="font-weight: bold;">if</span> i == N:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">if</span> j == M:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"+inf"</span>)
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">min</span>(
+                dfs(i, j + 1, 0),
+                <span style="font-weight: bold;">abs</span>(robot[i] - factory[j][0]) + dfs(i + 1, j, k + 1)
+                <span style="font-weight: bold;">if</span> k &lt; factory[j][1]
+                <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"+inf"</span>)
+            )
+
+        <span style="font-weight: bold;">return</span> dfs(0, 0, 0)g
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

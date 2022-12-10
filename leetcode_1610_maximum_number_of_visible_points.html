@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1610. Maximum Number of Visible Points</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1610. Maximum Number of Visible Points</h1>
+<p>
+<a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a>  Create the window with the first points that don't exceed the given angle and after that insert point by point removing ones from the beginning while the window is invalid.  The trick is that you have to replicate the points because this is a circular sliding window problem.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sub_points</span>(pa, pb):
+    <span style="font-weight: bold;">return</span> [pa[0] - pb[0], pa[1] - pb[1]]
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">angle_in_radians</span>(p):
+    <span style="font-weight: bold;">return</span> atan2(p[1], p[0])
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">visiblePoints</span>(
+        <span style="font-weight: bold;">self</span>, points: List[List[<span style="font-weight: bold;">int</span>]], angle: <span style="font-weight: bold;">int</span>, location: List[<span style="font-weight: bold;">int</span>]
+    ) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold; font-style: italic;">_points</span>, <span style="font-weight: bold; font-style: italic;">points</span> = points, [
+            sub_points(p, location) <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> points <span style="font-weight: bold;">if</span> p != location
+        ]
+        points.sort(key=angle_in_radians)
+        rads = [angle_in_radians(p) <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> points] + [
+            angle_in_radians(p) + 2 * pi <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> points
+        ]
+
+        N = <span style="font-weight: bold;">len</span>(rads)
+        R = radians(angle)
+        extra = <span style="font-weight: bold;">len</span>(_points) - <span style="font-weight: bold;">len</span>(points)
+        ans = 0
+
+        start = 0
+        end = 0
+        <span style="font-weight: bold;">while</span> end &lt; N:
+            <span style="font-weight: bold;">while</span> rads[end] - rads[start] &gt; R:
+                start += 1
+            ans = <span style="font-weight: bold;">max</span>(ans, end - start + 1)
+            end += 1
+
+        <span style="font-weight: bold;">return</span> ans + extra
+
+
+<span style="font-weight: bold;">assert</span> Solution().visiblePoints([[2, 1], [2, 2], [3, 3]], 90, [1, 1]) == 3
+<span style="font-weight: bold;">assert</span> Solution().visiblePoints([[2, 1], [2, 2], [3, 4], [1, 1]], 90, [1, 1]) == 4
+<span style="font-weight: bold;">assert</span> Solution().visiblePoints([[1, 0], [2, 1]], 13, [1, 1]) == 1
+</pre>
+</div>
+</div>
+</body>
+</html>

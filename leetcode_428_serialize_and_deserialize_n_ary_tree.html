@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 428. Serialize and Deserialize N-ary Tree</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 428. Serialize and Deserialize N-ary Tree</h1>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-style: italic;">"""</span>
+<span style="font-style: italic;"># Definition for a Node.</span>
+<span style="font-style: italic;">class Node(object):</span>
+<span style="font-style: italic;">    def __init__(self, val=None, children=None):</span>
+<span style="font-style: italic;">        self.val = val</span>
+<span style="font-style: italic;">        self.children = children</span>
+<span style="font-style: italic;">"""</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Codec</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">serialize</span>(<span style="font-weight: bold;">self</span>, root: <span style="font-style: italic;">'Node'</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-style: italic;">"""Encodes a tree to a single string.</span>
+
+<span style="font-style: italic;">        :type root: Node</span>
+<span style="font-style: italic;">        :rtype: str</span>
+<span style="font-style: italic;">        """</span>
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> root:
+            <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>
+        ans = []
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">dfs</span>(u):
+            ans.append(<span style="font-weight: bold;">str</span>(u.val))
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> u.children:
+                dfs(v)
+            ans.append(<span style="font-style: italic;">"null"</span>)
+
+        dfs(root)
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">","</span>.join(ans)
+
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">deserialize</span>(<span style="font-weight: bold;">self</span>, data: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-style: italic;">'Node'</span>:
+        <span style="font-style: italic;">"""Decodes your encoded data to tree.</span>
+
+<span style="font-style: italic;">        :type data: str</span>
+<span style="font-style: italic;">        :rtype: Node</span>
+<span style="font-style: italic;">        """</span>
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> data:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+        values = data.split(<span style="font-style: italic;">","</span>)
+        <span style="font-weight: bold; font-style: italic;">root</span> = Node(<span style="font-weight: bold;">int</span>(values[0]), [])
+        <span style="font-weight: bold; font-style: italic;">st</span> = [root]
+        <span style="font-weight: bold;">for</span> val <span style="font-weight: bold;">in</span> values[1:]:
+            <span style="font-weight: bold;">if</span> val == <span style="font-style: italic;">"null"</span>:
+                st.pop()
+            <span style="font-weight: bold;">else</span>:
+                node = Node(val=<span style="font-weight: bold;">int</span>(val), children=[])
+                st[-1].children.append(node)
+                st.append(node)
+        <span style="font-weight: bold;">return</span> root
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Your Codec object will be instantiated and called as such:</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">codec = Codec()</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">codec.deserialize(codec.serialize(root))</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

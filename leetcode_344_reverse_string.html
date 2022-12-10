@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 344. Reverse String</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 344. Reverse String</h1>
+<p>
+You can solve this problem with two pointers: one starting from the begin of the array and other from the end.  Each iteration you swap the number from one side to the other until you reach the element on the middle of the array.  Time complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">reverseString</span>(<span style="font-weight: bold;">self</span>, s: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-style: italic;">"""</span>
+<span style="font-style: italic;">        Do not return anything, modify s in-place instead.</span>
+<span style="font-style: italic;">        """</span>
+        <span style="font-weight: bold; font-style: italic;">i</span> = 0
+        <span style="font-weight: bold; font-style: italic;">j</span> = <span style="font-weight: bold;">len</span>(s) - 1
+        <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold; font-style: italic;">j</span>:
+            <span style="font-weight: bold; font-style: italic;">s</span>[<span style="font-weight: bold; font-style: italic;">i</span>], <span style="font-weight: bold; font-style: italic;">s</span>[<span style="font-weight: bold; font-style: italic;">j</span>] = s[j], s[i]
+            <span style="font-weight: bold; font-style: italic;">i</span> += 1
+            <span style="font-weight: bold; font-style: italic;">j</span> -= 1
+
+
+<span style="font-weight: bold; font-style: italic;">v</span> = [<span style="font-style: italic;">"h"</span>, <span style="font-style: italic;">"e"</span>, <span style="font-style: italic;">"l"</span>, <span style="font-style: italic;">"l"</span>, <span style="font-style: italic;">"o"</span>]
+Solution().reverseString(v)
+<span style="font-weight: bold;">assert</span> v == [<span style="font-style: italic;">"o"</span>, <span style="font-style: italic;">"l"</span>, <span style="font-style: italic;">"l"</span>, <span style="font-style: italic;">"e"</span>, <span style="font-style: italic;">"h"</span>]
+
+v = [<span style="font-style: italic;">"H"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"n"</span>, <span style="font-style: italic;">"n"</span>, <span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"h"</span>]
+Solution().reverseString(v)
+<span style="font-weight: bold;">assert</span> v == [
+    <span style="font-style: italic;">"h"</span>,
+    <span style="font-style: italic;">"a"</span>,
+    <span style="font-style: italic;">"n"</span>,
+    <span style="font-style: italic;">"n"</span>,
+    <span style="font-style: italic;">"a"</span>,
+    <span style="font-style: italic;">"H"</span>,
+]
+</pre>
+</div>
+</div>
+</body>
+</html>

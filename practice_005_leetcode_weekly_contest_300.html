@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #005: Leetcode Weekly Contest 300</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #005: Leetcode Weekly Contest 300</h1>
+<ul class="org-ul">
+<li>Time Spent: 1 hour 25 minutes 30 seconds</li>
+<li>Time Allotted: 1 hour 30 minutes</li>
+<li>Completed: July 2, 2022 9:00 PM</li>
+<li>Solved: 1, 2, 3</li>
+</ul>
+
+<div id="outline-container-orgeda4f88" class="outline-2">
+<h2 id="orgeda4f88">Leetcode: 2325. Decode the Message</h2>
+<div class="outline-text-2" id="text-orgeda4f88">
+<p>
+The solution consist on following the rules.  Keep a pointer to the next unused letter of the alphabet (starting from <code>a</code>) and bumped it after assign to the next non-mapped letter from the key string.  After that, iterate over the message decrypting it.  Time and space complexity: \(O(n+m)\) where \(n\) is the size of the key and \(m\) is the size of the message.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">decodeMessage</span>(<span style="font-weight: bold;">self</span>, key: <span style="font-weight: bold;">str</span>, message: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        sub = {<span style="font-style: italic;">" "</span>: <span style="font-style: italic;">" "</span>}
+        <span style="font-weight: bold; font-style: italic;">next_letter</span> = <span style="font-style: italic;">"a"</span>
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">key</span>:
+            <span style="font-weight: bold;">if</span> c <span style="font-weight: bold;">in</span> sub:
+                <span style="font-weight: bold;">continue</span>
+            sub[<span style="font-weight: bold; font-style: italic;">c</span>] = next_letter
+            <span style="font-weight: bold; font-style: italic;">next_letter</span> = <span style="font-weight: bold;">chr</span>(<span style="font-weight: bold;">ord</span>(next_letter) + 1)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-style: italic;">""</span>
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">message</span>:
+            ans += sub[c]
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().decodeMessage(
+        <span style="font-style: italic;">"the quick brown fox jumps over the lazy dog"</span>, <span style="font-style: italic;">"vkbs bs t suepuv"</span>
+    )
+    == <span style="font-style: italic;">"this is a secret"</span>
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().decodeMessage(
+        <span style="font-style: italic;">"eljuxhpwnyrdgtqkviszcfmabo"</span>, <span style="font-style: italic;">"zwx hnfx lqantp mnoeius ycgk vcnjrdb"</span>
+    )
+    == <span style="font-style: italic;">"the five boxing wizards jump quickly"</span>
+)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org03edeea" class="outline-2">
+<h2 id="org03edeea">Leetcode: 2326. Spiral Matrix IV</h2>
+<div class="outline-text-2" id="text-org03edeea">
+<p>
+To transverse the grid doing a spiral starting from \((0,0)\), you have to go to the left as much as possible, then go down as much as possible, then go right as much as possible and then go top as much as possible.  The definition of "as much as possible" is (1) the next position is inside the grid and it hasn't a value assigned to it.  Time and space complexity is \(O(m * n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for singly-linked list.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class ListNode:</span>
+<span style="font-weight: bold; font-style: italic;">#     </span><span style="font-weight: bold; font-style: italic;">def __init__(self, val=0, next=None):</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.val = val</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.next = next</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">spiralMatrix</span>(<span style="font-weight: bold;">self</span>, m: <span style="font-weight: bold;">int</span>, n: <span style="font-weight: bold;">int</span>, head: Optional[ListNode]) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">ans</span> = [[-1] * n <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m)]
+        <span style="font-weight: bold; font-style: italic;">i</span> = <span style="font-weight: bold; font-style: italic;">j</span> = <span style="font-weight: bold; font-style: italic;">d</span> = 0
+        <span style="font-weight: bold;">dir</span> = [[+0, +1], [+1, +0], [+0, -1], [-1, +0]]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">valid</span>(i, j):
+            <span style="font-weight: bold;">return</span> 0 &lt;= i &lt; m <span style="font-weight: bold;">and</span> 0 &lt;= j &lt; n <span style="font-weight: bold;">and</span> ans[i][j] == -1
+
+        <span style="font-weight: bold;">while</span> head <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">and</span> valid(i, j):
+            ans[i][j] = head.val
+            <span style="font-weight: bold; font-style: italic;">head</span> = head.<span style="font-weight: bold;">next</span>
+            <span style="font-weight: bold;">if</span> valid(i + <span style="font-weight: bold;">dir</span>[d][0], j + <span style="font-weight: bold;">dir</span>[d][1]):
+                <span style="font-weight: bold; font-style: italic;">i</span> += <span style="font-weight: bold;">dir</span>[d][0]
+                <span style="font-weight: bold; font-style: italic;">j</span> += <span style="font-weight: bold;">dir</span>[d][1]
+            <span style="font-weight: bold;">else</span>:
+                d = (d + 1) % 4
+                <span style="font-weight: bold; font-style: italic;">i</span> += <span style="font-weight: bold;">dir</span>[d][0]
+                <span style="font-weight: bold; font-style: italic;">j</span> += <span style="font-weight: bold;">dir</span>[d][1]
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4963ff6" class="outline-2">
+<h2 id="org4963ff6">Leetcode: 2327. Number of People Aware of a Secret</h2>
+<div class="outline-text-2" id="text-org4963ff6">
+<p>
+Retrospective: My intuition was that the problem had a recurrence like $f(n)=f(n-1)+f(n-2)+&#x2026;$, and I spent a long time trying to make one big recurrence to work.  I only unblocked myself when I decided to break the formula in parts that made more sense like "how can I define the number of people alive?" and "how can I define the number of people born on this day?" and so on.
+</p>
+
+<p>
+Be \(d(n)\) and \(b(n)\) the number of people that died (don't pass the secret anymore) and are born (people that started to spread the secret) on the $n$-th day.  We can compute \(a(n)=a(n-1)-d(n)+b(n)\) as the number of people that are alive (knows the secret) on the $n$-th day.  The number of people that died on the $n$-th is the number of people that were born \(forget\) days ago: \(d(n)=b(n-forget)\).  The trick part of the problem is to compute \(b(n)\) which is the people that were born \(n-forget+1\) days ago ($n$-th is the last day to tell the secret to someone else), \(n-forget+2\), &#x2026;, \(n-delay\) (\(n\) is the first day that they told the secret to someone else): \(b(n)=b(n-forget+1)+b(n-forget+2)+...+b(n-delay+1)\).  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">peopleAwareOfSecret</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, delay: <span style="font-weight: bold;">int</span>, forget: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        M = 10 ** 9 + 7
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">born</span>(n):
+            <span style="font-weight: bold;">if</span> n == 1:
+                <span style="font-weight: bold;">return</span> 1
+            <span style="font-weight: bold;">if</span> n &lt; 1:
+                <span style="font-weight: bold;">return</span> 0
+            ans = 0
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n - forget + 1, n - delay + 1):
+                ans = (ans + born(i)) % M
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">die</span>(n):
+            <span style="font-weight: bold;">return</span> born(n - forget) % M
+
+        <span style="font-weight: bold; text-decoration: underline;">@cache</span>
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">alive</span>(n):
+            <span style="font-weight: bold;">if</span> n == 0:
+                <span style="font-weight: bold;">return</span> 0
+            <span style="font-weight: bold;">return</span> (alive(n - 1) - die(n) + born(n)) % M
+
+        <span style="font-weight: bold;">return</span> alive(n) % M
+
+
+<span style="font-weight: bold;">assert</span> Solution().peopleAwareOfSecret(6, 2, 4) == 5
+<span style="font-weight: bold;">assert</span> Solution().peopleAwareOfSecret(4, 1, 3) == 6
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org45b9530" class="outline-2">
+<h2 id="org45b9530">Leetcode: 2328. Number of Increasing Paths in a Grid</h2>
+<div class="outline-text-2" id="text-org45b9530">
+<p>
+Retrospective: My intuition pointed to process the cell from the smaller to the bigger values (I used a similar trick on <a href="leetcode_329_longest_increasing_path_in_a_matrix.html#ID-D178FB4C-1257-41C6-A386-E7BF78FDC62A">Leetcode: 329. Longest Increasing Path in a Matrix</a>).  With this, the solution was straight-forward.
+</p>
+
+<p>
+<a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  Be \((i, j)\) the coordinate of the cell with the greatest value on the grid.  If we knew the number of paths for all its neighbors \(k\), then it is easy to compute the number of path that end on \((i, j)\): \(1 + k\).  If we remove this cell from the grid, we can compute the same for the second largest cell up to the point where there is only one cell which the number of paths that end on it is 1.  From this observation we can derive the following algorithm, from cell with the smallest value to the greatest values, compute the number of path that end on each one of them.  On the end, sum the number of paths that end on each cell on the grid and you have the answer for the problem.  Time and space complexity is \(O(n \times m)\) where \(n\) is the number of rows of the grid and \(m\) is the number of columns.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countPaths</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        MOD = 10**9 + 7
+        <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">len</span>(grid)
+        <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">len</span>(grid[0])
+        <span style="font-weight: bold; font-style: italic;">pos</span> = []
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(m):
+                pos.append((grid[i][j], i, j))
+
+        <span style="font-weight: bold; font-style: italic;">pos</span> = <span style="font-weight: bold;">list</span>(<span style="font-weight: bold;">sorted</span>(pos))
+        <span style="font-weight: bold; font-style: italic;">dp</span> = [[1] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+        <span style="font-weight: bold;">dir</span> = [[+0, +1], [+0, -1], [+1, +0], [-1, +0]]
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> _, i, j <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">pos</span>:
+            <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">dir</span>:
+                ni = i + d[0]
+                <span style="font-weight: bold; font-style: italic;">nj</span> = j + d[1]
+                <span style="font-weight: bold;">if</span> 0 &lt;= ni &lt; n <span style="font-weight: bold;">and</span> 0 &lt;= nj &lt; m <span style="font-weight: bold;">and</span> grid[ni][nj] &lt; grid[i][j]:
+                    dp[i][<span style="font-weight: bold; font-style: italic;">j</span>] += dp[ni][nj]
+            <span style="font-weight: bold; font-style: italic;">ans</span> = (ans + dp[i][j]) % MOD
+
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().countPaths([[1, 1], [3, 4]]) == 8
+<span style="font-weight: bold;">assert</span> Solution().countPaths([[1], [2]]) == 3
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

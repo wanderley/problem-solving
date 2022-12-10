@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 23. Merge k Sorted Lists</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 23. Merge k Sorted Lists</h1>
+
+<div id="outline-container-org2d0dae7" class="outline-2">
+<h2 id="org2d0dae7">Understand the problem</h2>
+<div class="outline-text-2" id="text-org2d0dae7">
+<p>
+Given an array of sorted linked lists, return a linked list that contains all elements sorted.
+</p>
+</div>
+
+<div id="outline-container-org5599d1e" class="outline-3">
+<h3 id="org5599d1e">Useful prompts</h3>
+<div class="outline-text-3" id="text-org5599d1e">
+<ul class="org-ul">
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf49c4c6" class="outline-2">
+<h2 id="orgf49c4c6">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgf49c4c6">
+<p>
+Use a sorted list to store the head of each list, pick the smallest one and add to the end of the answer.  If the list has a next element, add it back to the sorted list.  Time complexity is \(O(n \log n)\) and space is \(O(1)\).
+</p>
+</div>
+
+<div id="outline-container-org22af15c" class="outline-3">
+<h3 id="org22af15c">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org22af15c">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for singly-linked list.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class ListNode:</span>
+<span style="font-weight: bold; font-style: italic;">#     </span><span style="font-weight: bold; font-style: italic;">def __init__(self, val=0, next=None):</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.val = val</span>
+<span style="font-weight: bold; font-style: italic;">#         </span><span style="font-weight: bold; font-style: italic;">self.next = next</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">mergeKLists</span>(<span style="font-weight: bold;">self</span>, lists: List[Optional[ListNode]]) -&gt; <span style="font-weight: bold; font-style: italic;">Optional</span>[ListNode]:
+        pq = []
+        <span style="font-weight: bold;">for</span> i, l <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(lists):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold; font-style: italic;">l</span>:
+                heappush(pq, (l.val, i))
+        head = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold; font-style: italic;">tail</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">pq</span>:
+            <span style="font-weight: bold; font-style: italic;">_</span>, <span style="font-weight: bold; font-style: italic;">i</span> = heappop(pq)
+            <span style="font-weight: bold;">if</span> head <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                head = <span style="font-weight: bold; font-style: italic;">tail</span> = lists[i]
+            <span style="font-weight: bold;">else</span>:
+                tail.<span style="font-weight: bold;">next</span> = <span style="font-weight: bold; font-style: italic;">tail</span> = lists[i]
+            <span style="font-weight: bold; font-style: italic;">lists</span>[<span style="font-weight: bold; font-style: italic;">i</span>] = lists[i].<span style="font-weight: bold;">next</span>
+            <span style="font-weight: bold;">if</span> lists[i]:
+                heappush(pq, (lists[i].val, i))
+        <span style="font-weight: bold;">return</span> head
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0b5f75f" class="outline-2">
+<h2 id="org0b5f75f">Common mistakes</h2>
+<div class="outline-text-2" id="text-org0b5f75f">
+<ul class="org-ul">
+<li><a href="mistake_misread_the_problem.html#ID-192401C2-DA6F-4496-B530-89A3546712FD">Mistake: Misread the problem</a>: Had to fix my code multiple times since the input and output didn't match the problem's expectations.</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

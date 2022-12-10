@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2438. Range Product Queries of Powers</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2438. Range Product Queries of Powers</h1>
+
+<div id="outline-container-orgc85cbd3" class="outline-2">
+<h2 id="orgc85cbd3">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgc85cbd3">
+<p>
+Given an integer \(n\) and queries \(q=(l,r)\), return for each query the product of \(p[l:r]\) where \(p\) are the powers of \(2\) in non-decreasing order that compose \(n\).
+</p>
+</div>
+
+<div id="outline-container-org5d51aa9" class="outline-3">
+<h3 id="org5d51aa9">Useful prompts</h3>
+<div class="outline-text-3" id="text-org5d51aa9">
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org49280c2" class="outline-2">
+<h2 id="org49280c2">Devise a plan</h2>
+<div class="outline-text-2" id="text-org49280c2">
+<p>
+Compute all powers of 2 in \(n\) and for each query use <a href="brute_force.html#ID-EC1C87C8-A221-4823-9EF5-BEC706B2EEA5">Brute Force</a> to compute the answer by multiplying all required powers of 2.
+</p>
+</div>
+
+<div id="outline-container-orged9c169" class="outline-3">
+<h3 id="orged9c169">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orged9c169">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">productQueries</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, queries: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        MOD = 10**9 + 7
+        <span style="font-weight: bold; font-style: italic;">p</span> = []
+        <span style="font-weight: bold; font-style: italic;">c</span> = 1
+        <span style="font-weight: bold;">while</span> c &lt;= n:
+            <span style="font-weight: bold;">if</span> n &amp; c != 0:
+                p.append(c)
+            <span style="font-weight: bold; font-style: italic;">c</span> *= 2
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> start, end <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">queries</span>:
+            cur = p[start] % MOD
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(start + 1, end + 1):
+                <span style="font-weight: bold; font-style: italic;">cur</span> = (cur * p[j]) % MOD
+            ans.append(cur)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

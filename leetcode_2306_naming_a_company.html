@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2306. Naming a Company</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2306. Naming a Company</h1>
+<p>
+<a href="https://leetcode.com/problems/naming-a-company/">Problem Statement</a>: Given a list of strings \(S\), find the number of valid pair of strings \(a\) and \(b\) where \(b[0] + a[1...]\) and \(a[0] + b[1...]\) are not in \(S\).
+</p>
+
+<p>
+We are going <a href="counting_valid_pairs_using_brute_force.html#ID-0BB99275-7CE6-425A-8AB7-F8B60958DDE9">Counting valid pairs using Brute Force</a>.  Group all ideas by their first letters.  For example, the ideas \(abc, acd, bab, bcd\) form the groups \({{abc, acd}, {bab, bcd}}\).  Be \(A\) and \(B\) two groups and \(a,b\) ideas from \(A\) and \(B\) respectively.  The pair \((a, b)\) is invalid if \(a \in B\) or \(b \in A\).  When counting the number of pairs, we have to take in account the intersections of the groups.  So, the number of valid pairs formed with \(A\) and \(B\) is \(|A \setminus (A \cap B)| \times |B \setminus (A \cap B)|\).  There are at most 26 groups (one for each letter) and size of a group is at most \(5 \times 10^4 / 32 < 2 \times 10^3\).  The time complexity of the algorithm is then around \(26^2 \times 2 \times 10^3 < 2 \times 10^6\) what is enough to solve given its constraints.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> defaultdict
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(ideas):
+    <span style="font-weight: bold; font-style: italic;">groups</span> = defaultdict(<span style="font-weight: bold;">lambda</span>: <span style="font-weight: bold;">set</span>())
+    <span style="font-weight: bold;">for</span> idea <span style="font-weight: bold;">in</span> ideas:
+        groups[idea[0]].add(idea[1:])
+
+    ans = 0
+    <span style="font-weight: bold;">for</span> a <span style="font-weight: bold;">in</span> groups.values():
+        <span style="font-weight: bold;">for</span> b <span style="font-weight: bold;">in</span> groups.values():
+            <span style="font-weight: bold; font-style: italic;">common</span> = (a &amp; b)
+            <span style="font-weight: bold; font-style: italic;">ans</span> += <span style="font-weight: bold;">len</span>((a - common)) * <span style="font-weight: bold;">len</span>(b - common)
+    <span style="font-weight: bold;">return</span> ans
+
+<span style="font-weight: bold;">assert</span> solve([<span style="font-style: italic;">"coffee"</span>,<span style="font-style: italic;">"donuts"</span>,<span style="font-style: italic;">"time"</span>,<span style="font-style: italic;">"toffee"</span>]) == 6
+<span style="font-weight: bold;">assert</span> solve([<span style="font-style: italic;">"lack"</span>,<span style="font-style: italic;">"back"</span>]) == 0
+<span style="font-weight: bold;">assert</span> solve([<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"ba"</span>, <span style="font-style: italic;">"bc"</span>, <span style="font-style: italic;">"cc"</span>]) == 2
+<span style="font-weight: bold;">assert</span> solve([<span style="font-style: italic;">'jhn'</span>, <span style="font-style: italic;">'hr'</span>, <span style="font-style: italic;">'hhn'</span>, <span style="font-style: italic;">'jtz'</span>]) == 2
+<span style="font-weight: bold;">assert</span> solve([<span style="font-style: italic;">"aa"</span>, <span style="font-style: italic;">"ab"</span>, <span style="font-style: italic;">"ac"</span>, <span style="font-style: italic;">"bc"</span>]) == 0
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">distinctNames</span>(<span style="font-weight: bold;">self</span>, ideas: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(ideas)
+</pre>
+</div>
+</div>
+</body>
+</html>

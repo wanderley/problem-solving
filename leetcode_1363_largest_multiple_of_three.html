@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1363. Largest Multiple of Three</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1363. Largest Multiple of Three</h1>
+<ul class="org-ul">
+<li><a href="can_we_simplify_the_problem_which_keeping_it_the_same.html#ID-F19C9539-EE46-41EE-8DEF-24C3076C6DC2">Can we simplify the problem while keeping it the same?</a>  As \(10^k \mod 3 = 1\), we are concerned on picking digits where their sum in divisible by \(3\).  All digits divisible by \(3\) will be part of the answer, so the problem is to maximize \(2 \times x + y\) where \(x\) and \(y\) are the number of digits with rest \(2\) and \(1\) respectively.  Time complexity is \(O(x \times y + n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">largestMultipleOfThree</span>(<span style="font-weight: bold;">self</span>, digits: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">str</span>:
+        digits.sort(reverse=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+        cmod = Counter([d % 3 <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> digits])
+        r2 = r1 = 0
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(cmod[2] + 1):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(cmod[1], -1, -1):
+                <span style="font-weight: bold;">if</span> i + j &lt; r2 + r1:
+                    <span style="font-weight: bold;">break</span>
+                <span style="font-weight: bold;">if</span> (2 * i + j) % 3 == 0:
+                    r2 = i
+                    r1 = j
+        ans = deque()
+        <span style="font-weight: bold;">for</span> d <span style="font-weight: bold;">in</span> digits:
+            <span style="font-weight: bold;">if</span> d % 3 == 0:
+                ans.append(d)
+            <span style="font-weight: bold;">if</span> d % 3 == 1 <span style="font-weight: bold;">and</span> r1 &gt; 0:
+                r1 -= 1
+                ans.append(d)
+            <span style="font-weight: bold;">if</span> d % 3 == 2 <span style="font-weight: bold;">and</span> r2 &gt; 0:
+                r2 -= 1
+                ans.append(d)
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(ans) &gt; 1 <span style="font-weight: bold;">and</span> ans[0] == 0:
+            ans.popleft()
+
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(<span style="font-weight: bold;">map</span>(<span style="font-weight: bold;">str</span>, ans))
+
+
+<span style="font-weight: bold;">assert</span> Solution().largestMultipleOfThree([8, 1, 9]) == <span style="font-style: italic;">"981"</span>
+<span style="font-weight: bold;">assert</span> Solution().largestMultipleOfThree([8, 6, 7, 1, 0]) == <span style="font-style: italic;">"8760"</span>
+<span style="font-weight: bold;">assert</span> Solution().largestMultipleOfThree([1]) == <span style="font-style: italic;">""</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1579. Remove Max Number of Edges to Keep Graph Fully Traversable</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1579. Remove Max Number of Edges to Keep Graph Fully Traversable</h1>
+<ul class="org-ul">
+<li><a href="blackbox_this_is_a_variation_of_a_classic_problem.html#ID-EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C">Blackbox: This is a variation of a classic problem</a> to find <a href="connected_components_in_a_graph.html#ID-367C887D-3517-4AC8-8219-293AC0E77E07">Connected Components in a Graph</a>.</li>
+
+<li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  Be \(G\) a graph and \(T\) a tree of \(G\).  Be \(u\) and \(v\) in \(T\) where they need two edges of type 1 and 2.  If it is possible to swap these edges with one of type 3, then \(|E(G)|-|E(T)|\) is not the solution since we can do better.  Therefore, we can first add all edges of type 3 and then handle the ones with type 1 and type 2.  Time and space complexity are \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxNumEdgesToRemove</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, edges: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        p = {}
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(u):
+            <span style="font-weight: bold;">if</span> u <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">p</span>:
+                p[<span style="font-weight: bold; font-style: italic;">u</span>] = u
+            <span style="font-weight: bold;">if</span> p[u] != <span style="font-weight: bold; font-style: italic;">u</span>:
+                p[<span style="font-weight: bold; font-style: italic;">u</span>] = find(p[u])
+            <span style="font-weight: bold;">return</span> p[u]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">union</span>(u, v):
+            <span style="font-weight: bold; font-style: italic;">p</span>[find(u)] = find(v)
+
+        <span style="font-weight: bold; font-style: italic;">added</span> = 0
+        <span style="font-weight: bold;">for</span> t, u, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">sorted</span>(edges, key=<span style="font-weight: bold;">lambda</span> e: e[0], reverse=<span style="font-weight: bold; text-decoration: underline;">True</span>):
+            <span style="font-weight: bold;">if</span> t == 3:
+                <span style="font-weight: bold;">if</span> find(u) != find(v):
+                    union(u, v)
+                    union(~u, ~v)
+                    added += 1
+            <span style="font-weight: bold;">elif</span> t == 2:
+                <span style="font-weight: bold;">if</span> find(~u) != find(~v):
+                    union(~u, ~v)
+                    added += 1
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">if</span> find(u) != find(v):
+                    union(u, v)
+                    added += 1
+
+        valid = (
+            <span style="font-weight: bold;">len</span>({find(u) <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, n + 1)})
+            == <span style="font-weight: bold;">len</span>({find(~u) <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(1, n + 1)})
+            == 1
+        )
+        <span style="font-weight: bold;">return</span> -1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> valid <span style="font-weight: bold;">else</span> <span style="font-weight: bold;">len</span>(edges) - added
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().maxNumEdgesToRemove(
+        4, [[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]]
+    )
+    == 2
+)
+<span style="font-weight: bold;">assert</span> (
+    Solution().maxNumEdgesToRemove(4, [[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]]) == 0
+)
+<span style="font-weight: bold;">assert</span> Solution().maxNumEdgesToRemove(4, [[3, 2, 3], [1, 1, 2], [2, 3, 4]]) == -1
+</pre>
+</div>
+</div>
+</body>
+</html>

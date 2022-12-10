@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 30. Substring with Concatenation of All Words</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 30. Substring with Concatenation of All Words</h1>
+<p>
+Problem statement can be found <a href="https://leetcode.com/problems/substring-with-concatenation-of-all-words/">here</a>.
+</p>
+
+<p>
+Be \(s\) the string with length \(S\) and \(w\) the list of \(N\) words of length \(W\).  The letter \(s[i]\) can be the start of a permutation that satisfy the problem.  If so, then \(s[i+N]\) can also be the start of desired permutation if \(s[(i+N\times W)..(i+N\times W+W-1)]=s[i..i+W-1]\).  This means that we can use a <a href="sliding_window.html#ID-CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2">Sliding Window</a> to expand a match to find the next one which is suffix of the previous.  This observation is only true, because all words in \(w\) have the same length, which means that there is always one possible match.   Even though the following implementation uses a <code>Counter</code> to store words in \(w\), it could have used a <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a> for that.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> itertools <span style="font-weight: bold;">import</span> cycle
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> Counter
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">match_word</span>(s, i, w):
+    <span style="font-weight: bold; font-style: italic;">j</span> = 0
+    <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold;">len</span>(s) <span style="font-weight: bold;">and</span> j &lt; <span style="font-weight: bold;">len</span>(w) <span style="font-weight: bold;">and</span> s[i] == w[j]:
+        j += 1
+        i += 1
+    <span style="font-weight: bold;">return</span> j == <span style="font-weight: bold;">len</span>(w)
+
+
+<span style="font-weight: bold;">assert</span> match_word(<span style="font-style: italic;">"barfoothefoobarman"</span>, 0, <span style="font-style: italic;">"bar"</span>)
+<span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">not</span> match_word(<span style="font-style: italic;">"barfoothefoobarman"</span>, 0, <span style="font-style: italic;">"foo"</span>)
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">match_words</span>(s, word_len, wc, start):
+    ans = []
+    seen = Counter()
+    <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(start, <span style="font-weight: bold;">len</span>(s), word_len):
+        w = s[j : j + word_len]
+        <span style="font-weight: bold;">if</span> wc[w] - seen[w] &lt;= 0:
+            <span style="font-weight: bold;">break</span>
+        seen.update([w])
+        ans.append(w)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> match_words(<span style="font-style: italic;">"xyzabcbcd"</span>, 3, Counter([<span style="font-style: italic;">"bcd"</span>, <span style="font-style: italic;">"abc"</span>]), 3) == [<span style="font-style: italic;">"abc"</span>, <span style="font-style: italic;">"bcd"</span>]
+<span style="font-weight: bold;">assert</span> match_words(<span style="font-style: italic;">"xyzabcbce"</span>, 3, Counter([<span style="font-style: italic;">"bcd"</span>, <span style="font-style: italic;">"abc"</span>]), 3) == [<span style="font-style: italic;">"abc"</span>]
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, ws):
+    S = <span style="font-weight: bold;">len</span>(s)
+    N = <span style="font-weight: bold;">len</span>(ws)
+    W = <span style="font-weight: bold;">len</span>(ws[0])
+    wc = Counter(ws)
+    ans = <span style="font-weight: bold;">set</span>()
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(S - N * W + 1):
+        <span style="font-weight: bold;">if</span> i <span style="font-weight: bold;">in</span> ans:
+            <span style="font-weight: bold;">continue</span>
+        words_found = match_words(s, W, wc, i)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(words_found) != <span style="font-weight: bold;">len</span>(ws):
+            <span style="font-weight: bold;">continue</span>
+        ans.add(i)
+        i += N * W
+        <span style="font-weight: bold;">for</span> word <span style="font-weight: bold;">in</span> cycle(words_found):
+            <span style="font-weight: bold;">if</span> i &gt;= S <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">not</span> match_word(s, i, word):
+                <span style="font-weight: bold;">break</span>
+            ans.add(i - (N - 1) * W)
+            i += W
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"barfoothefoobarman"</span>, [<span style="font-style: italic;">"foo"</span>, <span style="font-style: italic;">"bar"</span>]) == {0, 9}
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"barfoobarfoobarman"</span>, [<span style="font-style: italic;">"foo"</span>, <span style="font-style: italic;">"bar"</span>]) == {0, 3, 6, 9}
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"wordgoodgoodgoodbestword"</span>, [<span style="font-style: italic;">"word"</span>, <span style="font-style: italic;">"good"</span>, <span style="font-style: italic;">"best"</span>, <span style="font-style: italic;">"word"</span>]) == <span style="font-weight: bold;">set</span>()
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"barfoofoobarthefoobarman"</span>, [<span style="font-style: italic;">"bar"</span>, <span style="font-style: italic;">"foo"</span>, <span style="font-style: italic;">"the"</span>]) == {6, 9, 12}
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findSubstring</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, words: List[<span style="font-weight: bold;">str</span>]) -&gt; List[<span style="font-weight: bold;">int</span>]:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">list</span>(solve(s, words))
+
+
+<span style="font-weight: bold;">assert</span> Solution().findSubstring(
+    <span style="font-style: italic;">"wordgoodgoodgoodbestword"</span>, [<span style="font-style: italic;">"word"</span>, <span style="font-style: italic;">"good"</span>, <span style="font-style: italic;">"best"</span>, <span style="font-style: italic;">"good"</span>]
+) == [8]
+</pre>
+</div>
+</div>
+</body>
+</html>

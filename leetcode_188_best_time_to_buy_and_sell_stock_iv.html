@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 188. Best Time to Buy and Sell Stock IV</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 188. Best Time to Buy and Sell Stock IV</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  I was too confident my implementation and didn't test it fully.</li>
+
+<li><a href="mistake_incorrect_evaluation_of_solution_s_viability.html#ID-DA951820-DBB5-4A7F-9401-DF5860EFAB8A">Mistake: Incorrect evaluation of solution's viability</a>.  Sometimes, I get away with \(10^8\) at Leetcode.  So, I tried without optimization.</li>
+
+<li><a href="can_we_reuse_or_extend_a_solution_from_a_sub_problem_to_solve_the_next_sub_problem_more_efficiently.html#ID-26656051-E32D-42FE-9315-05ADB46A1A82">Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?</a>  Suppose that we always started the day with money on the pocket.  So, we have to find the best between buying today and selling in future day, since there is no point of holding it.  This can be modeled with \(dp[i][k]=\max(dp[i+1][k], -prices[i] + prices[j] + dp[j + 1][k -1])\), and it will be efficiently computed if we store \(best[i][k]=\max(best[i+1][k], prices[i] + 1][k - 1])\) and \(dp[i][k]=\max(dp[i+1][k], -prices[i] + best[i+1][k])\).  Time and space complexity is \(O(n \times k)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxProfit</span>(<span style="font-weight: bold;">self</span>, K: <span style="font-weight: bold;">int</span>, prices: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(prices)
+        <span style="font-weight: bold; font-style: italic;">dp</span> = [[0] * (K + 1) <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N + 1)]
+        <span style="font-weight: bold; font-style: italic;">best</span> = [[0] * (K + 1) <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N + 1)]
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N, -1, -1):
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(K, -1, -1):
+                <span style="font-weight: bold;">if</span> k == 0 <span style="font-weight: bold;">or</span> i == N:
+                    <span style="font-weight: bold;">continue</span>
+                dp[i][<span style="font-weight: bold; font-style: italic;">k</span>] = <span style="font-weight: bold;">max</span>(dp[i + 1][k], -prices[i] + best[i + 1][k])
+                best[i][<span style="font-weight: bold; font-style: italic;">k</span>] = <span style="font-weight: bold;">max</span>(best[i + 1][k], prices[i] + dp[i + 1][k - 1])
+        <span style="font-weight: bold;">return</span> dp[0][K]
+
+
+<span style="font-weight: bold;">assert</span> Solution().maxProfit(2, [2, 4, 1]) == 2
+<span style="font-weight: bold;">assert</span> Solution().maxProfit(2, [3, 2, 6, 5, 0, 3]) == 7
+</pre>
+</div>
+</div>
+</body>
+</html>

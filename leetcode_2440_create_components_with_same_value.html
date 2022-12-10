@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2440. Create Components With Same Value</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2440. Create Components With Same Value</h1>
+
+<div id="outline-container-org51b0f11" class="outline-2">
+<h2 id="org51b0f11">Understand the problem</h2>
+<div class="outline-text-2" id="text-org51b0f11">
+<p>
+Split an tree in a forest with maximum number of trees where each component has the same weight.
+</p>
+</div>
+
+<div id="outline-container-org9846fef" class="outline-3">
+<h3 id="org9846fef">Useful prompts</h3>
+<div class="outline-text-3" id="text-org9846fef">
+<ul class="org-ul">
+<li><a href="can_we_state_the_problem_as_a_searching_problem.html#ID-60DEC3A8-810C-41E3-96E3-98145F4AAC3F">Can we state the problem as a searching problem?</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdf53455" class="outline-2">
+<h2 id="orgdf53455">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgdf53455">
+<p>
+We are going to use <a href="pattern_search_validate.html#ID-B39B7723-9DCB-4C18-BE7D-51086F1F2A81">Pattern: Search &amp; Validate</a>.  Be \(S=\sum a[i]\).  There are \(N+1\) possible weights \(0, S/1, S/2, ..., S/N\).  For each one of them \(x\) from \(S/N\) to \(0\), break the tree in forest where each tree has weight \(x\).  Compute <a href="pattern_postorder_traversal_of_tree.html#ID-D6AFDCD1-B93D-4F4F-9AA6-B2A540BFAA42">Pattern: Postorder traversal of tree</a> and for each vertex on this order, merge it with it's parent if the weight is less than \(x\), continue to the next one if the weight is exactly \(x\) and stop the search if the weight exceeds \(x\).  Time complexity is \(O(n ^ 2)\) and space is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-orgc7fc443" class="outline-3">
+<h3 id="orgc7fc443">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgc7fc443">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">componentValue</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], edges: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(nums)
+
+        <span style="font-weight: bold; font-style: italic;">A</span> = [<span style="font-weight: bold;">set</span>() <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N)]
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">edges</span>:
+            A[u].add(v)
+            A[v].add(u)
+        parent = [<span style="font-weight: bold; text-decoration: underline;">None</span>] * N
+        <span style="font-weight: bold; font-style: italic;">queue</span> = [u <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N) <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(A[u]) == 1]
+        <span style="font-weight: bold; font-style: italic;">T</span> = []
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">queue</span>:
+            T.append(u)
+            <span style="font-weight: bold;">for</span> v <span style="font-weight: bold;">in</span> A[u]:
+                parent[u] = v
+                A[v].discard(u)
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(A[v]) == 1:
+                    queue.append(v)
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">valid</span>(x):
+            <span style="font-weight: bold; font-style: italic;">ac</span> = nums[::]
+            <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> T:
+                <span style="font-weight: bold;">if</span> ac[u] &gt; x:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+                <span style="font-weight: bold;">if</span> ac[u] == x:
+                    <span style="font-weight: bold;">continue</span>
+                <span style="font-weight: bold;">if</span> ac[u] &lt; x:
+                    <span style="font-weight: bold;">if</span> parent[u] <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+                    <span style="font-weight: bold;">else</span>:
+                        ac[parent[u]] += ac[u]
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+        S = <span style="font-weight: bold;">sum</span>(nums)
+        <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N, 0, -1):
+            <span style="font-weight: bold;">if</span> S % x == 0 <span style="font-weight: bold;">and</span> valid(S / x):
+                <span style="font-weight: bold;">return</span> x - 1
+        <span style="font-weight: bold;">return</span> 0
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

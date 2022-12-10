@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2355. Maximum Number of Books You Can Take</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2355. Maximum Number of Books You Can Take</h1>
+<ul class="org-ul">
+<li><a href="pattern_find_optimal_subarray.html#ID-C715BAE2-002C-4F72-B5FC-5E727F0BA19E">Pattern: Find optimal subarray</a>.  Use a <a href="monotonic_stack.html#ID-E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5">Monotonic Stack</a> to support the construction of the optimal subarrays ending on each index of the array.  Time and space complexity are \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumBooks</span>(<span style="font-weight: bold;">self</span>, books: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        st = []
+        <span style="font-weight: bold; font-style: italic;">best</span> = [0] * <span style="font-weight: bold;">len</span>(books)
+        <span style="font-weight: bold; font-style: italic;">pa</span> = <span style="font-weight: bold;">lambda</span> n: (n * (n + 1)) // 2
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold;">for</span> i, b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(books):
+            <span style="font-weight: bold;">while</span> st <span style="font-weight: bold;">and</span> books[st[-1]] &gt;= b - (i - st[-1]):
+                st.pop()
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; font-style: italic;">st</span>:
+                best[<span style="font-weight: bold; font-style: italic;">i</span>] = pa(b) <span style="font-weight: bold;">if</span> b &lt;= i <span style="font-weight: bold;">else</span> pa(b) - pa(b - i - 1)
+            <span style="font-weight: bold;">else</span>:
+                best[<span style="font-weight: bold; font-style: italic;">i</span>] = pa(b) <span style="font-weight: bold;">if</span> b &lt;= i - st[-1] <span style="font-weight: bold;">else</span> pa(b) - pa(b - (i - st[-1]))
+                <span style="font-weight: bold; font-style: italic;">best</span>[<span style="font-weight: bold; font-style: italic;">i</span>] += best[st[-1]]
+            <span style="font-weight: bold;">if</span> best[i] &gt; <span style="font-weight: bold; font-style: italic;">ans</span>:
+                ans = best[i]
+                <span style="font-weight: bold; font-style: italic;">tmp</span> = i
+            st.append(i)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

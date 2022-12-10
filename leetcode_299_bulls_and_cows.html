@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 299. Bulls and Cows</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 299. Bulls and Cows</h1>
+<p>
+<a href="https://leetcode.com/problems/bulls-and-cows/">Problem Statement</a>: Given two strings \(s\) and \(g\) of length \(n\), return the number of digits where \(s[i]=g[i]\) and the number of digits in \(g\) that appear in \(s\) but in the wrong place.
+</p>
+
+<p>
+Be \(i\) the first position where \(s[i] \neq g[i]\).  We know that \(s[i]\) can be matched with some \(g[j]\) where \(j>i\), and \(g[i]\) can be matched with some \(s[j]\) where \(j>i\).  So, \(s[i]\) is an available digit, while \(g[i]\) is a required digit.  Suppose that we have an array \(f[d]=c\) where \(d\) is a digit and \(c>0\) if there are \(c\) copies of \(d\) available, and \(c<0\) if \(\text{abs}(c)\) copies of \(d\) are required.  If \(f[s[i]] < 0\), we can increment the misplaced counter since \(s[i]\) is required (\(s[i]\) appeared in \(g[0...(i-1)]\) and wasn't matched with any \(s[0...(i-1)]\)).  If \(f[g[i]]>0\), we can increment the misplaced counter since there is an available digit in \(s[0...(i-1)]\) to match with \(g[i]\).  After counting the misplaced digits, we can increment \(f[s[i]]\) and decrement \(f[g[i]]\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\).</li>
+<li>Space complexity: \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, g):
+    <span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">len</span>(s) == <span style="font-weight: bold;">len</span>(g)
+
+    <span style="font-weight: bold; font-style: italic;">bulls</span>, <span style="font-weight: bold; font-style: italic;">cows</span> = 0, 0
+    <span style="font-weight: bold; font-style: italic;">freq</span> = {}
+
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(s)):
+        <span style="font-weight: bold;">if</span> s[i] == g[i]:
+            bulls += 1
+        <span style="font-weight: bold;">else</span>:
+            fs = freq.get(s[i], 0)
+            fg = freq.get(g[i], 0)
+            <span style="font-weight: bold;">if</span> fs &lt; 0:
+                cows += 1
+            <span style="font-weight: bold;">if</span> fg &gt; 0:
+                cows += 1
+
+            freq[s[i]] = fs + 1
+            freq[g[i]] = fg - 1
+
+    <span style="font-weight: bold;">return</span> f<span style="font-style: italic;">"</span>{bulls}<span style="font-style: italic;">A</span>{cows}<span style="font-style: italic;">B"</span>
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1807"</span>, <span style="font-style: italic;">"7810"</span>) == <span style="font-style: italic;">"1A3B"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1123"</span>, <span style="font-style: italic;">"0111"</span>) == <span style="font-style: italic;">"1A1B"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>) == <span style="font-style: italic;">"1A0B"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>) == <span style="font-style: italic;">"0A0B"</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">getHint</span>(<span style="font-weight: bold;">self</span>, secret: <span style="font-weight: bold;">str</span>, guess: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> solve(secret, guess)
+</pre>
+</div>
+
+
+
+<p>
+2 passes
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s, g):
+    <span style="font-weight: bold;">assert</span> <span style="font-weight: bold;">len</span>(s) == <span style="font-weight: bold;">len</span>(g)
+
+    <span style="font-weight: bold; font-style: italic;">bulls</span>, <span style="font-weight: bold; font-style: italic;">cows</span> = 0, 0
+    <span style="font-weight: bold; font-style: italic;">sd_cnt</span>, <span style="font-weight: bold; font-style: italic;">gd_cnt</span> = {}, {}
+
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(s)):
+        <span style="font-weight: bold;">if</span> s[i] == g[i]:
+            bulls += 1
+        <span style="font-weight: bold;">else</span>:
+            sd_cnt[s[i]] = sd_cnt.get(s[i], 0) + 1
+            gd_cnt[g[i]] = gd_cnt.get(g[i], 0) + 1
+
+    <span style="font-weight: bold;">for</span> d, cnt <span style="font-weight: bold;">in</span> sd_cnt.items():
+        cows += <span style="font-weight: bold;">min</span>(cnt, gd_cnt.get(d, 0))
+
+    <span style="font-weight: bold;">return</span> f<span style="font-style: italic;">"</span>{bulls}<span style="font-style: italic;">A</span>{cows}<span style="font-style: italic;">B"</span>
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1807"</span>, <span style="font-style: italic;">"7810"</span>) == <span style="font-style: italic;">"1A3B"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1123"</span>, <span style="font-style: italic;">"0111"</span>) == <span style="font-style: italic;">"1A1B"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"1"</span>) == <span style="font-style: italic;">"1A0B"</span>
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"1"</span>, <span style="font-style: italic;">"0"</span>) == <span style="font-style: italic;">"0A0B"</span>
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">getHint</span>(<span style="font-weight: bold;">self</span>, secret: <span style="font-weight: bold;">str</span>, guess: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        <span style="font-weight: bold;">return</span> solve(secret, guess)
+</pre>
+</div>
+</div>
+</body>
+</html>

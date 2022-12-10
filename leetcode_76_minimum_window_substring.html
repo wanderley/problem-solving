@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 76. Minimum Window Substring</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 76. Minimum Window Substring</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>. I tried but didn't come up with <code>("a", "b")</code>.</li>
+
+<li><a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a>  To check if the window is valid, we count the number of letters that reached the correct frequency in the window.  It can be done by keeping a dictionary with the frequency.  Time complexity is \(O(n)\) and space complexity is \(O(1)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> defaultdict
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minWindow</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, t: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        R = <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">set</span>(t))
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(s)
+        <span style="font-weight: bold; font-style: italic;">required</span> = defaultdict(<span style="font-weight: bold;">int</span>)
+        <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">t</span>:
+            required[<span style="font-weight: bold; font-style: italic;">c</span>] += 1
+
+        <span style="font-weight: bold; font-style: italic;">freq</span> = defaultdict(<span style="font-weight: bold;">int</span>)
+        <span style="font-weight: bold; font-style: italic;">cnt_ok</span> = 0
+
+        <span style="font-weight: bold; font-style: italic;">start</span> = 0
+        <span style="font-weight: bold; font-style: italic;">valid</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> end, c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(s):
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> valid <span style="font-weight: bold;">and</span> freq[c] == required[c] - 1:
+                cnt_ok += 1
+                valid = cnt_ok == R
+
+            freq[c] += 1
+            <span style="font-weight: bold;">while</span> start &lt; N <span style="font-weight: bold;">and</span> freq[s[start]] &gt; required[s[start]]:
+                freq[s[start]] -= 1
+                start += 1
+
+            <span style="font-weight: bold;">if</span> valid <span style="font-weight: bold;">and</span> (ans <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">or</span> (ans[1] - ans[0] + 1) &gt; (end - start + 1)):
+                ans = (start, end)
+
+        <span style="font-weight: bold;">return</span> s[ans[0] : ans[1] + 1] <span style="font-weight: bold;">if</span> ans <span style="font-weight: bold;">else</span> <span style="font-style: italic;">""</span>
+
+
+<span style="font-weight: bold;">assert</span> Solution().minWindow(<span style="font-style: italic;">"ADOBECODEBANC"</span>, <span style="font-style: italic;">"ABC"</span>) == <span style="font-style: italic;">"BANC"</span>
+<span style="font-weight: bold;">assert</span> Solution().minWindow(<span style="font-style: italic;">"a"</span>, <span style="font-style: italic;">"a"</span>) == <span style="font-style: italic;">"a"</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

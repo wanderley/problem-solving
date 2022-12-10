@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1825. Finding MK Average</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1825. Finding MK Average</h1>
+<ul class="org-ul">
+<li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  Did not test for cases where all numbers are the same.  I thought that my formula was covering it, but it wasn't.</li>
+
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  Be \(s\) a list of last \(m\) numbers sorted.  The problem then is to return \(\sum_{k \leq i < n - k}_{} s[i]\) which can be solved using a <a href="fenwicktree.html#ID-2B44007C-8EC7-49DA-9A9B-0D6CF6578083">FenwickTree</a>.  Time complexity is \(O(\log M)\) for all operations and space is \(O(M)\) where \(M\) is the number of distinct numbers allowed.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FenwickTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n):
+        <span style="font-weight: bold;">self</span>.n = n
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">bit</span> = [0] * n
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sum</span>(<span style="font-weight: bold;">self</span>, r, l=<span style="font-weight: bold; text-decoration: underline;">None</span>):
+        <span style="font-weight: bold;">if</span> l <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span>(l) - <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span>(r - 1)
+        ret = 0
+        <span style="font-weight: bold;">while</span> r &gt;= 0:
+            ret += <span style="font-weight: bold;">self</span>.bit[r]
+            r = (r &amp; (r + 1)) - 1
+        <span style="font-weight: bold;">return</span> ret
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, idx, delta):
+        <span style="font-weight: bold;">while</span> idx &lt; <span style="font-weight: bold;">self</span>.n:
+            <span style="font-weight: bold;">self</span>.bit[<span style="font-weight: bold; font-style: italic;">idx</span>] += delta
+            idx = idx | (idx + 1)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">MKAverage</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, m: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>):
+        <span style="font-weight: bold;">self</span>.m = m
+        <span style="font-weight: bold;">self</span>.k = k
+        <span style="font-weight: bold;">self</span>.cnt = <span style="font-weight: bold;">self</span>.m - 2 * <span style="font-weight: bold;">self</span>.k
+        <span style="font-weight: bold;">self</span>.ac = FenwickTree(100_001)
+        <span style="font-weight: bold;">self</span>.nums = deque(maxlen=m + 1)
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sorted</span> = SortedList()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addElement</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.nums) == <span style="font-weight: bold;">self</span>.m:
+            r = <span style="font-weight: bold;">self</span>.nums.popleft()
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sorted</span>.remove(r)
+            <span style="font-weight: bold;">self</span>.ac.add(r, -r)
+        <span style="font-weight: bold;">self</span>.nums.append(num)
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sorted</span>.add(num)
+        <span style="font-weight: bold;">self</span>.ac.add(num, num)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">calculateMKAverage</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.nums) &lt; <span style="font-weight: bold;">self</span>.m:
+            <span style="font-weight: bold;">return</span> -1
+
+        i = <span style="font-weight: bold;">self</span>.k
+        j = <span style="font-weight: bold;">self</span>.m - <span style="font-weight: bold;">self</span>.k - 1
+        start_num = <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sorted</span>[i]
+        end_num = <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sorted</span>[j]
+
+        <span style="font-weight: bold;">if</span> start_num == end_num:
+            <span style="font-weight: bold;">return</span> start_num
+
+        s = <span style="font-weight: bold;">self</span>.ac.<span style="font-weight: bold;">sum</span>(start_num, end_num + 1)
+        s -= end_num * (<span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sorted</span>.bisect_right(end_num) - j - 1)
+        s -= start_num * (<span style="font-weight: bold;">self</span>.k - <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sorted</span>.bisect_left(start_num))
+        <span style="font-weight: bold;">return</span> s // <span style="font-weight: bold;">self</span>.cnt
+
+
+obj = MKAverage(3, 1)
+obj.addElement(3)
+obj.addElement(1)
+<span style="font-weight: bold;">assert</span> obj.calculateMKAverage() == -1
+obj.addElement(10)
+<span style="font-weight: bold;">assert</span> obj.calculateMKAverage() == 3
+obj.addElement(5)
+obj.addElement(5)
+obj.addElement(5)
+<span style="font-weight: bold;">assert</span> obj.calculateMKAverage() == 5
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FenwickTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, n):
+        <span style="font-weight: bold;">self</span>.n = n
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">bit</span> = [0] * n
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sum</span>(<span style="font-weight: bold;">self</span>, r, l=<span style="font-weight: bold; text-decoration: underline;">None</span>):
+        <span style="font-weight: bold;">if</span> l <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span>(l) - <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span>(r - 1)
+        ret = 0
+        <span style="font-weight: bold;">while</span> r &gt;= 0:
+            ret += <span style="font-weight: bold;">self</span>.bit[r]
+            r = (r &amp; (r + 1)) - 1
+        <span style="font-weight: bold;">return</span> ret
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, idx, delta):
+        <span style="font-weight: bold;">while</span> idx &lt; <span style="font-weight: bold;">self</span>.n:
+            <span style="font-weight: bold;">self</span>.bit[<span style="font-weight: bold; font-style: italic;">idx</span>] += delta
+            idx = idx | (idx + 1)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">MKAverage</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, m: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>):
+        <span style="font-weight: bold;">self</span>.m = m
+        <span style="font-weight: bold;">self</span>.k = k
+        <span style="font-weight: bold;">self</span>.r = m - 2 * k
+        <span style="font-weight: bold;">self</span>.c = FenwickTree(10**5 + 1)
+        <span style="font-weight: bold;">self</span>.n = FenwickTree(10**5 + 1)
+        <span style="font-weight: bold;">self</span>.stream = deque()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addElement</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.stream) == <span style="font-weight: bold;">self</span>.m:
+            x = <span style="font-weight: bold;">self</span>.stream.popleft()
+            <span style="font-weight: bold;">self</span>.c.add(x, -1)
+            <span style="font-weight: bold;">self</span>.n.add(x, -x)
+        <span style="font-weight: bold;">self</span>.stream.append(num)
+        <span style="font-weight: bold;">self</span>.c.add(num, +1)
+        <span style="font-weight: bold;">self</span>.n.add(num, +num)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">index</span>(<span style="font-weight: bold;">self</span>, v):
+        s = 1
+        e = 10**5
+        <span style="font-weight: bold;">while</span> s &lt; e:
+            m = s + (e - s) // 2
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.c.<span style="font-weight: bold;">sum</span>(m) &gt;= v:
+                e = m
+            <span style="font-weight: bold;">else</span>:
+                s = m + 1
+        <span style="font-weight: bold;">return</span> s
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">calculateMKAverage</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.stream) &lt; <span style="font-weight: bold;">self</span>.m:
+            <span style="font-weight: bold;">return</span> -1
+
+        s = <span style="font-weight: bold;">self</span>.index(<span style="font-weight: bold;">self</span>.k)
+        e = <span style="font-weight: bold;">self</span>.index(<span style="font-weight: bold;">self</span>.m - <span style="font-weight: bold;">self</span>.k)
+        ans = <span style="font-weight: bold;">self</span>.n.<span style="font-weight: bold;">sum</span>(e) - <span style="font-weight: bold;">self</span>.n.<span style="font-weight: bold;">sum</span>(s)
+        ans += s * <span style="font-weight: bold;">max</span>(0, <span style="font-weight: bold;">self</span>.c.<span style="font-weight: bold;">sum</span>(s) - <span style="font-weight: bold;">self</span>.k)
+        ans -= e * <span style="font-weight: bold;">max</span>(0, <span style="font-weight: bold;">self</span>.c.<span style="font-weight: bold;">sum</span>(e) - (<span style="font-weight: bold;">self</span>.m - <span style="font-weight: bold;">self</span>.k))
+        <span style="font-weight: bold;">return</span> floor(ans / <span style="font-weight: bold;">self</span>.r)
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>We can replace the sorted list and <a href="fenwicktree.html#ID-2B44007C-8EC7-49DA-9A9B-0D6CF6578083">FenwickTree</a> by implementing a <a href="segment_tree_from_one_dimensional_array.html#ID-252C5055-2C0D-4B0E-A4BF-9507B85A179F">Segment Tree</a> that keeps the sum and a count for each node.  Time complexity is \(O(\log M)\) for all operations and space is \(O(M)\) where \(M\) is the number of distinct numbers allowed.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">SegTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, start, end):
+        <span style="font-weight: bold;">self</span>.start = start
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">end</span> = end
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> = 0
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">count</span> = 0
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">left</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">right</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, v):
+        <span style="font-weight: bold;">if</span> v &lt; <span style="font-weight: bold;">self</span>.start <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">self</span>.end &lt; <span style="font-weight: bold; font-style: italic;">v</span>:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> += v
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">count</span> += 1
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.start == <span style="font-weight: bold;">self</span>.end:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">self</span>._extend()
+        <span style="font-weight: bold;">self</span>.left.add(v)
+        <span style="font-weight: bold;">self</span>.right.add(v)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">remove</span>(<span style="font-weight: bold;">self</span>, v):
+        <span style="font-weight: bold;">if</span> v &lt; <span style="font-weight: bold;">self</span>.start <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">self</span>.end &lt; v:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> -= v
+        <span style="font-weight: bold;">self</span>.count -= 1
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.start == <span style="font-weight: bold;">self</span>.end:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">self</span>._extend()
+        <span style="font-weight: bold;">self</span>.left.remove(v)
+        <span style="font-weight: bold;">self</span>.right.remove(v)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">query</span>(<span style="font-weight: bold;">self</span>, count):
+        <span style="font-weight: bold;">if</span> count == 0:
+            <span style="font-weight: bold;">return</span> 0
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.start == <span style="font-weight: bold;">self</span>.end:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.start * count
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left.count &lt; count:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.left.<span style="font-weight: bold;">sum</span> + <span style="font-weight: bold;">self</span>.right.query(count - <span style="font-weight: bold;">self</span>.left.count)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.left.query(count)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_extend</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.start &lt; <span style="font-weight: bold;">self</span>.end:
+            m = <span style="font-weight: bold;">self</span>.start + (<span style="font-weight: bold;">self</span>.end - <span style="font-weight: bold;">self</span>.start) // 2
+            <span style="font-weight: bold;">self</span>.left = SegTree(<span style="font-weight: bold;">self</span>.start, m)
+            <span style="font-weight: bold;">self</span>.right = SegTree(m + 1, <span style="font-weight: bold;">self</span>.end)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">print</span>(<span style="font-weight: bold;">self</span>, level=0):
+        <span style="font-weight: bold;">print</span>(
+            <span style="font-style: italic;">" "</span> * level,
+            <span style="font-style: italic;">"SegTree"</span>,
+            (<span style="font-weight: bold;">self</span>.start, <span style="font-weight: bold;">self</span>.end),
+            <span style="font-style: italic;">"sum"</span>,
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span>,
+            <span style="font-style: italic;">"count"</span>,
+            <span style="font-weight: bold;">self</span>.count,
+        )
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left:
+            <span style="font-weight: bold;">self</span>.left.<span style="font-weight: bold;">print</span>(level + 1)
+            <span style="font-weight: bold;">self</span>.right.<span style="font-weight: bold;">print</span>(level + 1)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">MKAverage</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, m: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>):
+        <span style="font-weight: bold;">self</span>.m = m
+        <span style="font-weight: bold;">self</span>.k = k
+        <span style="font-weight: bold;">self</span>.sg = SegTree(0, 100_001)
+        <span style="font-weight: bold;">self</span>.nums = deque(maxlen=m + 1)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addElement</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.nums) == <span style="font-weight: bold;">self</span>.m:
+            <span style="font-weight: bold;">self</span>.sg.remove(<span style="font-weight: bold;">self</span>.nums.popleft())
+        <span style="font-weight: bold;">self</span>.sg.add(num)
+        <span style="font-weight: bold;">self</span>.nums.append(num)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">calculateMKAverage</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.nums) &lt; <span style="font-weight: bold;">self</span>.m:
+            <span style="font-weight: bold;">return</span> -1
+        <span style="font-weight: bold;">return</span> (<span style="font-weight: bold;">self</span>.sg.query(<span style="font-weight: bold;">self</span>.m - <span style="font-weight: bold;">self</span>.k) - <span style="font-weight: bold;">self</span>.sg.query(<span style="font-weight: bold;">self</span>.k)) // (
+            <span style="font-weight: bold;">self</span>.m - 2 * <span style="font-weight: bold;">self</span>.k
+        )
+
+
+obj = MKAverage(3, 1)
+obj.addElement(3)
+obj.addElement(1)
+<span style="font-weight: bold;">assert</span> obj.calculateMKAverage() == -1
+obj.addElement(10)
+<span style="font-weight: bold;">assert</span> obj.calculateMKAverage() == 3
+obj.addElement(5)
+obj.addElement(5)
+obj.addElement(5)
+<span style="font-weight: bold;">assert</span> obj.calculateMKAverage() == 5
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="can_we_simplify_the_problem_which_keeping_it_the_same.html#ID-F19C9539-EE46-41EE-8DEF-24C3076C6DC2">Can we simplify the problem while keeping it the same?</a>  Keep tree lists \(left, mid\) and \(right\) with the last \(m\) elements from the stream.  After receiving a list, first remove one if it exceeds the limit and then update the lists to respect its sizes from left to right.  Time complexity is \(O(n \log n)\) and space complexity is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">MKAverage</span>:
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, m: <span style="font-weight: bold;">int</span>, k: <span style="font-weight: bold;">int</span>):
+        <span style="font-weight: bold;">self</span>.m = m
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">k</span> = k
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">r</span> = m - 2 * k
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">left</span> = SortedList()
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">right</span> = SortedList()
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">mid</span> = SortedList()
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> = 0
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">nums</span> = deque()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addElement</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.nums) == <span style="font-weight: bold;">self</span>.m:
+            <span style="font-weight: bold;">self</span>.popleft()
+        <span style="font-weight: bold;">self</span>.nums.append(num)
+        <span style="font-weight: bold;">self</span>.left.add(num)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.left) &gt; <span style="font-weight: bold;">self</span>.k:
+            x = <span style="font-weight: bold;">self</span>.left.pop(-1)
+            <span style="font-weight: bold;">self</span>.mid.add(x)
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> += x
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.mid) &gt; <span style="font-weight: bold;">self</span>.r:
+            x = <span style="font-weight: bold;">self</span>.mid.pop(-1)
+            <span style="font-weight: bold;">self</span>.right.add(x)
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> -= x
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">popleft</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        num = <span style="font-weight: bold;">self</span>.nums.popleft()
+        <span style="font-weight: bold;">if</span> num <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.left:
+            <span style="font-weight: bold;">self</span>.left.remove(num)
+        <span style="font-weight: bold;">elif</span> num <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.mid:
+            <span style="font-weight: bold;">self</span>.mid.remove(num)
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> -= num
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>.right.remove(num)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.left) &lt; <span style="font-weight: bold;">self</span>.k:
+            x = <span style="font-weight: bold;">self</span>.mid.pop(0)
+            <span style="font-weight: bold;">self</span>.left.add(x)
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> -= x
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.mid) &lt; <span style="font-weight: bold;">self</span>.r:
+            x = <span style="font-weight: bold;">self</span>.right.pop(0)
+            <span style="font-weight: bold;">self</span>.mid.add(x)
+            <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> += x
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">calculateMKAverage</span>(<span style="font-weight: bold;">self</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.nums) &lt; <span style="font-weight: bold;">self</span>.m:
+            <span style="font-weight: bold;">return</span> -1
+        <span style="font-weight: bold;">return</span> floor(<span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">sum</span> / <span style="font-weight: bold;">len</span>(<span style="font-weight: bold;">self</span>.mid))
+</pre>
+</div>
+</div>
+</body>
+</html>

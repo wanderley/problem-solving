@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 2158. Amount of New Area Painted Each Day</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 2158. Amount of New Area Painted Each Day</h1>
+<ul class="org-ul">
+<li><a href="mistake_high_constant_factor_in_the_implementation.html#ID-56B18554-8EDB-44AF-B72A-8FD307B2980C">Mistake: High constant factor in the implementation</a>.  Did not optimize when query an interval that was already full.</li>
+<li><a href="blackbox_this_is_a_variation_of_a_classic_problem.html#ID-EEDBE877-7C4A-4D0B-BA6B-EFDF9288B78C">Blackbox: This is a variation of a classic problem</a>: <a href="segment_tree_from_one_dimensional_array.html#ID-252C5055-2C0D-4B0E-A4BF-9507B85A179F">Segment Tree</a></li>
+
+<li><a href="can_we_formulate_the_problem_using_a_segment_tree.html#ID-37B33434-71C2-4E55-9121-5D6855D8E169">Can we formulate the problem using a segment tree?</a>  Suppose we have a <a href="segment_tree_from_one_dimensional_array.html#ID-8564CEB1-3E95-4A34-B888-0BCE6D6504B8">Lazy Segment Tree</a> covering the full range (1 to \(10^5\)).  The problem adding intervals to the segment tree while computing the number of new points covered.  Time complexity is \(O(n \log m)\) with space \(O(min(m, n))\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">SegTree</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, left, right, count=0):
+        <span style="font-weight: bold;">self</span>.left = left
+        <span style="font-weight: bold;">self</span>.mid = left + (right - left) // 2
+        <span style="font-weight: bold;">self</span>.right = right
+        <span style="font-weight: bold;">self</span>.count = count
+        <span style="font-weight: bold;">self</span>.left_child = <span style="font-weight: bold;">self</span>.right_child = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, left, right):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.right &lt; left <span style="font-weight: bold;">or</span> right &lt; <span style="font-weight: bold;">self</span>.left:
+            <span style="font-weight: bold;">return</span> 0
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.is_full() <span style="font-weight: bold;">or</span> left &lt;= <span style="font-weight: bold;">self</span>.left &lt;= <span style="font-weight: bold;">self</span>.right &lt;= right:
+            <span style="font-weight: bold;">self</span>.left_child = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">self</span>.right_child = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">self</span>.fill()
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.count
+        <span style="font-weight: bold;">self</span>._extend()
+        <span style="font-weight: bold;">self</span>.left_child.add(left, right)
+        <span style="font-weight: bold;">self</span>.right_child.add(left, right)
+        before = <span style="font-weight: bold;">self</span>.count
+        after = <span style="font-weight: bold;">self</span>.count = <span style="font-weight: bold;">self</span>.left_child.count + <span style="font-weight: bold;">self</span>.right_child.count
+        <span style="font-weight: bold;">return</span> after - before
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_full</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.count == <span style="font-weight: bold;">self</span>.right - <span style="font-weight: bold;">self</span>.left + 1
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">fill</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.count = <span style="font-weight: bold;">self</span>.right - <span style="font-weight: bold;">self</span>.left + 1
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_extend</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left_child <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">self</span>.left &lt; <span style="font-weight: bold;">self</span>.right:
+            <span style="font-weight: bold;">self</span>.left_child = SegTree(<span style="font-weight: bold;">self</span>.left, <span style="font-weight: bold;">self</span>.mid)
+            <span style="font-weight: bold;">self</span>.right_child = SegTree(<span style="font-weight: bold;">self</span>.mid + 1, <span style="font-weight: bold;">self</span>.right)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.is_full():
+                <span style="font-weight: bold;">self</span>.left_child.fill()
+                <span style="font-weight: bold;">self</span>.right_child.fill()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_print</span>(<span style="font-weight: bold;">self</span>, level=0):
+        <span style="font-weight: bold;">print</span>(<span style="font-style: italic;">" "</span> * level, (<span style="font-weight: bold;">self</span>.left, <span style="font-weight: bold;">self</span>.right), <span style="font-weight: bold;">self</span>.count)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.left_child:
+            <span style="font-weight: bold;">self</span>.left_child._print(level + 1)
+            <span style="font-weight: bold;">self</span>.right_child._print(level + 1)
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">amountPainted</span>(<span style="font-weight: bold;">self</span>, paint: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; List[<span style="font-weight: bold;">int</span>]:
+        st = SegTree(0, 50_000 + 1)
+        ans = []
+        <span style="font-weight: bold;">for</span> start, end <span style="font-weight: bold;">in</span> paint:
+            ans.append(st.add(start, end - 1))
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().amountPainted([[1, 4], [4, 7], [5, 8]]) == [3, 3, 1]
+<span style="font-weight: bold;">assert</span> Solution().amountPainted([[1, 4], [5, 8], [4, 7]]) == [3, 3, 1]
+<span style="font-weight: bold;">assert</span> Solution().amountPainted([[1, 5], [2, 4]]) == [4, 0]
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  The brute-force means painting every single point and for that the answer is no.  But we can improve on the brute-force algorithm by tracking the next possible empty cell using an array \(nxt\).  While processing \(paint[i]\), we can set \(nxt[paint[i].start]=nxt[paint[i].start+1]=..=nxt[paint[i].end-1]=paint[i].end\).  So, the next time that we reach any of those cells, we can jump directly to \(nxt[paint[i].end]\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">amountPainted</span>(<span style="font-weight: bold;">self</span>, paint: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        N = <span style="font-weight: bold;">len</span>(paint)
+        <span style="font-weight: bold; font-style: italic;">nxt</span> = [<span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(50_001)]
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+        <span style="font-weight: bold;">for</span> start, end <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">paint</span>:
+            cur = 0
+            <span style="font-weight: bold;">while</span> start &lt; <span style="font-weight: bold; font-style: italic;">end</span>:
+                <span style="font-weight: bold;">if</span> nxt[start] <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                    nxt[<span style="font-weight: bold; font-style: italic;">start</span>] = end
+                    <span style="font-weight: bold; font-style: italic;">cur</span> += 1
+                    <span style="font-weight: bold; font-style: italic;">start</span> += 1
+                <span style="font-weight: bold;">else</span>:
+                    nstart = nxt[start]
+                    <span style="font-weight: bold; font-style: italic;">nxt</span>[<span style="font-weight: bold; font-style: italic;">start</span>] = <span style="font-weight: bold;">max</span>(nxt[start], end)
+                    <span style="font-weight: bold; font-style: italic;">start</span> = nstart
+            ans.append(cur)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  The graph starts with \(m\) vertices and no edges.  We process each paint on order and create the edges \((paint[i].start, paint[i].start+1), (paint[i].start+1, paint[i].start+2), ..., (paint[i].end-1, paint[i].end)\).  While adding the edges to the graph, we keep track of the components created using <a href="union_find.html#ID-23A4E36E-24D3-40F8-AA20-32C0DB1E36F6">Union-Find</a>.  Each component is rooted on the left-most position in the component.  So, adding an edge \((u, u+1)\), we can jump to \(find(u+1)\) since it is the next available point to paint.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">amountPainted</span>(<span style="font-weight: bold;">self</span>, paint: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        N = <span style="font-weight: bold;">len</span>(paint)
+        <span style="font-weight: bold; font-style: italic;">p</span> = [i <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(50_001)]
+        <span style="font-weight: bold; font-style: italic;">ans</span> = []
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(a):
+            <span style="font-weight: bold;">if</span> p[a] == a:
+                <span style="font-weight: bold;">return</span> a
+            p[a] = find(p[a])
+            <span style="font-weight: bold;">return</span> p[a]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">union</span>(a, b):
+            <span style="font-weight: bold;">assert</span> b &gt; a
+            pa = find(a)
+            pb = find(b)
+            p[pa] = pb
+            <span style="font-weight: bold;">return</span> pb
+
+        <span style="font-weight: bold;">for</span> start, end <span style="font-weight: bold;">in</span> paint:
+            cur = 0
+            start = find(start)
+            <span style="font-weight: bold;">while</span> start &lt; end:
+                start = union(start, start + 1)
+                cur += 1
+            ans.append(cur)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</body>
+</html>

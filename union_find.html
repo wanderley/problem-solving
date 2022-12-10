@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Union-Find</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Union-Find</h1>
+
+
+<div id="outline-container-org18de566" class="outline-2">
+<h2 id="org18de566">Basic implementation</h2>
+<div class="outline-text-2" id="text-org18de566">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">UnionFind</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.p = {}
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">find</span>(<span style="font-weight: bold;">self</span>, u):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">self</span>.p[u] != <span style="font-weight: bold; font-style: italic;">u</span>:
+            <span style="font-weight: bold;">self</span>.p[<span style="font-weight: bold; font-style: italic;">u</span>] = <span style="font-weight: bold;">self</span>.find(<span style="font-weight: bold;">self</span>.p[u])
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.p[u]
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">union</span>(<span style="font-weight: bold;">self</span>, u, v):
+        <span style="font-weight: bold;">self</span>.p.setdefault(u, u)
+        <span style="font-weight: bold;">self</span>.p.setdefault(v, v)
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">p</span>[<span style="font-weight: bold;">self</span>.find(u)] = <span style="font-weight: bold;">self</span>.find(v)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

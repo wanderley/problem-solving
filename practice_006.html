@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #006: Leetcode</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #006: Leetcode</h1>
+<ul class="org-ul">
+<li>Time Spent: 32 minutes 47 seconds</li>
+<li>Time Allotted: 1 hour</li>
+<li>Completed: July 3, 2022 1:35 PM</li>
+<li>Score: 5.99</li>
+</ul>
+
+<div id="outline-container-orgcfb8aa2" class="outline-2">
+<h2 id="orgcfb8aa2">Leetcode: 482. License Key Formatting</h2>
+<div class="outline-text-2" id="text-orgcfb8aa2">
+<p>
+
+</p>
+
+<p>
+:ID:       68FE274B-E4D2-42FF-AEBE-1B378112223F
+</p>
+<p>
+<a href="https://leetcode.com/problems/license-key-formatting/">Problem Statement</a>
+</p>
+
+<p>
+Remove all dashes from \(s\) and then from the end to the begin add char by char with the proper dash.  On the end, you just have to reverse the string.  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">licenseKeyFormatting</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>, k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        s = s.replace(<span style="font-style: italic;">"-"</span>, <span style="font-style: italic;">""</span>)
+        <span style="font-weight: bold; font-style: italic;">j</span> = 0
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-style: italic;">""</span>
+        <span style="font-weight: bold;">for</span> i, c <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(<span style="font-weight: bold;">reversed</span>(s.upper())):
+            <span style="font-weight: bold;">if</span> c == <span style="font-style: italic;">"-"</span>:
+                <span style="font-weight: bold;">continue</span>
+            ans += c
+            j += 1
+            <span style="font-weight: bold;">if</span> j == k <span style="font-weight: bold;">and</span> i + 1 &lt; <span style="font-weight: bold;">len</span>(s):
+                ans += <span style="font-style: italic;">"-"</span>
+                j = 0
+        <span style="font-weight: bold;">return</span> <span style="font-style: italic;">""</span>.join(<span style="font-weight: bold;">reversed</span>(ans))
+
+<span style="font-weight: bold;">assert</span> Solution().licenseKeyFormatting(<span style="font-style: italic;">"5F3Z-2e-9-w"</span>, 4) == <span style="font-style: italic;">"5F3Z-2E9W"</span>
+<span style="font-weight: bold;">assert</span> Solution().licenseKeyFormatting(<span style="font-style: italic;">"2-5g-3-J"</span>, 2) == <span style="font-style: italic;">"2-5G-3J"</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org763dab4" class="outline-2">
+<h2 id="org763dab4">Leetcode: 388. Longest Absolute File Path</h2>
+<div class="outline-text-2" id="text-org763dab4">
+<p>
+<a href="https://leetcode.com/problems/longest-absolute-file-path/">Problem Statement</a>
+</p>
+
+<p>
+Keep a stack with the current directories and use the total length of it to compute the total length of the absolute path.  Time and space complexity is \(O(n)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">lengthLongestPath</span>(<span style="font-weight: bold;">self</span>, <span style="font-weight: bold;">input</span>: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        ans = 0
+        <span style="font-weight: bold; font-style: italic;">prefix_len</span> = 0
+        <span style="font-weight: bold; font-style: italic;">dirs</span> = []
+        <span style="font-weight: bold;">for</span> w <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">input</span>.split(<span style="font-style: italic;">"\n"</span>):
+            <span style="font-weight: bold; font-style: italic;">depth</span> = w.count(<span style="font-style: italic;">"\t"</span>)
+            <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(dirs) &gt; <span style="font-weight: bold; font-style: italic;">depth</span>:
+                prefix_len -= dirs.pop()
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">"."</span> <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">w</span>:
+                ans = <span style="font-weight: bold;">max</span>(ans, prefix_len + <span style="font-weight: bold;">len</span>(w))
+            <span style="font-weight: bold;">else</span>:
+                dirs.append(<span style="font-weight: bold;">len</span>(w) - depth)
+                <span style="font-weight: bold; font-style: italic;">prefix_len</span> += <span style="font-weight: bold;">len</span>(w) - depth
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> (
+    Solution().lengthLongestPath(
+        <span style="font-style: italic;">"dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"</span>
+    )
+    == 32
+)
+<span style="font-weight: bold;">assert</span> Solution().lengthLongestPath(<span style="font-style: italic;">"a"</span>) == 0
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prefix Sum</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Prefix Sum</h1>
+
+<div id="outline-container-org3c8be34" class="outline-2">
+<h2 id="org3c8be34">One-dimensional Prefix Sum</h2>
+<div class="outline-text-2" id="text-org3c8be34">
+<p>
+Given an array \(v\), returns a new array where its i-th element is equal to \(v[0] + v[1] + .. + v[i]\).  The following algorithm solves the problem with \(O(n)\) time and space complexity where \(n\) is the number of elements in the array.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaf21c57" class="outline-2">
+<h2 id="orgaf21c57"><span class="todo TODO">TODO</span> One-dimensional Prefix Sum using Binary Indexed Tree</h2>
+<div class="outline-text-2" id="text-orgaf21c57">
+<p>
+Useful when the problem requires query and update of the prefix sum.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://en.wikipedia.org/wiki/Fenwick_tree">Wikipedia</a></li>
+<li><a href="https://www.youtube.com/watch?v=CWDQJGaN1gY">Tushar Roy's Fenwick Tree explanation</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org0db6c70" class="outline-2">
+<h2 id="org0db6c70">Two-dimensional Prefix Sum</h2>
+<div class="outline-text-2" id="text-org0db6c70">
+<p>
+Given a two-dimensional array, returns a new two-dimensional array where each position \((i, j)\) is the sum of all number in the subarray from the position \((0,0)\) to \((i,j)\).  The following code solves the problem with \(O(n \times m)\) time and space complexity.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

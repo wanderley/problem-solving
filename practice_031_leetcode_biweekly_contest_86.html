@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice #031: Leetcode Biweekly Contest 86</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Practice #031: Leetcode Biweekly Contest 86</h1>
+
+<div id="outline-container-org133ea14" class="outline-2">
+<h2 id="org133ea14">Leetcode: 2395. Find Subarrays With Equal Sum</h2>
+<div class="outline-text-2" id="text-org133ea14">
+<p>
+<a href="https://leetcode.com/problems/find-subarrays-with-equal-sum/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findSubarrays</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">bool</span>:
+        c = {}
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(nums) - 1):
+            <span style="font-weight: bold; font-style: italic;">s</span> = nums[i] + nums[i + 1]
+            c.setdefault(s, 0)
+            <span style="font-weight: bold; font-style: italic;">c</span>[<span style="font-weight: bold; font-style: italic;">s</span>] += 1
+            <span style="font-weight: bold;">if</span> c[s] &gt;= 2:
+                <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9eb28ad" class="outline-2">
+<h2 id="org9eb28ad">Leetcode: 2396. Strictly Palindromic Number</h2>
+<div class="outline-text-2" id="text-org9eb28ad">
+<p>
+<a href="https://leetcode.com/problems/strictly-palindromic-number/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isStrictlyPalindromic</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">bool</span>:
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">isp</span>(x):
+            i = 0
+            <span style="font-weight: bold; font-style: italic;">j</span> = <span style="font-weight: bold;">len</span>(x) - 1
+            <span style="font-weight: bold;">while</span> i &lt; <span style="font-weight: bold; font-style: italic;">j</span>:
+                <span style="font-weight: bold;">if</span> x[i] != <span style="font-weight: bold; font-style: italic;">x</span>[j]:
+                    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+                i += 1
+                <span style="font-weight: bold; font-style: italic;">j</span> -= 1
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">convert</span>(n, b):
+            <span style="font-weight: bold;">if</span> n &lt; <span style="font-weight: bold; font-style: italic;">b</span>:
+                <span style="font-weight: bold;">return</span> [n]
+
+            ans = []
+            <span style="font-weight: bold;">while</span> n &gt; 0:
+                ans.append(n % b)
+                <span style="font-weight: bold; font-style: italic;">n</span> = n // b
+
+            ans.reverse()
+            <span style="font-weight: bold;">return</span> ans
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">for</span> b <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(2, n - 1):
+            <span style="font-weight: bold; font-style: italic;">ans</span> = ans <span style="font-weight: bold;">and</span> isp(convert(n, b))
+
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7925f6b" class="outline-2">
+<h2 id="org7925f6b">Leetcode: 2397. Maximum Rows Covered by Columns</h2>
+<div class="outline-text-2" id="text-org7925f6b">
+<p>
+<a href="https://leetcode.com/problems/maximum-rows-covered-by-columns/">Problem Statement</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumRows</span>(<span style="font-weight: bold;">self</span>, mat: List[List[<span style="font-weight: bold;">int</span>]], cols: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(mat)
+        <span style="font-weight: bold; font-style: italic;">M</span> = <span style="font-weight: bold;">len</span>(mat[0])
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+        <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(2**M):
+            <span style="font-weight: bold;">if</span> s.bit_count() != <span style="font-weight: bold; font-style: italic;">cols</span>:
+                <span style="font-weight: bold;">continue</span>
+            cur = 0
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">all</span>(mat[i][j] == 0 <span style="font-weight: bold;">or</span> s &amp; (1 &lt;&lt; j) <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(M)):
+                    <span style="font-weight: bold; font-style: italic;">cur</span> += 1
+            <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">max</span>(ans, cur)
+
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0d2aa12" class="outline-2">
+<h2 id="org0d2aa12">Leetcode: 2398. Maximum Number of Robots Within Budget</h2>
+<div class="outline-text-2" id="text-org0d2aa12">
+<p>
+<a href="https://leetcode.com/problems/maximum-number-of-robots-within-budget/">Problem Statement</a>
+</p>
+
+<ul class="org-ul">
+<li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  We can use a sorted list to query the max element in the interval and <a href="prefix_sum.html#ID-6C76A007-72FB-4495-904F-CC3407193847">Prefix Sum</a> to compute the sum.  With this info, we can use a <a href="sliding_window.html#ID-CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2">Sliding Window</a> to go over all valid intervals and find the bigger one.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
+<span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumRobots</span>(
+        <span style="font-weight: bold;">self</span>, chargeTimes: List[<span style="font-weight: bold;">int</span>], runningCosts: List[<span style="font-weight: bold;">int</span>], budget: <span style="font-weight: bold;">int</span>
+    ) -&gt; <span style="font-weight: bold;">int</span>:
+        N = <span style="font-weight: bold;">len</span>(chargeTimes)
+        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+        <span style="font-weight: bold; font-style: italic;">start</span> = 0
+
+        <span style="font-weight: bold; font-style: italic;">pref</span> = <span style="font-weight: bold;">list</span>(accumulate(runningCosts))
+        <span style="font-weight: bold; font-style: italic;">maxq</span> = SortedList([])
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">cost</span>():
+            <span style="font-weight: bold; font-style: italic;">sumv</span> = pref[end] - (pref[start - 1] <span style="font-weight: bold;">if</span> start - 1 &gt;= 0 <span style="font-weight: bold;">else</span> 0)
+            <span style="font-weight: bold;">return</span> maxq[-1] + (end - start + 1) * sumv
+
+        <span style="font-weight: bold;">for</span> end <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            maxq.add(chargeTimes[end])
+            <span style="font-weight: bold;">while</span> maxq <span style="font-weight: bold;">and</span> cost() &gt; <span style="font-weight: bold; font-style: italic;">budget</span>:
+                maxq.remove(chargeTimes[start])
+                start += 1
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold; font-style: italic;">maxq</span>:
+                ans = <span style="font-weight: bold;">max</span>(ans, end - start + 1)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

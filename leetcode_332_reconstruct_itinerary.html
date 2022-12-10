@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 332. Reconstruct Itinerary</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 332. Reconstruct Itinerary</h1>
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a>  Find an <a href="eulerian_path_in_directed_graph.html#ID-BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9">Eulerian path in Directed Graph</a>.  Time and space complexity is \(O(m)\) where \(m\) is the number of edges in the graph.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findItinerary</span>(<span style="font-weight: bold;">self</span>, tickets: List[List[<span style="font-weight: bold;">str</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">str</span>]:
+        A = {u: [] <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">set</span>(u <span style="font-weight: bold;">for</span> t <span style="font-weight: bold;">in</span> tickets <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> t)}
+        <span style="font-weight: bold;">for</span> u, v <span style="font-weight: bold;">in</span> tickets:
+            A[u].append(v)
+        <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> A:
+            A[u].sort(reverse=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+        st = [<span style="font-style: italic;">"JFK"</span>]
+        ans = []
+        <span style="font-weight: bold;">while</span> st:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> A[st[-1]]:
+                ans.append(st.pop())
+            <span style="font-weight: bold;">else</span>:
+                st.append(A[st[-1]].pop())
+        ans.reverse()
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().findItinerary(
+    [[<span style="font-style: italic;">"MUC"</span>, <span style="font-style: italic;">"LHR"</span>], [<span style="font-style: italic;">"JFK"</span>, <span style="font-style: italic;">"MUC"</span>], [<span style="font-style: italic;">"SFO"</span>, <span style="font-style: italic;">"SJC"</span>], [<span style="font-style: italic;">"LHR"</span>, <span style="font-style: italic;">"SFO"</span>]]
+) == [<span style="font-style: italic;">"JFK"</span>, <span style="font-style: italic;">"MUC"</span>, <span style="font-style: italic;">"LHR"</span>, <span style="font-style: italic;">"SFO"</span>, <span style="font-style: italic;">"SJC"</span>]
+<span style="font-weight: bold;">assert</span> Solution().findItinerary(
+    [[<span style="font-style: italic;">"JFK"</span>, <span style="font-style: italic;">"SFO"</span>], [<span style="font-style: italic;">"JFK"</span>, <span style="font-style: italic;">"ATL"</span>], [<span style="font-style: italic;">"SFO"</span>, <span style="font-style: italic;">"ATL"</span>], [<span style="font-style: italic;">"ATL"</span>, <span style="font-style: italic;">"JFK"</span>], [<span style="font-style: italic;">"ATL"</span>, <span style="font-style: italic;">"SFO"</span>]]
+) == [<span style="font-style: italic;">"JFK"</span>, <span style="font-style: italic;">"ATL"</span>, <span style="font-style: italic;">"JFK"</span>, <span style="font-style: italic;">"SFO"</span>, <span style="font-style: italic;">"ATL"</span>, <span style="font-style: italic;">"SFO"</span>]
+</pre>
+</div>
+</div>
+</body>
+</html>

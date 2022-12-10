@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 3. Longest Substring Without Repeating Characters</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 3. Longest Substring Without Repeating Characters</h1>
+<p>
+<a href="https://leetcode.com/problems/substring-with-concatenation-of-all-words/">Problem Statement</a>: Find the length of the longest substring without repeating characters in \(s\).
+</p>
+
+<p>
+Be \(s_0, s_1, s_2, ..., s_{n-1}\) the characters in \(s\) and \(s_i, s_{i+1}, ..., s_{k}\) one substring without repeating characters in \(s\).  If \(s_{k+1}\) is not a character in \(s[i..k]\), then we can append \(s_{k+1}\) to the substring and make it longest.  If \(s_{k+1}\) is a character already in \(s[i..k]\), then appending \(s_{k+1}\) would make the substring invalid.  Thus, the best we can do is to continue searching if the longest substring starts on \(s_{j+1}\) for \(i\leq j\) and \(s_j=s_{k+1}\).  To summarize, we want to apply <a href="sliding_window.html#ID-CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2">Sliding Window</a> technique to go over \(s\) expanding and contracting the longest substring until that point.  The following code uses a <a href="deque.html#ID-D449CB99-E7B7-4B35-AD73-26E996029D93">Deque</a> to keep the string and a <a href="set.html#ID-AF42C6EF-199F-4E9D-ADAE-822084DB6EEC">Set</a> to quickly check if a given character was seen before.
+</p>
+
+<p>
+With \(n=|s|\), we have
+</p>
+<ul class="org-ul">
+<li>time complexity of \(O(n)\), since checking if an item is part of the set is \(O(1)\) on average and appending and popping elements from the deque is also \(O(1)\); and</li>
+<li>space complexity of \(O(n)\) since it stores the characters on the set and deque and it could be necessary to store all of them.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(s):
+    <span style="font-weight: bold; font-style: italic;">seen</span> = <span style="font-weight: bold;">set</span>()
+    <span style="font-weight: bold; font-style: italic;">match</span> = deque()
+    <span style="font-weight: bold; font-style: italic;">ans</span> = 0
+    <span style="font-weight: bold;">for</span> sym <span style="font-weight: bold;">in</span> s:
+        <span style="font-weight: bold;">if</span> sym <span style="font-weight: bold;">in</span> seen:
+            <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(match) &gt; 0 <span style="font-weight: bold;">and</span> match[0] != <span style="font-weight: bold; font-style: italic;">sym</span>:
+                seen.remove(match.popleft())
+            match.popleft()
+        seen.add(sym)
+        match.append(sym)
+        ans = <span style="font-weight: bold;">max</span>(ans, <span style="font-weight: bold;">len</span>(match))
+
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"abcabcbb"</span>) == 3
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"bbbbb"</span>) == 1
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"pwwkew"</span>) == 3
+<span style="font-weight: bold;">assert</span> solve(<span style="font-style: italic;">"tmmzuxt"</span>) == 5
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">lengthOfLongestSubstring</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(s)
+</pre>
+</div>
+</div>
+</body>
+</html>

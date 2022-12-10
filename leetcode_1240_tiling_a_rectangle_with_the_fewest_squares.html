@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1240. Tiling a Rectangle with the Fewest Squares</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1240. Tiling a Rectangle with the Fewest Squares</h1>
+<ul class="org-ul">
+<li><a href="mistake_overcomplicated_solution.html#ID-40E38FD2-DDF0-4C25-BB8C-43D07F3D5136">Mistake: Overcomplicated solution</a>.  My <a href="backtracking.html#ID-605B3009-7C7C-410A-9361-218A24ED8D8C">Backtracking</a> had the current square size to paint what made the solution too complicated.</li>
+
+<li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a>  For each cell of the rectangle, for each possible square that can have its top-left corner on that cell, fill the area and move to the next empty cell <b>on the same line</b>.   If there is no empty line in the line, continue the <a href="backtracking.html#ID-605B3009-7C7C-410A-9361-218A24ED8D8C">Backtracking</a> on the next row.  Time complexity is \(O(n \times m \times k^3)\) and space is \(O(n \times m)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tilingRectangle</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, m: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        grid = [[0] * m <span style="font-weight: bold;">for</span> _ <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(n)]
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = n * m
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bt</span>(i, j, cur):
+            <span style="font-weight: bold;">nonlocal</span> ans
+            <span style="font-weight: bold;">if</span> cur &gt;= ans:
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">if</span> i == n:
+                ans = <span style="font-weight: bold;">min</span>(ans, cur)
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">while</span> j &lt; m <span style="font-weight: bold;">and</span> grid[i][j] &gt; 0:
+                j += 1
+            <span style="font-weight: bold;">if</span> j == m:
+                bt(i + 1, 0, cur)
+                <span style="font-weight: bold;">return</span>
+            <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">min</span>(n - i, m - j), 0, -1):
+                valid = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                <span style="font-weight: bold;">for</span> ii <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, i + k):
+                    <span style="font-weight: bold;">for</span> jj <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(j, j + k):
+                        <span style="font-weight: bold;">if</span> grid[ii][jj] &gt; 0:
+                            valid = <span style="font-weight: bold; text-decoration: underline;">False</span>
+                        grid[ii][<span style="font-weight: bold; font-style: italic;">jj</span>] += 1
+                <span style="font-weight: bold;">if</span> valid:
+                    bt(i, j + k, cur + 1)
+                <span style="font-weight: bold;">for</span> ii <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i, i + k):
+                    <span style="font-weight: bold;">for</span> jj <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(j, j + k):
+                        grid[ii][<span style="font-weight: bold; font-style: italic;">jj</span>] -= 1
+
+        bt(0, 0, 0)
+        <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> Solution().tilingRectangle(2, 3) == 3
+<span style="font-weight: bold;">assert</span> Solution().tilingRectangle(5, 8) == 5
+<span style="font-weight: bold;">assert</span> Solution().tilingRectangle(11, 13) == 6
+</pre>
+</div>
+</div>
+</body>
+</html>

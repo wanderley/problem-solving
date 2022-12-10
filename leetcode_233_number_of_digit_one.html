@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 233. Number of Digit One</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 233. Number of Digit One</h1>
+<p>
+<a href="wip.html#ID-153A8411-5A07-478C-BD5F-562FE777012D">@WIP</a>
+</p>
+
+<p>
+First idea consists on counting the number of 1's in all possible inputs and answer the queries in \(O(1)\).  As \(0 \leq p \leq 10^9\), we would need \(10^9 \times 32\) bits or \(120\) megabytes just to store the count and the algorithm would have time complexity of \(O(9n) = O(9 \times 10^9)\) what is too slow.
+</p>
+
+<p>
+Let's explore the fact that any given input will be a number with at most 9 digits.  Be \(c(p)\) the total number of digit 1 appearing in all non-negative integers less than or equal to \(n\). Take \(n=12345\) as example.  It has 5 digits.  What do we know about numbers with less than 5 digits?  Be \(d(p)\) the total number of digit 1 appearing in all non-negative integers <b>with exactly \(p\) digits</b>.  If <b>the first digit (left-most digit) is 1</b>, then there are 10 values (0-9) for each of the other digits.  If <b>the first digit is not 1</b>, then there are \(\tbinom{p}{q}\) ways to have \(q\) 1-digits in the integer and \(9^{p-q}\) values for the remainder \((p-q)\) digits.  So, \(d(p)=10^{p-1}+\sum_{1\leq q \leq p}\tbinom{p}{q} \times 9^{p-q}\).
+</p>
+
+<div id="outline-container-orgde7d066" class="outline-2">
+<h2 id="orgde7d066"><span class="todo TODO">TODO</span> Explain the usage of <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a> to solve the problem</h2>
+</div>
+
+<div id="outline-container-org9ca149f" class="outline-2">
+<h2 id="org9ca149f">Building blocks</h2>
+<div class="outline-text-2" id="text-org9ca149f">
+<ul class="org-ul">
+<li><a href="factorial.html#ID-D115096E-9F04-4A70-BB5F-30FE4977F266">Factorial</a></li>
+<li><a href="binomial_coefficient.html#ID-B0399413-0375-4F60-85DA-CF98482CFF02">Binomial coefficient</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

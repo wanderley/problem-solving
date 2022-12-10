@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 849. Maximize Distance to Closest Person</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 849. Maximize Distance to Closest Person</h1>
+<p>
+Be \(l(i)\) the distance of the next one on the left of \(i\) and \(r(i)\) the distance of the next one on the right of \(i\).  The solution for the problem is \(\max_{0 \leq i < n} \min(l(i), r(i))\).  We can compute \(l\) by iterating over all position while keeping track of the position of the last one.  Note that \(r\) can be computed in a similar way.
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(n)\).</li>
+<li>Space complexity: \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxDistToClosest</span>(<span style="font-weight: bold;">self</span>, seats: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        INF = 10**9
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">calc_dist</span>(seats):
+            <span style="font-weight: bold; font-style: italic;">ans</span> = []
+            <span style="font-weight: bold; font-style: italic;">last_one</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+            <span style="font-weight: bold;">for</span> i, s <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(seats):
+                <span style="font-weight: bold;">if</span> s == 1:
+                    last_one = i
+                    ans.append(0)
+                <span style="font-weight: bold;">else</span>:
+                    ans.append(INF <span style="font-weight: bold;">if</span> last_one <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span> <span style="font-weight: bold;">else</span> i - last_one)
+            <span style="font-weight: bold;">return</span> ans
+        ans = 0
+        <span style="font-weight: bold;">for</span> l, r <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">zip</span>(calc_dist(seats), <span style="font-weight: bold;">reversed</span>(calc_dist(<span style="font-weight: bold;">reversed</span>(seats)))):
+            ans = <span style="font-weight: bold;">max</span>(ans, <span style="font-weight: bold;">min</span>(l, r))
+        <span style="font-weight: bold;">return</span> ans
+
+<span style="font-weight: bold;">assert</span> Solution().maxDistToClosest([1,0,0,0,1,0,1]) == 2
+<span style="font-weight: bold;">assert</span> Solution().maxDistToClosest([1,0,0,0]) == 3
+<span style="font-weight: bold;">assert</span> Solution().maxDistToClosest([0,1]) == 1
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 1044. Longest Duplicate Substring</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 1044. Longest Duplicate Substring</h1>
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_searching_the_last_element_that_satisfy_a_condition.html#ID-BA8FA096-1785-4100-BF9F-E1D101994F21">Can we formulate the problem as searching the last element that satisfy a condition?</a>  We want to find the max (or last) \(k\) such that there are two equal substrings of \(s\) of length \(k\).  To find \(k\), we can use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> and to check if there are such substrings we can use <a href="rabin_karp_algorithm_for_string_matching.html#ID-85E6E394-A1B3-4DE0-835C-CCE7D2830150">Rabin-Karp Algorithm for string matching</a>.  Time complexity is \(O(n \log n)\) and space \(O(n)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">longestDupSubstring</span>(<span style="font-weight: bold;">self</span>, s: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">str</span>:
+        n = [<span style="font-weight: bold;">ord</span>(c) - <span style="font-weight: bold;">ord</span>(<span style="font-style: italic;">"a"</span>) <span style="font-weight: bold;">for</span> c <span style="font-weight: bold;">in</span> s]
+
+        <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">check</span>(k):
+            <span style="font-weight: bold; font-style: italic;">P</span> = 31
+            <span style="font-weight: bold; font-style: italic;">MOD</span> = 2**64 - 1
+            <span style="font-weight: bold; font-style: italic;">Pk</span> = (P**k) % MOD
+            <span style="font-weight: bold; font-style: italic;">h</span> = 0
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k):
+                <span style="font-weight: bold; font-style: italic;">h</span> = (h * P + n[i]) % MOD
+            <span style="font-weight: bold; font-style: italic;">seen</span> = {<span style="font-weight: bold; font-style: italic;">h</span>: [0]}
+            <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(k, <span style="font-weight: bold;">len</span>(s)):
+                h = (h * P + n[i] - n[i - k] * Pk) % MOD
+                <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> seen.setdefault(h, []):
+                    <span style="font-weight: bold;">if</span> s[j : j + k] == s[i - k + 1 : i + 1]:
+                        <span style="font-weight: bold;">return</span> s[i - k + 1 : i + 1]
+                seen[h].append(i - k + 1)
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+        lo = 0
+        hi = <span style="font-weight: bold;">len</span>(s)
+        <span style="font-weight: bold;">while</span> lo &lt; hi:
+            mid = lo + (hi - lo) // 2
+            <span style="font-weight: bold;">if</span> check(mid) <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+                hi = mid
+            <span style="font-weight: bold;">else</span>:
+                lo = mid + 1
+        <span style="font-weight: bold;">return</span> check(lo - 1)
+</pre>
+</div>
+</div>
+</body>
+</html>

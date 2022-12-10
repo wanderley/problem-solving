@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 907. Sum of Subarray Minimums</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 907. Sum of Subarray Minimums</h1>
+<p>
+<a href="https://leetcode.com/problems/sum-of-subarray-minimums/">Problem Statement</a>: Given an array of integers \(a\), return the sum of \(min(b)\) where \(b\) is an interval of \(a\).
+</p>
+
+<p>
+Suppose that we have \(n(i)\) and \(p(i)\) defined as the index of the <a href="monotonic_stack.html#ID-135D43F0-78FA-43E4-821F-509439B633D1">next smaller</a> and <a href="monotonic_stack.html#ID-C9A1DCE9-FFE5-498A-9A04-07B71ABDEFCD">previous smaller</a> of \(a[i]\).  Having these numbers, we can easily compute the number of intervals of \(a\) where \(a[i]\): \(n(i) \times p(i)\).
+</p>
+
+<ul class="org-ul">
+<li>Time complexity: \(O(|a|)\).</li>
+<li>Space complexity: \(O(|a|)\).</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> deque
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">next_smaller</span>(nums):
+    <span style="font-weight: bold; font-style: italic;">ans</span> = [-1] * <span style="font-weight: bold;">len</span>(nums)
+    <span style="font-weight: bold; font-style: italic;">st</span> = deque(maxlen=<span style="font-weight: bold;">len</span>(nums))
+    <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(nums):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(st) &gt; 0 <span style="font-weight: bold;">and</span> nums[st[-1]] &gt; x:
+            ans[st.pop()] = i
+        st.append(i)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> next_smaller([3, 2, 5, 4, 9]) == [1, -1, 3, -1, -1]
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">prev_smaller</span>(nums):
+    ans = [-1] * <span style="font-weight: bold;">len</span>(nums)
+    st = deque(maxlen=<span style="font-weight: bold;">len</span>(nums))
+    <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(nums):
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold;">len</span>(st) &gt; 0 <span style="font-weight: bold;">and</span> nums[st[-1]] &gt; x:
+            st.pop()
+        ans[<span style="font-weight: bold; font-style: italic;">i</span>] = -1 <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(st) == 0 <span style="font-weight: bold;">else</span> st[-1]
+        st.append(i)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> prev_smaller([10, 2, 5, 4, 9]) == [-1, -1, 1, 1, 3]
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">solve</span>(nums):
+    n = next_smaller(nums)
+    p = prev_smaller(nums)
+    ans = 0
+    <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(nums)):
+        l = i - p[i]
+        r = (<span style="font-weight: bold;">len</span>(nums) <span style="font-weight: bold;">if</span> n[i] == -1 <span style="font-weight: bold;">else</span> n[i]) - i
+        <span style="font-weight: bold;">assert</span> l &gt;= 0
+        <span style="font-weight: bold;">assert</span> r &gt;= 0
+        c = nums[i] * (l * r)
+        ans = (ans + c) % (10**9 + 7)
+    <span style="font-weight: bold;">return</span> ans
+
+
+<span style="font-weight: bold;">assert</span> solve([3, 1, 2, 4]) == 17
+<span style="font-weight: bold;">assert</span> solve([11, 81, 94, 43, 3]) == 444
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sumSubarrayMins</span>(<span style="font-weight: bold;">self</span>, arr: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold;">return</span> solve(arr)
+</pre>
+</div>
+</div>
+</body>
+</html>
