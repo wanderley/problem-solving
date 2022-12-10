@@ -45,9 +45,9 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2460. Apply Operations to an Array</h1>
 
-<div id="outline-container-org2b1bcfd" class="outline-2">
-<h2 id="org2b1bcfd">Understand the problem</h2>
-<div class="outline-text-2" id="text-org2b1bcfd">
+<div id="outline-container-org5859964" class="outline-2">
+<h2 id="org5859964">Understand the problem</h2>
+<div class="outline-text-2" id="text-org5859964">
 <p>
 Given an array \(a\) of non-negative integers.  Simulate the following rules:
 </p>
@@ -58,9 +58,9 @@ Given an array \(a\) of non-negative integers.  Simulate the following rules:
 </ul>
 </div>
 
-<div id="outline-container-org2bba269" class="outline-3">
-<h3 id="org2bba269">Useful prompts</h3>
-<div class="outline-text-3" id="text-org2bba269">
+<div id="outline-container-orgb12c729" class="outline-3">
+<h3 id="orgb12c729">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgb12c729">
 <ul class="org-ul">
 <li><a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a>  Since \(2 \leq |a| \leq 2000\), it is fine to simulate the rules.</li>
 </ul>
@@ -68,17 +68,17 @@ Given an array \(a\) of non-negative integers.  Simulate the following rules:
 </div>
 </div>
 
-<div id="outline-container-org5cc1a6e" class="outline-2">
-<h2 id="org5cc1a6e">Devise a plan</h2>
-<div class="outline-text-2" id="text-org5cc1a6e">
+<div id="outline-container-org3307398" class="outline-2">
+<h2 id="org3307398">Devise a plan</h2>
+<div class="outline-text-2" id="text-org3307398">
 <p>
 Simulate the rules while saving the new non-zero values.  After that, we shift all number different than zero to the beginning of the array and fill the rest of the array with zeros.  Time is \(O(n)\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-org3a33a26" class="outline-3">
-<h3 id="org3a33a26">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org3a33a26">
+<div id="outline-container-org56b9fde" class="outline-3">
+<h3 id="org56b9fde">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org56b9fde">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">applyOperations</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:

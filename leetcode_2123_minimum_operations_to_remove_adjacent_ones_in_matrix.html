@@ -45,17 +45,17 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2123. Minimum Operations to Remove Adjacent Ones in Matrix</h1>
 
-<div id="outline-container-org5128b73" class="outline-2">
-<h2 id="org5128b73">Understand the problem</h2>
-<div class="outline-text-2" id="text-org5128b73">
+<div id="outline-container-org83c099e" class="outline-2">
+<h2 id="org83c099e">Understand the problem</h2>
+<div class="outline-text-2" id="text-org83c099e">
 <p>
 Find the minimum number of 1-cells in the grid to switch such that no other two horizontal or vertical 1-cells are adjacent.  Suppose that the grid (i.e <a href="2d_matrix.html#ID-2AC58B7A-4948-4E84-AA80-020E985D36E0">2D Matrix</a>) is colored like a chess board.  Two 1-cells can be connected only if they are in square with distinct colors.  So cells can be divided in two groups where there is no connections between cells on the same group.  Modeling as a graph problem, we can construct a graph \(G=(U, V, E)\), where \(U\) are the cells on white squares (i.e \(i \mod 2 = j \mod 2\) where \((i, j)\) is the coordinate of the cell), and \(V\) are the cells on black squares.  And the problem becomes <a href="pattern_find_minimum_vertex_cover_in_a_bipartite_graph.html#ID-E9AE0EFB-E12B-4AAB-82A5-6D9902F4741F">Pattern: Find minimum vertex cover in a bipartite graph</a>.
 </p>
 </div>
 
-<div id="outline-container-org0f158ab" class="outline-3">
-<h3 id="org0f158ab">Useful prompts</h3>
-<div class="outline-text-3" id="text-org0f158ab">
+<div id="outline-container-orgae28b5d" class="outline-3">
+<h3 id="orgae28b5d">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgae28b5d">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -65,17 +65,17 @@ Find the minimum number of 1-cells in the grid to switch such that no other two 
 </div>
 </div>
 
-<div id="outline-container-org705c685" class="outline-2">
-<h2 id="org705c685">Devise a plan</h2>
-<div class="outline-text-2" id="text-org705c685">
+<div id="outline-container-orgbffa535" class="outline-2">
+<h2 id="orgbffa535">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgbffa535">
 <p>
 Represent the given grid as a graph and execute the algorithm to find <a href="bipartite_minimum_vertex_cover.html#ID-C65F99DB-3808-4E4F-9952-FBB343E9AB9F">Bipartite Minimum Vertex Cover</a>.
 </p>
 </div>
 
-<div id="outline-container-orgc8c2f8b" class="outline-3">
-<h3 id="orgc8c2f8b">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgc8c2f8b">
+<div id="outline-container-org4e7cdcd" class="outline-3">
+<h3 id="org4e7cdcd">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org4e7cdcd">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 
@@ -120,9 +120,9 @@ Represent the given grid as a graph and execute the algorithm to find <a href="b
 </div>
 </div>
 
-<div id="outline-container-orga327923" class="outline-2">
-<h2 id="orga327923">Common mistakes</h2>
-<div class="outline-text-2" id="text-orga327923">
+<div id="outline-container-orge4e930d" class="outline-2">
+<h2 id="orge4e930d">Common mistakes</h2>
+<div class="outline-text-2" id="text-orge4e930d">
 <ul class="org-ul">
 <li><a href="mistake_failed_to_recognize_a_classic_problem_in_the_reduced_problem.html#ID-B3BCF738-D1F0-4705-89B2-10B66DCE8977">Mistake: Failed to recognize a classic problem in the reduced problem</a>.</li>
 </ul>

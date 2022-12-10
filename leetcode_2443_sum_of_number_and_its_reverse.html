@@ -45,17 +45,17 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2443. Sum of Number and Its Reverse</h1>
 
-<div id="outline-container-org300a8b6" class="outline-2">
-<h2 id="org300a8b6">Understand the problem</h2>
-<div class="outline-text-2" id="text-org300a8b6">
+<div id="outline-container-org148fee9" class="outline-2">
+<h2 id="org148fee9">Understand the problem</h2>
+<div class="outline-text-2" id="text-org148fee9">
 <p>
 Given an integer \(num\), return \(True\) if there is a non-negative integer \(x\) such that \(x+r(x)=num\) where \(r(x)\) is the integer generate by reverting the digits of \(x\).
 </p>
 </div>
 
-<div id="outline-container-org00337ab" class="outline-3">
-<h3 id="org00337ab">Useful prompts</h3>
-<div class="outline-text-3" id="text-org00337ab">
+<div id="outline-container-orgb9f0e94" class="outline-3">
+<h3 id="orgb9f0e94">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgb9f0e94">
 <ul class="org-ul">
 <li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Given an integer \(num\), return \(True\) if there is a non-negative integer \(x
 </div>
 </div>
 
-<div id="outline-container-org179d409" class="outline-2">
-<h2 id="org179d409">Devise a plan</h2>
-<div class="outline-text-2" id="text-org179d409">
+<div id="outline-container-org3d8b028" class="outline-2">
+<h2 id="org3d8b028">Devise a plan</h2>
+<div class="outline-text-2" id="text-org3d8b028">
 <p>
 There are only \(num\) possible numbers.  Iterate over all them and return \(True\) if one satisfy the condition.
 </p>
 </div>
 
-<div id="outline-container-org048436f" class="outline-3">
-<h3 id="org048436f">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org048436f">
+<div id="outline-container-org73375df" class="outline-3">
+<h3 id="org73375df">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org73375df">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sumOfNumberAndReverse</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">bool</span>:
