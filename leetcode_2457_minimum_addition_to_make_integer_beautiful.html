@@ -46,18 +46,18 @@
 <h1 class="title">Leetcode: 2457. Minimum Addition to Make Integer Beautiful</h1>
 
 
-<div id="outline-container-orgb91e323" class="outline-2">
-<h2 id="orgb91e323">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgb91e323">
+<div id="outline-container-org45f8b1b" class="outline-2">
+<h2 id="org45f8b1b">Understand the problem</h2>
+<div class="outline-text-2" id="text-org45f8b1b">
 <p>
 Given two integers \(n\) and \(t\), find the smallest \(x\) which sum of digits of \(n + x\) is at most \(t\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org91a1275" class="outline-2">
-<h2 id="org91a1275">Solution</h2>
-<div class="outline-text-2" id="text-org91a1275">
+<div id="outline-container-org77b8cd3" class="outline-2">
+<h2 id="org77b8cd3">Solution</h2>
+<div class="outline-text-2" id="text-org77b8cd3">
 <p>
 <i>Best explanation I have so far</i>:  <a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  We construct \(x\) from right to left, by making sure that \(x_0+n_0=x_1+n_1=...=10\).  So, we always minimize the difference of \(d(n+x)\) and \(t\) for each number.
 </p>

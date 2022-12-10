@@ -45,33 +45,39 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree</h1>
 
-<div id="outline-container-org0ae8094" class="outline-2">
-<h2 id="org0ae8094">Patterns</h2>
-<div class="outline-text-2" id="text-org0ae8094">
+<div id="outline-container-org3d3d884" class="outline-2">
+<h2 id="org3d3d884">Patterns</h2>
+<div class="outline-text-2" id="text-org3d3d884">
 <ul class="org-ul">
 <li><a href="pattern_tree_problem.html#ID-63791EB8-1E2A-41D3-AFCE-1511EFAE55AC">Pattern: Tree Problem</a>.</li>
 
+<li><a href="pattern_binary_search_tree_problem.html#ID-99977944-7D54-4914-94EB-10952391E8E0">Pattern: Binary Search Tree Problem</a>.</li>
+
 <li><a href="pattern_search_for_closest_number_of_some_kind.html#ID-05007800-BCCC-415E-A4D3-7B69ABC73588">Pattern: Search for closest number of some kind</a>.</li>
 
-<li id="<a href="pattern_problem_s_constraints_play_big_role_on_the_solution.html#ID-8CCAE757-A015-4494-A17E-C6BBFC38F658">Pattern: Problem's constraints play big role on the solution</a>">There is no mention that the <a href="binary_search_tree.html#ID-84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD">Binary Search Tree</a> is balanced.  So, we can't use it directly to answer the queries.</li>
+<li><a href="pattern_problem_s_constraints_play_big_role_on_the_solution.html#ID-8CCAE757-A015-4494-A17E-C6BBFC38F658">Pattern: Problem's constraints play big role on the solution</a>.  We can't traverse the tree for each query since it can be unbalanced (a long path).</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgbefcaed" class="outline-2">
-<h2 id="orgbefcaed">Prompts</h2>
-<div class="outline-text-2" id="text-orgbefcaed">
+<div id="outline-container-org5b9cc68" class="outline-2">
+<h2 id="org5b9cc68">Prompts</h2>
+<div class="outline-text-2" id="text-org5b9cc68">
 <ul class="org-ul">
 <li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org21fae36" class="outline-2">
-<h2 id="org21fae36">Solution</h2>
-<div class="outline-text-2" id="text-org21fae36">
+<div id="outline-container-org9476df8" class="outline-2">
+<h2 id="org9476df8">Solution</h2>
+<div class="outline-text-2" id="text-org9476df8">
 <p>
-While the input for the problem is a <a href="binary_search_tree.html#ID-84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD">Binary Search Tree</a>, we don't know if it is balanced or not.  In this case, we should assume that the tree could be a path, and traversing it to answer the queries would take linear time what is too slow.  As traversing for each query is not an option, we can traverse the tree once and create a <b>sorted</b> array with its values.  Now, the problem becomes answering the queries using the sorted array, and we can do it using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the first element \(e\) that is equal or greater than the query \(q\).  If \(q=a[e]\), the answer is \((q, q)\).  If \(e=0\), all elements on the list are greater than \(q\) and the answer is \((-1, a[e])\).  If \(e=n\), all elements on the list are smaller than \(q\) and the answer is \((a[e-1], -1)\).  Otherwise, \((a[e-1],a[e])\) is the answer for the query.  Time complexity is \(O(m \log n)\) where \(m\) is the number of queries and \(n\) is the number of vertices.  The space complexity is \(O(n)\).
+The naive solution is traversing the tree to answer each query.  The problem says the input is a <a href="binary_search_tree.html#ID-84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD">Binary Search Tree</a>, but there is no mention if it is balanced or not.  If it is unbalanced, the naive approach would have complexity of \(O(n^2 \times m)\).  This solution is too slow.
+</p>
+
+<p>
+As traversing for each query is not an option, we can traverse the tree <b>once</b> and create a <b>sorted</b> array with its values (<a href="in_order_tree_traversal.html#ID-D2838080-397D-4D1A-B57F-1748043F6641">In-order Tree Traversal</a>).  The problem becomes answering the queries using the sorted array, and we can do it using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the first element \(e\) that is equal or greater than the query \(q\).  If \(q=a[e]\), the answer is \((q, q)\).  If \(e=0\), all elements on the list are greater than \(q\) and the answer is \((-1, a[e])\).  If \(e=n\), all elements on the list are smaller than \(q\) and the answer is \((a[e-1], -1)\).  Otherwise, \((a[e-1],a[e])\) is the answer for the query.  Time complexity is \(O(n \times m \log n)\) where \(m\) is the number of queries and \(n\) is the number of vertices.  The space complexity is \(O(n)\).
 </p>
 
 <div class="org-src-container">

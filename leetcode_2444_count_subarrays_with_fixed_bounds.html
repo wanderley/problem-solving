@@ -45,17 +45,17 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2444. Count Subarrays With Fixed Bounds</h1>
 
-<div id="outline-container-org25eb14d" class="outline-2">
-<h2 id="org25eb14d">Understand the problem</h2>
-<div class="outline-text-2" id="text-org25eb14d">
+<div id="outline-container-orgf81c23a" class="outline-2">
+<h2 id="orgf81c23a">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgf81c23a">
 <p>
 Given an array \(a\) and numbers \(minK\) and \(maxK\), return the number of subarrays \(s\) where \(min(s)=minK\) and \(max(s)=maxK\).
 </p>
 </div>
 
-<div id="outline-container-orgbbfe712" class="outline-3">
-<h3 id="orgbbfe712">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgbbfe712">
+<div id="outline-container-org5543200" class="outline-3">
+<h3 id="org5543200">Useful prompts</h3>
+<div class="outline-text-3" id="text-org5543200">
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Given an array \(a\) and numbers \(minK\) and \(maxK\), return the number of sub
 </div>
 </div>
 
-<div id="outline-container-org3b24db1" class="outline-2">
-<h2 id="org3b24db1">Devise a plan</h2>
-<div class="outline-text-2" id="text-org3b24db1">
+<div id="outline-container-org80b8448" class="outline-2">
+<h2 id="org80b8448">Devise a plan</h2>
+<div class="outline-text-2" id="text-org80b8448">
 <p>
 If \(a[i] < minK\) or \(a[i] > maxK\), then no subarray that contains \(a[i]\) should be counted.  So, we can split the given array in subarray that contains only elements between \(minK\) and \(maxK\).   For now on, we suppose that \(a\) only contains elements from \(minK\) to \(maxK\).  <a href="pattern_count_subarrays_starting_ending_in_a_position.html#ID-C9DC4E36-0C33-4279-BC4E-8F6CEA6CA34D">Pattern: Count subarrays starting/ending in a position</a>.  For each position \(i\), we find the smallest index \(j\) where \(a[i..j]\) contains at least one value \(minK\) and one value \(maxK\).  The number of subarrays starting on \(i\) is going to be \(|a|-j\).  Time complexity and space \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-orgf7fd935" class="outline-3">
-<h3 id="orgf7fd935">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgf7fd935">
+<div id="outline-container-orga40161b" class="outline-3">
+<h3 id="orga40161b">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orga40161b">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countSubarrays</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], minK: <span style="font-weight: bold;">int</span>, maxK: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

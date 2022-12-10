@@ -45,9 +45,9 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2477. Minimum Fuel Cost to Report to the Capital</h1>
 
-<div id="outline-container-org6ff7d4c" class="outline-2">
-<h2 id="org6ff7d4c">Patterns</h2>
-<div class="outline-text-2" id="text-org6ff7d4c">
+<div id="outline-container-orgdc8ce2a" class="outline-2">
+<h2 id="orgdc8ce2a">Patterns</h2>
+<div class="outline-text-2" id="text-orgdc8ce2a">
 <ul class="org-ul">
 <li><a href="pattern_tree_problem.html#ID-63791EB8-1E2A-41D3-AFCE-1511EFAE55AC">Pattern: Tree Problem</a>.</li>
 
@@ -58,18 +58,18 @@
 </div>
 </div>
 
-<div id="outline-container-org77ea542" class="outline-2">
-<h2 id="org77ea542">Prompts</h2>
-<div class="outline-text-2" id="text-org77ea542">
+<div id="outline-container-orgf50f446" class="outline-2">
+<h2 id="orgf50f446">Prompts</h2>
+<div class="outline-text-2" id="text-orgf50f446">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_using_a_greedy_approach.html#ID-1CA3366B-D045-4BF4-9E39-DFA5131EF937">Can we solve the problem using a greedy approach?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org5ea00c1" class="outline-2">
-<h2 id="org5ea00c1">Solution</h2>
-<div class="outline-text-2" id="text-org5ea00c1">
+<div id="outline-container-org76fb409" class="outline-2">
+<h2 id="org76fb409">Solution</h2>
+<div class="outline-text-2" id="text-org76fb409">
 <p>
 Let's explore this problem looking the cities in a particular order: leaf cities to the capital.  A leaf city has only one connection to a city that we call parent.  The representative must use one car to move up to the parent city.  Note that there is no other option for moving representatives from a leaf city to the capital, we must move them <i>first</i> to the parent city.  Suppose that you moved all representatives from leaf cities to their respective parent cities.  You end up with either one city (the capital) or a tree with new leaves.  Now, the problem is bit different since you have to move all representatives that got to the new leaf cities and their own representative.  Luckily, we can easily do that by accumulating two values: the total cost to move the child cities up and the total number of representatives on those cities.  There is no other way to process the leaf cities, since they don't have other routes to the capital instead going to their parent cities.  Therefore, this order of processing is the optimal one.  Time and space complexity is \(O(n)\).
 </p>
