@@ -45,17 +45,17 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2448. Minimum Cost to Make Array Equal</h1>
 
-<div id="outline-container-orgecb36c5" class="outline-2">
-<h2 id="orgecb36c5">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgecb36c5">
+<div id="outline-container-orgcdf3e85" class="outline-2">
+<h2 id="orgcdf3e85">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgcdf3e85">
 <p>
 Given an array of integers \(a\) and an array of costs \(c\), find the minimum total cost of making all numbers in \(a\) equal.  The cost function is \(f(c)=abs(a[i]-x) \times c[i]\).
 </p>
 </div>
 
-<div id="outline-container-orgaa2c0ac" class="outline-3">
-<h3 id="orgaa2c0ac">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgaa2c0ac">
+<div id="outline-container-org658657c" class="outline-3">
+<h3 id="org658657c">Useful prompts</h3>
+<div class="outline-text-3" id="text-org658657c">
 <ul class="org-ul">
 <li><a href="can_we_state_the_problem_as_a_searching_problem.html#ID-60DEC3A8-810C-41E3-96E3-98145F4AAC3F">Can we state the problem as a searching problem?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Given an array of integers \(a\) and an array of costs \(c\), find the minimum t
 </div>
 </div>
 
-<div id="outline-container-org25d631c" class="outline-2">
-<h2 id="org25d631c">Devise a plan</h2>
-<div class="outline-text-2" id="text-org25d631c">
+<div id="outline-container-org6d31687" class="outline-2">
+<h2 id="org6d31687">Devise a plan</h2>
+<div class="outline-text-2" id="text-org6d31687">
 <p>
 <a href="pattern_search_validate.html#ID-B39B7723-9DCB-4C18-BE7D-51086F1F2A81">Pattern: Search &amp; Validate</a> to find the optimal value \(x\) using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>.  Note that if \(f(x)=f(x+1)=f(x-1)\), then all elements in \(a\) are already equal and the solution is 0.  Other important fact about this problem is that \(f\) is a convex function and has a shape like a parabola.  Be \(x'\) a guess.  If \(f(x') < f(x' + 1)\), then we know that the optimal value is on the left, and it is on the right if \(f(x') > f(x' + 1)\).  Time complexity is \(O(n \log \max(a))\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-orga8584ff" class="outline-3">
-<h3 id="orga8584ff">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orga8584ff">
+<div id="outline-container-orgce3c336" class="outline-3">
+<h3 id="orgce3c336">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgce3c336">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minCost</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], cost: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:

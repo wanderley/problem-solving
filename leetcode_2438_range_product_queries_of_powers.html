@@ -45,17 +45,17 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2438. Range Product Queries of Powers</h1>
 
-<div id="outline-container-orgd93b4af" class="outline-2">
-<h2 id="orgd93b4af">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgd93b4af">
+<div id="outline-container-orgede7259" class="outline-2">
+<h2 id="orgede7259">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgede7259">
 <p>
 Given an integer \(n\) and queries \(q=(l,r)\), return for each query the product of \(p[l:r]\) where \(p\) are the powers of \(2\) in non-decreasing order that compose \(n\).
 </p>
 </div>
 
-<div id="outline-container-org7999e27" class="outline-3">
-<h3 id="org7999e27">Useful prompts</h3>
-<div class="outline-text-3" id="text-org7999e27">
+<div id="outline-container-orgdd29c1b" class="outline-3">
+<h3 id="orgdd29c1b">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgdd29c1b">
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Given an integer \(n\) and queries \(q=(l,r)\), return for each query the produc
 </div>
 </div>
 
-<div id="outline-container-org04065d2" class="outline-2">
-<h2 id="org04065d2">Devise a plan</h2>
-<div class="outline-text-2" id="text-org04065d2">
+<div id="outline-container-org4d01893" class="outline-2">
+<h2 id="org4d01893">Devise a plan</h2>
+<div class="outline-text-2" id="text-org4d01893">
 <p>
 Compute all powers of 2 in \(n\) and for each query use <a href="brute_force.html#ID-EC1C87C8-A221-4823-9EF5-BEC706B2EEA5">Brute Force</a> to compute the answer by multiplying all required powers of 2.
 </p>
 </div>
 
-<div id="outline-container-orgbd3dd41" class="outline-3">
-<h3 id="orgbd3dd41">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgbd3dd41">
+<div id="outline-container-org2610848" class="outline-3">
+<h3 id="org2610848">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org2610848">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">productQueries</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, queries: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
