@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       99977944-7D54-4914-94EB-10952391E8E0
+:END:
+#+TITLE: Pattern: Binary Search Tree Problem

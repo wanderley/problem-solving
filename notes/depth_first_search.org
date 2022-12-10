@@ -2,3 +2,5 @@
 :ID:       212DBFC3-FE3C-493E-86A6-42FF3F82CD53
 :END:
 #+TITLE: Depth-first search
+
+- [[id:288D6B23-229C-42EA-BD60-2F78C3F7EFFF][Tree Traversal]]
