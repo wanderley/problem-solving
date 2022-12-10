@@ -45,17 +45,17 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 588. Design In-Memory File System</h1>
 
-<div id="outline-container-org1140b54" class="outline-2">
-<h2 id="org1140b54">Understand the problem</h2>
-<div class="outline-text-2" id="text-org1140b54">
+<div id="outline-container-orgfad7657" class="outline-2">
+<h2 id="orgfad7657">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgfad7657">
 <p>
 Given a list of path where some are directories and other are files.  Implement an efficient data structure that allows easily access to each directory to save files and list its content.
 </p>
 </div>
 
-<div id="outline-container-org9a51357" class="outline-3">
-<h3 id="org9a51357">Useful prompts</h3>
-<div class="outline-text-3" id="text-org9a51357">
+<div id="outline-container-org08e5656" class="outline-3">
+<h3 id="org08e5656">Useful prompts</h3>
+<div class="outline-text-3" id="text-org08e5656">
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
 
@@ -65,17 +65,17 @@ Given a list of path where some are directories and other are files.  Implement 
 </div>
 </div>
 
-<div id="outline-container-orgc8b62bf" class="outline-2">
-<h2 id="orgc8b62bf">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgc8b62bf">
+<div id="outline-container-org116b608" class="outline-2">
+<h2 id="org116b608">Devise a plan</h2>
+<div class="outline-text-2" id="text-org116b608">
 <p>
 Use <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a> to represent the directory and file paths.  Time complexity is \(O(p)\) to find a node (for <code>mkdir</code>, <code>write</code> and <code>read</code>) where \(p\) is the length of the path, \(O(p + P)\) for <code>ls</code> where the \(P\) is the sum of length of all nodes in a sub-path.
 </p>
 </div>
 
-<div id="outline-container-org8791fe6" class="outline-3">
-<h3 id="org8791fe6">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org8791fe6">
+<div id="outline-container-org42bf089" class="outline-3">
+<h3 id="org42bf089">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org42bf089">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FileSystem</span>:
 

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interview preparation: V</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<h1 class="title">Interview preparation: V</h1>
+<p>
+The time has come to test the method with someone that wants to get ready for coding interviews.
+</p>
+
+<p>
+I have two purposes for this note.  It contains support material for V's preparation like explanations about the interview process, method used to study for interview, weekly assignments etc.  This will help us to keep track where we are and what we should work next.  The other purpose is to serve as a place where I can formalize my thoughts about the theme.  Explaining things to others forces me to look to the problems in different perspectives.
+</p>
+
+<div id="outline-container-orgea81360" class="outline-2">
+<h2 id="orgea81360">Coding Interviews</h2>
+<div class="outline-text-2" id="text-orgea81360">
+<p>
+To best define the preparation required for coding interviews, let's compare (coding) interview problems with problems that we usually see on Computer Science's courses.  They require application of knowledge in Data Structure, Algorithms on Graphs and ad-hoc strategies (e.g. Dynamic Programming, Line-Sweeping, Sliding-Window etc).  They differ in two aspects: time to solve and difficult.  You have many days to solve an assignment exercise, but only have 15-20 minutes to solve an interview problem.  Due this difference in time to solve, you can expect interview problems to be easier than most of the assignments that you've done on University.
+</p>
+
+<p>
+Due the wide range of topics covered and restriction in time, interview problems are more like final exam's questions on Data Structure and Algorithms courses than assignments.  But there is an important difference.  While you do your exam alone and in silence, you have to verbalize your thoughts while solving the interview problem.  It is definitely an extra challenge, but also an opportunity to engage with the interviewer in case you don't see the solution right away.
+</p>
+
+<p>
+The structure and requirements of coding interviews ask for two distinct preparations: studying and performing.  You have to quickly find the solution for the problem using the right data structure, algorithm or technique.  While doing so, you have to perform the interview routine: come up with a solution, explain your thought process and code it in a clear and concise way.  <i>Learning</i> does not need to be time-bounded, since some concepts require time to sink in.  But <i>performing</i> should follow as close as possible a real interview with time constraints and feedback.
+</p>
+
+<p>
+A popular way to study is using a curated lists like <a href="https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions">Blind 75</a>.  Such lists cover majority of topics that you see in an interview.  These problems cover specific data structures, algorithms and techniques that work as building blocks for your future solutions.  While these lists are a good start, you might have more success if you discover the kind of problems that your target company asks.  It is not that a company uses only one type of questions, but their interviewers might converge to a sub-set of topics due internal culture or type of business.  Since during the interview you do not know the problem's type, it is wise to also study without using hints like Array, Graphs, DP etc.  To play safe, practice as many topics and problems that you can.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org9bd10b6" class="outline-2">
+<h2 id="org9bd10b6">Spaced-repetition</h2>
+<div class="outline-text-2" id="text-org9bd10b6">
+<p>
+Spaced-repetition is a study-technique commonly used to memorization of factual information.  It uses flashcard as way to store and review content.  A flashcard has two sides: front and back.  A question or prompt goes in the front of the card, and the information to memorize goes on the back.  For example, you have a picture of someone in the front of the card and their name on the back.  The technique uses the <a href="https://en.wikipedia.org/wiki/Spacing_effect">spacing effect</a> to encode information in the long-term memory by spacing the study sessions, and it is known to have better results than <a href="https://en.wikipedia.org/wiki/Cramming_(education)">cramming</a> (repeat many times in a single session).  Difficult cards appear more often while easier ones are less frequent.  <a href="https://ankiweb.net/">Anki</a> is a well-know and flexible program to manage cards.
+</p>
+
+<p>
+How spaced-repetition can be applied to problem solving.  While this technique has proven to be efficient when memorizing facts, it still unclear its impact on other types of study.  My bet is that we can use spaced-repetition to prepare for interviews in the following way.  After you solve a problem, you create a card that contains the problem statement (or simplify a link to the problem) and put on the back the steps that you should take to solve the problem.  By steps, I mean the observation that you found crucial to solve the problem.  Building blocks that you used to solve the problem in the correct order.  For example:
+</p>
+
+<ul class="org-ul">
+<li>Constraints require a logarithmic solution.</li>
+<li>One element of the array with its neighbors is enough to decide which side of the array lays the answer.</li>
+<li>Use a Binary-search for find the answer.</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgb3c67da" class="outline-2">
+<h2 id="orgb3c67da">Method</h2>
+<div class="outline-text-2" id="text-orgb3c67da">
+<p>
+An studying session is divided in two parts: solving new problems and reviewing old problems.
+</p>
+
+<p>
+<b>For new problems</b>, you pick one or two problems per day and spend as much time you need to solve them.  If you solved the problem, follow the instructions on <a href="#orgcc347b3">Creating a new card</a>.  Otherwise, give at least one day to try again.  On the second day, you can check a solution to the problem.  The goal is to understand the solution and find the gaps on your knowledge.  There is a data structure that you are not familiar, a particular technique or idea that makes the problem dead easy to solve.  After you learned how to solve the problem (congrats!), <a href="#orgcc347b3">create a card</a> for it and move on.
+</p>
+
+<p>
+<b>For old problems</b>, you open Anki and practice each available card (<i>new</i> and <i>for review</i>).  Avoid reviewing cards using "Easy" button since they schedule a new review for too far way.  Use the "Good" button if you solved the problem without any issues: recalled the steps to solve it and passed the problem on the first try.  The "Hard" button should be used if you had difficult on recalling the steps to solve the problem or when coding it.  Reserve the "Again" button for when you couldn't solve the problem at all.  Be emotionally ready for that because this might happen more often than you expect.
+</p>
+</div>
+
+
+<div id="outline-container-orgcc347b3" class="outline-3">
+<h3 id="orgcc347b3">Creating a new card</h3>
+<div class="outline-text-3" id="text-orgcc347b3">
+<p>
+The front of the card has a link for the problem.  The back of the card has the steps to solve the problem and optionally an example for the solution.  You might get stuck trying to write the <i>perfect</i> card.  Don't bother with this.  You will have many opportunities to improve them after a review session.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org3b91012" class="outline-2">
+<h2 id="org3b91012">FAQ</h2>
+<div class="outline-text-2" id="text-org3b91012">
+</div>
+<div id="outline-container-orgbf35ec3" class="outline-3">
+<h3 id="orgbf35ec3">When should I work in a new problem?</h3>
+<div class="outline-text-3" id="text-orgbf35ec3">
+<p>
+Don't start working in a new problem if you have more reviews than you have time to get them done in a day, or you already have new cards waiting for you.  It is easy to get overwhelmed with the number of reviews.  Striving for consistency will bring better results than rushing every other day.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6de046d" class="outline-3">
+<h3 id="org6de046d">Should I code the solution on every review?</h3>
+<div class="outline-text-3" id="text-org6de046d">
+<p>
+Yes!  Reconstructing your steps to the solution and writing the code again will cement the building blocks on your memory.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org494334a" class="outline-3">
+<h3 id="org494334a">What should I do if I can't solve a problem?</h3>
+<div class="outline-text-3" id="text-org494334a">
+<p>
+First of all, that is fine and will happen more frequently than you imagine.  Give at least one day before looking to solutions.  After you read and <b>understand</b> a solution, ask yourself "what steps should I have done to solve this problem?".  Create a card with these steps and review it as any other card.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgacb1a13" class="outline-2">
+<h2 id="orgacb1a13">Meetings</h2>
+<div class="outline-text-2" id="text-orgacb1a13">
+</div>
+<div id="outline-container-org9505ea3" class="outline-3">
+<h3 id="org9505ea3">December 2, 2022</h3>
+<div class="outline-text-3" id="text-org9505ea3">
+<ul class="org-ul">
+<li>The goal of this method is to use spaced-repetition to build your intuition to solve coding challenges.  The card has the path to solve the problem and this will be internalized after many repetitions.  When solving new problems, a thought will scream at you "Binary Search!" or "This is a Graph Problem".  In fact, this is not much different of how we learned math.  How many times did you verbalize the steps to isolate \(x\) in an equation?  You used descriptive knowledge to build the intuition muscle that later on helped you to perform simplification without using much mental energy.</li>
+
+<li>For next session, you will work in <a href="https://leetcode.com/contest/weekly-contest-320/">4 problems</a> which you should apply the method: solve them, create and review the cards.  We will review your thought process to solve these problems and what worked and didn't work when create and reviewing your cards:
+
+<ul class="org-ul">
+<li><a href="leetcode_2475_number_of_unequal_triplets_in_array.html#ID-AD689352-C66F-4BFC-95A4-65B58110A851">Leetcode: 2475. Number of Unequal Triplets in Array</a></li>
+<li><a href="leetcode_2476_closest_nodes_queries_in_a_binary_search_tree.html#ID-7F2BA5B5-2C29-40AE-A4D3-B3D438A660C9">Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree</a></li>
+<li><a href="leetcode_2477_minimum_fuel_cost_to_report_to_the_capital.html#ID-47D88994-CD09-41C5-A3BA-9EDF2B9AB80E">Leetcode: 2477. Minimum Fuel Cost to Report to the Capital</a></li>
+<li><a href="leetcode_2478_number_of_beautiful_partitions.html#ID-D500C3CF-B17C-4C7D-90F2-BFA02AB1C9D6">Leetcode: 2478. Number of Beautiful Partitions</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5c25ac8" class="outline-3">
+<h3 id="org5c25ac8">December 9, 2022</h3>
+<div class="outline-text-3" id="text-org5c25ac8">
+</div>
+<div id="outline-container-orgdf2f1b8" class="outline-4">
+<h4 id="orgdf2f1b8">Performing a solution</h4>
+<div class="outline-text-4" id="text-orgdf2f1b8">
+<ul class="org-ul">
+<li class="on"><code>[X]</code> Found the worst case but didn't narrow the search for the optimal algorithm to that case.</li>
+<li class="on"><code>[X]</code> Explain what are chucks and how to use them.
+<ul class="org-ul">
+<li><a href="https://www.theroar.com.au/2016/12/19/ten-ways-get-cricket-including-youve-never-seen/">What are the ways to be dismissed in cricket?</a>
+<ul class="org-ul">
+<li>Define one of them.</li>
+<li>Define other one.</li>
+<li>Contrast them.</li>
+</ul></li>
+</ul></li>
+<li class="on"><code>[X]</code> Things that will improve over time:
+<ul class="org-ul">
+<li>Proficiency in the selected Programming Language.</li>
+<li>Formulate a high-level plan and execute each part in isolation.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1776768" class="outline-4">
+<h4 id="org1776768">Next steps</h4>
+<div class="outline-text-4" id="text-org1776768">
+<p>
+We will start with <a href="https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions">Blind 75</a> problems.  As we work through them, we will find that few areas should get more attention.  For those, I will add problems to increase your proficiency on specific building blocks.  Here is the list of problems for this week:
+</p>
+
+<ul class="org-ul">
+<li>Blind 75
+<ul class="org-ul">
+<li><a href="https://leetcode.com/problems/two-sum/">Two Sum</a></li>
+<li><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/">Best Time to Buy and Sell Stock</a></li>
+<li><a href="https://leetcode.com/problems/contains-duplicate/">Contains Duplicate</a></li>
+</ul></li>
+<li>Supplement
+<ul class="org-ul">
+<li><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/">Binary Tree Inorder Traversal</a>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
