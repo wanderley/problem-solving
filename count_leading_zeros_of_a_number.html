@@ -45,18 +45,18 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Count leading zeros of a number</h1>
 
-<div id="outline-container-org4a887f5" class="outline-2">
-<h2 id="org4a887f5">Naive approach</h2>
-<div class="outline-text-2" id="text-org4a887f5">
+<div id="outline-container-orgffc896e" class="outline-2">
+<h2 id="orgffc896e">Naive approach</h2>
+<div class="outline-text-2" id="text-orgffc896e">
 <p>
 A naive consists on checking if the number is a multiple of 10 or not.  If so, divide (<a href="integer_division.html#ID-EA4496F1-4DE1-4F87-B23E-B7FA4CBCE33F">integer division</a>) the number by 10 and repeat the process, counting how many times the number is divisible by 10.  The algorithm has time complexity of \(O(n)\) where \(n\) is the number of digits of the number and memory complexity of \(O(1)\).  For example, \(12300\) is divisible by 10, \(1230\) is also divisible by 10 and \(123\) is not.  So, the number leading zeros in \(12300\) is \(2\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org21d94ed" class="outline-2">
-<h2 id="org21d94ed">Count leading zeros of a number using its 2's and 5's factors</h2>
-<div class="outline-text-2" id="text-org21d94ed">
+<div id="outline-container-org40ac45a" class="outline-2">
+<h2 id="org40ac45a">Count leading zeros of a number using its 2's and 5's factors</h2>
+<div class="outline-text-2" id="text-org40ac45a">
 <p>
 As \(10=2\times5\), we can re-write above <code>count_zeros</code> function as following:
 </p>
