@@ -45,26 +45,26 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2447. Number of Subarrays With GCD Equal to K</h1>
 
-<div id="outline-container-orgae593b2" class="outline-2">
-<h2 id="orgae593b2">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgae593b2">
+<div id="outline-container-org39d90d1" class="outline-2">
+<h2 id="org39d90d1">Understand the problem</h2>
+<div class="outline-text-2" id="text-org39d90d1">
 <p>
 Given an array of integers \(a\) and an integer \(k\), find all subarrays \(a[i..j]\) where \(gcd(a[i], a[i+1], ..., a[j])=k\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org46422a1" class="outline-2">
-<h2 id="org46422a1">Devise a plan</h2>
-<div class="outline-text-2" id="text-org46422a1">
+<div id="outline-container-org84a5278" class="outline-2">
+<h2 id="org84a5278">Devise a plan</h2>
+<div class="outline-text-2" id="text-org84a5278">
 <p>
 <a href="pattern_small_constraints_could_allow_brute_force_solution.html#ID-BC81A358-FBCC-43AA-9928-E9778A107869">Pattern: Small constraints could allow a brute-force solution</a>, so iterate over all subarrays and compute GCD.
 </p>
 </div>
 
-<div id="outline-container-orgbc98f6c" class="outline-3">
-<h3 id="orgbc98f6c">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgbc98f6c">
+<div id="outline-container-org67c7144" class="outline-3">
+<h3 id="org67c7144">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org67c7144">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">subarrayGCD</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

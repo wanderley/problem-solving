@@ -45,26 +45,26 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2452. Words Within Two Edits of Dictionary</h1>
 
-<div id="outline-container-org8221005" class="outline-2">
-<h2 id="org8221005">Understand the problem</h2>
-<div class="outline-text-2" id="text-org8221005">
+<div id="outline-container-org8fe3165" class="outline-2">
+<h2 id="org8fe3165">Understand the problem</h2>
+<div class="outline-text-2" id="text-org8fe3165">
 <p>
 Given a dictionary and queries, return a subarray of queries which each query \(q\) appear in the dictionary if edit distance (only change) at most 2.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org4b77702" class="outline-2">
-<h2 id="org4b77702">Devise a plan</h2>
-<div class="outline-text-2" id="text-org4b77702">
+<div id="outline-container-orgbdbe29b" class="outline-2">
+<h2 id="orgbdbe29b">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgbdbe29b">
 <p>
 <a href="pattern_small_constraints_could_allow_brute_force_solution.html#ID-BC81A358-FBCC-43AA-9928-E9778A107869">Pattern: Small constraints could allow a brute-force solution</a>.  For each query, compute the edit distance to all words in the dictionary and add it to the output if the distance is at most 2.
 </p>
 </div>
 
-<div id="outline-container-orgb5860e3" class="outline-3">
-<h3 id="orgb5860e3">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgb5860e3">
+<div id="outline-container-org002c45a" class="outline-3">
+<h3 id="org002c45a">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org002c45a">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">twoEditWords</span>(<span style="font-weight: bold;">self</span>, queries: List[<span style="font-weight: bold;">str</span>], dictionary: List[<span style="font-weight: bold;">str</span>]) -&gt; List[<span style="font-weight: bold;">str</span>]:
