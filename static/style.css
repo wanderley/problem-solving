@@ -28,6 +28,17 @@ nav {
     border-bottom: 1px solid lightgray;
 }
 
+.nav-header {
+    font-weight: bolder;
+    font-size: 1.2em;
+    padding-right: 1.2em;
+}
+
+.nav-header {
+    font-size: 1em;
+}
+
+
 #content {
     background: white;
     max-width: 1024px;

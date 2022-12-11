@@ -71,7 +71,7 @@
         ;; Org-publish
         org-export-with-broken-links 'mark
         org-html-validation-link nil
-        org-html-home/up-format "<!-- %s --><nav><a href=\"%s\">Problem Solving</a></nav>"
+        org-html-home/up-format "<!-- %s --><nav><span class=\"nav-header\">Problem Solving</span><span class=\"nav-items\"><a href=\"%s\">Home</a><span></nav>"
         org-html-link-home "index.html"
         org-html-head-include-scripts nil
         org-html-head-include-default-style nil
