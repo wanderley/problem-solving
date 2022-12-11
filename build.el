@@ -4,10 +4,9 @@
 
 ;;; Commentary:
 ;;
-;; This script publishes the notes using Emacs.  The following command publishes
-;; the notes from the folder `/notes' to `/out'.
+;; This file contains the API to build the notes.  Use `make' to build the notes:
 ;;
-;;     > emacs --batch -l build.el --kill
+;;     > make site
 ;;
 ;; It was inspired by
 ;; - https://org-roam.discourse.group/t/export-backlinks-on-org-export/1756/25?page=2
@@ -32,12 +31,12 @@
   (load bootstrap-file nil 'nomessage))
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
-(setq debug-on-error t)
 
 
 ;;; Early setup
 
-(setq make-backup-files nil)
+(setq make-backup-files nil
+      debug-on-error t)
 
 
 ;;; Install dependencies
@@ -54,61 +53,60 @@
 (require 'org-roam)
 
 
-;;; Setup Org-roam
+;;; Setup
 
-(setq org-roam-directory (expand-file-name "./notes")
-      org-roam-db-location (expand-file-name "./notes/org-roam.db"))
+(defun wander/setup-org-roam (&optional DB-SYNC)
+  "Setup org-roam directory and database location."
+  (setq org-roam-directory (expand-file-name "./notes")
+        org-roam-db-location (expand-file-name "./notes/org-roam.db"))
+  (org-roam-db-sync DB-SYNC))
 
-(org-roam-db-sync t)
+(defun wander/setup-site (&optional DB-SYNC)
+  (wander/setup-org-roam DB-SYNC)
+  (setq org-id-locations-file ".orgids"
+        org-id-link-to-org-use-id t
+        org-id-extra-files (org-roam-list-files)
+        org-id-track-globally t
+
+        ;; Org-publish
+        org-export-with-broken-links 'mark
+        org-html-validation-link nil
+        org-html-home/up-format "<!-- %s --><nav><a href=\"%s\">Problem Solving</a></nav>"
+        org-html-link-home "index.html"
+        org-html-head-include-scripts nil
+        org-html-head-include-default-style nil
+        org-html-head  "<link rel=\"stylesheet\" href=\"style.css\">"
+
+        static-directory (expand-file-name "./static")
+        publish-directory (expand-file-name "./out")
+
+        org-publish-project-alist
+        (list
+         (list "org-site:static"
+               :base-directory static-directory
+               :base-extension "css\\|js\\|png\\|jpg\\|gif\\|svg\\|pdf\\|mp3\\|ogg\\|swf"
+               :recursive t
+               :publishing-directory publish-directory
+               :publishing-function 'org-publish-attachment)
+         (list "org-site:main"
+               :recursive t
+               :exclude ".*gitignore|.*/private/.*"
+               :base-directory org-roam-directory
+               :base-extension "org"
+               :publishing-function 'org-html-publish-to-html
+               :publishing-directory publish-directory
+               :with-date t
+               :with-author nil
+               :with-creator nil
+               :with-toc nil
+               :section-numbers nil
+               :time-stamp-file nil)))
+  (add-hook 'org-export-before-processing-hook 'wander/org-roam-insert-html-backlinks-string))
 
 
-;;; Setup Org
+;;; Helper Functions
 
-(setq org-id-locations-file ".orgids"
-      org-id-link-to-org-use-id t
-      org-id-extra-files (org-roam-list-files)
-      org-id-track-globally t
-
-      ;; Org-publish
-      org-export-with-broken-links 'mark
-      org-html-validation-link nil
-      org-html-home/up-format "<!-- %s --><nav><a href=\"%s\">Problem Solving</a></nav>"
-      org-html-link-home "index.html"
-      org-html-head-include-scripts nil
-      org-html-head-include-default-style nil
-      org-html-head  "<link rel=\"stylesheet\" href=\"style.css\">"
-
-      static-directory "static"
-      publish-directory "out")
-
-(setq org-publish-project-alist
-      (list
-       (list "org-site:static"
-             :base-directory static-directory
-             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-             :recursive t
-             :publishing-directory publish-directory
-             :publishing-function 'org-publish-attachment)
-       (list "org-site:main"
-             :recursive t
-             :exclude ".*gitignore|.*/private/.*" ;; remove private directory
-             :base-directory org-roam-directory
-             :base-extension "org"
-             :publishing-function 'org-html-publish-to-html
-             :publishing-directory publish-directory
-             :with-date t
-             :with-author nil           ;; Don't include author name
-             :with-creator nil          ;; Don't include Emacs and Org versions in footer
-             :with-toc nil              ;; Don't include a table of contents
-             :section-numbers nil       ;; Don't include section numbers
-             :time-stamp-file nil       ;; Don't include timestamp in footer
-             )
-       ))
-
-
-;;; Extension to Org-publish
-
-(defun wander/org-roam-collect-backlinks-string ()
+(defun wander/org-roam-collect-html-backlinks-string ()
   (when (org-roam-node-at-point)
     (let* ((node (org-roam-node-at-point))
            (filename (org-roam-node-file node))
@@ -126,16 +124,25 @@
                               "\n\n"))))
       content)))
 
-(defun wander/org-roam-insert-backlinks-string (backend)
+(defun wander/org-roam-insert-html-backlinks-string (backend)
   (save-excursion
     (goto-char (point-min))
     (when (org-roam-node-at-point)
       (goto-char (point-max))
-      (insert (or (wander/org-roam-collect-backlinks-string) "")))))
-
-(add-hook 'org-export-before-processing-hook 'wander/org-roam-insert-backlinks-string)
+      (insert (or (wander/org-roam-collect-html-backlinks-string) "")))))
 
 
-;;; Publish
+;;; Build API
 
-(org-publish-all t)
+(defun wander/publish-site ()
+  (message "Publish site ...")
+  (wander/setup-site t)
+  (org-publish-all t)
+  (message "Publish site DONE"))
+
+(defun wander/iterate-site ()
+  (message "Iterate on site using specific note ...")
+  (wander/setup-site)
+  (org-publish "org-site:static")
+  (find-file (expand-file-name (or (getenv "NOTE") "./notes/interview_preparation_v.org")))
+  (org-publish-current-file t))

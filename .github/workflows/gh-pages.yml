@@ -25,7 +25,7 @@ jobs:
           version: '28.1'
 
       - name: Build
-        run: emacs --batch -l build.el --kill
+        run: make site
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
