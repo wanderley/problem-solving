@@ -3,9 +3,12 @@
 :END:
 #+TITLE: Interview preparation: V
 
+#+BEGIN_ABSTRACT
 The time has come to test the method with someone that wants to get ready for coding interviews.
 
 I have two purposes for this note.  It contains support material for V's preparation like explanations about the interview process, method used to study for interview, weekly assignments etc.  This will help us to keep track where we are and what we should work next.  The other purpose is to serve as a place where I can formalize my thoughts about the theme.  Explaining things to others forces me to look to the problems in different perspectives.
+#+END_ABSTRACT
+#+TOC: headlines 2
 
 * Coding Interviews
 
