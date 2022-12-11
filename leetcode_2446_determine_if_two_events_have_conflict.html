@@ -45,26 +45,26 @@
 <!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2446. Determine if Two Events Have Conflict</h1>
 
-<div id="outline-container-org60d7f9a" class="outline-2">
-<h2 id="org60d7f9a">Understand the problem</h2>
-<div class="outline-text-2" id="text-org60d7f9a">
+<div id="outline-container-orgb3a2fd1" class="outline-2">
+<h2 id="orgb3a2fd1">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgb3a2fd1">
 <p>
 Determine if two segments intersect.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org9443969" class="outline-2">
-<h2 id="org9443969">Devise a plan</h2>
-<div class="outline-text-2" id="text-org9443969">
+<div id="outline-container-org201f5b7" class="outline-2">
+<h2 id="org201f5b7">Devise a plan</h2>
+<div class="outline-text-2" id="text-org201f5b7">
 <p>
 If two segments intersect, then they have a point \(x\) in common which \(s_1[0] \leq x s_1[1]\) and \(s_2[0] \leq x s_2[1]\).  Therefore, \(\max(s_1[0], s_2[0]) \leq x\) and \(x \leq \min(s_1[1], s_2[1])\).  To answer the question, we can just check if \(\max(s_1[0], s_2[0]) \leq \min(s_1[1], s_2[1])\).
 </p>
 </div>
 
-<div id="outline-container-orgfcbc03f" class="outline-3">
-<h3 id="orgfcbc03f">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgfcbc03f">
+<div id="outline-container-org663ad83" class="outline-3">
+<h3 id="org663ad83">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org663ad83">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">haveConflict</span>(<span style="font-weight: bold;">self</span>, event1: List[<span style="font-weight: bold;">str</span>], event2: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">bool</span>:
