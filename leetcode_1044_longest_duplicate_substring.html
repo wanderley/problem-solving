@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 1044. Longest Duplicate Substring</h1>
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_as_searching_the_last_element_that_satisfy_a_condition.html#ID-BA8FA096-1785-4100-BF9F-E1D101994F21">Can we formulate the problem as searching the last element that satisfy a condition?</a>  We want to find the max (or last) \(k\) such that there are two equal substrings of \(s\) of length \(k\).  To find \(k\), we can use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> and to check if there are such substrings we can use <a href="rabin_karp_algorithm_for_string_matching.html#ID-85E6E394-A1B3-4DE0-835C-CCE7D2830150">Rabin-Karp Algorithm for string matching</a>.  Time complexity is \(O(n \log n)\) and space \(O(n)\).</li>

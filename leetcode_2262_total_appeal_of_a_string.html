@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2262. Total Appeal of A String</h1>
 <ul class="org-ul">
 <li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Count the number of substring that \(s[i]\) is the first appearance of \(s[i]\) on it.  For strings starting on \(i\), it will appear on \(N - i\) of those.  It will appear in the mid of \((i - prev[s[i]]) \times (N - i - 1)\) where \(prev[s[i]]\) is the last occurrence of \(s[i]\) on \(0..(i-1)\).  Time complexity is \(O(n)\) and space is \(O(1)\).</li>

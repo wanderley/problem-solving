@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 1793. Maximum Score of a Good Subarray</h1>
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  The problem asks to find indexes \(i\) and \(j\) such that \(i \leq k \leq j\), but the optimal choice can have the minimum value in \(i\) or \(j\).  Therefore, we can try to find the best \(j\) by supposing that \(i\) the is minimum one and the do the same fixing \(j\).  To do so, we need a data structure (two sorted lists) that we could query \(j\) in logarithm time.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).</li>

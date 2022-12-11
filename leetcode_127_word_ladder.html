@@ -42,20 +42,20 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 127. Word Ladder</h1>
 
-<div id="outline-container-org92fbf49" class="outline-2">
-<h2 id="org92fbf49">Understand the problem</h2>
-<div class="outline-text-2" id="text-org92fbf49">
+<div id="outline-container-org2720158" class="outline-2">
+<h2 id="org2720158">Understand the problem</h2>
+<div class="outline-text-2" id="text-org2720158">
 <p>
 <a href="pattern_find_shortest_path_between_two_vertices_in_a_graph.html#ID-3283AA3B-67CD-4F8E-960E-442AAE3FD7DC">Pattern: Find shortest path between two vertices in a graph</a> where vertices are words and two words are adjacent if they differ only by one letter.
 </p>
 </div>
 
-<div id="outline-container-org4d03138" class="outline-3">
-<h3 id="org4d03138">Useful prompts</h3>
-<div class="outline-text-3" id="text-org4d03138">
+<div id="outline-container-org005c118" class="outline-3">
+<h3 id="org005c118">Useful prompts</h3>
+<div class="outline-text-3" id="text-org005c118">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -65,17 +65,17 @@
 </div>
 </div>
 
-<div id="outline-container-orgb422aab" class="outline-2">
-<h2 id="orgb422aab">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgb422aab">
+<div id="outline-container-org0512feb" class="outline-2">
+<h2 id="org0512feb">Devise a plan</h2>
+<div class="outline-text-2" id="text-org0512feb">
 <p>
 This is a classic example of <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a>.  The only thing to look out is how to efficiently generate the edges of the graph.  By inspecting the constraints, you will find that we can generate the next word and then check if it is an vertex in the graph.  Time complexity is \(O(n^2)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-org4677c81" class="outline-3">
-<h3 id="org4677c81">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org4677c81">
+<div id="outline-container-org313b9c7" class="outline-3">
+<h3 id="org313b9c7">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org313b9c7">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 <span style="font-weight: bold;">import</span> string

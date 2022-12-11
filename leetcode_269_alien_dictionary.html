@@ -42,20 +42,20 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 269. Alien Dictionary</h1>
 
-<div id="outline-container-org4f2d0d3" class="outline-2">
-<h2 id="org4f2d0d3">Understand the problem</h2>
-<div class="outline-text-2" id="text-org4f2d0d3">
+<div id="outline-container-org39f3c82" class="outline-2">
+<h2 id="org39f3c82">Understand the problem</h2>
+<div class="outline-text-2" id="text-org39f3c82">
 <p>
 Given a sequence of words sorted lexicographically using unknown alphabetic order, return the alphabet's letters sorted in respect to the alphabet's rule.
 </p>
 </div>
 
-<div id="outline-container-org8517f7d" class="outline-3">
-<h3 id="org8517f7d">Useful prompts</h3>
-<div class="outline-text-3" id="text-org8517f7d">
+<div id="outline-container-orgcd7cfc8" class="outline-3">
+<h3 id="orgcd7cfc8">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgcd7cfc8">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -65,17 +65,17 @@ Given a sequence of words sorted lexicographically using unknown alphabetic orde
 </div>
 </div>
 
-<div id="outline-container-org5dcd52e" class="outline-2">
-<h2 id="org5dcd52e">Devise a plan</h2>
-<div class="outline-text-2" id="text-org5dcd52e">
+<div id="outline-container-org49b590f" class="outline-2">
+<h2 id="org49b590f">Devise a plan</h2>
+<div class="outline-text-2" id="text-org49b590f">
 <p>
 Modeling as a graph problem, letters are vertices and an edge \((u,v)\) means that the letter \(u\) comes before \(v\) in the unknown alphabet.  If there are cycles in this graph then there is no way to build (discover) the alphabet because \(u, v_1, v_2, ..., v_k, u\) means that \(u\) comes before \(u\) what is impossible.  Therefore, this is a <a href="directed_graph.html#ID-ABCED065-0F63-4FFE-8FEC-2D2615196BF7">Directed Graph</a>.  The problem become <a href="pattern_find_topological_order_of_vertices_in_a_graph.html#ID-38C2A4B4-E65F-4507-A1C6-0F2AF200DA69">Pattern: Find topological order of vertices in a graph</a>.  Time complexity is \(O(n)\) and space complexity is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-org27aef3b" class="outline-3">
-<h3 id="org27aef3b">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org27aef3b">
+<div id="outline-container-orgacd4440" class="outline-3">
+<h3 id="orgacd4440">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgacd4440">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">alienOrder</span>(<span style="font-weight: bold;">self</span>, words: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">str</span>:
@@ -163,9 +163,9 @@ Modeling as a graph problem, letters are vertices and an edge \((u,v)\) means th
 </div>
 </div>
 
-<div id="outline-container-org47d9df3" class="outline-2">
-<h2 id="org47d9df3">Common mistakes</h2>
-<div class="outline-text-2" id="text-org47d9df3">
+<div id="outline-container-org307c3ab" class="outline-2">
+<h2 id="org307c3ab">Common mistakes</h2>
+<div class="outline-text-2" id="text-org307c3ab">
 <ul class="org-ul">
 <li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>: \(abc,ab\).</li>
 </ul>

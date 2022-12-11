@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 493. Reverse Pairs</h1>
 <ul class="org-ul">
 <li><a href="can_we_reuse_or_extend_a_solution_from_a_sub_problem_to_solve_the_next_sub_problem_more_efficiently.html#ID-26656051-E32D-42FE-9315-05ADB46A1A82">Can we reuse or extend a solution from a sub-problem to solve the next sub-problem more efficiently?</a>  The number of reverse pairs in the last element is zero.  We will have only one reverse pair if \(a[n-2] > 2 \times a[n-1]\).  On iteration \(i\), be \(b\) an array with numbers \(2 \times a[i+1], ... 2 \times a[n-1]\).  The problem is then finding the number of number in \(b\) that are smaller than \(a[i]\).  After processing \(i\), we can add \(2 \times a[i]\) to the list and continue to the next index.  Time complexity is \(O(n \times \log n)\) and space is \(O(n)\).</li>

@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 719. Find K-th Smallest Pair Distance</h1>
 <ul class="org-ul">
 <li><a href="can_we_state_the_problem_as_result_of_multiple_searches.html#ID-3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE">Can we state the problem as result of multiple searches?</a>  Use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the value of the k-th smallest pair distance.  To verify if the value \(a\) is a valid answer, count the number of pairs starting on \(i\): \(j - i - 1\) where \(nums[j] < nums[i] + a\).  The value for \(j\) can be found using a second <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>.  Time complexity is \(O(n \log n \log m)\) where \(m=max(nums) - min(nums)\).  Space complexity is \(O(1)\).</li>

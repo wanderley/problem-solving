@@ -42,8 +42,9 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Interview preparation: V</h1>
+<div class="ABSTRACT" id="org41fcb0b">
 <p>
 The time has come to test the method with someone that wants to get ready for coding interviews.
 </p>
@@ -52,9 +53,38 @@ The time has come to test the method with someone that wants to get ready for co
 I have two purposes for this note.  It contains support material for V's preparation like explanations about the interview process, method used to study for interview, weekly assignments etc.  This will help us to keep track where we are and what we should work next.  The other purpose is to serve as a place where I can formalize my thoughts about the theme.  Explaining things to others forces me to look to the problems in different perspectives.
 </p>
 
-<div id="outline-container-orga01cf42" class="outline-2">
-<h2 id="orga01cf42">Coding Interviews</h2>
-<div class="outline-text-2" id="text-orga01cf42">
+</div>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org3429d5a">Coding Interviews</a></li>
+<li><a href="#org159ef6a">Spaced-repetition</a></li>
+<li><a href="#org73225b0">Method</a>
+<ul>
+<li><a href="#org9d1c7cc">Creating a new card</a></li>
+</ul>
+</li>
+<li><a href="#org2f12855">FAQ</a>
+<ul>
+<li><a href="#org9a1b54a">When should I work in a new problem?</a></li>
+<li><a href="#org0c968ad">Should I code the solution on every review?</a></li>
+<li><a href="#org45dc561">What should I do if I can't solve a problem?</a></li>
+</ul>
+</li>
+<li><a href="#org056a542">Meetings</a>
+<ul>
+<li><a href="#orge488ed6">December 2, 2022</a></li>
+<li><a href="#org7cf3ab2">December 9, 2022</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3429d5a" class="outline-2">
+<h2 id="org3429d5a">Coding Interviews</h2>
+<div class="outline-text-2" id="text-org3429d5a">
 <p>
 To best define the preparation required for coding interviews, let's compare (coding) interview problems with problems that we usually see on Computer Science's courses.  They require application of knowledge in Data Structure, Algorithms on Graphs and ad-hoc strategies (e.g. Dynamic Programming, Line-Sweeping, Sliding-Window etc).  They differ in two aspects: time to solve and difficult.  You have many days to solve an assignment exercise, but only have 15-20 minutes to solve an interview problem.  Due this difference in time to solve, you can expect interview problems to be easier than most of the assignments that you've done on University.
 </p>
@@ -74,9 +104,9 @@ A popular way to study is using a curated lists like <a href="https://leetcode.c
 </div>
 
 
-<div id="outline-container-org2cee264" class="outline-2">
-<h2 id="org2cee264">Spaced-repetition</h2>
-<div class="outline-text-2" id="text-org2cee264">
+<div id="outline-container-org159ef6a" class="outline-2">
+<h2 id="org159ef6a">Spaced-repetition</h2>
+<div class="outline-text-2" id="text-org159ef6a">
 <p>
 Spaced-repetition is a study-technique commonly used to memorization of factual information.  It uses flashcard as way to store and review content.  A flashcard has two sides: front and back.  A question or prompt goes in the front of the card, and the information to memorize goes on the back.  For example, you have a picture of someone in the front of the card and their name on the back.  The technique uses the <a href="https://en.wikipedia.org/wiki/Spacing_effect">spacing effect</a> to encode information in the long-term memory by spacing the study sessions, and it is known to have better results than <a href="https://en.wikipedia.org/wiki/Cramming_(education)">cramming</a> (repeat many times in a single session).  Difficult cards appear more often while easier ones are less frequent.  <a href="https://ankiweb.net/">Anki</a> is a well-know and flexible program to manage cards.
 </p>
@@ -94,15 +124,15 @@ How spaced-repetition can be applied to problem solving.  While this technique h
 </div>
 
 
-<div id="outline-container-org6ac682a" class="outline-2">
-<h2 id="org6ac682a">Method</h2>
-<div class="outline-text-2" id="text-org6ac682a">
+<div id="outline-container-org73225b0" class="outline-2">
+<h2 id="org73225b0">Method</h2>
+<div class="outline-text-2" id="text-org73225b0">
 <p>
 An studying session is divided in two parts: solving new problems and reviewing old problems.
 </p>
 
 <p>
-<b>For new problems</b>, you pick one or two problems per day and spend as much time you need to solve them.  If you solved the problem, follow the instructions on <a href="#orgaff1d96">Creating a new card</a>.  Otherwise, give at least one day to try again.  On the second day, you can check a solution to the problem.  The goal is to understand the solution and find the gaps on your knowledge.  There is a data structure that you are not familiar, a particular technique or idea that makes the problem dead easy to solve.  After you learned how to solve the problem (congrats!), <a href="#orgaff1d96">create a card</a> for it and move on.
+<b>For new problems</b>, you pick one or two problems per day and spend as much time you need to solve them.  If you solved the problem, follow the instructions on <a href="#org9d1c7cc">Creating a new card</a>.  Otherwise, give at least one day to try again.  On the second day, you can check a solution to the problem.  The goal is to understand the solution and find the gaps on your knowledge.  There is a data structure that you are not familiar, a particular technique or idea that makes the problem dead easy to solve.  After you learned how to solve the problem (congrats!), <a href="#org9d1c7cc">create a card</a> for it and move on.
 </p>
 
 <p>
@@ -111,9 +141,9 @@ An studying session is divided in two parts: solving new problems and reviewing 
 </div>
 
 
-<div id="outline-container-orgaff1d96" class="outline-3">
-<h3 id="orgaff1d96">Creating a new card</h3>
-<div class="outline-text-3" id="text-orgaff1d96">
+<div id="outline-container-org9d1c7cc" class="outline-3">
+<h3 id="org9d1c7cc">Creating a new card</h3>
+<div class="outline-text-3" id="text-org9d1c7cc">
 <p>
 The front of the card has a link for the problem.  The back of the card has the steps to solve the problem and optionally an example for the solution.  You might get stuck trying to write the <i>perfect</i> card.  Don't bother with this.  You will have many opportunities to improve them after a review session.
 </p>
@@ -122,31 +152,31 @@ The front of the card has a link for the problem.  The back of the card has the 
 </div>
 
 
-<div id="outline-container-orgd31fdb1" class="outline-2">
-<h2 id="orgd31fdb1">FAQ</h2>
-<div class="outline-text-2" id="text-orgd31fdb1">
+<div id="outline-container-org2f12855" class="outline-2">
+<h2 id="org2f12855">FAQ</h2>
+<div class="outline-text-2" id="text-org2f12855">
 </div>
-<div id="outline-container-org674a432" class="outline-3">
-<h3 id="org674a432">When should I work in a new problem?</h3>
-<div class="outline-text-3" id="text-org674a432">
+<div id="outline-container-org9a1b54a" class="outline-3">
+<h3 id="org9a1b54a">When should I work in a new problem?</h3>
+<div class="outline-text-3" id="text-org9a1b54a">
 <p>
 Don't start working in a new problem if you have more reviews than you have time to get them done in a day, or you already have new cards waiting for you.  It is easy to get overwhelmed with the number of reviews.  Striving for consistency will bring better results than rushing every other day.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org8fa3b37" class="outline-3">
-<h3 id="org8fa3b37">Should I code the solution on every review?</h3>
-<div class="outline-text-3" id="text-org8fa3b37">
+<div id="outline-container-org0c968ad" class="outline-3">
+<h3 id="org0c968ad">Should I code the solution on every review?</h3>
+<div class="outline-text-3" id="text-org0c968ad">
 <p>
 Yes!  Reconstructing your steps to the solution and writing the code again will cement the building blocks on your memory.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgcad6260" class="outline-3">
-<h3 id="orgcad6260">What should I do if I can't solve a problem?</h3>
-<div class="outline-text-3" id="text-orgcad6260">
+<div id="outline-container-org45dc561" class="outline-3">
+<h3 id="org45dc561">What should I do if I can't solve a problem?</h3>
+<div class="outline-text-3" id="text-org45dc561">
 <p>
 First of all, that is fine and will happen more frequently than you imagine.  Give at least one day before looking to solutions.  After you read and <b>understand</b> a solution, ask yourself "what steps should I have done to solve this problem?".  Create a card with these steps and review it as any other card.
 </p>
@@ -155,13 +185,13 @@ First of all, that is fine and will happen more frequently than you imagine.  Gi
 </div>
 
 
-<div id="outline-container-org303847a" class="outline-2">
-<h2 id="org303847a">Meetings</h2>
-<div class="outline-text-2" id="text-org303847a">
+<div id="outline-container-org056a542" class="outline-2">
+<h2 id="org056a542">Meetings</h2>
+<div class="outline-text-2" id="text-org056a542">
 </div>
-<div id="outline-container-orgd000363" class="outline-3">
-<h3 id="orgd000363">December 2, 2022</h3>
-<div class="outline-text-3" id="text-orgd000363">
+<div id="outline-container-orge488ed6" class="outline-3">
+<h3 id="orge488ed6">December 2, 2022</h3>
+<div class="outline-text-3" id="text-orge488ed6">
 <ul class="org-ul">
 <li>The goal of this method is to use spaced-repetition to build your intuition to solve coding challenges.  The card has the path to solve the problem and this will be internalized after many repetitions.  When solving new problems, a thought will scream at you "Binary Search!" or "This is a Graph Problem".  In fact, this is not much different of how we learned math.  How many times did you verbalize the steps to isolate \(x\) in an equation?  You used descriptive knowledge to build the intuition muscle that later on helped you to perform simplification without using much mental energy.</li>
 
@@ -177,13 +207,13 @@ First of all, that is fine and will happen more frequently than you imagine.  Gi
 </div>
 </div>
 
-<div id="outline-container-org3c8a001" class="outline-3">
-<h3 id="org3c8a001">December 9, 2022</h3>
-<div class="outline-text-3" id="text-org3c8a001">
+<div id="outline-container-org7cf3ab2" class="outline-3">
+<h3 id="org7cf3ab2">December 9, 2022</h3>
+<div class="outline-text-3" id="text-org7cf3ab2">
 </div>
-<div id="outline-container-org99a04f9" class="outline-4">
-<h4 id="org99a04f9">Performing a solution</h4>
-<div class="outline-text-4" id="text-org99a04f9">
+<div id="outline-container-orgfeb4a3f" class="outline-4">
+<h4 id="orgfeb4a3f">Performing a solution</h4>
+<div class="outline-text-4" id="text-orgfeb4a3f">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Found the worst case but didn't narrow the search for the optimal algorithm to that case.</li>
 <li class="on"><code>[X]</code> Explain what are chucks and how to use them.
@@ -204,9 +234,9 @@ First of all, that is fine and will happen more frequently than you imagine.  Gi
 </div>
 </div>
 
-<div id="outline-container-org538259f" class="outline-4">
-<h4 id="org538259f">Next steps</h4>
-<div class="outline-text-4" id="text-org538259f">
+<div id="outline-container-orge85fe71" class="outline-4">
+<h4 id="orge85fe71">Next steps</h4>
+<div class="outline-text-4" id="text-orge85fe71">
 <p>
 We will start with <a href="https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions">Blind 75</a> problems.  As we work through them, we will find that few areas should get more attention.  For those, I will add problems to increase your proficiency on specific building blocks.  Here is the list of problems for this week:
 </p>

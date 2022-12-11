@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 42. Trapping Rain Water</h1>
 <p>
 <a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a>  There is nothing to do if we have just one or two walls.  With three walls \(h_1, h_2\) and \(h_3\), there is no water trapped if \(h_1<h_2<h_3\) or \(h_1>h_2>h_3\), but there is water trapped if \(h_1>h_2\) and \(h_3>h_2\).  In the last case, we can compute the amount of water trapped \((\min(h_3,h_1) - h_2) \times (i_3 - i_1 - 1)\).  After that, we can remove \(a_2\), add \(a_3\) and continue the process with the next height.  We can use <a href="monotonic_stack.html#ID-E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5">Monotonic Stack</a> to keep track of the heights and solve the problem in time and space \(O(n)\).

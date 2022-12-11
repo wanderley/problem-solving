@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 1504. Count Submatrices With All Ones</h1>
 <p>
 A solution \(O(m^2 \times n^2)\) won't pass the time limit, but one \(O(m \times n^2)\) would pass.  How does such solution looks like?  We have to iterating only once on each line and for each of those, we can do two nested loops for each column.  In other words, we can fix the base of the submatrices and check if they are valid for all possible left and right side.  Be \(k, i\) and \(k\) the bottom row, the left column and the right column respectively.  The number of submatrices filled with zero will be \(\max_{i \leq c \le j}_{} height(k, c)\), where \(height(k, c)\) is the number of ones starting on \((k, c)\) to the top of the matrix.  You can compute \(height\) while processing each row from the top to the bottom of the matrix.  Time complexity is \(O(m \times n^2)\).
@@ -78,14 +78,14 @@ A solution \(O(m^2 \times n^2)\) won't pass the time limit, but one \(O(m \times
 </pre>
 </div>
 
-<div id="outline-container-org117090f" class="outline-2">
-<h2 id="org117090f"><span class="todo TODO">TODO</span> Implement solution \(O(m \times n^2)\)</h2>
+<div id="outline-container-org7845196" class="outline-2">
+<h2 id="org7845196"><span class="todo TODO">TODO</span> Implement solution \(O(m \times n^2)\)</h2>
 </div>
 
 
-<div id="outline-container-org6e88c2b" class="outline-2">
-<h2 id="org6e88c2b">Cited by 1</h2>
-<div class="outline-text-2" id="text-org6e88c2b">
+<div id="outline-container-org6fc66dc" class="outline-2">
+<h2 id="org6fc66dc">Cited by 1</h2>
+<div class="outline-text-2" id="text-org6fc66dc">
 <ul class="org-ul">
 <li><a href="practice_004.html#ID-75F7DE70-9B14-4B4C-BC59-F1C463C06547">Practice #004</a></li>
 </ul>

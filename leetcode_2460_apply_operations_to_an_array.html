@@ -42,12 +42,12 @@
 </script>
 </head>
 <body>
-<!--  --><nav><a href="index.html">Problem Solving</a></nav><div id="content" class="content">
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2460. Apply Operations to an Array</h1>
 
-<div id="outline-container-orgc130cb1" class="outline-2">
-<h2 id="orgc130cb1">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgc130cb1">
+<div id="outline-container-orgbc1e1d6" class="outline-2">
+<h2 id="orgbc1e1d6">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgbc1e1d6">
 <p>
 Given an array \(a\) of non-negative integers.  Simulate the following rules:
 </p>
@@ -58,9 +58,9 @@ Given an array \(a\) of non-negative integers.  Simulate the following rules:
 </ul>
 </div>
 
-<div id="outline-container-org17c4d9b" class="outline-3">
-<h3 id="org17c4d9b">Useful prompts</h3>
-<div class="outline-text-3" id="text-org17c4d9b">
+<div id="outline-container-org27d17a9" class="outline-3">
+<h3 id="org27d17a9">Useful prompts</h3>
+<div class="outline-text-3" id="text-org27d17a9">
 <ul class="org-ul">
 <li><a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a>  Since \(2 \leq |a| \leq 2000\), it is fine to simulate the rules.</li>
 </ul>
@@ -68,17 +68,17 @@ Given an array \(a\) of non-negative integers.  Simulate the following rules:
 </div>
 </div>
 
-<div id="outline-container-org4b3dcf8" class="outline-2">
-<h2 id="org4b3dcf8">Devise a plan</h2>
-<div class="outline-text-2" id="text-org4b3dcf8">
+<div id="outline-container-org0cc1341" class="outline-2">
+<h2 id="org0cc1341">Devise a plan</h2>
+<div class="outline-text-2" id="text-org0cc1341">
 <p>
 Simulate the rules while saving the new non-zero values.  After that, we shift all number different than zero to the beginning of the array and fill the rest of the array with zeros.  Time is \(O(n)\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-org6eb6416" class="outline-3">
-<h3 id="org6eb6416">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org6eb6416">
+<div id="outline-container-org5fd215d" class="outline-3">
+<h3 id="org5fd215d">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org5fd215d">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">applyOperations</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
