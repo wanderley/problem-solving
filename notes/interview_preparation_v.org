@@ -4,9 +4,7 @@
 #+TITLE: Interview preparation: V
 
 #+BEGIN_ABSTRACT
-The time has come to test the method with someone that wants to get ready for coding interviews.
-
-I have two purposes for this note.  It contains support material for V's preparation like explanations about the interview process, method used to study for interview, weekly assignments etc.  This will help us to keep track where we are and what we should work next.  The other purpose is to serve as a place where I can formalize my thoughts about the theme.  Explaining things to others forces me to look to the problems in different perspectives.
+This note tracks my experience of helping my friend V on their preparation for coding interviews.  It has been awhile since last time that V solved a coding challenge, and as any other skill if you don't practice it you lose it.  I have two purposes for this note: track V's evolution through the preparation and use it as a place to formalize my method on how to improve in problem solving.  By method, I mean the result of experiments that I did on myself (2022) after getting back from many years without practice to coding competitions.  This is a living document and you might visit it multiple times if you want to follow V's journey.
 #+END_ABSTRACT
 #+TOC: headlines 2
 
@@ -68,9 +66,9 @@ First of all, that is fine and will happen more frequently than you imagine.  Gi
 
 ** December 2, 2022
 
-- The goal of this method is to use spaced-repetition to build your intuition to solve coding challenges.  The card has the path to solve the problem and this will be internalized after many repetitions.  When solving new problems, a thought will scream at you "Binary Search!" or "This is a Graph Problem".  In fact, this is not much different of how we learned math.  How many times did you verbalize the steps to isolate $x$ in an equation?  You used descriptive knowledge to build the intuition muscle that later on helped you to perform simplification without using much mental energy.
+The goal of this method is to use spaced-repetition to build your intuition to solve coding challenges.  The card has the path to solve the problem and this will be internalized after many repetitions.  When solving new problems, a thought will scream at you "Binary Search!" or "This is a Graph Problem".  In fact, this is not much different of how we learned math.  How many times did you verbalize the steps to isolate $x$ in an equation?  You used descriptive knowledge to build the intuition muscle that later on helped you to perform simplification without using much mental energy.
 
-- For next session, you will work in [[https://leetcode.com/contest/weekly-contest-320/][4 problems]] which you should apply the method: solve them, create and review the cards.  We will review your thought process to solve these problems and what worked and didn't work when create and reviewing your cards:
+For next session, you will work in [[https://leetcode.com/contest/weekly-contest-320/][4 problems]] which you should apply the method: solve them, create and review the cards.  We will review your thought process to solve these problems and what worked and didn't work when create and reviewing your cards:
 
   - [[id:AD689352-C66F-4BFC-95A4-65B58110A851][Leetcode: 2475. Number of Unequal Triplets in Array]]
   - [[id:7F2BA5B5-2C29-40AE-A4D3-B3D438A660C9][Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree]]
