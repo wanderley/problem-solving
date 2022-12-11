@@ -5,11 +5,16 @@ body {
 }
 
 a, a:visited {
-    color: blue;
+    color: #0645ad;
+    text-decoration: none;
 }
 
-a:hover {
-    color: navy;
+a[href*="//"] {
+    background-image: url("assets/external-link.svg");
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: 0.5em;
+    padding-right: 0.8em;
 }
 
 nav {
