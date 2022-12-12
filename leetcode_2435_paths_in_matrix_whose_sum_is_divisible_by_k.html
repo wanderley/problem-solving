@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2435. Paths in Matrix Whose Sum Is Divisible by K</h1>
 
-<div id="outline-container-orgeb414f9" class="outline-2">
-<h2 id="orgeb414f9">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgeb414f9">
+<div id="outline-container-orgfc1d246" class="outline-2">
+<h2 id="orgfc1d246">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgfc1d246">
 <p>
 Count the number of paths from \((0,0)\) to \((n-1,m-1)\) (on  <a href="directed_acyclic_graph.html#ID-81260E21-C442-48DE-A414-CA7B83F2C404">Directed Acyclic Graph</a>) where the path goes down-right and has sum module \(k\).
 </p>
 </div>
 
-<div id="outline-container-orgd63dbdb" class="outline-3">
-<h3 id="orgd63dbdb">Useful prompots</h3>
-<div class="outline-text-3" id="text-orgd63dbdb">
+<div id="outline-container-org0fd28e1" class="outline-3">
+<h3 id="org0fd28e1">Useful prompots</h3>
+<div class="outline-text-3" id="text-org0fd28e1">
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Count the number of paths from \((0,0)\) to \((n-1,m-1)\) (on  <a href="directed
 </div>
 </div>
 
-<div id="outline-container-org24b0b9d" class="outline-2">
-<h2 id="org24b0b9d">Devise a plan</h2>
-<div class="outline-text-2" id="text-org24b0b9d">
+<div id="outline-container-org28ce6cc" class="outline-2">
+<h2 id="org28ce6cc">Devise a plan</h2>
+<div class="outline-text-2" id="text-org28ce6cc">
 <p>
 Modeling as a graph problem, a cell connected to the one directly to the left and top.  So, this is an <a href="directed_acyclic_graph.html#ID-81260E21-C442-48DE-A414-CA7B83F2C404">Directed Acyclic Graph</a> and we can compute the number of paths using <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a>.  For each cell and each \(0 \leq x < k\), store the number of paths that reached that cell such that sum of the paths is \(x\) module \(k\).  Time complexity is \(O(n \times m \times k)\) and space is \(O(n \times m \times k)\).
 </p>
 </div>
 
-<div id="outline-container-org01ac254" class="outline-3">
-<h3 id="org01ac254">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org01ac254">
+<div id="outline-container-orgceb248a" class="outline-3">
+<h3 id="orgceb248a">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgceb248a">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">numberOfPaths</span>(<span style="font-weight: bold;">self</span>, grid: List[List[<span style="font-weight: bold;">int</span>]], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

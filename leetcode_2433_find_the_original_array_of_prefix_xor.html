@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2433. Find The Original Array of Prefix Xor</h1>
 
-<div id="outline-container-org3ba977c" class="outline-2">
-<h2 id="org3ba977c">Understand the problem</h2>
-<div class="outline-text-2" id="text-org3ba977c">
+<div id="outline-container-orgfc2fa87" class="outline-2">
+<h2 id="orgfc2fa87">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgfc2fa87">
 <p>
 Given an array \(p\), find an array \(a\) given that \(p_0=a_0\), \(p_1=a_0 \oplus a_1\) and so on.
 </p>
 </div>
 
-<div id="outline-container-org60931b2" class="outline-3">
-<h3 id="org60931b2">Useful prompts</h3>
-<div class="outline-text-3" id="text-org60931b2">
+<div id="outline-container-orga671cbf" class="outline-3">
+<h3 id="orga671cbf">Useful prompts</h3>
+<div class="outline-text-3" id="text-orga671cbf">
 <ul class="org-ul">
 <li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Given an array \(p\), find an array \(a\) given that \(p_0=a_0\), \(p_1=a_0 \opl
 </div>
 </div>
 
-<div id="outline-container-org16b242a" class="outline-2">
-<h2 id="org16b242a">Devise a plan</h2>
-<div class="outline-text-2" id="text-org16b242a">
+<div id="outline-container-orgd7186a7" class="outline-2">
+<h2 id="orgd7186a7">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgd7186a7">
 <p>
 Since \(p_i = p_{i-1} \oplus a_i\), then \(a_i=p_{i-1} \oplus p_i\).
 </p>
 </div>
 
-<div id="outline-container-orgc03ba7d" class="outline-3">
-<h3 id="orgc03ba7d">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgc03ba7d">
+<div id="outline-container-org0aed6ce" class="outline-3">
+<h3 id="org0aed6ce">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org0aed6ce">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">hardestWorker</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, logs: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:

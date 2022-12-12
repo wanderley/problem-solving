@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/generate-parentheses/">Problem Statement</a>: Given an integer \(n\), return all well-formed parentheses string formed with \(n\) pair of parentheses.
 </p>
 
-<div id="outline-container-orge7bba30" class="outline-2">
-<h2 id="orge7bba30"><a href="constructive.html#ID-F7D1B315-77B8-4556-B665-AFFD00550C1E">Constructive</a>: one parentheses at time</h2>
-<div class="outline-text-2" id="text-orge7bba30">
+<div id="outline-container-org72a8aad" class="outline-2">
+<h2 id="org72a8aad"><a href="constructive.html#ID-F7D1B315-77B8-4556-B665-AFFD00550C1E">Constructive</a>: one parentheses at time</h2>
+<div class="outline-text-2" id="text-org72a8aad">
 <p>
 The naive approach consist on generating all possible string (\(2^{2 \times n}=4^n\)) and filter only the ones that are well-formed.  To do better than that, we have to understand what makes a candidate ill-formed.  Let's see some examples of possible candidates for \(n=1\): <code>((</code>, <code>()</code>, <code>)(</code>, <code>))</code>.  If we compute the sum by the number of open parentheses subtracted by the number of close parentheses, we have that the <code>((</code> sums to 2 and <code>))</code> sums to -2.  The other two candidates have sum of 0, but only <code>()</code> is well-formed.  This example is enough to show that we can't compute this sum after all parentheses are in-place, but we have to filter out <code>)(</code>.  Observe that if the number of close parentheses is greater than the number of parentheses in a position \(i\), then the candidate will always be ill-formed no matter what come later (the only way to close the extra close parentheses is by an open one that come first).  So, we have to check for two conditions to construct a well-formed string: (1) the number of sum of parentheses is never negative during construction and (2) after the last parentheses the sum must be 0.
 </p>
@@ -90,9 +90,9 @@ The naive approach consist on generating all possible string (\(2^{2 \times n}=4
 </div>
 </div>
 
-<div id="outline-container-orga32befc" class="outline-2">
-<h2 id="orga32befc">Combining well-formed expressions</h2>
-<div class="outline-text-2" id="text-orga32befc">
+<div id="outline-container-orga422acd" class="outline-2">
+<h2 id="orga422acd">Combining well-formed expressions</h2>
+<div class="outline-text-2" id="text-orga422acd">
 <p>
 A well-formed parentheses string can be represented by its parts: \(s=\texttt{(}p\texttt{)}q\), where \(0\leq|p|,|q|<|s|\) and \(|p|+|q|+2=|s|\).  As \(s\) is well-formed, follows that \(p\) and \(q\) are also well-formed.  Note that a well-formed string can't start with a close parentheses.  So, it starts with an open parentheses that can either close on the end of the string (\(|q|=0\)) or somewhere in the middle of \(s\) (\(|q|>0\)).  In both cases, \(|p|=|s|-|q|\).  The generation of well-formed strings works using this property, because all that we are saying is: (1) fix the first pair of parentheses and (2) fill it's gaps with all possible well-formed strings.
 </p>
