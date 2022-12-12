@@ -1,28 +1,22 @@
 :PROPERTIES:
 :ID:       8B3C6E28-3ACB-47BB-B6B0-E1A0F35719A0
 :END:
-#+TITLE: Home
+#+TITLE: Welcome to my problem solving notes!
 
-Welcome to my problem solving notes!
+Long time ago, I participated in [[http://maratona.sbc.org.br/][ACM ICPC South America/Brazil]].  I had average results in the regional competitions and never got to the World Finals.  It was hard to finish my career without accomplishing my goal.  But the good part is that I found a way to continue involved with competitive programming.  From 2007 to 2010, I coached [[https://www.ime.usp.br/~maratona/usp_historia][Universidade de São Paulo]]'s teams in ICPC.  I met so many bright people and had chance to make friends for life beside traveling the world.  Around the same time, I trained high-school students to compete in [[https://olimpiada.ic.unicamp.br/][Olimpíada Brasileira de Informática (OBI)]] and those classified to [[https://ioinformatics.org/][International Olympiad in Informatics (IOI)]].  Again, I met many intelligent and hard-working kids that dedicated part of their lives to become better at problem solving.  And witnessed the positive impact that studying for these competitions had on their lives: school and job opportunities.  These part of life and people that I met will always have a special place in my heart.
 
-Long time ago, I participated on the [[http://maratona.sbc.org.br/][ACM ICPC South America/Brazil regional]].  My average results on the competitions didn't stop my passion on the area.  From 2007 to 2010, I coached teams from [[https://www.ime.usp.br/~maratona/usp_historia][Universidade de São Paulo]] to compete on ACM ICPC.  I met so many bright people and made friends for life.  At the same time, I trained high-school students to compete in [[https://olimpiada.ic.unicamp.br/][Olimpíada Brasileira de Informática]] and those classified to the [[https://ioinformatics.org/][International Olympiad in Informatics]].  Again, I met an incredible amount of intelligent and hard-working kids that dedicated hours and hours of their days to become better at problem solving.  This time with all these folks will always have a special place in my heart.
+As I moved to my next "thing", I took a break (of almost 10 years) from competitive programming.  I decided to come back and solve few problems in late 2022.  Ouch!  Time wasn't be gentile with my skills.  I found that I couldn't solve problems that once were easy, and I was slow not only to find solutions but code them.  If there is one thing that I know about competitive programming, it is that these skills don't come in a day and grinding is the only way to improve.
 
-As I moved to my next "thing", I took a break (of almost 10 years) from competitive programming.  I decided to come back and solve few problems in late 2022.  Ouch!  Time wasn't gentile with my skills.  I found that I couldn't solve problems that once was easy, and I was slow not only to find solution but code them.  If there is one thing that I know about competitive programming, it is that these skill don't come in a day and you have to grind!
-
-There are tons of resource online to study and practice.  The number of problems increased considerably as the number of editorials and solutions.  But the core problem continues the same: /how can someone use these resource to improve their problem solving skills?/  With these notes, I want to give a try to answer this question.  I will experiment different methods and strategies to hopefully find the one that could be used by those who don't have opportunity to work with a coach.  If I get there or not, time will say.  Until there, welcome to the journey.
+There are tons of resource online to study and practice.  The number of problems increased as the number of editorials and solutions.  But the core problem continues the same: /how can someone use these resources to improve their problem solving skills?/  With these notes, I want to give a try to answer this question.  I will experiment different methods and strategies to hopefully find the one that could be used by those who don't have opportunity to work with a coach.  But until then, welcome to the journey.
 
 * Method
 
-This is a work in-progress which you can follow on [[id:B38C0682-EB89-466F-9645-E89A055D3D99][Method]].
+I will formalize my thoughts about the method as I help a friend to get ready for interviews.  You can follow it here: [[id:8C7E9E52-9220-4A7B-B0E6-54F960E17CA8][Interview preparation: V]].
 
 * Coding Interviews
 
-In the first phase of the project, I will focus on coding interview problems and more specially for [[https://leetcode.com/][Leetcode]] problems.  Compared with coding competitions' problems, they are easier to solve and require knowledge of smaller number of topics.  By the other hand, they have better problem statements and the number of sub-problems is at most two (e.g. transform problem in X and run algorithm Y on it).
-
-Here is a list of few experiments:
-
-- [[id:8C7E9E52-9220-4A7B-B0E6-54F960E17CA8][Interview preparation: V]]
+In the first phase of the project, I will focus in coding interview problems and more specially in [[https://leetcode.com/][Leetcode]] problems.  Compared with coding competitions' problems, they are easier to solve and require knowledge of smaller number of topics.  By the other hand, they have better problem statements and require 1-2 algorithms/techniques to solve them.
 
 * Competitive Programming
 
-After I get the method established in Coding Interviews world, I extend it to cover competitive programming.  It will take a while, so take a sit otherwise you will be tired.
+After I get the method established in Coding Interviews world, I will extend it to cover competitive programming.  It will take a while, so take a sit otherwise you will get tired.
