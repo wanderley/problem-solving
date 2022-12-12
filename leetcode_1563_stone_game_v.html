@@ -48,9 +48,9 @@
 Check out the problem statement <a href="https://leetcode.com/problems/stone-game-v">here</a>.
 </p>
 
-<div id="outline-container-org078b9c8" class="outline-2">
-<h2 id="org078b9c8">Slow Dynamic Programming</h2>
-<div class="outline-text-2" id="text-org078b9c8">
+<div id="outline-container-orgab25f18" class="outline-2">
+<h2 id="orgab25f18">Slow Dynamic Programming</h2>
+<div class="outline-text-2" id="text-orgab25f18">
 <p>
 Be \(s(i,j)\) the sum of stone values from \(i\) to \(j\), and be \(f(i, j)\) the max score Alice can obtain using stones \(i..j\).  When \(i=j\), the game has finished and the score is 0.  Otherwise, \(i<j\) and \(f(i,j)\) is the maximum score between all possible ways to split the interval in two: \(i..k\) and \(k..j\) where \(i<\leq k\leq j\).  For each \(k\), the score is either \(s(i,k)+f(i,k)\) or \(s(k+1,j)+f(k+1,j)\) if one side is smaller than the other or the max of both sides if \(s(i,k)=s(k+1,j)\).  The following algorithm implements this idea by trying all possible \(k\) for each interval \(i..j\).
 </p>
@@ -114,9 +114,9 @@ With \(n\) being the number of stones, we have that
 </div>
 </div>
 
-<div id="outline-container-orgabc27ea" class="outline-2">
-<h2 id="orgabc27ea"><a href="dynamic_programming_on_multiple_optimizations.html#ID-3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2">Dynamic Programming on multiple optimizations</a></h2>
-<div class="outline-text-2" id="text-orgabc27ea">
+<div id="outline-container-orgd93cada" class="outline-2">
+<h2 id="orgd93cada"><a href="dynamic_programming_on_multiple_optimizations.html#ID-3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2">Dynamic Programming on multiple optimizations</a></h2>
+<div class="outline-text-2" id="text-orgd93cada">
 <p>
 To speed up the solution above, we have to avoid checking all possible intervals when computing \(f(i,j)\).  But, how could we do that?  Is the cubic solution using all constraints of the problem?  The answer is <b>"No! The cubic solution is not using the fact that stone values are integers greater than 0"</b>.  How does this constraint help us when deciding where to split an interval?  Let's take \([1, 2, 1, 1, 1, 1]\) as example and \(i=0\) (first stone) and \(j=5\) (last stone).  These are all ways to split on an index \(k\):
 </p>
@@ -278,9 +278,9 @@ Note that for \(k<3\), the left side sum is always <b>smaller</b> than the right
 </div>
 
 
-<div id="outline-container-org47f8ec6" class="outline-2">
-<h2 id="org47f8ec6">Cited by 1</h2>
-<div class="outline-text-2" id="text-org47f8ec6">
+<div id="outline-container-org1d40a36" class="outline-2">
+<h2 id="org1d40a36">Cited by 1</h2>
+<div class="outline-text-2" id="text-org1d40a36">
 <ul class="org-ul">
 <li><a href="leetcode_1289_minimum_falling_path_sum_ii.html#ID-FEF4EFF1-C8BA-4959-A87C-58642407EF0C">Leetcode: 1289. Minimum Falling Path Sum II</a></li>
 </ul>

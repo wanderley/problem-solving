@@ -45,26 +45,26 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2446. Determine if Two Events Have Conflict</h1>
 
-<div id="outline-container-org6e93ef3" class="outline-2">
-<h2 id="org6e93ef3">Understand the problem</h2>
-<div class="outline-text-2" id="text-org6e93ef3">
+<div id="outline-container-orgcf05858" class="outline-2">
+<h2 id="orgcf05858">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgcf05858">
 <p>
 Determine if two segments intersect.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc7cb2b5" class="outline-2">
-<h2 id="orgc7cb2b5">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgc7cb2b5">
+<div id="outline-container-org2c5e5a6" class="outline-2">
+<h2 id="org2c5e5a6">Devise a plan</h2>
+<div class="outline-text-2" id="text-org2c5e5a6">
 <p>
 If two segments intersect, then they have a point \(x\) in common which \(s_1[0] \leq x s_1[1]\) and \(s_2[0] \leq x s_2[1]\).  Therefore, \(\max(s_1[0], s_2[0]) \leq x\) and \(x \leq \min(s_1[1], s_2[1])\).  To answer the question, we can just check if \(\max(s_1[0], s_2[0]) \leq \min(s_1[1], s_2[1])\).
 </p>
 </div>
 
-<div id="outline-container-orgc125708" class="outline-3">
-<h3 id="orgc125708">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgc125708">
+<div id="outline-container-org48b690d" class="outline-3">
+<h3 id="org48b690d">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org48b690d">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">haveConflict</span>(<span style="font-weight: bold;">self</span>, event1: List[<span style="font-weight: bold;">str</span>], event2: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">bool</span>:
