@@ -31,6 +31,9 @@ How spaced-repetition can be applied to problem solving.  While this technique h
 
 
 * Method
+:PROPERTIES:
+:ID:       B38C0682-EB89-466F-9645-E89A055D3D99
+:END:
 
 An studying session is divided in two parts: solving new problems and reviewing old problems.
 

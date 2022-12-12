@@ -1,37 +1,28 @@
 :PROPERTIES:
 :ID:       8B3C6E28-3ACB-47BB-B6B0-E1A0F35719A0
 :END:
-#+TITLE: Index
+#+TITLE: Home
 
-- Prompts
-  - General
-    - [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]
-    - [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for $i$ to $i+1$?]]
-  - Intervals
-    - [[id:29DB5011-3209-4B10-BAA5-823D1ADB9F47][How could we find the optimal interval knowing a tiny part of it?]]
-- Data Structure
-  - [[id:21C2B5E5-78D0-4A47-B69E-7B1FBA6A69A1][Array]]
-  - [[id:0DE29B4D-0B7D-4B34-B370-F5D3193AA932][Matrix]]
-  - [[id:D449CB99-E7B7-4B35-AD73-26E996029D93][Deque]]
-  - [[id:AE7CF4B3-19EF-4C06-AD7A-D37ACB3EFEAE][Monotonic Queue]]
-  - [[id:E4CFDB04-DCFD-47E3-9ED2-0DC6446420B5][Monotonic Stack]]
-- [[id:DBDF96ED-7731-40F0-BC12-C6B6C29FEF42][Math]]
-  - [[id:1EB04540-F111-49BF-B21E-1A2B468F5D14][Gaussian elimination]]
-- Graphs
-  - [[id:3D4A4826-ADA4-4975-9C9E-C8B6AF39E01A][Dijkstra Algorithm]]
-- Dynamic Programming
-  - [[id:3463A33B-D953-4E75-895D-0BE4AAB16813][Top-down]]
-  - [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]]
-  - [[id:3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2][Dynamic Programming on multiple optimizations]]
-- Brute Force
-  - [[id:0BB99275-7CE6-425A-8AB7-F8B60958DDE9][Counting valid pairs using Brute Force]]
-- Search
-  - [[id:CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2][Sliding Window]]
-- String
-  - [[id:5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7][Trie]]
-  - [[id:E3CBBE60-D8DC-453F-9C52-0AB0359B6957][Search substring in string using brute-force]]
-- Optimization
-  - [[id:4A2206E8-074B-4CDB-BD5B-01DE3C901C15][Min-Max Problem]]
-- Utilities
-  - [[id:EC2FE62E-29FD-4C76-8005-050C40EA6D8A][Convert integer to array of digits]]
-- [[id:A8CF27F2-1B1E-4A5B-AB8C-75D301AF82B6][Interesting Resources]]
+Welcome to my problem solving notes!
+
+Long time ago, I participated on the [[http://maratona.sbc.org.br/][ACM ICPC South America/Brazil regional]].  My average results on the competitions didn't stop my passion on the area.  From 2007 to 2010, I coached teams from [[https://www.ime.usp.br/~maratona/usp_historia][Universidade de São Paulo]] to compete on ACM ICPC.  I met so many bright people and made friends for life.  At the same time, I trained high-school students to compete in [[https://olimpiada.ic.unicamp.br/][Olimpíada Brasileira de Informática]] and those classified to the [[https://ioinformatics.org/][International Olympiad in Informatics]].  Again, I met an incredible amount of intelligent and hard-working kids that dedicated hours and hours of their days to become better at problem solving.  This time with all these folks will always have a special place in my heart.
+
+As I moved to my next "thing", I took a break (of almost 10 years) from competitive programming.  I decided to come back and solve few problems in late 2022.  Ouch!  Time wasn't gentile with my skills.  I found that I couldn't solve problems that once was easy, and I was slow not only to find solution but code them.  If there is one thing that I know about competitive programming, it is that these skill don't come in a day and you have to grind!
+
+There are tons of resource online to study and practice.  The number of problems increased considerably as the number of editorials and solutions.  But the core problem continues the same: /how can someone use these resource to improve their problem solving skills?/  With these notes, I want to give a try to answer this question.  I will experiment different methods and strategies to hopefully find the one that could be used by those who don't have opportunity to work with a coach.  If I get there or not, time will say.  Until there, welcome to the journey.
+
+* Method
+
+This is a work in-progress which you can follow on [[id:B38C0682-EB89-466F-9645-E89A055D3D99][Method]].
+
+* Coding Interviews
+
+In the first phase of the project, I will focus on coding interview problems and more specially for [[https://leetcode.com/][Leetcode]] problems.  Compared with coding competitions' problems, they are easier to solve and require knowledge of smaller number of topics.  By the other hand, they have better problem statements and the number of sub-problems is at most two (e.g. transform problem in X and run algorithm Y on it).
+
+Here is a list of few experiments:
+
+- [[id:8C7E9E52-9220-4A7B-B0E6-54F960E17CA8][Interview preparation: V]]
+
+* Competitive Programming
+
+After I get the method established in Coding Interviews world, I extend it to cover competitive programming.  It will take a while, so take a sit otherwise you will be tired.
