@@ -6,6 +6,7 @@
 #+ROAM_REFS: https://leetcode.com/problems/two-sum/
 #+LEETCODE_LEVEL: Easy
 #+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1670826287924
 
 * Patterns
 
