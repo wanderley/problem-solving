@@ -45,6 +45,7 @@
 (use-package org :straight t)
 (use-package org-roam :straight t)
 (use-package htmlize :straight t)
+(use-package s :straight t)
 
 
 ;;; Load dependencies
@@ -101,7 +102,9 @@
                :with-toc nil
                :section-numbers nil
                :time-stamp-file nil)))
-  (add-hook 'org-export-before-processing-hook 'wander/org-roam-insert-html-backlinks-string))
+  (--each '(wander/org-roam-insert-html-backlinks-string
+            wander/org-roam-insert-html-leetcode-url-string)
+      (add-hook 'org-export-before-processing-hook it)))
 
 
 ;;; Helper Functions
@@ -131,6 +134,17 @@
       (goto-char (point-max))
       (insert (or (wander/org-roam-collect-html-backlinks-string) "")))))
 
+(defun wander/org-roam-insert-html-leetcode-url-string (backend)
+  (goto-char (point-min))
+  (when-let* ((ref (and (org-roam-node-at-point)
+                        (car (cdr (assoc "ROAM_REFS" (org-collect-keywords '("ROAM_REFS")))))))
+              (leetcode? (s-starts-with? "https://leetcode.com" ref)))
+    (ignore-errors
+      (goto-char (point-min))
+      (while (not (equal (pos-bol) (pos-eol)))
+        (next-line 1))
+      (insert (format "[[%s][%s]]\n" ref "Problem Statement")))))
+
 
 ;;; Build API
 
@@ -144,5 +158,9 @@
   (message "Iterate on site using specific note ...")
   (wander/setup-site)
   (org-publish "org-site:static")
-  (find-file (expand-file-name (or (getenv "NOTE") "./notes/interview_preparation_v.org")))
+  (find-file (expand-file-name
+              (concat org-roam-directory
+                      "/"
+                      (or (getenv "NOTE")
+                          "interview_preparation_v.org"))))
   (org-publish-current-file t))
