@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       5F25DCD8-CE46-4F18-A1B1-952BC35382A9
+:ROAM_REFS: https://leetcode.com/problems/two-sum/
+:END:
+#+TITLE: Leetcode: 1. Two Sum
+#+ROAM_REFS: https://leetcode.com/problems/two-sum/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+
+* Patterns
+
+- [[id:12D16A10-EB7A-4EF8-A0E8-91B5EE694582][Pattern: Searching in Array]].
+
+* Prompts
+
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]
+
+* Solution
+
+The naive /and slow/ approach consists on fixing a number $i$ and searching for a different number $j$ which $numbers[i]+numbers[j]=target$.  This solution has time complexity$O(n^2)$ and space complexity $O(1)$.
+
+Without knowing any property about the numbers, it is hard to improve the time complexity of the naive approach without making memory concessions.  For example, if the numbers were sorted, for each number we could use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find its complement and have a faster solution without using extra memory.  The order of the numbers is crucial to solve the problem like that.
+
+What else can we do spending extra memory?  Hash tables are efficient data-structures where adding and looking up data are performed in $O(1)$ amortized run time.  Yep!  This is all that we need.  For each number $i$, use a hash table to check if $target-numbers[i]$ appeared before.  If so, we found the answer.  Otherwise, add $numbers[i]$ to the table and do the same for the next number.  Time and space complexity are $O(n)$.
+
+#+begin_src python
+  class Solution:
+      def twoSum(self, nums: List[int], target: int) -> List[int]:
+          idx = {}
+          for i, n in enumerate(nums):
+              x = target - n
+              if x in idx:
+                  return [i, idx[x]]
+              idx[n] = i
+#+end_src
