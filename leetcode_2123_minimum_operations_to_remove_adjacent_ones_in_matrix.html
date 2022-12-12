@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2123. Minimum Operations to Remove Adjacent Ones in Matrix</h1>
 
-<div id="outline-container-org1b74b47" class="outline-2">
-<h2 id="org1b74b47">Understand the problem</h2>
-<div class="outline-text-2" id="text-org1b74b47">
+<div id="outline-container-org1439702" class="outline-2">
+<h2 id="org1439702">Understand the problem</h2>
+<div class="outline-text-2" id="text-org1439702">
 <p>
 Find the minimum number of 1-cells in the grid to switch such that no other two horizontal or vertical 1-cells are adjacent.  Suppose that the grid (i.e <a href="2d_matrix.html#ID-2AC58B7A-4948-4E84-AA80-020E985D36E0">2D Matrix</a>) is colored like a chess board.  Two 1-cells can be connected only if they are in square with distinct colors.  So cells can be divided in two groups where there is no connections between cells on the same group.  Modeling as a graph problem, we can construct a graph \(G=(U, V, E)\), where \(U\) are the cells on white squares (i.e \(i \mod 2 = j \mod 2\) where \((i, j)\) is the coordinate of the cell), and \(V\) are the cells on black squares.  And the problem becomes <a href="pattern_find_minimum_vertex_cover_in_a_bipartite_graph.html#ID-E9AE0EFB-E12B-4AAB-82A5-6D9902F4741F">Pattern: Find minimum vertex cover in a bipartite graph</a>.
 </p>
 </div>
 
-<div id="outline-container-org7adcdf2" class="outline-3">
-<h3 id="org7adcdf2">Useful prompts</h3>
-<div class="outline-text-3" id="text-org7adcdf2">
+<div id="outline-container-org6aafaf2" class="outline-3">
+<h3 id="org6aafaf2">Useful prompts</h3>
+<div class="outline-text-3" id="text-org6aafaf2">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -65,17 +65,17 @@ Find the minimum number of 1-cells in the grid to switch such that no other two 
 </div>
 </div>
 
-<div id="outline-container-org5b0677c" class="outline-2">
-<h2 id="org5b0677c">Devise a plan</h2>
-<div class="outline-text-2" id="text-org5b0677c">
+<div id="outline-container-org03b0af9" class="outline-2">
+<h2 id="org03b0af9">Devise a plan</h2>
+<div class="outline-text-2" id="text-org03b0af9">
 <p>
 Represent the given grid as a graph and execute the algorithm to find <a href="bipartite_minimum_vertex_cover.html#ID-C65F99DB-3808-4E4F-9952-FBB343E9AB9F">Bipartite Minimum Vertex Cover</a>.
 </p>
 </div>
 
-<div id="outline-container-org73cf4d6" class="outline-3">
-<h3 id="org73cf4d6">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org73cf4d6">
+<div id="outline-container-org19dc735" class="outline-3">
+<h3 id="org19dc735">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org19dc735">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 
@@ -120,9 +120,9 @@ Represent the given grid as a graph and execute the algorithm to find <a href="b
 </div>
 </div>
 
-<div id="outline-container-org54b4dc0" class="outline-2">
-<h2 id="org54b4dc0">Common mistakes</h2>
-<div class="outline-text-2" id="text-org54b4dc0">
+<div id="outline-container-orgcda6f55" class="outline-2">
+<h2 id="orgcda6f55">Common mistakes</h2>
+<div class="outline-text-2" id="text-orgcda6f55">
 <ul class="org-ul">
 <li><a href="mistake_failed_to_recognize_a_classic_problem_in_the_reduced_problem.html#ID-B3BCF738-D1F0-4705-89B2-10B66DCE8977">Mistake: Failed to recognize a classic problem in the reduced problem</a>.</li>
 </ul>
