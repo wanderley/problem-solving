@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2441. Largest Positive Integer That Exists With Its Negative</h1>
 
-<div id="outline-container-orga606997" class="outline-2">
-<h2 id="orga606997">Understand the problem</h2>
-<div class="outline-text-2" id="text-orga606997">
+<div id="outline-container-orge14164a" class="outline-2">
+<h2 id="orge14164a">Understand the problem</h2>
+<div class="outline-text-2" id="text-orge14164a">
 <p>
 Given an array \(a\), find the largest integer \(k\) such that \(-k\) is also in \(a\).
 </p>
 </div>
 
-<div id="outline-container-orgad68ea5" class="outline-3">
-<h3 id="orgad68ea5">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgad68ea5">
+<div id="outline-container-org21d87cc" class="outline-3">
+<h3 id="org21d87cc">Useful prompts</h3>
+<div class="outline-text-3" id="text-org21d87cc">
 <ul class="org-ul">
 <li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Given an array \(a\), find the largest integer \(k\) such that \(-k\) is also in
 </div>
 </div>
 
-<div id="outline-container-org4622408" class="outline-2">
-<h2 id="org4622408">Devise a plan</h2>
-<div class="outline-text-2" id="text-org4622408">
+<div id="outline-container-org8bff180" class="outline-2">
+<h2 id="org8bff180">Devise a plan</h2>
+<div class="outline-text-2" id="text-org8bff180">
 <p>
 Use a <code>set</code> to store numbers of \(a\) and for each one \(x\) from the largest to the smaller, check if \(-x\) is also in the set.
 </p>
 </div>
 
-<div id="outline-container-org7659185" class="outline-3">
-<h3 id="org7659185">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org7659185">
+<div id="outline-container-org1f8fc26" class="outline-3">
+<h3 id="org1f8fc26">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org1f8fc26">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findMaxK</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
