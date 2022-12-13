@@ -29,11 +29,9 @@ The problem of finding $j$ became trivial if we use $dp$.  We first compute $dp$
 #+begin_src python
   class Solution:
       def maxProfit(self, prices: List[int]) -> int:
-          maxv = float("-inf")
-          ans = 0
-          for p in reversed(prices):
-              cur = maxv - p
-              ans = max(ans, cur)
-              maxv = max(maxv, p)
+          ans, m = 0, float("-inf")
+          for n in reversed(prices):
+              ans = max(ans, m - n)
+              m = max(m, n)
           return ans
 #+end_src
