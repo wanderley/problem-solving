@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2478. Number of Beautiful Partitions</h1>
 
-<div id="outline-container-org4e6246f" class="outline-2">
-<h2 id="org4e6246f">Patterns</h2>
-<div class="outline-text-2" id="text-org4e6246f">
+<div id="outline-container-org4d4cdd5" class="outline-2">
+<h2 id="org4d4cdd5">Patterns</h2>
+<div class="outline-text-2" id="text-org4d4cdd5">
 <ul class="org-ul">
 <li><a href="pattern_counting_problem.html#ID-5BBCFD49-3103-4D06-BBCE-DC812A9633C6">Pattern: Counting Problem</a>.</li>
 
@@ -56,18 +56,18 @@
 </div>
 </div>
 
-<div id="outline-container-org0e77915" class="outline-2">
-<h2 id="org0e77915">Prompts</h2>
-<div class="outline-text-2" id="text-org0e77915">
+<div id="outline-container-org61c2a10" class="outline-2">
+<h2 id="org61c2a10">Prompts</h2>
+<div class="outline-text-2" id="text-org61c2a10">
 <ul class="org-ul">
 <li><a href="can_we_state_the_problem_in_terms_of_number_of_x_starting_on_any_index_greater_than_y.html#ID-19659A01-72E7-49D4-A70C-8DE16C17AC8A">Can we state the problem in terms of number of X starting on any index greater than Y?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org188dfa7" class="outline-2">
-<h2 id="org188dfa7">Solution \(O(n^2)\)</h2>
-<div class="outline-text-2" id="text-org188dfa7">
+<div id="outline-container-orgfa5c147" class="outline-2">
+<h2 id="orgfa5c147">Solution \(O(n^2)\)</h2>
+<div class="outline-text-2" id="text-orgfa5c147">
 <p>
 Be \(dp(i, k)\) the number of beautiful partitions where the first partition starts on <b>any</b> index between \(i\) and \(n-1\).  Base cases:  if \(i>n\) or \(k<0\), the answer is 0.  If \(i=n\), the answer is 1 if \(k=0\) and 0 otherwise.  Induction step: if \(s[i]\) is a prime and \(s[i-1]\) is not a prime, then \(dp(i, k)=dp(i+1,k) + dp(i + minLength, k - 1)\) since we must consider cutting on \(i\).  Otherwise, \(dp(i, k)=dp(i + 1, k)\) since there is no cut to consider.  Time and space complexity is \(O(n^2)\).
 </p>
@@ -98,9 +98,9 @@ Be \(dp(i, k)\) the number of beautiful partitions where the first partition sta
 </div>
 </div>
 
-<div id="outline-container-org413c5a9" class="outline-2">
-<h2 id="org413c5a9">Solution \(O(n^2 \times \log n)\)</h2>
-<div class="outline-text-2" id="text-org413c5a9">
+<div id="outline-container-orgab4024c" class="outline-2">
+<h2 id="orgab4024c">Solution \(O(n^2 \times \log n)\)</h2>
+<div class="outline-text-2" id="text-orgab4024c">
 <ul class="org-ul">
 <li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a>  If \(s\) starts is a non-prime or ends with a prime, then the solution is always 0.</li>
 
@@ -173,9 +173,9 @@ The first idea that comes to mind is using <a href="dynamic_programming.html#ID-
 </div>
 
 
-<div id="outline-container-org784970a" class="outline-2">
-<h2 id="org784970a">Cited by 1</h2>
-<div class="outline-text-2" id="text-org784970a">
+<div id="outline-container-orgcd93762" class="outline-2">
+<h2 id="orgcd93762">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgcd93762">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

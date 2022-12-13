@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 121. Best Time to Buy and Sell Stock</h1>
 
-<div id="outline-container-orgb09fa9e" class="outline-2">
-<h2 id="orgb09fa9e">Patterns</h2>
-<div class="outline-text-2" id="text-orgb09fa9e">
+<div id="outline-container-orgee2a752" class="outline-2">
+<h2 id="orgee2a752">Patterns</h2>
+<div class="outline-text-2" id="text-orgee2a752">
 <ul class="org-ul">
 <li><a href="pattern_search_for_max_min_value_in_unsorted_array.html#ID-D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6">Pattern: Search for max/min value in unsorted array</a>.</li>
 
@@ -56,18 +56,18 @@
 </div>
 </div>
 
-<div id="outline-container-org4387998" class="outline-2">
-<h2 id="org4387998">Prompts</h2>
-<div class="outline-text-2" id="text-org4387998">
+<div id="outline-container-orgdb06566" class="outline-2">
+<h2 id="orgdb06566">Prompts</h2>
+<div class="outline-text-2" id="text-orgdb06566">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org0d2469f" class="outline-2">
-<h2 id="org0d2469f">Solution</h2>
-<div class="outline-text-2" id="text-org0d2469f">
+<div id="outline-container-org0cff34a" class="outline-2">
+<h2 id="org0cff34a">Solution</h2>
+<div class="outline-text-2" id="text-org0cff34a">
 <p>
 Suppose we know that the best day to buy is on $i$-th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index \(j\) where \(j > i\) and \(prices[j]-prices[i]\) is the maximum possible profit.  The naive approach to find \(j\) consists on iterating over \(i+1,i+2,...,n-1\).  While it solves the problem, this solution is \(O(n^2)\) what will not pass on the tests.  Therefore, we have to come up with a more efficient way to find \(j\).
 </p>
@@ -83,12 +83,10 @@ The problem of finding \(j\) became trivial if we use \(dp\).  We first compute 
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxProfit</span>(<span style="font-weight: bold;">self</span>, prices: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
-        maxv = <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
-        <span style="font-weight: bold; font-style: italic;">ans</span> = 0
-        <span style="font-weight: bold;">for</span> p <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">reversed</span>(prices):
-            <span style="font-weight: bold; font-style: italic;">cur</span> = maxv - p
-            <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">max</span>(ans, cur)
-            <span style="font-weight: bold; font-style: italic;">maxv</span> = <span style="font-weight: bold;">max</span>(maxv, p)
+        <span style="font-weight: bold; font-style: italic;">ans</span>, <span style="font-weight: bold; font-style: italic;">m</span> = 0, <span style="font-weight: bold;">float</span>(<span style="font-style: italic;">"-inf"</span>)
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">reversed</span>(prices):
+            <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">max</span>(ans, m - n)
+            <span style="font-weight: bold; font-style: italic;">m</span> = <span style="font-weight: bold;">max</span>(m, n)
         <span style="font-weight: bold;">return</span> ans
 </pre>
 </div>
@@ -96,9 +94,9 @@ The problem of finding \(j\) became trivial if we use \(dp\).  We first compute 
 </div>
 
 
-<div id="outline-container-org9d619e1" class="outline-2">
-<h2 id="org9d619e1">Cited by 1</h2>
-<div class="outline-text-2" id="text-org9d619e1">
+<div id="outline-container-orgbafa7e7" class="outline-2">
+<h2 id="orgbafa7e7">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgbafa7e7">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>
