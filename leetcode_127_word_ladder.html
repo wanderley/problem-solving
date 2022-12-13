@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 127. Word Ladder</h1>
 
-<div id="outline-container-org20bbe4d" class="outline-2">
-<h2 id="org20bbe4d">Understand the problem</h2>
-<div class="outline-text-2" id="text-org20bbe4d">
+<div id="outline-container-org00b47a9" class="outline-2">
+<h2 id="org00b47a9">Understand the problem</h2>
+<div class="outline-text-2" id="text-org00b47a9">
 <p>
 <a href="pattern_find_shortest_path_between_two_vertices_in_a_graph.html#ID-3283AA3B-67CD-4F8E-960E-442AAE3FD7DC">Pattern: Find shortest path between two vertices in a graph</a> where vertices are words and two words are adjacent if they differ only by one letter.
 </p>
 </div>
 
-<div id="outline-container-org8a9499d" class="outline-3">
-<h3 id="org8a9499d">Useful prompts</h3>
-<div class="outline-text-3" id="text-org8a9499d">
+<div id="outline-container-orgb79b0aa" class="outline-3">
+<h3 id="orgb79b0aa">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgb79b0aa">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -65,17 +65,17 @@
 </div>
 </div>
 
-<div id="outline-container-org29dfef2" class="outline-2">
-<h2 id="org29dfef2">Devise a plan</h2>
-<div class="outline-text-2" id="text-org29dfef2">
+<div id="outline-container-org313ab2e" class="outline-2">
+<h2 id="org313ab2e">Devise a plan</h2>
+<div class="outline-text-2" id="text-org313ab2e">
 <p>
 This is a classic example of <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a>.  The only thing to look out is how to efficiently generate the edges of the graph.  By inspecting the constraints, you will find that we can generate the next word and then check if it is an vertex in the graph.  Time complexity is \(O(n^2)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-org3eb793f" class="outline-3">
-<h3 id="org3eb793f">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org3eb793f">
+<div id="outline-container-orgfbe5af9" class="outline-3">
+<h3 id="orgfbe5af9">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgfbe5af9">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 <span style="font-weight: bold;">import</span> string
