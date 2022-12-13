@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       81682CDD-4D5A-485C-9C1C-5689B6AF1A41
+:ROAM_REFS: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+:END:
+#+TITLE: Leetcode: 121. Best Time to Buy and Sell Stock
+#+ROAM_REFS: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1670910031638
+
+* Patterns
+
+- [[id:D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6][Pattern: Search for max/min value in unsorted array]].
+
+- [[id:FCF0DB21-F99D-4A98-B592-6889DB9FE1F4][Pattern: Problem's constraints disallow $O(n^2)$ solutions]].
+
+* Prompts
+
+- [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]
+
+* Solution
+
+Suppose we know that the best day to buy is on $i$-th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index $j$ where $j > i$ and $prices[j]-prices[i]$ is the maximum possible profit.  The naive approach to find $j$ consists on iterating over $i+1,i+2,...,n-1$.  While it solves the problem, this solution is $O(n^2)$ what will not pass on the tests.  Therefore, we have to come up with a more efficient way to find $j$.
+
+Without knowing any interesting property about $prices$, we might have to use extra memory to efficiently find the index $j$.  Let's create $dp[i]$ which represents the maximum value in $prices[i,i+1,..,n-1]$.  We can define $dp$ recursively as $dp[i]=max(prices[i], dp[i+1])$.  More, we can compute $dp$ by iterating over the input from right to left.
+
+The problem of finding $j$ became trivial if we use $dp$.  We first compute $dp$ and them solve the original problem.  Going back to the original problem, for each $i$ it is possible to test if buying on $i$-th day and selling for the price of $dp[i+1]$ is the best option.  The algorithm has time and space complexity of $O(n)$.  /Wait, we can do better than that!/  While we search for the best $i$ from right to left, we can keep track of the last value of $dp[i+1]$ since this is the only interesting value when testing $i$.  This optimization will reduce the space complexity to $O(1)$ making the solution more efficient.
+
+#+begin_src python
+  class Solution:
+      def maxProfit(self, prices: List[int]) -> int:
+          maxv = float("-inf")
+          ans = 0
+          for p in reversed(prices):
+              cur = maxv - p
+              ans = max(ans, cur)
+              maxv = max(maxv, p)
+          return ans
+#+end_src

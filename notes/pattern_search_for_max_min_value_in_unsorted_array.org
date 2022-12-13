@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6
+:END:
+#+TITLE: Pattern: Search for max/min value in unsorted array

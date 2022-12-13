@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       FCF0DB21-F99D-4A98-B592-6889DB9FE1F4
+:END:
+#+TITLE: Pattern: Problem's constraints disallow $O(n^2)$ solutions

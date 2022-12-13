@@ -96,9 +96,9 @@ For next session, you will work in [[https://leetcode.com/contest/weekly-contest
 
 We will start with [[https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions][Blind 75]] problems.  As we work through them, we will find that few areas should get more attention.  For those, I will add problems to increase your proficiency on specific building blocks.  Here is the list of problems for this week:
 
-- Blind 75
+- Blind 75:
   - [[https://leetcode.com/problems/two-sum/][Two Sum]] ([[id:5F25DCD8-CE46-4F18-A1B1-952BC35382A9][solution]]).
-  - [[https://leetcode.com/problems/best-time-to-buy-and-sell-stock/][Best Time to Buy and Sell Stock]]
-  - [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]]
-- Supplement
+  - [[https://leetcode.com/problems/best-time-to-buy-and-sell-stock/][Best Time to Buy and Sell Stock]] ([[id:81682CDD-4D5A-485C-9C1C-5689B6AF1A41][solution]]).
+  - [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]].
+- Supplement:
   - [[https://leetcode.com/problems/binary-tree-inorder-traversal/][Binary Tree Inorder Traversal]].
