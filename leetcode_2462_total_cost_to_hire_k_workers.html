@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2462. Total Cost to Hire K Workers</h1>
 
-<div id="outline-container-orgf6d2b8f" class="outline-2">
-<h2 id="orgf6d2b8f">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgf6d2b8f">
+<div id="outline-container-org484c1fe" class="outline-2">
+<h2 id="org484c1fe">Understand the problem</h2>
+<div class="outline-text-2" id="text-org484c1fe">
 <p>
 Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the cost of picking \(k\) integers from \(a\) as following:
 </p>
@@ -58,9 +58,9 @@ Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the 
 </ol>
 </div>
 
-<div id="outline-container-orgb9f19aa" class="outline-3">
-<h3 id="orgb9f19aa">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgb9f19aa">
+<div id="outline-container-orgce99c75" class="outline-3">
+<h3 id="orgce99c75">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgce99c75">
 <ul class="org-ul">
 <li><a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a></li>
 </ul>
@@ -68,17 +68,17 @@ Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the 
 </div>
 </div>
 
-<div id="outline-container-org9a4efd6" class="outline-2">
-<h2 id="org9a4efd6">Devise a plan</h2>
-<div class="outline-text-2" id="text-org9a4efd6">
+<div id="outline-container-org3ffe626" class="outline-2">
+<h2 id="org3ffe626">Devise a plan</h2>
+<div class="outline-text-2" id="text-org3ffe626">
 <p>
 On every turn, the array reduces in one.  Because of that, we have to efficiently resize the pool of candidates to pick.  To do so, we keep a priority queue with the candidates to pick.  After removing the best candidate from the pool, we add the next one from the left or the right depending on each side the best candidate is.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-org54b0dc4" class="outline-3">
-<h3 id="org54b0dc4">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org54b0dc4">
+<div id="outline-container-orgd9ad68e" class="outline-3">
+<h3 id="orgd9ad68e">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgd9ad68e">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">totalCost</span>(<span style="font-weight: bold;">self</span>, costs: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>, candidates: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

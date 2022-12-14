@@ -45,7 +45,7 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2312. Selling Pieces of Wood</h1>
 <p>
-<a href="https://leetcode.com/problems/selling-pieces-of-wood/">Problem Statement</a>: Given a rectangle of dimensions \(m \times n\) and tiles \(r[i]=[h_i, w_i, p_i]\) where \(h_i, w_i\) and \(p_i\) are the height, width and price of the $i$-th tile, return the maximum coverage (sum of all prices of each tile used) of the given rectangles given that you always have to entirely cut the rectangle in horizontally or vertically.
+<a href="https://leetcode.com/problems/selling-pieces-of-wood/">Problem Statement</a>: Given a rectangle of dimensions \(m \times n\) and tiles \(r[i]=[h_i, w_i, p_i]\) where \(h_i, w_i\) and \(p_i\) are the height, width and price of the \(i\)th tile, return the maximum coverage (sum of all prices of each tile used) of the given rectangles given that you always have to entirely cut the rectangle in horizontally or vertically.
 </p>
 
 <p>
@@ -63,9 +63,9 @@ We can formulate using the following recurrence:
 This recurrence has \(O(m \times n)\) subproblems and each one is solved in \(O(m + n)\).  So, the time complexity to compute it will be \(O(m \times n \times (m + n))\).
 </p>
 
-<div id="outline-container-org655b2ca" class="outline-2">
-<h2 id="org655b2ca"><a href="top_down.html#ID-3463A33B-D953-4E75-895D-0BE4AAB16813">Top-down</a></h2>
-<div class="outline-text-2" id="text-org655b2ca">
+<div id="outline-container-org6f04e20" class="outline-2">
+<h2 id="org6f04e20"><a href="top_down.html#ID-3463A33B-D953-4E75-895D-0BE4AAB16813">Top-down</a></h2>
+<div class="outline-text-2" id="text-org6f04e20">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 <span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache

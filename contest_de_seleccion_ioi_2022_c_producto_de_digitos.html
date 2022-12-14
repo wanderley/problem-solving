@@ -481,7 +481,7 @@ That is a big number which would require either a formula to compute or a logari
 
 
 <p>
-There are not many of them, but how could we generate them efficiently?  For that, we can use <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a> to go over all possible numbers \(x\) and compute \(P(x)\) of each one of them.  The function <code>rec</code> try all possible digits for the $i$-th digit and returns all \(P(x)\) that could be generated so far.  With all possible \(P(x)\) generated, we can iterate over each one of them, say \(z\) and count those where \(z+b<n\) and \(p(z)=z+b\).  The first inequality comes from the fact that we can compute \(x\) knowing \(b\) and \(P(x)\), since \(x-P(x)=b\).  The second equation checks if the \(x\) derived from \(P(x)\) is a valid \(x\) one.
+There are not many of them, but how could we generate them efficiently?  For that, we can use <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a> to go over all possible numbers \(x\) and compute \(P(x)\) of each one of them.  The function <code>rec</code> try all possible digits for the \(i\)th digit and returns all \(P(x)\) that could be generated so far.  With all possible \(P(x)\) generated, we can iterate over each one of them, say \(z\) and count those where \(z+b<n\) and \(p(z)=z+b\).  The first inequality comes from the fact that we can compute \(x\) knowing \(b\) and \(P(x)\), since \(x-P(x)=b\).  The second equation checks if the \(x\) derived from \(P(x)\) is a valid \(x\) one.
 </p>
 
 <p>
@@ -492,9 +492,9 @@ With \(k\) being the number of different values of \(P(x)\):
 <li>Space complexity: \(O(k)\)</li>
 </ul>
 
-<div id="outline-container-org1de1b0e" class="outline-2">
-<h2 id="org1de1b0e">Python solution</h2>
-<div class="outline-text-2" id="text-org1de1b0e">
+<div id="outline-container-orgc113aba" class="outline-2">
+<h2 id="orgc113aba">Python solution</h2>
+<div class="outline-text-2" id="text-orgc113aba">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> functools <span style="font-weight: bold;">import</span> cache, <span style="font-weight: bold;">reduce</span>
 <span style="font-weight: bold;">from</span> operator <span style="font-weight: bold;">import</span> mul
@@ -544,9 +544,9 @@ With \(k\) being the number of different values of \(P(x)\):
 </div>
 </div>
 
-<div id="outline-container-orgfd02867" class="outline-2">
-<h2 id="orgfd02867">C++ solution</h2>
-<div class="outline-text-2" id="text-orgfd02867">
+<div id="outline-container-org1bfecb7" class="outline-2">
+<h2 id="org1bfecb7">C++ solution</h2>
+<div class="outline-text-2" id="text-org1bfecb7">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;set&gt;</span>
 <span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;vector&gt;</span>
