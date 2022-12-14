@@ -8,7 +8,7 @@
 :ID:       1E82ABF5-661B-47CC-8656-26B50FE472B8
 :END:
 
-Given an array $v$, returns a new array where its i-th element is equal to $v[0] + v[1] + .. + v[i]$.  The following algorithm solves the problem with $O(n)$ time and space complexity where $n$ is the number of elements in the array.
+Given an array $v$, returns a new array where its \(i\)th element is equal to $v[0] + v[1] + .. + v[i]$.  The following algorithm solves the problem with $O(n)$ time and space complexity where $n$ is the number of elements in the array.
 
 #+begin_src python :exports none
   from itertools import accumulate

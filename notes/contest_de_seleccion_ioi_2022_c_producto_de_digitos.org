@@ -122,7 +122,7 @@ That is a big number which would require either a formula to compute or a logari
 | $0...10^8$ |               2026 |
 
 
-There are not many of them, but how could we generate them efficiently?  For that, we can use [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]] to go over all possible numbers $x$ and compute $P(x)$ of each one of them.  The function =rec= try all possible digits for the $i$-th digit and returns all $P(x)$ that could be generated so far.  With all possible $P(x)$ generated, we can iterate over each one of them, say $z$ and count those where $z+b<n$ and $p(z)=z+b$.  The first inequality comes from the fact that we can compute $x$ knowing $b$ and $P(x)$, since $x-P(x)=b$.  The second equation checks if the $x$ derived from $P(x)$ is a valid $x$ one.
+There are not many of them, but how could we generate them efficiently?  For that, we can use [[id:4EABECD0-AEDD-4A57-8902-67F2BC6673AC][Dynamic Programming by Digit]] to go over all possible numbers $x$ and compute $P(x)$ of each one of them.  The function =rec= try all possible digits for the \(i\)th digit and returns all $P(x)$ that could be generated so far.  With all possible $P(x)$ generated, we can iterate over each one of them, say $z$ and count those where $z+b<n$ and $p(z)=z+b$.  The first inequality comes from the fact that we can compute $x$ knowing $b$ and $P(x)$, since $x-P(x)=b$.  The second equation checks if the $x$ derived from $P(x)$ is a valid $x$ one.
 
 With $k$ being the number of different values of $P(x)$:
 - Time complexity: $O(k)$

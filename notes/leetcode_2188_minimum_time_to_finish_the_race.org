@@ -10,7 +10,7 @@
 
 * Understand the problem
 
-Given an array representing tires where $tires[i] = [f_i, r_i]$, a cost to change tires and number of laps in the race.  The time $t$ for the tire $i$ to make j-th lap is $t(i, j) = t(i, j - 1) + f_i \times r_i^j$.  Determine the minimum times to finish the race.
+Given an array representing tires where $tires[i] = [f_i, r_i]$, a cost to change tires and number of laps in the race.  The time $t$ for the tire $i$ to make \(j\)th lap is $t(i, j) = t(i, j - 1) + f_i \times r_i^j$.  Determine the minimum times to finish the race.
 
 * Devise a plan
 

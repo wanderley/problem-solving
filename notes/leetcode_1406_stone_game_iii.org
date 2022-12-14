@@ -7,7 +7,7 @@ Problem statement can be found [[https://leetcode.com/problems/stone-game-iii/][
 
 * Linear solution
 
-This is an example of a classic [[id:4A2206E8-074B-4CDB-BD5B-01DE3C901C15][Min-Max Problem]].  Alice and Bob wants to maximize their score, which means that Alice wants to maximize the difference of their scores, while Bob wants to minimize it.  Be $a$ the array of stone values with $n$ elements.  Be $f(A, i)$ and $f(B, i)$ the max and min score difference that Alice and Bob can make starting on the $i$-th stone, respectively.  By the rules of the game, we know that
+This is an example of a classic [[id:4A2206E8-074B-4CDB-BD5B-01DE3C901C15][Min-Max Problem]].  Alice and Bob wants to maximize their score, which means that Alice wants to maximize the difference of their scores, while Bob wants to minimize it.  Be $a$ the array of stone values with $n$ elements.  Be $f(A, i)$ and $f(B, i)$ the max and min score difference that Alice and Bob can make starting on the \(i\)th stone, respectively.  By the rules of the game, we know that
 
 \begin{align*}
 f(A, i)  = & \max_{i \leq j \leq min(|a|, i + 2)} f(B, j+1) + \sum_{i\leq k \leq j } a[k] \\

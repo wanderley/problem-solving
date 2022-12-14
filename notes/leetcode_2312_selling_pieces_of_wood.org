@@ -3,7 +3,7 @@
 :END:
 #+TITLE: Leetcode: 2312. Selling Pieces of Wood
 
-[[https://leetcode.com/problems/selling-pieces-of-wood/][Problem Statement]]: Given a rectangle of dimensions $m \times n$ and tiles $r[i]=[h_i, w_i, p_i]$ where $h_i, w_i$ and $p_i$ are the height, width and price of the $i$-th tile, return the maximum coverage (sum of all prices of each tile used) of the given rectangles given that you always have to entirely cut the rectangle in horizontally or vertically.
+[[https://leetcode.com/problems/selling-pieces-of-wood/][Problem Statement]]: Given a rectangle of dimensions $m \times n$ and tiles $r[i]=[h_i, w_i, p_i]$ where $h_i, w_i$ and $p_i$ are the height, width and price of the \(i\)th tile, return the maximum coverage (sum of all prices of each tile used) of the given rectangles given that you always have to entirely cut the rectangle in horizontally or vertically.
 
 We can formulate using the following recurrence:
 

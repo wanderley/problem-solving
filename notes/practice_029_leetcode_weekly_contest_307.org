@@ -118,7 +118,7 @@
 :END:
 [[https://leetcode.com/contest/weekly-contest-307/problems/find-the-k-sum-of-an-array/][Problem Statement]]
 
-- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  After computing the last number, we can compute the first k-th sums and use it to compute the k-th largest one.  Time complexity is $O(n + (\log n + log k))$ and space complexity is $O(k)$.
+- [[id:29512D97-A54D-42F9-A8C7-C3422881933B][Can we use brute-force to solve the problem?]]  After computing the last number, we can compute the first \(k\)th sums and use it to compute the \(k\)th largest one.  Time complexity is $O(n + (\log n + log k))$ and space complexity is $O(k)$.
 
 #+begin_src python
   class Solution:
