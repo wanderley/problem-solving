@@ -20,7 +20,7 @@
 
 * Solution
 
-Suppose we know that the best day to buy is on \(i\)th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index $j$ where $j > i$ and $prices[j]-prices[i]$ is the maximum possible profit.  The naive approach to find $j$ consists on iterating over $i+1,i+2,...,n-1$.  While it solves the problem, this solution is $O(n^2)$ what will not pass on the tests.  Therefore, we have to come up with a more efficient way to find $j$.
+Suppose we know that the best day to buy is on \(i\)th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index $j$ where $j > i$ and $prices[j]-prices[i]$ is the maximum possible profit.  The naive approach to find $j$ consists on iterating over $i+1,i+2,...,n-1$.  While it solves the problem, this solution is $O(n^2)$ and does not pass on all tests.  Therefore, we have to come up with a more efficient way to find $j$.
 
 Without knowing any interesting property about $prices$, we might have to use extra memory to efficiently find the index $j$.  Let's create $dp[i]$ which represents the maximum value in $prices[i,i+1,..,n-1]$.  We can define $dp$ recursively as $dp[i]=max(prices[i], dp[i+1])$.  More, we can compute $dp$ by iterating over the input from right to left.
 
