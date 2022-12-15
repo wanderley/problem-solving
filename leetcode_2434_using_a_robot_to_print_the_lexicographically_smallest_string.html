@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2434. Using a Robot to Print the Lexicographically Smallest String</h1>
 
-<div id="outline-container-orgdca83f8" class="outline-2">
-<h2 id="orgdca83f8">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgdca83f8">
+<div id="outline-container-org615404d" class="outline-2">
+<h2 id="org615404d">Understand the problem</h2>
+<div class="outline-text-2" id="text-org615404d">
 <p>
 <a href="pattern_find_optimal_arrangement.html#ID-F431A436-0E2F-42F4-9EB9-13A82272F944">Pattern: Find optimal arrangement</a> where you can do two operations: (1) remove first char from the input and add to a stack, (2) remove char from stack and put on the answer.  Find the smallest string that can be formed using these rules.
 </p>
 </div>
 
-<div id="outline-container-org34d0db7" class="outline-3">
-<h3 id="org34d0db7">Useful prompts</h3>
-<div class="outline-text-3" id="text-org34d0db7">
+<div id="outline-container-org88d99ed" class="outline-3">
+<h3 id="org88d99ed">Useful prompts</h3>
+<div class="outline-text-3" id="text-org88d99ed">
 <ul class="org-ul">
 <li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a></li>
 </ul>
@@ -63,17 +63,17 @@
 </div>
 </div>
 
-<div id="outline-container-orgea56f98" class="outline-2">
-<h2 id="orgea56f98">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgea56f98">
+<div id="outline-container-orgd83a669" class="outline-2">
+<h2 id="orgd83a669">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgd83a669">
 <p>
 For each char in the input, add it to the answer if there is no char on the right (rest of the string) that comes first than it.  Otherwise, drop all chars from the current stack to the answer while they are smaller than the smaller char to the right.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-orgd0333a6" class="outline-3">
-<h3 id="orgd0333a6">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgd0333a6">
+<div id="outline-container-orge8aedf1" class="outline-3">
+<h3 id="orge8aedf1">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orge8aedf1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
 
