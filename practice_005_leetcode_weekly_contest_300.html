@@ -51,9 +51,9 @@
 <li>Solved: 1, 2, 3</li>
 </ul>
 
-<div id="outline-container-orgf10cd8d" class="outline-2">
-<h2 id="orgf10cd8d">Leetcode: 2325. Decode the Message</h2>
-<div class="outline-text-2" id="text-orgf10cd8d">
+<div id="outline-container-orgf63e617" class="outline-2">
+<h2 id="orgf63e617">Leetcode: 2325. Decode the Message</h2>
+<div class="outline-text-2" id="text-orgf63e617">
 <p>
 The solution consist on following the rules.  Keep a pointer to the next unused letter of the alphabet (starting from <code>a</code>) and bumped it after assign to the next non-mapped letter from the key string.  After that, iterate over the message decrypting it.  Time and space complexity: \(O(n+m)\) where \(n\) is the size of the key and \(m\) is the size of the message.
 </p>
@@ -91,9 +91,9 @@ The solution consist on following the rules.  Keep a pointer to the next unused 
 </div>
 </div>
 
-<div id="outline-container-org43edd0d" class="outline-2">
-<h2 id="org43edd0d">Leetcode: 2326. Spiral Matrix IV</h2>
-<div class="outline-text-2" id="text-org43edd0d">
+<div id="outline-container-org432bd22" class="outline-2">
+<h2 id="org432bd22">Leetcode: 2326. Spiral Matrix IV</h2>
+<div class="outline-text-2" id="text-org432bd22">
 <p>
 To transverse the grid doing a spiral starting from \((0,0)\), you have to go to the left as much as possible, then go down as much as possible, then go right as much as possible and then go top as much as possible.  The definition of "as much as possible" is (1) the next position is inside the grid and it hasn't a value assigned to it.  Time and space complexity is \(O(m * n)\).
 </p>
@@ -129,9 +129,9 @@ To transverse the grid doing a spiral starting from \((0,0)\), you have to go to
 </div>
 </div>
 
-<div id="outline-container-org833e21b" class="outline-2">
-<h2 id="org833e21b">Leetcode: 2327. Number of People Aware of a Secret</h2>
-<div class="outline-text-2" id="text-org833e21b">
+<div id="outline-container-org33ae2c3" class="outline-2">
+<h2 id="org33ae2c3">Leetcode: 2327. Number of People Aware of a Secret</h2>
+<div class="outline-text-2" id="text-org33ae2c3">
 <p>
 Retrospective: My intuition was that the problem had a recurrence like $f(n)=f(n-1)+f(n-2)+&#x2026;$, and I spent a long time trying to make one big recurrence to work.  I only unblocked myself when I decided to break the formula in parts that made more sense like "how can I define the number of people alive?" and "how can I define the number of people born on this day?" and so on.
 </p>
@@ -177,9 +177,9 @@ Be \(d(n)\) and \(b(n)\) the number of people that died (don't pass the secret a
 </div>
 </div>
 
-<div id="outline-container-org8353f5a" class="outline-2">
-<h2 id="org8353f5a">Leetcode: 2328. Number of Increasing Paths in a Grid</h2>
-<div class="outline-text-2" id="text-org8353f5a">
+<div id="outline-container-orga2bf23d" class="outline-2">
+<h2 id="orga2bf23d">Leetcode: 2328. Number of Increasing Paths in a Grid</h2>
+<div class="outline-text-2" id="text-orga2bf23d">
 <p>
 Retrospective: My intuition pointed to process the cell from the smaller to the bigger values (I used a similar trick on <a href="leetcode_329_longest_increasing_path_in_a_matrix.html#ID-D178FB4C-1257-41C6-A386-E7BF78FDC62A">Leetcode: 329. Longest Increasing Path in a Matrix</a>).  With this, the solution was straight-forward.
 </p>
