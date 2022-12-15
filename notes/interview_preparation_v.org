@@ -115,11 +115,11 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
 - Things to improve.
 
-  - Use easy problems as opportunity to become proficient in your choose programming language.  The method uses spaced-repetition to make sure that you get enough exposure with each problem and have a chance to craft all parts of problem solving: identify patterns, come up with solution and implement it.  An easy problem makes the first two step trivial, but gives you the opportunity to craft the last one.  So, use them!!
+  - You might think that easy problems are waste of time.  They are not.  Easy problems help you to solidify building blocks, become proficient in your chosen programming language, focus on recalling the patterns and prompts, and finally explain the problem in a concise way.  Leave to the spaced-repetition the task to decide which problem you have to review.  Over time, the easy problems will appear less frequently than the challenging ones.
 
-  - A pattern is word or sentence that extract the essence of the problem or part of it.  It will be used by your brain to access algorithms and techniques that you used to solve past problems.  For example, patterns highlight the structure of the problem's input (e.g. Tree, Array, Unsorted Linked List).  It can also re-write the problem in more general terms like "Searching Problem" or "Searching for pair of indexes in unsorted array".  Note that "convert list to set" isn't a pattern but a step required to solve the problem.
+  - You added "Convert list to set" as one pattern in your card.  A pattern is word or sentence that abstract the problem or part of it.  Here is some examples of patterns: "Binary Balance Tree", "Directed Graph", "String Search", "Searching in Array".  Note that they generalize the problem in terms that are easier to associate with.  We are going to use these terms (or sentences) as hooks to grab ideas from previous problems that we solved.  You think "Directed Graph", and few seconds later "poof" you think "Are there cycles in this Graph?".
 
-  - While we love functional programming, imperative programming is usually a better choice for problem solving.  It is possible to use immutable data structures, lambdas and etc, but a simple for loop can reduce 10-15 lines of functional programming to 3 lines.  Writing less code means that you reduced your surface of errors.
+  - While we love functional programming, imperative programming is usually a better choice for problem solving.  It is possible to use immutable data structures, lambdas, maps, filters, and etc, but a simple for loop can reduce 10-15 lines of functional programming to 3 lines.  Remember that less code means less surface for errors.
 
 - Questions about the training.
 
