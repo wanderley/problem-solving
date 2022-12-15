@@ -77,6 +77,11 @@
         org-html-head-include-scripts nil
         org-html-head-include-default-style nil
         org-html-head  "<link rel=\"stylesheet\" href=\"style.css\">"
+        org-html-checkbox-type 'html
+        org-html-checkbox-types '((html
+                                   (on . "<input type='checkbox' checked='checked' disabled='disabled'/>")
+                                   (off . "<input type='checkbox' disabled='disabled' />")
+                                   (trans . "<input type='checkbox' disabled='disabled' />")))
 
         static-directory (expand-file-name "./static")
         publish-directory (expand-file-name "./out")
@@ -104,7 +109,7 @@
                :time-stamp-file nil)))
   (--each '(wander/org-roam-insert-html-backlinks-string
             wander/org-roam-insert-html-leetcode-url-string)
-      (add-hook 'org-export-before-processing-hook it)))
+    (add-hook 'org-export-before-processing-hook it)))
 
 
 ;;; Helper Functions
