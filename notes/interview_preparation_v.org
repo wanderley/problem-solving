@@ -73,10 +73,10 @@ The goal of this method is to use spaced-repetition to build your intuition to s
 
 For next session, you will work in [[https://leetcode.com/contest/weekly-contest-320/][4 problems]] which you should apply the method: solve them, create and review the cards.  We will review your thought process to solve these problems and what worked and didn't work when create and reviewing your cards:
 
-  - [[id:AD689352-C66F-4BFC-95A4-65B58110A851][Leetcode: 2475. Number of Unequal Triplets in Array]]
-  - [[id:7F2BA5B5-2C29-40AE-A4D3-B3D438A660C9][Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree]]
-  - [[id:47D88994-CD09-41C5-A3BA-9EDF2B9AB80E][Leetcode: 2477. Minimum Fuel Cost to Report to the Capital]]
-  - [[id:D500C3CF-B17C-4C7D-90F2-BFA02AB1C9D6][Leetcode: 2478. Number of Beautiful Partitions]]
+  - [ ] [[id:AD689352-C66F-4BFC-95A4-65B58110A851][Leetcode: 2475. Number of Unequal Triplets in Array]]
+  - [X] [[id:7F2BA5B5-2C29-40AE-A4D3-B3D438A660C9][Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree]]
+  - [ ] [[id:47D88994-CD09-41C5-A3BA-9EDF2B9AB80E][Leetcode: 2477. Minimum Fuel Cost to Report to the Capital]]
+  - [ ] [[id:D500C3CF-B17C-4C7D-90F2-BFA02AB1C9D6][Leetcode: 2478. Number of Beautiful Partitions]]
 
 ** December 9, 2022
 
@@ -97,8 +97,41 @@ For next session, you will work in [[https://leetcode.com/contest/weekly-contest
 We will start with [[https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions][Blind 75]] problems.  As we work through them, we will find that few areas should get more attention.  For those, I will add problems to increase your proficiency on specific building blocks.  Here is the list of problems for this week:
 
 - Blind 75:
-  - [[https://leetcode.com/problems/two-sum/][Two Sum]] ([[id:5F25DCD8-CE46-4F18-A1B1-952BC35382A9][solution]]).
-  - [[https://leetcode.com/problems/best-time-to-buy-and-sell-stock/][Best Time to Buy and Sell Stock]] ([[id:81682CDD-4D5A-485C-9C1C-5689B6AF1A41][solution]]).
-  - [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]].
+  - [X] [[https://leetcode.com/problems/two-sum/][Two Sum]] ([[id:5F25DCD8-CE46-4F18-A1B1-952BC35382A9][solution]]).
+  - [X] [[https://leetcode.com/problems/best-time-to-buy-and-sell-stock/][Best Time to Buy and Sell Stock]] ([[id:81682CDD-4D5A-485C-9C1C-5689B6AF1A41][solution]]).
+  - [ ] [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]].
 - Supplement:
-  - [[https://leetcode.com/problems/binary-tree-inorder-traversal/][Binary Tree Inorder Traversal]].
+  - [X] [[https://leetcode.com/problems/binary-tree-inorder-traversal/][Binary Tree Inorder Traversal]].
+
+** December 14, 2022
+
+*** Review last week's problems
+
+- Done well.
+
+  - Read the problem and checked the problem's constraints.
+
+  - Used the problem constraints to define an upper bound for the solution's time complexity.
+
+- Things to improve.
+
+  - Use easy problems as opportunity to become proficient in your choose programming language.  The method uses spaced-repetition to make sure that you get enough exposure with each problem and have a chance to craft all parts of problem solving: identify patterns, come up with solution and implement it.  An easy problem makes the first two step trivial, but gives you the opportunity to craft the last one.  So, use them!!
+
+  - A pattern is word or sentence that extract the essence of the problem or part of it.  It will be used by your brain to access algorithms and techniques that you used to solve past problems.  For example, patterns highlight the structure of the problem's input (e.g. Tree, Array, Unsorted Linked List).  It can also re-write the problem in more general terms like "Searching Problem" or "Searching for pair of indexes in unsorted array".  Note that "convert list to set" isn't a pattern but a step required to solve the problem.
+
+  - While we love functional programming, imperative programming is usually a better choice for problem solving.  It is possible to use immutable data structures, lambdas and etc, but a simple for loop can reduce 10-15 lines of functional programming to 3 lines.  Writing less code means that you reduced your surface of errors.
+
+- Questions about the training.
+
+  - Are you doing at least one/two reviews per day?
+    - Every two days.
+  - Is the number of reviews sustainable?
+    - Yes. Problems are small and there is no issue so far.
+  - Have you had chance to look the solutions available here?
+    - Yes, but didn't understand part of the solution.
+  - What insight did you extract after using this method in the last two weeks?
+    - Solution for the past problems come to mind after much effort and don't require paper work before start coding.
+
+- Questions about the problems.
+  - What is common in the solution for these problems?
+    - We have to use extra memory to solve the searching problem in $O(1)$.

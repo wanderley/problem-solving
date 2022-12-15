@@ -20,7 +20,7 @@
 
 * Solution $O(n^2)$
 
-Be $dp(i, k)$ the number of beautiful partitions where the first partition starts on *any* index between $i$ and $n-1$.  Base cases:  if $i>n$ or $k<0$, the answer is 0.  If $i=n$, the answer is 1 if $k=0$ and 0 otherwise.  Induction step: if $s[i]$ is a prime and $s[i-1]$ is not a prime, then $dp(i, k)=dp(i+1,k) + dp(i + minLength, k - 1)$ since we must consider cutting on $i$.  Otherwise, $dp(i, k)=dp(i + 1, k)$ since there is no cut to consider.  Time and space complexity is $O(n^2)$.
+Be $dp(i, k)$ the number of beautiful partitions where the first partition starts on *any* index between $i$ and $n-1$.  Base cases:  if $i>n$ or $k<0$, the answer is 0.  If $i=n$, the answer is 1 if $k=0$ and 0 otherwise.  Induction step: if $s[i]$ is a prime and $s[i-1]$ is not a prime, then $dp(i, k)=dp(i+1,k) + dp(i + minLength, k - 1)$ since we must consider cutting on $i$.  Otherwise, $dp(i, k)=dp(i + 1, k)$ since there is no cut to consider at position $i$.  Time and space complexity is $O(n^2)$.
 
 #+begin_src python
   class Solution:
