@@ -45,26 +45,26 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2447. Number of Subarrays With GCD Equal to K</h1>
 
-<div id="outline-container-orgd857df2" class="outline-2">
-<h2 id="orgd857df2">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgd857df2">
+<div id="outline-container-org9383840" class="outline-2">
+<h2 id="org9383840">Understand the problem</h2>
+<div class="outline-text-2" id="text-org9383840">
 <p>
 Given an array of integers \(a\) and an integer \(k\), find all subarrays \(a[i..j]\) where \(gcd(a[i], a[i+1], ..., a[j])=k\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org53e7f12" class="outline-2">
-<h2 id="org53e7f12">Devise a plan</h2>
-<div class="outline-text-2" id="text-org53e7f12">
+<div id="outline-container-org85b9425" class="outline-2">
+<h2 id="org85b9425">Devise a plan</h2>
+<div class="outline-text-2" id="text-org85b9425">
 <p>
 <a href="pattern_small_constraints_could_allow_brute_force_solution.html#ID-BC81A358-FBCC-43AA-9928-E9778A107869">Pattern: Small constraints could allow a brute-force solution</a>, so iterate over all subarrays and compute GCD.
 </p>
 </div>
 
-<div id="outline-container-org9bea361" class="outline-3">
-<h3 id="org9bea361">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org9bea361">
+<div id="outline-container-org16a1719" class="outline-3">
+<h3 id="org16a1719">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org16a1719">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">subarrayGCD</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
