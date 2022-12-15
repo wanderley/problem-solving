@@ -82,13 +82,13 @@ For next session, you will work in [[https://leetcode.com/contest/weekly-contest
 
 *** Performing a solution
 
-- [X] Found the worst case but didn't narrow the search for the optimal algorithm to that case.
-- [X] Explain what are chucks and how to use them.
+- Found the worst case but didn't narrow the search for the optimal algorithm to that case.
+- Explain what are chucks and how to use them.
   - [[https://www.theroar.com.au/2016/12/19/ten-ways-get-cricket-including-youve-never-seen/][What are the ways to be dismissed in cricket?]]
     - Define one of them.
     - Define other one.
     - Contrast them.
-- [X] Things that will improve over time:
+- Things that will improve over time:
   - Proficiency in the selected Programming Language.
   - Formulate a high-level plan and execute each part in isolation.
 
