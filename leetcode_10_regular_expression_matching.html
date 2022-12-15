@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/regular-expression-matching/solution/">Problem Statement</a>: Given two string \(s\) and a pattern \(p\), return if \(s\) matches \(p\).  Note that \(p\) contains English letters, <code>'.'</code> and <code>'*'</code> (Kleene start).  The character <code>'.'</code> can be matched with any other character.
 </p>
 
-<div id="outline-container-org69c3ca3" class="outline-2">
-<h2 id="org69c3ca3">Simulating all transitions</h2>
-<div class="outline-text-2" id="text-org69c3ca3">
+<div id="outline-container-orgd27397c" class="outline-2">
+<h2 id="orgd27397c">Simulating all transitions</h2>
+<div class="outline-text-2" id="text-orgd27397c">
 <p>
 Let's use an example to explain the idea (kind of how I saw the solution).  Suppose that \(s=aabb\) and \(p=aa*a.*\).  Be \(i\) the position on \(s\) that was matched so far, and \(j\) the position on the pattern that we are matching \(s_i\) against.  initially \(i=j=0\).  as \(s_i=p_i\), we can move forward in \(s\) and \(p\) by adding one to \(i\) and \(j\).  Now, \(s_1=a\), \(p_1=a\) and \(p_1\) is a zero or more pattern.  If we match \(s_1\) with \(p_1\), we won't be able to match the rest of \(s\) because \(p_3\) must be matched with an letter a in \(s\) and \(s_1\) is the last one.  Even thought we can't perform this match, it isn't always true for other inputs (e.g. \(s=aaabb\) and \(p=aa*a.*\)).  The conclusion is that we have to branch the matching every time that \(p_j\) is a Kleene star.   In this example, we would have to try matching \(s_1\) with \(p_1\) and \(s_1\) with \(p_3\) (we have to jump the <code>*</code>).  So, for every \(i\), we have to keep a set of position \(js\) to match \(s_i\) against.  After performing all matches, we would be able to generate the new \(js\) to match \(s_{i+1}\) against.  The following code implements this idea.
 </p>
@@ -130,9 +130,9 @@ With \(N\) and \(M\) being the length of \(s\) and \(p\) respectively,
 </div>
 </div>
 
-<div id="outline-container-orgfed4737" class="outline-2">
-<h2 id="orgfed4737"><a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a></h2>
-<div class="outline-text-2" id="text-orgfed4737">
+<div id="outline-container-orgbd6bc06" class="outline-2">
+<h2 id="orgbd6bc06"><a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a></h2>
+<div class="outline-text-2" id="text-orgbd6bc06">
 <p>
 We would like to compute a function \(f(i,j)\) that is true if it is possible to match \(s\) starting on \(i\) with \(p\) starting on \(j\), and false otherwise.  To do so, we have to try matching \(s_i\) with \(p_j\) if possible, and also skipping zero or more pattern.  The following code implements using top-down approach.
 </p>
@@ -255,9 +255,9 @@ Both, implementations have
 </div>
 
 
-<div id="outline-container-org00a0bd5" class="outline-2">
-<h2 id="org00a0bd5">Cited by 1</h2>
-<div class="outline-text-2" id="text-org00a0bd5">
+<div id="outline-container-orgd1d3c2e" class="outline-2">
+<h2 id="orgd1d3c2e">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgd1d3c2e">
 <ul class="org-ul">
 <li><a href="journal.html#ID-1D831B69-EB70-4709-A336-06D3974FDDD0">Journal</a></li>
 </ul>

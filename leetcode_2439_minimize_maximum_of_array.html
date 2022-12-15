@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2439. Minimize Maximum of Array</h1>
 
-<div id="outline-container-orgee932f5" class="outline-2">
-<h2 id="orgee932f5">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgee932f5">
+<div id="outline-container-org95ff937" class="outline-2">
+<h2 id="org95ff937">Understand the problem</h2>
+<div class="outline-text-2" id="text-org95ff937">
 <p>
 Given an array of integers which you can do operations to transfer 1 from any positive number to its right-neighbor, compute the minimum possible values after performing any number of operations.
 </p>
 </div>
 
-<div id="outline-container-org88441f9" class="outline-3">
-<h3 id="org88441f9">Useful prompts</h3>
-<div class="outline-text-3" id="text-org88441f9">
+<div id="outline-container-orgcec43f1" class="outline-3">
+<h3 id="orgcec43f1">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgcec43f1">
 <ul class="org-ul">
 <li><a href="can_we_state_the_problem_as_a_searching_problem.html#ID-60DEC3A8-810C-41E3-96E3-98145F4AAC3F">Can we state the problem as a searching problem?</a></li>
 </ul>
@@ -63,17 +63,17 @@ Given an array of integers which you can do operations to transfer 1 from any po
 </div>
 </div>
 
-<div id="outline-container-orgf77a19f" class="outline-2">
-<h2 id="orgf77a19f">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgf77a19f">
+<div id="outline-container-org00575b5" class="outline-2">
+<h2 id="org00575b5">Devise a plan</h2>
+<div class="outline-text-2" id="text-org00575b5">
 <p>
 For a given input, suppose that we know the answer and it is \(x\) (<a href="pattern_search_validate.html#ID-B39B7723-9DCB-4C18-BE7D-51086F1F2A81">Pattern: Search &amp; Validate</a>).  We can go from left to right applying operations to make each number less than \(x\).  For example, \(a=[3,2,9]\) and \(x=5\). We can apply the following operations: \([3,6,5] \rightarrow [4,5,5]\).  After the first operation, we changed \(a[2]\) from \(9\) to \(5\) what left \(4\) remained which was added to \(a[1]\).  When the remainder is negative, we can set it to zero, since there is no way to transfer values from right to left.  On the end, if the remainder is zero, we know that \(x\) was a valid answer.  If \(x\) is an optimal answer, then \(x+1\) is also a valid answer and \(x-1\) is an invalid answer.  So, a value \(y\) between \(0\) and \(\sum a[i]\), we have that it is invalid if \(y<x\) and valid otherwise.  We can use this property and use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the optimal value \(x\).  Time complexity is \(O(n \times \log \sum a[i])\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-org16dcdc0" class="outline-3">
-<h3 id="org16dcdc0">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org16dcdc0">
+<div id="outline-container-org9066972" class="outline-3">
+<h3 id="org9066972">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org9066972">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimizeArrayValue</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
