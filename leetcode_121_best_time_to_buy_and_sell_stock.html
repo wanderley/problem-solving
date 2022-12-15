@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 121. Best Time to Buy and Sell Stock</h1>
 
-<div id="outline-container-org8a8f4d7" class="outline-2">
-<h2 id="org8a8f4d7">Patterns</h2>
-<div class="outline-text-2" id="text-org8a8f4d7">
+<div id="outline-container-org0eabbf9" class="outline-2">
+<h2 id="org0eabbf9">Patterns</h2>
+<div class="outline-text-2" id="text-org0eabbf9">
 <ul class="org-ul">
 <li><a href="pattern_search_for_max_min_value_in_unsorted_array.html#ID-D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6">Pattern: Search for max/min value in unsorted array</a>.</li>
 
@@ -56,28 +56,28 @@
 </div>
 </div>
 
-<div id="outline-container-org3c32ca0" class="outline-2">
-<h2 id="org3c32ca0">Prompts</h2>
-<div class="outline-text-2" id="text-org3c32ca0">
+<div id="outline-container-orga279762" class="outline-2">
+<h2 id="orga279762">Prompts</h2>
+<div class="outline-text-2" id="text-orga279762">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge65c720" class="outline-2">
-<h2 id="orge65c720">Solution</h2>
-<div class="outline-text-2" id="text-orge65c720">
+<div id="outline-container-org768daf4" class="outline-2">
+<h2 id="org768daf4">Solution</h2>
+<div class="outline-text-2" id="text-org768daf4">
 <p>
 Suppose we know that the best day to buy is on \(i\)th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index \(j\) where \(j > i\) and \(prices[j]-prices[i]\) is the maximum possible profit.  The naive approach to find \(j\) consists on iterating over \(i+1,i+2,...,n-1\).  While it solves the problem, this solution is \(O(n^2)\) and does not pass on all tests.  Therefore, we have to come up with a more efficient way to find \(j\).
 </p>
 
 <p>
-Without knowing any interesting property about \(prices\), we might have to use extra memory to efficiently find the index \(j\).  Let's create \(dp[i]\) which represents the maximum value in \(prices[i,i+1,..,n-1]\).  We can define \(dp\) recursively as \(dp[i]=max(prices[i], dp[i+1])\).  More, we can compute \(dp\) by iterating over the input from right to left.
+Without knowing any interesting property about \(prices\), we might have to use extra memory to efficiently find the index \(j\).  Be \(f(i)\) the maximum value in \(prices[i,i+1,..,n-1]\).  We can define \(f\) recursively as \(f(i)=max(prices[i], f(i+1))\).  More, we can compute \(f\) by iterating over the input from right to left.
 </p>
 
 <p>
-The problem of finding \(j\) became trivial if we use \(dp\).  We first compute \(dp\) and them solve the original problem.  Going back to the original problem, for each \(i\) it is possible to test if buying on \(i\)th day and selling for the price of \(dp[i+1]\) is the best option.  The algorithm has time and space complexity of \(O(n)\).  <i>Wait, we can do better than that!</i>  While we search for the best \(i\) from right to left, we can keep track of the last value of \(dp[i+1]\) since this is the only interesting value when testing \(i\).  This optimization will reduce the space complexity to \(O(1)\) making the solution more efficient.
+The problem of finding \(j\) became trivial if we use \(f\).  We first compute \(f\) and them solve the original problem.  Going back to the original problem, for each \(i\) it is possible to test if buying on \(i\)th day and selling for the price of \(f(i+1)\) is the best option.  The algorithm has time and space complexity of \(O(n)\).  <i>Wait, we can do better than that!</i>  While we search for the best \(i\) from right to left, we can keep track of the last value of \(f(i+1)\) since this is the only interesting value when testing \(i\).  This optimization will reduce the space complexity to \(O(1)\) making the solution more efficient.
 </p>
 
 <div class="org-src-container">
@@ -94,9 +94,9 @@ The problem of finding \(j\) became trivial if we use \(dp\).  We first compute 
 </div>
 
 
-<div id="outline-container-orgb4a4947" class="outline-2">
-<h2 id="orgb4a4947">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgb4a4947">
+<div id="outline-container-org7d837aa" class="outline-2">
+<h2 id="org7d837aa">Cited by 1</h2>
+<div class="outline-text-2" id="text-org7d837aa">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

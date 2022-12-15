@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 1697. Checking Existence of Edge Length Limited Paths</h1>
 
-<div id="outline-container-org13867e2" class="outline-2">
-<h2 id="org13867e2">Understand the problem</h2>
-<div class="outline-text-2" id="text-org13867e2">
+<div id="outline-container-orgecb9dfa" class="outline-2">
+<h2 id="orgecb9dfa">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgecb9dfa">
 <p>
 For each query \((u, v, l)\), return \(True\) if there is a path between \(u\) and \(v\) where all edges in the path has cost less than \(l\).
 </p>
 </div>
 
-<div id="outline-container-org40628b2" class="outline-3">
-<h3 id="org40628b2">Useful prompts</h3>
-<div class="outline-text-3" id="text-org40628b2">
+<div id="outline-container-orgbad98e4" class="outline-3">
+<h3 id="orgbad98e4">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgbad98e4">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -67,17 +67,17 @@ For each query \((u, v, l)\), return \(True\) if there is a path between \(u\) a
 </div>
 </div>
 
-<div id="outline-container-orgba7949a" class="outline-2">
-<h2 id="orgba7949a">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgba7949a">
+<div id="outline-container-org4239ac8" class="outline-2">
+<h2 id="org4239ac8">Devise a plan</h2>
+<div class="outline-text-2" id="text-org4239ac8">
 <p>
 The naive solution is to build a graph for each query and test if there is required path.  The issue with the naive solution is that we compute parts of the graph over and over again.  For <a href="pattern_answer_queries_on_online_directed_acyclic_graph.html#ID-117736F8-6CF6-435F-9043-18B8D22EDDE9">Pattern: Answer queries on online graph</a>, we can usually rearrange the queries in a way that the computation of one query can be reused by the next one.  In this case, we can process the queries from the smallest limit to the greatest one.  For each query in order, we add to the graph all edges (using <a href="union_find.html#ID-23A4E36E-24D3-40F8-AA20-32C0DB1E36F6">Union-Find</a>) that doesn't exceed the limit.  When there is no more edges to add, we answer the query.  Time complexity is \(O(n \times \log n)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-org1238faf" class="outline-3">
-<h3 id="org1238faf">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org1238faf">
+<div id="outline-container-org9aa168e" class="outline-3">
+<h3 id="org9aa168e">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org9aa168e">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 

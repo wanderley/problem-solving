@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2454. Next Greater Element IV</h1>
 
-<div id="outline-container-org3486406" class="outline-2">
-<h2 id="org3486406">Understand the problem</h2>
-<div class="outline-text-2" id="text-org3486406">
+<div id="outline-container-org203540e" class="outline-2">
+<h2 id="org203540e">Understand the problem</h2>
+<div class="outline-text-2" id="text-org203540e">
 <p>
 Given an array of non-negative integers, find for each integer in the array the second greatest element to its right.
 </p>
 </div>
 
-<div id="outline-container-orgb3dfe51" class="outline-3">
-<h3 id="orgb3dfe51">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgb3dfe51">
+<div id="outline-container-orgfa8706b" class="outline-3">
+<h3 id="orgfa8706b">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgfa8706b">
 <ul class="org-ul">
 <li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
 <li><a href="have_you_solved_a_similar_problem.html#ID-50666722-6010-4D80-8283-6DE83E32EB33">Have you solved a similar problem?</a> <a href="monotonic_stack.html#ID-E4C9A18D-FC2B-4C1D-A040-1A94C39F9F63">Problem: Next greater integer in unsorted array</a>.</li>
@@ -64,17 +64,17 @@ Given an array of non-negative integers, find for each integer in the array the 
 </div>
 </div>
 
-<div id="outline-container-orgccd34af" class="outline-2">
-<h2 id="orgccd34af">Derive a plan</h2>
-<div class="outline-text-2" id="text-orgccd34af">
+<div id="outline-container-org2148d75" class="outline-2">
+<h2 id="org2148d75">Derive a plan</h2>
+<div class="outline-text-2" id="text-org2148d75">
 <p>
 Let's keep two sorted containers \(a\) and \(b\).  Elements on \(a\) didn't see a greater element to the left, and elements on \(b\) saw one element greater than them to their left.  For each element \(i\) in the array (left to right), we remove from \(b\) all elements that are smaller than \(i\) since \(i\) is the second greatest element to their left; after that we transfer elements from \(a\) to \(b\) that are smaller than \(i\).  Finally, we add \(i\) to \(a\) and continue the process.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-orgbf2bcfe" class="outline-3">
-<h3 id="orgbf2bcfe">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgbf2bcfe">
+<div id="outline-container-org59c9078" class="outline-3">
+<h3 id="org59c9078">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org59c9078">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
 
