@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       489C947E-AD8A-4611-B8F7-DD0BB44ABAE5
+:ROAM_REFS: https://leetcode.com/problems/product-of-array-except-self/
+:END:
+#+TITLE: Leetcode: 238. Product of Array Except Self
+#+ROAM_REFS: https://leetcode.com/problems/product-of-array-except-self/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1671083132945
+
+* Patterns
+
+- [[id:D0BAD240-E912-4D4B-A20C-2943FB8BC75E][Pattern: Find accumulated value of an array]].
+
+* Prompts
+
+- [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]
+- [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]
+
+* Solution
+
+The problem is specific about the time and space complexity.  It expects a solution with time complexity of $O(n)$ and space complexity of $O(1)$.  This is already a big hint for us, since we know that it is possible to solve the problem without using extra memory.  [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Yes, there is: return $answer$ where $answer[i]=nums[0] \times nums[1] \times ... \times nums[i-1]$.  With a simple iteration, we can compute this $answer$ without using extra memory.  If the problem were to find $answer$ where $answer[i]=nums[n-1] \times nums[n-2] \times ... \times nums[i+1]$, it can also be solved with a simple iteration.  Is it possible to combine these two problem and solve the original one?  Yes, but I will leave it for you to do.
+
+#+begin_src python
+  class Solution:
+      def productExceptSelf(self, nums: List[int]) -> List[int]:
+          cur = 1
+          ans = []
+          for n in nums:
+              ans.append(cur)
+              cur = cur * n
+          cur = 1
+          for i in range(len(nums) - 1, -1, -1):
+              ans[i] = ans[i] * cur
+              cur = cur * nums[i]
+          return ans
+#+end_src

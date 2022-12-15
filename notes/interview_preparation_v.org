@@ -134,11 +134,11 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
 - Questions about the problems.
   - What is common in the solution for these problems?
-    - We have to use extra memory to solve the searching problem in $O(1)$.
+    - We have to use extra memory to solve the searching problem in $O(1)$.  In [[id:AF49B2EA-A026-4E91-A4EC-423123E63A9B][Improve Performance Using More Memory]], I argued why sometimes this is the case for improving performance.
 
 *** Next steps
 
-- [ ] [[https://leetcode.com/problems/product-of-array-except-self/][Product of Array Except Self]] (TBD)
+- [ ] [[https://leetcode.com/problems/product-of-array-except-self/][Product of Array Except Self]] ([[id:489C947E-AD8A-4611-B8F7-DD0BB44ABAE5][solution]])
 - [ ] [[https://leetcode.com/problems/maximum-subarray/][Maximum Subarray]] (TBD)
 - [ ] [[https://leetcode.com/problems/maximum-product-subarray/][Maximum Product Subarray]] (TBD)
 - [ ] [[https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/][Find Minimum in Rotated Sorted Array]] ([[id:48BCADF1-CF96-4522-975C-240761676740][solution]])

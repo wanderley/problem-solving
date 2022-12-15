@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       D0BAD240-E912-4D4B-A20C-2943FB8BC75E
+:END:
+#+TITLE: Pattern: Find accumulated value of an array
