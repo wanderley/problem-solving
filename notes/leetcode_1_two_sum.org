@@ -20,7 +20,7 @@
 
 The naive /and slow/ approach consists on fixing a number $i$ and searching for a different number $j$ which $numbers[i]+numbers[j]=target$.  This solution has time complexity$O(n^2)$ and space complexity $O(1)$.
 
-Without knowing any property about the numbers, it is hard to improve the time complexity of the naive approach without making memory concessions.  For example, if the numbers were sorted, for each number we could use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find its complement and have a faster solution without using extra memory.  The order of the numbers is crucial to solve the problem like that.
+Without knowing any property about the numbers, it is hard to improve the time complexity of the naive approach without making memory concessions ([[id:AF49B2EA-A026-4E91-A4EC-423123E63A9B][Improve Performance Using More Memory]]).  For example, if the numbers were sorted, for each number we could use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find its complement and have a faster solution without using extra memory.  The order of the numbers is crucial to solve the problem like that.
 
 What else can we do spending extra memory?  Hash tables are efficient data-structures where adding and looking up data are performed in $O(1)$ amortized run time.  Yep!  This is all that we need.  For each number $i$, use a hash table to check if $target-numbers[i]$ appeared before.  If so, we found the answer.  Otherwise, add $numbers[i]$ to the table and do the same for the next number.  Time and space complexity are $O(n)$.
 
