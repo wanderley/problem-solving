@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 121. Best Time to Buy and Sell Stock</h1>
 
-<div id="outline-container-org614fca2" class="outline-2">
-<h2 id="org614fca2">Patterns</h2>
-<div class="outline-text-2" id="text-org614fca2">
+<div id="outline-container-orgca0f9f4" class="outline-2">
+<h2 id="orgca0f9f4">Patterns</h2>
+<div class="outline-text-2" id="text-orgca0f9f4">
 <ul class="org-ul">
 <li><a href="pattern_search_for_max_min_value_in_unsorted_array.html#ID-D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6">Pattern: Search for max/min value in unsorted array</a>.</li>
 
@@ -56,24 +56,24 @@
 </div>
 </div>
 
-<div id="outline-container-org5bafd4a" class="outline-2">
-<h2 id="org5bafd4a">Prompts</h2>
-<div class="outline-text-2" id="text-org5bafd4a">
+<div id="outline-container-org83665d8" class="outline-2">
+<h2 id="org83665d8">Prompts</h2>
+<div class="outline-text-2" id="text-org83665d8">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgcd9273b" class="outline-2">
-<h2 id="orgcd9273b">Solution</h2>
-<div class="outline-text-2" id="text-orgcd9273b">
+<div id="outline-container-orgc55ad63" class="outline-2">
+<h2 id="orgc55ad63">Solution</h2>
+<div class="outline-text-2" id="text-orgc55ad63">
 <p>
 Suppose we know that the best day to buy is on \(i\)th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index \(j\) where \(j > i\) and \(prices[j]-prices[i]\) is the maximum possible profit.  The naive approach to find \(j\) consists on iterating over \(i+1,i+2,...,n-1\).  While it solves the problem, this solution is \(O(n^2)\) and does not pass on all tests.  Therefore, we have to come up with a more efficient way to find \(j\).
 </p>
 
 <p>
-Without knowing any interesting property about \(prices\), we might have to use extra memory to efficiently find the index \(j\).  Be \(f(i)\) the maximum value in \(prices[i,i+1,..,n-1]\).  We can define \(f\) recursively as \(f(i)=max(prices[i], f(i+1))\).  More, we can compute \(f\) by iterating over the input from right to left.
+Without knowing any interesting property about \(prices\), we might have to use extra memory to efficiently find the index \(j\) (<a href="improve_performance_using_more_memory.html#ID-AF49B2EA-A026-4E91-A4EC-423123E63A9B">Improve Performance Using More Memory</a>).  Be \(f(i)\) the maximum value in \(prices[i,i+1,..,n-1]\).  We can define \(f\) recursively as \(f(i)=max(prices[i], f(i+1))\).  More, we can compute \(f\) by iterating over the input from right to left.
 </p>
 
 <p>
@@ -94,9 +94,9 @@ The problem of finding \(j\) became trivial if we use \(f\).  We first compute \
 </div>
 
 
-<div id="outline-container-org39dd58a" class="outline-2">
-<h2 id="org39dd58a">Cited by 1</h2>
-<div class="outline-text-2" id="text-org39dd58a">
+<div id="outline-container-org313a5de" class="outline-2">
+<h2 id="org313a5de">Cited by 1</h2>
+<div class="outline-text-2" id="text-org313a5de">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

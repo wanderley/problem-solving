@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/longest-valid-parentheses/">Problem Statement</a>: Given a string \(s\) with parentheses, return the length of the longest well-formed substring of \(s\).
 </p>
 
-<div id="outline-container-org64758ca" class="outline-2">
-<h2 id="org64758ca"><a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a></h2>
-<div class="outline-text-2" id="text-org64758ca">
+<div id="outline-container-orgbd58041" class="outline-2">
+<h2 id="orgbd58041"><a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a></h2>
+<div class="outline-text-2" id="text-orgbd58041">
 <p>
 Be \(z\) a longest well-formed substring of \(s\).  What do we know about it?  We know that it doesn't starts with a close parentheses, since it is well-formed.  If the second parentheses of \(z\) is a close parentheses, then \(z=\texttt{()}x\) where \(x\) is a well-formed substring of \(s\) and \(|x|\geq0\).  Otherwise, \(z=\texttt{(}y\texttt{)}z\), where \(|y|>0\) and \(|z|\geq 0\).  So, \(z\) can be decomposed in well-formed substring of \(s\).  This observation is the base for the recursion implemented by the following <a href="top_down.html#ID-3463A33B-D953-4E75-895D-0BE4AAB16813">Top-down</a> solution.
 </p>
@@ -110,9 +110,9 @@ Be \(z\) a longest well-formed substring of \(s\).  What do we know about it?  W
 </div>
 
 
-<div id="outline-container-orgf179d96" class="outline-2">
-<h2 id="orgf179d96">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgf179d96">
+<div id="outline-container-org29352ab" class="outline-2">
+<h2 id="org29352ab">Cited by 1</h2>
+<div class="outline-text-2" id="text-org29352ab">
 <ul class="org-ul">
 <li><a href="journal.html#ID-1D831B69-EB70-4709-A336-06D3974FDDD0">Journal</a></li>
 </ul>

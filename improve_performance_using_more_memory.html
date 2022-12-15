@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Improve Performance Using More Memory</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Improve Performance Using More Memory</h1>
+<p>
+Sometimes constraints are a requisite to write efficient algorithms.  Let's use a classical problem to show how it is possible: given an array \(a\) of integers of length \(n\) and an integer \(x\), return if \(x\) is in \(a\).  The naive approach consists on a simple iteration over all values of \(a\).  It does not care if the first integer is the smaller value in \(a\) and the second one is greater or equal than the first one and so on.  This approach is called linear search.  And the issue in this particular problem is that it has to check all integers if \(x\) is not in \(a\).  Can we do better?  You probably know this already, but if you don't know: welcome!  To do so, let's use the property about the order of the integers in the array.  Knowing that \(a[0]\) or \(a[-1]\) are greater or smaller than the \(x\) does not help much.  Why?  Because, ruling them out leaves \(n-1\) integers to test.  Is there a better place to start?  Yes, knowing if \(a[n/2]\) is greater or smaller than \(x\) is extremely useful.  If \(a[n/2]>x\), we must focus on searching for \(x\) in \(a[0,..,(n/2-1)]\).  Otherwise, we must focus on $a[(n/2+1),..,(n-1)].  You see.  The order of input helped us to make a better guess about which part of the array to search for \(x\).  The key observation is that <b>order</b> and <b>organization</b> can help us make better decisions.
+</p>
+
+<p>
+Order and Organization are good thing, but we can't expect that they will always be there.  There are problems that you have to create order to allow the creation of faster solutions.  When this happens, you have to make a trade as we usually do in life.  Usually, you have to use more memory and/or spend time ahead getting ready to solve the problem if you want to solve it faster.  What do you do when you want to find your clothes quickly?  Throwing them around in the room isn't the solution.  You store them in a place where they are organized and easy to find in future.  Solving problem isn't that different.  In the search example, we used the property that the array were sorted.  If it is not but we have it to be to write a faster solution, then we have to spend a time sorting it before solving the proposed problem.  You traded time to gain time in future.  Also, you might have to organize the data in buckets, maps, or sets to latter access them quickly an solve the problem.  The moral of history is that you have to give something in order to build what you want.
+</p>
+
+
+<div id="outline-container-orgcc6af3b" class="outline-2">
+<h2 id="orgcc6af3b">Cited by 2</h2>
+<div class="outline-text-2" id="text-orgcc6af3b">
+<ul class="org-ul">
+<li><a href="leetcode_1_two_sum.html#ID-5F25DCD8-CE46-4F18-A1B1-952BC35382A9">Leetcode: 1. Two Sum</a></li>
+<li><a href="leetcode_121_best_time_to_buy_and_sell_stock.html#ID-81682CDD-4D5A-485C-9C1C-5689B6AF1A41">Leetcode: 121. Best Time to Buy and Sell Stock</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

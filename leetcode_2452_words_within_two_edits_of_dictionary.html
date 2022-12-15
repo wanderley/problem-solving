@@ -45,26 +45,26 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2452. Words Within Two Edits of Dictionary</h1>
 
-<div id="outline-container-orga60398e" class="outline-2">
-<h2 id="orga60398e">Understand the problem</h2>
-<div class="outline-text-2" id="text-orga60398e">
+<div id="outline-container-org5e03b08" class="outline-2">
+<h2 id="org5e03b08">Understand the problem</h2>
+<div class="outline-text-2" id="text-org5e03b08">
 <p>
 Given a dictionary and queries, return a subarray of queries which each query \(q\) appear in the dictionary if edit distance (only change) at most 2.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb18bcd0" class="outline-2">
-<h2 id="orgb18bcd0">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgb18bcd0">
+<div id="outline-container-orgd41637d" class="outline-2">
+<h2 id="orgd41637d">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgd41637d">
 <p>
 <a href="pattern_small_constraints_could_allow_brute_force_solution.html#ID-BC81A358-FBCC-43AA-9928-E9778A107869">Pattern: Small constraints could allow a brute-force solution</a>.  For each query, compute the edit distance to all words in the dictionary and add it to the output if the distance is at most 2.
 </p>
 </div>
 
-<div id="outline-container-orgb41876b" class="outline-3">
-<h3 id="orgb41876b">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgb41876b">
+<div id="outline-container-org2b4cf9c" class="outline-3">
+<h3 id="org2b4cf9c">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org2b4cf9c">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">twoEditWords</span>(<span style="font-weight: bold;">self</span>, queries: List[<span style="font-weight: bold;">str</span>], dictionary: List[<span style="font-weight: bold;">str</span>]) -&gt; List[<span style="font-weight: bold;">str</span>]:
