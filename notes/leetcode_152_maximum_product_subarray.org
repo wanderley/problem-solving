@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID:       D821DCA2-8A6A-4650-BD9E-D9B78F446901
+:ROAM_REFS: https://leetcode.com/problems/maximum-product-subarray/description/
+:END:
+#+TITLE: Leetcode: 152. Maximum Product Subarray
+#+ROAM_REFS: https://leetcode.com/problems/maximum-product-subarray/description/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1671173083006
+
+* Pattern
+
+- [[id:E531AE8D-3BE5-486D-A28E-58828790F8E3][Pattern: Find cumulative product of an array]].
+
+- [[id:C715BAE2-002C-4F72-B5FC-5E727F0BA19E][Pattern: Find optimal subarray]].
+
+* Prompts
+
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]
+
+- [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]
+
+* Solution
+
+Have I solved a similar problem?  Yes, I solved [[id:01AB9AC6-5E8D-49BB-9533-92B7032CFDE3][Leetcode: 53. Maximum Subarray]] which is about finding the subarray with maximum [[id:239E05AC-0313-4A15-A5E5-3F9A7C857804][Cumulative Sum]].  But I discarded it since I failed in past to transfer ideas from problems that use additions or subtractions to similar problems that use multiplications and divisions;  I couldn't keep the same time complexity or needed extra memory.  Then I decided to go for a quadratic solution due the problem's constraints of $|nums|=n \le (2 \times 10^4)^2 = 4 \times 10^8$.  Fix the left index of the subarray and search for the best right index.  While searching for the best right index, extend the [[id:9734F433-D5A0-430A-8E8A-FE243846C444][Cumulative Product]] for each new index, and update the answer accordingly.  The solution timed out what sent me back to the blackboard.
+
+#+begin_src python
+  class Solution:
+      def maxProduct(self, nums: List[int]) -> int:
+          ans, N = nums[0], len(nums)
+          for i in range(N):
+              cur = 1
+              for j in range(i, N):
+                  cur *= nums[j]
+                  ans = max(ans, cur)
+          return ans
+#+end_src
+
+Time to simplify the problem.  What variations of this problem do I know how to solve?
+
+- If all numbers are positive, the answer is the product of all numbers.
+
+- If all numbers are negative, the answer is the product of all numbers if and only if $n$ is even otherwise it is either $nums[1,..,(n-1)]$ or $nums[0,...,(n-2)]$.
+
+- If there is a zero at position $i$, the best subarray is either on $nums[0,..,i-1]$ or $nums[i+1, ...,n-1]$ because any subarray that contains zero has a zero [[id:9734F433-D5A0-430A-8E8A-FE243846C444][Cumulative Product]].
+
+As we need a linear solution for the problem, let's apply the linear version of [[id:8F498120-1895-4E22-AE25-10FC78432B7C][Fix One and Search Other Template]]: for each $i$ representing the right-most indexed of the subarray, search the right-most index $j$ in constant time.
+
+Let's find $j$ by keeping two segments negative and total subarray called respectively $neg$ and $t$.  The total subarray is the proper $nums[i,i+1,...,j]$.  And the negative subarray is the prefix of total subarray with the largest negative product.  For sure, $product(t)$ is a candidate for solution.  If the total subarray product is negative, then $product(t) / product(neg)$ is also a candidate since this is the largest product of all suffixes of $t$.  For this solution to work, we have to carefully reset the subarray when $product(t)=0$.  Time complexity is $O(n)$ and space complexity is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def maxProduct(self, nums: List[int]) -> int:
+          ans, cur = nums[0], 1
+          neg = float("-inf")
+          for i in range(len(nums)):
+              cur *= nums[i]
+              ans = max(ans, cur)
+              if cur < 0:
+                  if neg != float("-inf"):
+                      ans = max(ans, cur // neg)
+                  neg = max(neg, cur)
+              elif cur == 0:
+                  cur = 1
+                  neg = float("-inf")
+          return ans
+#+end_src

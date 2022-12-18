@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       8F498120-1895-4E22-AE25-10FC78432B7C
+:END:
+#+TITLE: Fix One and Search Other Template
+
+👷 Waiting for more examples to consolidate them in this note.

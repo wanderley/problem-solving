@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       01AB9AC6-5E8D-49BB-9533-92B7032CFDE3
+:ROAM_REFS: https://leetcode.com/problems/maximum-subarray/
+:END:
+#+TITLE: Leetcode: 53. Maximum Subarray
+#+ROAM_REFS: https://leetcode.com/problems/maximum-subarray/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1671170373311
+
+* Patterns
+
+- [[id:C715BAE2-002C-4F72-B5FC-5E727F0BA19E][Pattern: Find optimal subarray]].
+
+- [[id:FCF0DB21-F99D-4A98-B592-6889DB9FE1F4][Pattern: Problem's constraints disallow $O(n^2)$ solutions]].
+
+* Prompts
+
+- [[id:46522C06-DAC3-4986-A13A-17C2ED44ADD1][Can we formulate the problem as sliding window?]]
+
+- [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for i to i+1?]]
+
+* Solution
+
+Let's start by re-stating the problem in terms of [[id:8F498120-1895-4E22-AE25-10FC78432B7C][Fix One and Search Other Template]].  For each $i$ representing the right-most indexed of the subarray, search the right-most index $j$ such that $nums[j] + nums[j+1] + ... + nums[i]$ is maximum.  To search in constant time, we have to compute the value of $j$ knowing something about $nums[0,1,...,i]$ or have this information already computed as we iterated over each index $i$.  Let's use the second option.  As we iterate over indexes $i$, compute $cur$ which means the maximum subarray sum ending on $i$.  Let $prev$ be the maximum subarray sum ending on $i-1$.  We can write $cur$ in terms of $prev$ since $cur = nums[i]$ if $prev+nums[i]<0$ (starting a new subarray) or $cur = prev + nums[i]$.  After this iteration, $prev$ becomes $cur$ and we continue to the next iteration.  Time complexity is $O(n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def maxSubArray(self, nums: List[int]) -> int:
+          ans = cur = nums[0]
+          for n in nums[1:]:
+              cur = n if cur < 0 else n + cur
+              ans = max(ans, cur)
+          return ans
+#+end_src

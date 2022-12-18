@@ -113,7 +113,7 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
   - Used the problem constraints to define an upper bound for the solution's time complexity.
 
-- Things to improve.
+- Things to improve:
 
   - You might think that easy problems are waste of time.  They are not.  Easy problems help you to solidify building blocks, become proficient in your chosen programming language, focus on recalling the patterns and prompts, and finally explain the problem in a concise way.  Leave to the spaced-repetition the task to decide which problem you have to review.  Over time, the easy problems will appear less frequently than the challenging ones.
 
@@ -121,7 +121,7 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
   - While we love functional programming, imperative programming is usually a better choice for problem solving.  It is possible to use immutable data structures, lambdas, maps, filters, and etc, but a simple for loop can reduce 10-15 lines of functional programming to 3 lines.  Remember that less code means less surface for errors.
 
-- Questions about the training.
+- Questions about the training:
 
   - Are you doing at least one/two reviews per day?
     - Every two days.
@@ -132,13 +132,17 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
   - What insight did you extract after using this method in the last two weeks?
     - Solution for the past problems come to mind after much effort and don't require paper work before start coding.
 
-- Questions about the problems.
-  - What is common in the solution for these problems?
-    - We have to use extra memory to solve the searching problem in $O(1)$.  In [[id:AF49B2EA-A026-4E91-A4EC-423123E63A9B][Improve Performance Using More Memory]], I argued why sometimes this is the case for improving performance.
+- Questions about the problems:
+
+  - What is common in the solution for these problems?  We have to use extra memory to solve the searching problem in $O(1)$.  In [[id:AF49B2EA-A026-4E91-A4EC-423123E63A9B][Improve Performance Using More Memory]], I argued why sometimes this is the case for improving performance.
 
 *** Next steps
 
 - [ ] [[https://leetcode.com/problems/product-of-array-except-self/][Product of Array Except Self]] ([[id:489C947E-AD8A-4611-B8F7-DD0BB44ABAE5][solution]])
-- [ ] [[https://leetcode.com/problems/maximum-subarray/][Maximum Subarray]] (TBD)
-- [ ] [[https://leetcode.com/problems/maximum-product-subarray/][Maximum Product Subarray]] (TBD)
-- [ ] [[https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/][Find Minimum in Rotated Sorted Array]] ([[id:48BCADF1-CF96-4522-975C-240761676740][solution]])
+- [ ] [[https://leetcode.com/problems/maximum-subarray/][Maximum Subarray]] ([[id:01AB9AC6-5E8D-49BB-9533-92B7032CFDE3][solution]])
+- [ ] [[https://leetcode.com/problems/maximum-product-subarray/][Maximum Product Subarray]] ([[id:D821DCA2-8A6A-4650-BD9E-D9B78F446901][solution]])
+- [ ] [[https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/][Find Minimum in Rotated Sorted Array]] ([[id:C1F8B8F2-72CF-4085-852C-4D1EF8E19195][solution]])
+
+** December X, 2022 :noexport:
+
+- As I mentioned before, I developed this method after 9 years without working on problem solving.  This is an example of how I improved by following this method:  [[https://leetcode.com/problems/maximum-subarray/submissions/541620453/][old solution]] from Aug 2021 vs [[https://leetcode.com/problems/maximum-subarray/submissions/860511074/][new solution]] from December 2022.  I knew that this is a classical problem, but I didn't remember that I solved it on Leetcode.  The new solution is shorter and straight to the point, while the old one is unnecessarily complex.

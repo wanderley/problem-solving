@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       C1F8B8F2-72CF-4085-852C-4D1EF8E19195
+:ROAM_REFS: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+:END:
+#+TITLE: Leetcode: 153. Find Minimum in Rotated Sorted Array
+#+ROAM_REFS: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1671400647634
+
+* Patterns
+
+- [[id:12D16A10-EB7A-4EF8-A0E8-91B5EE694582][Pattern: Searching in Array]]
+
+* Prompts
+
+- [[id:BA8FA096-1785-4100-BF9F-E1D101994F21][Can we formulate the problem as searching the last element that satisfy a condition?]]
+
+* Solution
+
+Be $m$ an index of the array.  If $nums[m]>nums[n-1]$, we know that the smaller element is in $nums[(m+1)...(n-1)]$, otherwise it is in $nums[0...(m-1)]$.  Time complexity is $O(\log n)$ and space is $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def findMin(self, nums: List[int]) -> int:
+          ans, start, end = None, 0, len(nums) - 1
+          while start <= end:
+              mid = start + (end - start) // 2
+              if nums[mid] > nums[-1]:
+                  start = mid + 1
+              else:
+                  ans = nums[mid]
+                  end = mid - 1
+          return ans
+#+end_src

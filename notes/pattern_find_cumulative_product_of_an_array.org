@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E531AE8D-3BE5-486D-A28E-58828790F8E3
+:END:
+#+TITLE: Pattern: Find cumulative product of an array
