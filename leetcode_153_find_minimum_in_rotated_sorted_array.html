@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 153. Find Minimum in Rotated Sorted Array</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 153. Find Minimum in Rotated Sorted Array</h1>
+
+<div id="outline-container-org2c53625" class="outline-2">
+<h2 id="org2c53625">Patterns</h2>
+<div class="outline-text-2" id="text-org2c53625">
+<ul class="org-ul">
+<li><a href="pattern_searching_in_array.html#ID-12D16A10-EB7A-4EF8-A0E8-91B5EE694582">Pattern: Searching in Array</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgdd804cc" class="outline-2">
+<h2 id="orgdd804cc">Prompts</h2>
+<div class="outline-text-2" id="text-orgdd804cc">
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_searching_the_last_element_that_satisfy_a_condition.html#ID-BA8FA096-1785-4100-BF9F-E1D101994F21">Can we formulate the problem as searching the last element that satisfy a condition?</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3b11eb7" class="outline-2">
+<h2 id="org3b11eb7">Solution</h2>
+<div class="outline-text-2" id="text-org3b11eb7">
+<p>
+Be \(m\) an index of the array.  If \(nums[m]>nums[n-1]\), we know that the smaller element is in \(nums[(m+1)...(n-1)]\), otherwise it is in \(nums[0...(m-1)]\).  Time complexity is \(O(\log n)\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">findMin</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold; font-style: italic;">ans</span>, <span style="font-weight: bold; font-style: italic;">start</span>, <span style="font-weight: bold; font-style: italic;">end</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>, 0, <span style="font-weight: bold;">len</span>(nums) - 1
+        <span style="font-weight: bold;">while</span> start &lt;= <span style="font-weight: bold; font-style: italic;">end</span>:
+            mid = start + (end - start) // 2
+            <span style="font-weight: bold;">if</span> nums[mid] &gt; <span style="font-weight: bold; font-style: italic;">nums</span>[-1]:
+                start = mid + 1
+            <span style="font-weight: bold;">else</span>:
+                ans = nums[mid]
+                <span style="font-weight: bold; font-style: italic;">end</span> = mid - 1
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org76a218e" class="outline-2">
+<h2 id="org76a218e">Cited by 2</h2>
+<div class="outline-text-2" id="text-org76a218e">
+<ul class="org-ul">
+<li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
+<li><a href="practice_015_leetcode_binary_search.html#ID-1B312D82-8DED-49FE-8521-F8C2B6AAB660">Leetcode: 162. Find Peak Element</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

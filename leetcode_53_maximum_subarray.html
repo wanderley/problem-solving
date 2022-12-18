@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 53. Maximum Subarray</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 53. Maximum Subarray</h1>
+
+<div id="outline-container-org20bd0d1" class="outline-2">
+<h2 id="org20bd0d1">Patterns</h2>
+<div class="outline-text-2" id="text-org20bd0d1">
+<ul class="org-ul">
+<li><a href="pattern_find_optimal_subarray.html#ID-C715BAE2-002C-4F72-B5FC-5E727F0BA19E">Pattern: Find optimal subarray</a>.</li>
+
+<li><a href="pattern_problem_s_constraints_disallow_o_n_2_solutions.html#ID-FCF0DB21-F99D-4A98-B592-6889DB9FE1F4">Pattern: Problem's constraints disallow \(O(n^2)\) solutions</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org52e1080" class="outline-2">
+<h2 id="org52e1080">Prompts</h2>
+<div class="outline-text-2" id="text-org52e1080">
+<ul class="org-ul">
+<li><a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a></li>
+
+<li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for i to i+1?</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfecf665" class="outline-2">
+<h2 id="orgfecf665">Solution</h2>
+<div class="outline-text-2" id="text-orgfecf665">
+<p>
+Let's start by re-stating the problem in terms of <a href="fix_one_find_other_template.html#ID-8F498120-1895-4E22-AE25-10FC78432B7C">Fix One and Search Other Template</a>.  For each \(i\) representing the right-most indexed of the subarray, search the right-most index \(j\) such that \(nums[j] + nums[j+1] + ... + nums[i]\) is maximum.  To search in constant time, we have to compute the value of \(j\) knowing something about \(nums[0,1,...,i]\) or have this information already computed as we iterated over each index \(i\).  Let's use the second option.  As we iterate over indexes \(i\), compute \(cur\) which means the maximum subarray sum ending on \(i\).  Let \(prev\) be the maximum subarray sum ending on \(i-1\).  We can write \(cur\) in terms of \(prev\) since \(cur = nums[i]\) if \(prev+nums[i]<0\) (starting a new subarray) or \(cur = prev + nums[i]\).  After this iteration, \(prev\) becomes \(cur\) and we continue to the next iteration.  Time complexity is \(O(n)\) and space is \(O(1)\).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxSubArray</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        ans = <span style="font-weight: bold; font-style: italic;">cur</span> = nums[0]
+        <span style="font-weight: bold;">for</span> n <span style="font-weight: bold;">in</span> <span style="font-weight: bold; font-style: italic;">nums</span>[1:]:
+            cur = n <span style="font-weight: bold;">if</span> cur &lt; 0 <span style="font-weight: bold;">else</span> n + cur
+            <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">max</span>(ans, cur)
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgc181d26" class="outline-2">
+<h2 id="orgc181d26">Cited by 2</h2>
+<div class="outline-text-2" id="text-orgc181d26">
+<ul class="org-ul">
+<li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
+<li><a href="leetcode_152_maximum_product_subarray.html#ID-D821DCA2-8A6A-4650-BD9E-D9B78F446901">Leetcode: 152. Maximum Product Subarray</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

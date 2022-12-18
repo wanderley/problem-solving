@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2461. Maximum Sum of Distinct Subarrays With Length K</h1>
 
-<div id="outline-container-orgd07301a" class="outline-2">
-<h2 id="orgd07301a">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgd07301a">
+<div id="outline-container-orga530e1b" class="outline-2">
+<h2 id="orga530e1b">Understand the problem</h2>
+<div class="outline-text-2" id="text-orga530e1b">
 <p>
 Given an integer array \(a\) and an integer \(k\).  Find the maximum subarray sum of all subarrays of length \(k\) with \(k\) distinct values.
 </p>
 </div>
 
-<div id="outline-container-org7cb5007" class="outline-3">
-<h3 id="org7cb5007">Useful prompts</h3>
-<div class="outline-text-3" id="text-org7cb5007">
+<div id="outline-container-org24309c5" class="outline-3">
+<h3 id="org24309c5">Useful prompts</h3>
+<div class="outline-text-3" id="text-org24309c5">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a>  Since \(n \leq 10^5\), we have to solve the problem in linear time.  So, a <a href="sliding_window.html#ID-CFD4BBD7-C0F6-47F4-BD30-2FD367ACE7A2">Sliding Window</a> of size \(k\) can help with that.</li>
 </ul>
@@ -63,17 +63,17 @@ Given an integer array \(a\) and an integer \(k\).  Find the maximum subarray su
 </div>
 </div>
 
-<div id="outline-container-orgfe9182c" class="outline-2">
-<h2 id="orgfe9182c">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgfe9182c">
+<div id="outline-container-orgaafb32d" class="outline-2">
+<h2 id="orgaafb32d">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgaafb32d">
 <p>
 Create a window of length \(k\) and slide it from left to right.  For every new valid window (ones that contains \(k\) distinct elements), pick it sum if it greater to the best result so far.  Time complexity is \(O(n)\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-org56822a9" class="outline-3">
-<h3 id="org56822a9">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org56822a9">
+<div id="outline-container-org37176cd" class="outline-3">
+<h3 id="org37176cd">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org37176cd">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maximumSubarraySum</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

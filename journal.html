@@ -45,18 +45,18 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Journal</h1>
 
-<div id="outline-container-org7869618" class="outline-2">
-<h2 id="org7869618">2022-06-08 Wed - <a href="leetcode_41_first_missing_positive.html#ID-27ABBE29-C35A-46C2-A7DB-B3952EFF1422">Leetcode: 41. First Missing Positive</a></h2>
-<div class="outline-text-2" id="text-org7869618">
+<div id="outline-container-org33b99f3" class="outline-2">
+<h2 id="org33b99f3">2022-06-08 Wed - <a href="leetcode_41_first_missing_positive.html#ID-27ABBE29-C35A-46C2-A7DB-B3952EFF1422">Leetcode: 41. First Missing Positive</a></h2>
+<div class="outline-text-2" id="text-org33b99f3">
 <ul class="org-ul">
 <li>Didn't explore the brute force solution to know more about the problem and its proprieties.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org356737d" class="outline-2">
-<h2 id="org356737d">2022-06-04 Sat - <a href="leetcode_32_longest_valid_parentheses.html#ID-65A2D62D-2D38-4D3B-9A15-76B01DEA4D6A">Leetcode: 32. Longest Valid Parentheses</a></h2>
-<div class="outline-text-2" id="text-org356737d">
+<div id="outline-container-orged0c2e2" class="outline-2">
+<h2 id="orged0c2e2">2022-06-04 Sat - <a href="leetcode_32_longest_valid_parentheses.html#ID-65A2D62D-2D38-4D3B-9A15-76B01DEA4D6A">Leetcode: 32. Longest Valid Parentheses</a></h2>
+<div class="outline-text-2" id="text-orged0c2e2">
 <ul class="org-ul">
 <li>Didn't think about edge cases before the first submission.  Missed that could have a gap between \(i\) and the start of the longest valid parentheses which could make impossible to combine them.</li>
 <li>Though about defining <code>dfs(i)</code> as the longest valid subsequence, but implemented as the longest valid subsequence starting on <code>i</code> or any position after that.</li>
@@ -65,9 +65,9 @@
 </div>
 </div>
 
-<div id="outline-container-org72de0cd" class="outline-2">
-<h2 id="org72de0cd">2022-06-03 Fri - <a href="leetcode_10_regular_expression_matching.html#ID-7FB1FE23-5F97-4B38-9364-059C13DB42F5">Leetcode: 10. Regular Expression Matching</a></h2>
-<div class="outline-text-2" id="text-org72de0cd">
+<div id="outline-container-org1f20236" class="outline-2">
+<h2 id="org1f20236">2022-06-03 Fri - <a href="leetcode_10_regular_expression_matching.html#ID-7FB1FE23-5F97-4B38-9364-059C13DB42F5">Leetcode: 10. Regular Expression Matching</a></h2>
+<div class="outline-text-2" id="text-org1f20236">
 <ul class="org-ul">
 <li>I didn't notice that the transition function could land on Kleene star pattern: <code>s=aa</code> and <code>p=ab*a</code>.  In this case, <code>transition(0)=[1,3]</code> instead of just <code>[1]</code>.  I received 3 wrong answers while fixing this bug.  I found that creating functions like <code>is_zero_or_more</code> and <code>expand</code> were vital to continue to improve the solution.</li>
 
@@ -75,9 +75,9 @@
 </ul>
 </div>
 
-<div id="outline-container-orgea10dae" class="outline-3">
-<h3 id="orgea10dae">Takeaways</h3>
-<div class="outline-text-3" id="text-orgea10dae">
+<div id="outline-container-org63e038b" class="outline-3">
+<h3 id="org63e038b">Takeaways</h3>
+<div class="outline-text-3" id="text-org63e038b">
 <ul class="org-ul">
 <li>Check for <a href="dynamic_programming.html#ID-241ABA4C-A86F-405F-B6FC-85BF441EB24B">Dynamic Programming</a> even against your intuition.  If both solution have the same time complexity, implement the easy one during the competition and both while studying.</li>
 

@@ -45,18 +45,18 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 238. Product of Array Except Self</h1>
 
-<div id="outline-container-org205b593" class="outline-2">
-<h2 id="org205b593">Patterns</h2>
-<div class="outline-text-2" id="text-org205b593">
+<div id="outline-container-orgda869e2" class="outline-2">
+<h2 id="orgda869e2">Patterns</h2>
+<div class="outline-text-2" id="text-orgda869e2">
 <ul class="org-ul">
 <li><a href="pattern_find_accumulated_value_of_an_array.html#ID-D0BAD240-E912-4D4B-A20C-2943FB8BC75E">Pattern: Find accumulated value of an array</a>.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org8e3f120" class="outline-2">
-<h2 id="org8e3f120">Prompts</h2>
-<div class="outline-text-2" id="text-org8e3f120">
+<div id="outline-container-org00125dd" class="outline-2">
+<h2 id="org00125dd">Prompts</h2>
+<div class="outline-text-2" id="text-org00125dd">
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
 <li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
@@ -64,9 +64,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgf5bfa35" class="outline-2">
-<h2 id="orgf5bfa35">Solution</h2>
-<div class="outline-text-2" id="text-orgf5bfa35">
+<div id="outline-container-org2cc369c" class="outline-2">
+<h2 id="org2cc369c">Solution</h2>
+<div class="outline-text-2" id="text-org2cc369c">
 <p>
 The problem is specific about the time and space complexity.  It expects a solution with time complexity of \(O(n)\) and space complexity of \(O(1)\).  This is already a big hint for us, since we know that it is possible to solve the problem without using extra memory.  <a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Yes, there is: return \(answer\) where \(answer[i]=nums[0] \times nums[1] \times ... \times nums[i-1]\).  With a simple iteration, we can compute this \(answer\) without using extra memory.  If the problem were to find \(answer\) where \(answer[i]=nums[n-1] \times nums[n-2] \times ... \times nums[i+1]\), it can also be solved with a simple iteration.  Is it possible to combine these two problem and solve the original one?  Yes, but I will leave it for you to do.
 </p>
@@ -90,9 +90,9 @@ The problem is specific about the time and space complexity.  It expects a solut
 </div>
 
 
-<div id="outline-container-orgee9453d" class="outline-2">
-<h2 id="orgee9453d">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgee9453d">
+<div id="outline-container-org165ab01" class="outline-2">
+<h2 id="org165ab01">Cited by 1</h2>
+<div class="outline-text-2" id="text-org165ab01">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

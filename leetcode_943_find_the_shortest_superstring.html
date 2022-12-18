@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 943. Find the Shortest Superstring</h1>
 
-<div id="outline-container-orgabe333b" class="outline-2">
-<h2 id="orgabe333b">Patterns</h2>
-<div class="outline-text-2" id="text-orgabe333b">
+<div id="outline-container-org32f3ef4" class="outline-2">
+<h2 id="org32f3ef4">Patterns</h2>
+<div class="outline-text-2" id="text-org32f3ef4">
 <ul class="org-ul">
 <li><a href="pattern_problem_s_constraints_allow_time_complexity_of_o_2_n_times_x.html#ID-D01DE8B5-6747-477C-9EC1-E8A658F83851">Pattern: Problem's constraints allow time complexity of \(O(2^n \times X)\)</a>.</li>
 
@@ -58,9 +58,9 @@
 </div>
 </div>
 
-<div id="outline-container-org9522576" class="outline-2">
-<h2 id="org9522576">Solution</h2>
-<div class="outline-text-2" id="text-org9522576">
+<div id="outline-container-orgb599bfc" class="outline-2">
+<h2 id="orgb599bfc">Solution</h2>
+<div class="outline-text-2" id="text-orgb599bfc">
 <p>
 Suppose that we have \(f(i, S)\) that computes the smallest string starting with \(words[i]\) and covering all words not in \(S\).  We can easily solve the original problem by iterating over all words and picking the \(words[j]\) which \(f(j, S \cup {j})\) produces the smallest string.  The problem is how to compute \(f(i, S)\).  If \(S\) contains all words, then \(f(i, S)\) returns \(words[i]\) for all possible values of \(i\).  Note that it also covers the case where \(words\) has only one word.  Otherwise, we have two or more words to cover, and we need to build the smallest string starting with \(words[i]\) that cover all words not in \(S\).  For each word \(j \notin S\), find the longest prefix \(k\) of \(words[j]\) that is a suffix of \(words[i]\).  We have that \(words[i][0..(k-1)]words[j]\) is the smallest string that covers both \(i\) and \(j\).  Therefore, \(words[i][0..k(j)] \cdot f(j, S \cup {j})\) is a candidate solution for all \(j\) that is not in \(S\) and \(f(j, S \cup {j})\).  To pick the solution for \(f(i, S)\), we can iterate over all candidates \(j\) and pick the one that produces the smallest string.  At this point, we have only left the problem to efficiently find the longest suffix of two strings.  This can be done by building a table \(suf\) where \(suf[i][j]\) is the index on \(words[i]\) of the longest suffix.  The search-space of \(f\) contains \(n \times 2 ^ n\) different nodes with \(O(n)\) transitions.  So, the space complexity is \(O(n \times 2^n)\) and time complexity is \(O(n^2 \times 2 ^ n)\).
 </p>

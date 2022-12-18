@@ -45,18 +45,18 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Count leading zeros of a number</h1>
 
-<div id="outline-container-org75df10f" class="outline-2">
-<h2 id="org75df10f">Naive approach</h2>
-<div class="outline-text-2" id="text-org75df10f">
+<div id="outline-container-org83cce1c" class="outline-2">
+<h2 id="org83cce1c">Naive approach</h2>
+<div class="outline-text-2" id="text-org83cce1c">
 <p>
 A naive consists on checking if the number is a multiple of 10 or not.  If so, divide (<a href="integer_division.html#ID-EA4496F1-4DE1-4F87-B23E-B7FA4CBCE33F">integer division</a>) the number by 10 and repeat the process, counting how many times the number is divisible by 10.  The algorithm has time complexity of \(O(n)\) where \(n\) is the number of digits of the number and memory complexity of \(O(1)\).  For example, \(12300\) is divisible by 10, \(1230\) is also divisible by 10 and \(123\) is not.  So, the number leading zeros in \(12300\) is \(2\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-orga7a6e09" class="outline-2">
-<h2 id="orga7a6e09">Count leading zeros of a number using its 2's and 5's factors</h2>
-<div class="outline-text-2" id="text-orga7a6e09">
+<div id="outline-container-orga9cd123" class="outline-2">
+<h2 id="orga9cd123">Count leading zeros of a number using its 2's and 5's factors</h2>
+<div class="outline-text-2" id="text-orga9cd123">
 <p>
 As \(10=2\times5\), we can re-write above <code>count_zeros</code> function as following:
 </p>
@@ -67,12 +67,12 @@ The code didn't change, but it is easier to see that counting 10 factors is the 
 </div>
 </div>
 
-<div id="outline-container-orgcc39910" class="outline-2">
-<h2 id="orgcc39910">Cited by 2</h2>
-<div class="outline-text-2" id="text-orgcc39910">
+<div id="outline-container-orga7d900e" class="outline-2">
+<h2 id="orga7d900e">Cited by 2</h2>
+<div class="outline-text-2" id="text-orga7d900e">
 <ul class="org-ul">
-<li><a href="leetcode_172_factorial_trailing_zeroes.html#ID-A895C35A-7AD3-4C9E-A785-3C25C7FD0A8B">Leetcode: 172. Factorial Trailing Zeroes</a></li>
 <li><a href="leetcode_2245_maximum_trailing_zeros_in_a_cornered_path.html#ID-BCB2026F-5A0B-4C8D-A079-5DE04E8962E2">Leetcode: 2245. Maximum Trailing Zeros in a Cornered Path</a></li>
+<li><a href="leetcode_172_factorial_trailing_zeroes.html#ID-A895C35A-7AD3-4C9E-A785-3C25C7FD0A8B">Leetcode: 172. Factorial Trailing Zeroes</a></li>
 </ul>
 </div>
 </div>
