@@ -51,17 +51,13 @@ Let's find $j$ by keeping two segments negative and total subarray called respec
 #+begin_src python
   class Solution:
       def maxProduct(self, nums: List[int]) -> int:
-          ans, cur = nums[0], 1
-          neg = float("-inf")
-          for i in range(len(nums)):
-              cur *= nums[i]
-              ans = max(ans, cur)
+          neg, ans, cur = -inf, nums[0], 1
+          for n in nums:
+              cur = cur * n or n
+              ans = max(ans, cur, cur // (neg if neg != -inf else 1))
               if cur < 0:
-                  if neg != float("-inf"):
-                      ans = max(ans, cur // neg)
                   neg = max(neg, cur)
               elif cur == 0:
-                  cur = 1
-                  neg = float("-inf")
+                  neg, cur = -inf, 1
           return ans
 #+end_src
