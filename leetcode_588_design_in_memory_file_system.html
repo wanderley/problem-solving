@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 588. Design In-Memory File System</h1>
 
-<div id="outline-container-org8dedd87" class="outline-2">
-<h2 id="org8dedd87">Understand the problem</h2>
-<div class="outline-text-2" id="text-org8dedd87">
+<div id="outline-container-org7bf1e90" class="outline-2">
+<h2 id="org7bf1e90">Understand the problem</h2>
+<div class="outline-text-2" id="text-org7bf1e90">
 <p>
 Given a list of path where some are directories and other are files.  Implement an efficient data structure that allows easily access to each directory to save files and list its content.
 </p>
 </div>
 
-<div id="outline-container-org7cede7b" class="outline-3">
-<h3 id="org7cede7b">Useful prompts</h3>
-<div class="outline-text-3" id="text-org7cede7b">
+<div id="outline-container-orgf8968ba" class="outline-3">
+<h3 id="orgf8968ba">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgf8968ba">
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
 
@@ -65,17 +65,17 @@ Given a list of path where some are directories and other are files.  Implement 
 </div>
 </div>
 
-<div id="outline-container-orgda7c185" class="outline-2">
-<h2 id="orgda7c185">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgda7c185">
+<div id="outline-container-org8e0c3c1" class="outline-2">
+<h2 id="org8e0c3c1">Devise a plan</h2>
+<div class="outline-text-2" id="text-org8e0c3c1">
 <p>
 Use <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a> to represent the directory and file paths.  Time complexity is \(O(p)\) to find a node (for <code>mkdir</code>, <code>write</code> and <code>read</code>) where \(p\) is the length of the path, \(O(p + P)\) for <code>ls</code> where the \(P\) is the sum of length of all nodes in a sub-path.
 </p>
 </div>
 
-<div id="outline-container-org78eb4ec" class="outline-3">
-<h3 id="org78eb4ec">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org78eb4ec">
+<div id="outline-container-org671ba62" class="outline-3">
+<h3 id="org671ba62">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org671ba62">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FileSystem</span>:
 

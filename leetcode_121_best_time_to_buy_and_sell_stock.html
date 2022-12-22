@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 121. Best Time to Buy and Sell Stock</h1>
 
-<div id="outline-container-org50342c9" class="outline-2">
-<h2 id="org50342c9">Patterns</h2>
-<div class="outline-text-2" id="text-org50342c9">
+<div id="outline-container-orgbaddb0c" class="outline-2">
+<h2 id="orgbaddb0c">Patterns</h2>
+<div class="outline-text-2" id="text-orgbaddb0c">
 <ul class="org-ul">
 <li><a href="pattern_search_for_max_min_value_in_unsorted_array.html#ID-D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6">Pattern: Search for max/min value in unsorted array</a>.</li>
 
@@ -56,18 +56,18 @@
 </div>
 </div>
 
-<div id="outline-container-org46fdfd8" class="outline-2">
-<h2 id="org46fdfd8">Prompts</h2>
-<div class="outline-text-2" id="text-org46fdfd8">
+<div id="outline-container-orgaec1444" class="outline-2">
+<h2 id="orgaec1444">Prompts</h2>
+<div class="outline-text-2" id="text-orgaec1444">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org6968ea6" class="outline-2">
-<h2 id="org6968ea6">Solution</h2>
-<div class="outline-text-2" id="text-org6968ea6">
+<div id="outline-container-org5d0e169" class="outline-2">
+<h2 id="org5d0e169">Solution</h2>
+<div class="outline-text-2" id="text-org5d0e169">
 <p>
 Suppose we know that the best day to buy is on \(i\)th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index \(j\) where \(j > i\) and \(prices[j]-prices[i]\) is the maximum possible profit.  The naive approach to find \(j\) consists on iterating over \(i+1,i+2,...,n-1\).  While it solves the problem, this solution is \(O(n^2)\) and does not pass on all tests.  Therefore, we have to come up with a more efficient way to find \(j\).
 </p>
@@ -94,9 +94,9 @@ The problem of finding \(j\) became trivial if we use \(f\).  We first compute \
 </div>
 
 
-<div id="outline-container-org5d2e3ac" class="outline-2">
-<h2 id="org5d2e3ac">Cited by 1</h2>
-<div class="outline-text-2" id="text-org5d2e3ac">
+<div id="outline-container-orgdda63f1" class="outline-2">
+<h2 id="orgdda63f1">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgdda63f1">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>
