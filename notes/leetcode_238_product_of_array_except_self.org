@@ -10,11 +10,12 @@
 
 * Patterns
 
-- [[id:D0BAD240-E912-4D4B-A20C-2943FB8BC75E][Pattern: Find accumulated value of an array]].
+- [[id:E531AE8D-3BE5-486D-A28E-58828790F8E3][Pattern: Find cumulative product of an array]]
 
 * Prompts
 
 - [[id:69D68202-BF1A-4D72-A0EC-DDCBAF112500][Can we break-down the problem in small and easily to solve parts?]]
+
 - [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]
 
 * Solution
