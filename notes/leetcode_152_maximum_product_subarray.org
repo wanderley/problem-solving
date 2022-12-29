@@ -20,7 +20,7 @@
 
 - [[id:C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09][Can we solve the problem by iterating from left to right (or right to left)?]]
 
-* Solution
+* Solution 1
 
 Have I solved a similar problem?  Yes, I solved [[id:01AB9AC6-5E8D-49BB-9533-92B7032CFDE3][Leetcode: 53. Maximum Subarray]] which is about finding the subarray with maximum [[id:239E05AC-0313-4A15-A5E5-3F9A7C857804][Cumulative Sum]].  But I discarded it since I failed in past to transfer ideas from problems that use additions or subtractions to similar problems that use multiplications and divisions;  I couldn't keep the same time complexity or needed extra memory.  Then I decided to go for a quadratic solution due the problem's constraints of $|nums|=n \le (2 \times 10^4)^2 = 4 \times 10^8$.  Fix the left index of the subarray and search for the best right index.  While searching for the best right index, extend the [[id:9734F433-D5A0-430A-8E8A-FE243846C444][Cumulative Product]] for each new index, and update the answer accordingly.  The solution timed out what sent me back to the blackboard.
 
@@ -59,5 +59,19 @@ Let's find $j$ by keeping two segments negative and total subarray called respec
                   neg = max(neg, cur)
               elif cur == 0:
                   neg, cur = -inf, 1
+          return ans
+#+end_src
+
+* Solution 2
+
+Be $maxp_{i-1} = nums[p] \times nums[p+1] \times ... \times nums[i-1]$ the *maximum* possible product ending on $i-1$ and $minp_{i-1} = nums[q] \times nums[q+1] \times ... \times nums[i-1]$  the *minimum* possible product ending on $i-1$.  Note that the problem is solved if we can compute $maxp_{n-1}$.  [[id:45B9F3C8-D007-4980-95EF-4361906245A8][How can we extend the solution for i to i+1?]]  The maximum possible product ending on $i$ is either $nums[i]$ if the product started on $i$, $nums[i] \times maxp_{i-1}$ if the product extends the maximum product so far or $nums[i] \times minp_{i-1}$ if the minimum product so far became positive when multiplied by $nums[i]$.  The minimum possible product ending on $i$ is the minimum of the same values.
+
+#+begin_src python
+  class Solution:
+      def maxProduct(self, nums: List[int]) -> int:
+          maxp = minp = ans = nums[0]
+          for n in nums[1:]:
+              maxp, minp = max(n, maxp * n, min * n), min(n, minp * n, maxp * n)
+              ans = max(ans, maxp)
           return ans
 #+end_src
