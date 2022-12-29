@@ -45,18 +45,20 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 528. Random Pick with Weight</h1>
 
-<div id="outline-container-org5908628" class="outline-2">
-<h2 id="org5908628">Patterns</h2>
-<div class="outline-text-2" id="text-org5908628">
+<div id="outline-container-org34d87ab" class="outline-2">
+<h2 id="org34d87ab">Patterns</h2>
+<div class="outline-text-2" id="text-org34d87ab">
 <ul class="org-ul">
 <li><a href="pattern_cumulative_sum.html#ID-0679DF6C-5271-409F-A4EF-AD92EE1C3036">Pattern: Cumulative Sum</a>.</li>
+
+<li><a href="pattern_problem_s_constraints_disallow_o_n_2_solutions.html#ID-FCF0DB21-F99D-4A98-B592-6889DB9FE1F4">Pattern: Problem's constraints disallow \(O(n^2)\) solutions</a>.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge41fb3f" class="outline-2">
-<h2 id="orge41fb3f">Prompts</h2>
-<div class="outline-text-2" id="text-orge41fb3f">
+<div id="outline-container-org7c45970" class="outline-2">
+<h2 id="org7c45970">Prompts</h2>
+<div class="outline-text-2" id="text-org7c45970">
 <dl class="org-dl">
 <dt><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a></dt><dd>Compute the accumulate probability of picking any of \(0..i\) elements using <a href="prefix_sum.html#ID-6C76A007-72FB-4495-904F-CC3407193847">Prefix Sum</a>.</dd>
 
@@ -65,9 +67,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgc7e22ae" class="outline-2">
-<h2 id="orgc7e22ae">Solution</h2>
-<div class="outline-text-2" id="text-orgc7e22ae">
+<div id="outline-container-orgbf9ba87" class="outline-2">
+<h2 id="orgbf9ba87">Solution</h2>
+<div class="outline-text-2" id="text-orgbf9ba87">
 <p>
 Compute the accumulate probability of picking any of \(0..i\) elements and use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the index of one random element.  Time complexity is \(O(n)\) for pre-processing and \(O(\log n)\) to answer each query.  Space complexity is \(O(n)\) to store the accumulated probabilities.
 </p>
