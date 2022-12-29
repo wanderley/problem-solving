@@ -12,6 +12,8 @@
 
 - [[id:0679DF6C-5271-409F-A4EF-AD92EE1C3036][Pattern: Cumulative Sum]].
 
+- [[id:FCF0DB21-F99D-4A98-B592-6889DB9FE1F4][Pattern: Problem's constraints disallow $O(n^2)$ solutions]].
+
 * Prompts
 
 - [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]] :: Compute the accumulate probability of picking any of $0..i$ elements using [[id:6C76A007-72FB-4495-904F-CC3407193847][Prefix Sum]].
