@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 357. Count Numbers with Unique Digits</h1>
 
-<div id="outline-container-org22daf8d" class="outline-2">
-<h2 id="org22daf8d">Brute-Force Search</h2>
-<div class="outline-text-2" id="text-org22daf8d">
+<div id="outline-container-org76b184d" class="outline-2">
+<h2 id="org76b184d">Brute-Force Search</h2>
+<div class="outline-text-2" id="text-org76b184d">
 <p>
 The brute-force approach consists on iterating over all numbers between 0 and \(x\) and counting ones that have only unique digits.  The following algorithm has time complexity of \(x \times 16\) which is \(16\times10^8 = 1,600,000,000\) in the worst-case scenario.  The 16 factor comes from the fact that each number needs to be decomposed on digits twice.
 </p>
@@ -58,18 +58,18 @@ None
 </div>
 </div>
 
-<div id="outline-container-org632aa35" class="outline-2">
-<h2 id="org632aa35">Dynamic Programming</h2>
-<div class="outline-text-2" id="text-org632aa35">
+<div id="outline-container-orgcb84eb2" class="outline-2">
+<h2 id="orgcb84eb2">Dynamic Programming</h2>
+<div class="outline-text-2" id="text-orgcb84eb2">
 <p>
 This problem can be solved using <a href="dynamic_programming_by_digit.html#ID-4EABECD0-AEDD-4A57-8902-67F2BC6673AC">Dynamic Programming by Digit</a>.  The numbers are generated digit while the used digits are kept on a set to avoid the same digit to be used twice.  It also needs to keep an extra variable to flag when the digit zero can be used, since the leading zeros aren't count as digits in the number.  There are \(x \times 2^{10} \times 2 \leq 8 \times 2^{10} \times 2 = 2^{14} = 16\,384\) different possible states, where \(x\) is the number of digits to be generated, \(2^10\) is the number of possible ways to select digits that are used in the number, and finally 2 for the zero flag.  The following algorithm has time complexity of \(O(2^{14} \times 10)\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org560114e" class="outline-2">
-<h2 id="org560114e"><a href="math.html#ID-DBDF96ED-7731-40F0-BC12-C6B6C29FEF42">Math</a></h2>
-<div class="outline-text-2" id="text-org560114e">
+<div id="outline-container-orgb62ee97" class="outline-2">
+<h2 id="orgb62ee97"><a href="math.html#ID-DBDF96ED-7731-40F0-BC12-C6B6C29FEF42">Math</a></h2>
+<div class="outline-text-2" id="text-orgb62ee97">
 <p>
 Be \(f(x)\) the number of numbers with unique digits less or equal to \(x\).  We have that \(f(0)=1\), \(f(1)=10\), \(f(2)=9\times9\) because there are 9 candidates for the first digit (\(1..9\)) and 9 candidates for the second digit (excluding the digit used in the first digit).  For \(f(3)=z + f(2)\) where \(z\) is the number of number with unique digits and exactly 3 digits.  There are 9 candidates for the first digit of \(z\), 9 for the second because 0 can be used but the number used on the first digit needs to be excluded, and finally 8 for the third.  The same process can be applied when \(x\geq4\).  The following algorithm has time complexity of \(O(x)\).
 </p>
