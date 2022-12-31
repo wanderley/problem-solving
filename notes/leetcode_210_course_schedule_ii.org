@@ -10,7 +10,7 @@
 
 * Patterns
 
-- [[id:81260E21-C442-48DE-A414-CA7B83F2C404][Directed Acyclic Graph]].
+- [[id:7F19BF77-1756-4B0E-83CB-0924722E82F9][Pattern: Graph problem]].
 
 - [[id:106D2C06-9633-40A5-9BA7-E3CE17A0C784][Pattern: Ordering problem]].
 

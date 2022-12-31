@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       7F19BF77-1756-4B0E-83CB-0924722E82F9
+:END:
+#+TITLE: Pattern: Graph problem
