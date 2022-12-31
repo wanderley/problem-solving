@@ -73,9 +73,9 @@ The goal of this method is to use spaced-repetition to build your intuition to s
 
 For next session, you will work in [[https://leetcode.com/contest/weekly-contest-320/][4 problems]] which you should apply the method: solve them, create and review the cards.  We will review your thought process to solve these problems and what worked and didn't work when create and reviewing your cards:
 
-  - [ ] [[id:AD689352-C66F-4BFC-95A4-65B58110A851][Leetcode: 2475. Number of Unequal Triplets in Array]]
+  - [X] [[id:AD689352-C66F-4BFC-95A4-65B58110A851][Leetcode: 2475. Number of Unequal Triplets in Array]]
   - [X] [[id:7F2BA5B5-2C29-40AE-A4D3-B3D438A660C9][Leetcode: 2476. Closest Nodes Queries in a Binary Search Tree]]
-  - [ ] [[id:47D88994-CD09-41C5-A3BA-9EDF2B9AB80E][Leetcode: 2477. Minimum Fuel Cost to Report to the Capital]]
+  - [X] [[id:47D88994-CD09-41C5-A3BA-9EDF2B9AB80E][Leetcode: 2477. Minimum Fuel Cost to Report to the Capital]]
   - [ ] [[id:D500C3CF-B17C-4C7D-90F2-BFA02AB1C9D6][Leetcode: 2478. Number of Beautiful Partitions]]
 
 ** December 9, 2022
@@ -92,14 +92,14 @@ For next session, you will work in [[https://leetcode.com/contest/weekly-contest
   - Proficiency in the selected Programming Language.
   - Formulate a high-level plan and execute each part in isolation.
 
-*** Next steps
+*** Problems
 
 We will start with [[https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions][Blind 75]] problems.  As we work through them, we will find that few areas should get more attention.  For those, I will add problems to increase your proficiency on specific building blocks.  Here is the list of problems for this week:
 
 - Blind 75:
   - [X] [[https://leetcode.com/problems/two-sum/][Two Sum]] ([[id:5F25DCD8-CE46-4F18-A1B1-952BC35382A9][solution]]).
   - [X] [[https://leetcode.com/problems/best-time-to-buy-and-sell-stock/][Best Time to Buy and Sell Stock]] ([[id:81682CDD-4D5A-485C-9C1C-5689B6AF1A41][solution]]).
-  - [ ] [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]].
+  - [X] [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]].
 - Supplement:
   - [X] [[https://leetcode.com/problems/binary-tree-inorder-traversal/][Binary Tree Inorder Traversal]].
 
@@ -117,7 +117,7 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
   - You might think that easy problems are waste of time.  They are not.  Easy problems help you to solidify building blocks, become proficient in your chosen programming language, focus on recalling the patterns and prompts, and finally explain the problem in a concise way.  Leave to the spaced-repetition the task to decide which problem you have to review.  Over time, the easy problems will appear less frequently than the challenging ones.
 
-  - You added "Convert list to set" as one pattern in your card.  A pattern is word or sentence that abstract the problem or part of it.  Here is some examples of patterns: "Binary Balance Tree", "Directed Graph", "String Search", "Searching in Array".  Note that they generalize the problem in terms that are easier to associate with.  We are going to use these terms (or sentences) as hooks to grab ideas from previous problems that we solved.  You think "Directed Graph", and few seconds later "poof" you think "Are there cycles in this Graph?".
+  - You added "Convert list to set" as one pattern in your card.  A pattern is word or sentence that abstract the problem or part of it.  Here is some examples of patterns: "Binary Balance Tree", "Directed Graph", "String Search", "Searching in Array".  Note that they generalize the problem in terms that are easier to associate with.  We are going to upse these terms (or sentences) as hooks to grab ideas from previous problems that we solved.  You think "Directed Graph", and few seconds later "poof" you think "Are there cycles in this Graph?".
 
   - While we love functional programming, imperative programming is usually a better choice for problem solving.  It is possible to use immutable data structures, lambdas, maps, filters, and etc, but a simple for loop can reduce 10-15 lines of functional programming to 3 lines.  Remember that less code means less surface for errors.
 
@@ -136,13 +136,32 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
   - What is common in the solution for these problems?  We have to use extra memory to solve the searching problem in $O(1)$.  In [[id:AF49B2EA-A026-4E91-A4EC-423123E63A9B][Improve Performance Using More Memory]], I argued why sometimes this is the case for improving performance.
 
-*** Next steps
+*** Next problems
 
-- [ ] [[https://leetcode.com/problems/product-of-array-except-self/][Product of Array Except Self]] ([[id:489C947E-AD8A-4611-B8F7-DD0BB44ABAE5][solution]])
-- [ ] [[https://leetcode.com/problems/maximum-subarray/][Maximum Subarray]] ([[id:01AB9AC6-5E8D-49BB-9533-92B7032CFDE3][solution]])
+- [X] [[https://leetcode.com/problems/product-of-array-except-self/][Product of Array Except Self]] ([[id:489C947E-AD8A-4611-B8F7-DD0BB44ABAE5][solution]])
+- [X] [[https://leetcode.com/problems/maximum-subarray/][Maximum Subarray]] ([[id:01AB9AC6-5E8D-49BB-9533-92B7032CFDE3][solution]])
 - [ ] [[https://leetcode.com/problems/maximum-product-subarray/][Maximum Product Subarray]] ([[id:D821DCA2-8A6A-4650-BD9E-D9B78F446901][solution]])
-- [ ] [[https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/][Find Minimum in Rotated Sorted Array]] ([[id:C1F8B8F2-72CF-4085-852C-4D1EF8E19195][solution]])
+- [X] [[https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/][Find Minimum in Rotated Sorted Array]] ([[id:C1F8B8F2-72CF-4085-852C-4D1EF8E19195][solution]])
 
-** December X, 2022 :noexport:
+** December 30, 2022
+
+- Review of a card
+  - [[https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/][Find Minimum in Rotated Sorted Array]]
+    - Wrote the patterns and prompts as comments in the code.
+      - It has can make easier to compare with the card and assess the review.
+      - It makes easier to direct focus.
+    - Implemented his solution and than the alternative one.
+      - The familiarity with the language is noticeable.  Good job!
+      - It is fine to breakdown the problem in smaller sub problems.
+      - There is no problem with writing the recursive version of binary search, but the interviewer will ask you to save memory (stack) by having the iterative version.
+      - Is there something that is blocking you to get to the alternative solution from the begin?
+      - What is the difference between both approaches?
 
 - As I mentioned before, I developed this method after 9 years without working on problem solving.  This is an example of how I improved by following this method:  [[https://leetcode.com/problems/maximum-subarray/submissions/541620453/][old solution]] from Aug 2021 vs [[https://leetcode.com/problems/maximum-subarray/submissions/860511074/][new solution]] from December 2022.  I knew that this is a classical problem, but I didn't remember that I solved it on Leetcode.  The new solution is shorter and straight to the point, while the old one is unnecessarily complex.
+
+
+*** Next problems
+
+- [ ] [[https://leetcode.com/problems/search-in-rotated-sorted-array/][Search in Rotated Sorted Array]]
+- [ ] [[https://leetcode.com/problems/3sum/][3 Sum]]
+- [ ] [[Container With Most Water][Container With Most Water]]
