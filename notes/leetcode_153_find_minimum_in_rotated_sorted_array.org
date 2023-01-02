@@ -10,7 +10,9 @@
 
 * Patterns
 
-- [[id:12D16A10-EB7A-4EF8-A0E8-91B5EE694582][Pattern: Searching in Array]]
+- [[id:D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6][Pattern: Search for max/min value in unsorted array]]
+
+- [[id:FCF0DB21-F99D-4A98-B592-6889DB9FE1F4][Pattern: Problem's constraints disallow $O(n^2)$ solutions]]
 
 * Prompts
 
