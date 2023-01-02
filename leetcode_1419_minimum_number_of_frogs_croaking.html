@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 1419. Minimum Number of Frogs Croaking</h1>
 
-<div id="outline-container-org1329809" class="outline-2">
-<h2 id="org1329809">Patterns</h2>
-<div class="outline-text-2" id="text-org1329809">
+<div id="outline-container-org09568e4" class="outline-2">
+<h2 id="org09568e4">Patterns</h2>
+<div class="outline-text-2" id="text-org09568e4">
 <ul class="org-ul">
 <li><a href="pattern_optimization_problem_to_find_minimum_maximum_number_of_x_to_cover_y.html#ID-45D8FD21-992F-4073-8EC6-7695FAA0E3AB">Pattern: Optimization problem to find minimum/maximum number of X to cover Y</a>.</li>
 
@@ -56,18 +56,18 @@
 </div>
 </div>
 
-<div id="outline-container-orge6bb1c3" class="outline-2">
-<h2 id="orge6bb1c3">Prompts</h2>
-<div class="outline-text-2" id="text-orge6bb1c3">
+<div id="outline-container-org75c7bd2" class="outline-2">
+<h2 id="org75c7bd2">Prompts</h2>
+<div class="outline-text-2" id="text-org75c7bd2">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_using_a_greedy_approach.html#ID-1CA3366B-D045-4BF4-9E39-DFA5131EF937">Can we solve the problem using a greedy approach?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org7473288" class="outline-2">
-<h2 id="org7473288">Solution</h2>
-<div class="outline-text-2" id="text-org7473288">
+<div id="outline-container-orgb25c786" class="outline-2">
+<h2 id="orgb25c786">Solution</h2>
+<div class="outline-text-2" id="text-orgb25c786">
 <p>
 The fact that one frog can croak multiple times means that two independent croaks can be performed by the same frog.  For example, one frog can produce "croakcroak" while two frogs are required to produce "crcroakoakcroak" ("aabbbbbaaaaaaaa" or "aabbbbbaaabbbbb" where \(a\) and \(b\) represents two frogs).  Thus, we can postpone the decision to add one frog to the answer iff all other frogs are in busy croaking.  Doing so, the algorithm is making a locally optimal choice (<a href="greedy_algorithm.html#ID-FFC75108-C74E-44B1-9B60-B3A22B15E617">Greedy algorithm</a>).
 </p>

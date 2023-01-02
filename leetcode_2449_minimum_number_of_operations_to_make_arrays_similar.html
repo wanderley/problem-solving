@@ -45,17 +45,17 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2449. Minimum Number of Operations to Make Arrays Similar</h1>
 
-<div id="outline-container-orgc5e38d9" class="outline-2">
-<h2 id="orgc5e38d9">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgc5e38d9">
+<div id="outline-container-org3c11d91" class="outline-2">
+<h2 id="org3c11d91">Understand the problem</h2>
+<div class="outline-text-2" id="text-org3c11d91">
 <p>
 Given two integer arrays \(a\) and \(t\).  Transform \(a\) in \(t\) by performing any number of times and operation: pick \(i\) and \(j\) and do \(a[i] += 2\) and \(a[j] -= 2\).
 </p>
 </div>
 
-<div id="outline-container-org9584a87" class="outline-3">
-<h3 id="org9584a87">Useful prompts</h3>
-<div class="outline-text-3" id="text-org9584a87">
+<div id="outline-container-orgf8c2dcc" class="outline-3">
+<h3 id="orgf8c2dcc">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgf8c2dcc">
 <ul class="org-ul">
 <li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
 </ul>
@@ -63,9 +63,9 @@ Given two integer arrays \(a\) and \(t\).  Transform \(a\) in \(t\) by performin
 </div>
 </div>
 
-<div id="outline-container-org3f05660" class="outline-2">
-<h2 id="org3f05660">Devise a plan</h2>
-<div class="outline-text-2" id="text-org3f05660">
+<div id="outline-container-org44a31c3" class="outline-2">
+<h2 id="org44a31c3">Devise a plan</h2>
+<div class="outline-text-2" id="text-org44a31c3">
 <p>
 There are two important properties on this problem:
 </p>
@@ -80,9 +80,9 @@ You can prove (2) by contradiction and (1) comes from the property of the operat
 </p>
 </div>
 
-<div id="outline-container-org49356d8" class="outline-3">
-<h3 id="org49356d8">Carry out a plan</h3>
-<div class="outline-text-3" id="text-org49356d8">
+<div id="outline-container-orge7ff9da" class="outline-3">
+<h3 id="orge7ff9da">Carry out a plan</h3>
+<div class="outline-text-3" id="text-orge7ff9da">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">makeSimilar</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], target: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
