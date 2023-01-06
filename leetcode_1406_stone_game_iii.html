@@ -48,9 +48,9 @@
 Problem statement can be found <a href="https://leetcode.com/problems/stone-game-iii/">here</a>.
 </p>
 
-<div id="outline-container-orga6ca7c6" class="outline-2">
-<h2 id="orga6ca7c6">Linear solution</h2>
-<div class="outline-text-2" id="text-orga6ca7c6">
+<div id="outline-container-org644f22c" class="outline-2">
+<h2 id="org644f22c">Linear solution</h2>
+<div class="outline-text-2" id="text-org644f22c">
 <p>
 This is an example of a classic <a href="min_max_problem.html#ID-4A2206E8-074B-4CDB-BD5B-01DE3C901C15">Min-Max Problem</a>.  Alice and Bob wants to maximize their score, which means that Alice wants to maximize the difference of their scores, while Bob wants to minimize it.  Be \(a\) the array of stone values with \(n\) elements.  Be \(f(A, i)\) and \(f(B, i)\) the max and min score difference that Alice and Bob can make starting on the \(i\)th stone, respectively.  By the rules of the game, we know that
 </p>
@@ -61,9 +61,9 @@ f(B, i)  = & \min_{i \leq j \leq min(|a|, i + 2)} f(A, j+1) + \sum_{i\leq k \leq
 \end{align*}
 </div>
 
-<div id="outline-container-orgb792f97" class="outline-3">
-<h3 id="orgb792f97">Memoization</h3>
-<div class="outline-text-3" id="text-orgb792f97">
+<div id="outline-container-orga59ffa4" class="outline-3">
+<h3 id="orga59ffa4">Memoization</h3>
+<div class="outline-text-3" id="text-orga59ffa4">
 <ul class="org-ul">
 <li>Time Complexity: \(O(n)\)</li>
 <li>Space Complexity: \(O(n)\)</li>
@@ -110,9 +110,9 @@ f(B, i)  = & \min_{i \leq j \leq min(|a|, i + 2)} f(A, j+1) + \sum_{i\leq k \leq
 </div>
 </div>
 
-<div id="outline-container-org5456b9b" class="outline-3">
-<h3 id="org5456b9b">Dynamic Programming</h3>
-<div class="outline-text-3" id="text-org5456b9b">
+<div id="outline-container-org0982166" class="outline-3">
+<h3 id="org0982166">Dynamic Programming</h3>
+<div class="outline-text-3" id="text-org0982166">
 <ul class="org-ul">
 <li>Time Complexity: \(O(n)\)</li>
 <li>Space Complexity: \(O(1)\)</li>
