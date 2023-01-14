@@ -170,6 +170,10 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 - [ ] [[https://leetcode.com/problems/counting-bits/][Counting Bits]]
 - [ ] [[https://leetcode.com/problems/missing-number/][Missing Number]]
 - [ ] [[https://leetcode.com/problems/reverse-bits/][Reverse Bits]]
+- [ ] [[https://leetcode.com/problems/climbing-stairs/][Climbing Stairs]]
+- [ ] [[https://leetcode.com/problems/coin-change/][Coin Change]]
+- [ ] [[https://leetcode.com/problems/longest-increasing-subsequence/][Longest Increasing Subsequence]]
+- [ ] [[https://leetcode.com/problems/longest-common-subsequence/][Longest Common Subsequence]]
 - Extra:
   - [ ] [[https://leetcode.com/problems/find-peak-element/][Find Peak Element]] ([[id:E4E1316F-92A3-4C51-8FC6-16A39DD1C1CE][solution]])
 
