@@ -44,6 +44,10 @@
 <body>
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 753. Cracking the Safe</h1>
+<p>
+<a href="https://leetcode.com/problems/cracking-the-safe/">Problem Statement</a>
+</p>
+
 <ul class="org-ul">
 <li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Find the smallest string which contains all possible string with \(n\) digits where each digit is between \(0\) and \(k-1\).  I don't know how to prove (even though I saw a relationship with <a href="eulerian_path_in_directed_graph.html#ID-BE52E57C-4A9B-4F62-9F8F-EBD0447ABBB9">Eulerian path in Directed Graph</a>), it is always possible to create such string where each new digit covers a new possible string.  Therefore, we can try all possibilities with a basic prune (i.e. stop if the current answer is greater than the best one so far).  Time complexity is \(O(X \times k)\) where \(X\) is the size of the final string.  Space complexity is \(O(X)\).</li>
 </ul>

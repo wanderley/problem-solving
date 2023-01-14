@@ -44,6 +44,10 @@
 <body>
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2163. Minimum Difference in Sums After Removal of Elements</h1>
+<p>
+<a href="https://leetcode.com/problems/minimum-difference-in-sums-after-removal-of-elements/">Problem Statement</a>
+</p>
+
 <ul class="org-ul">
 <li><a href="pattern_find_optimal_partition_of_array.html#ID-4060A2EA-09E8-4E05-922D-8340AAF60F44">Pattern: Find optimal partition of array</a>.  Partition the given array in two subarrays \(ln=a[0..i]\) and \(rn=a[(i+1)..(n-1)]\) such that \(\sum l[i] - \sum r[j]\) is the smallest possible after removing elements from \(l\) and \(r\) to make them have exactly \(n\) elements.  Due the optimization function, we want to remove the greatest elements from \(l\) and the smaller elements from \(r\) to make both have exactly \(n\) elements.  To solve the problem, we can first compute \(l(i)\) and \(r(i)\) which is the best left and right sum ending on \(i\).  This can be done by keeping two sorted list while processing the indexes from the left to right and right to left respectively.  Time complexity is \(O(n \log n)\) with space is \(O(n)\).</li>
 </ul>

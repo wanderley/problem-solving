@@ -44,6 +44,10 @@
 <body>
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 472. Concatenated Words</h1>
+<p>
+<a href="https://leetcode.com/problems/concatenated-words/">Problem Statement</a>
+</p>
+
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a>  For a given word, find if it is possible to decompose it as words in the dictionary.  The search-space for this problem is \((i, j, k)\) which means if it possible to break down the word \(i\), starting on position \(j\) after breaking it already in \(k\) parts.  The problem left is to quickly find a part starting on the current position which can be solved using a <a href="trie.html#ID-5BC30FCA-3402-4DA7-89D9-7661FEBDA3A7">Trie</a>.  Time complexity is \(O(n \times s)\) where \(s\) is \(\max |w[i]|\).  Space complexity is \(\sum |w[i]|\).</li>
 </ul>

@@ -44,10 +44,13 @@
 <body>
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2462. Total Cost to Hire K Workers</h1>
+<p>
+<a href="https://leetcode.com/problems/total-cost-to-hire-k-workers/">Problem Statement</a>
+</p>
 
-<div id="outline-container-org0193cb1" class="outline-2">
-<h2 id="org0193cb1">Understand the problem</h2>
-<div class="outline-text-2" id="text-org0193cb1">
+<div id="outline-container-org1f14e8f" class="outline-2">
+<h2 id="org1f14e8f">Understand the problem</h2>
+<div class="outline-text-2" id="text-org1f14e8f">
 <p>
 Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the cost of picking \(k\) integers from \(a\) as following:
 </p>
@@ -58,9 +61,9 @@ Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the 
 </ol>
 </div>
 
-<div id="outline-container-orgf5e44fe" class="outline-3">
-<h3 id="orgf5e44fe">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgf5e44fe">
+<div id="outline-container-org5bb78f0" class="outline-3">
+<h3 id="org5bb78f0">Useful prompts</h3>
+<div class="outline-text-3" id="text-org5bb78f0">
 <ul class="org-ul">
 <li><a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a></li>
 </ul>
@@ -68,17 +71,17 @@ Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the 
 </div>
 </div>
 
-<div id="outline-container-org4e5f85e" class="outline-2">
-<h2 id="org4e5f85e">Devise a plan</h2>
-<div class="outline-text-2" id="text-org4e5f85e">
+<div id="outline-container-org8c8960c" class="outline-2">
+<h2 id="org8c8960c">Devise a plan</h2>
+<div class="outline-text-2" id="text-org8c8960c">
 <p>
 On every turn, the array reduces in one.  Because of that, we have to efficiently resize the pool of candidates to pick.  To do so, we keep a priority queue with the candidates to pick.  After removing the best candidate from the pool, we add the next one from the left or the right depending on each side the best candidate is.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-orgb07ae76" class="outline-3">
-<h3 id="orgb07ae76">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgb07ae76">
+<div id="outline-container-org9909f7c" class="outline-3">
+<h3 id="org9909f7c">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org9909f7c">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">totalCost</span>(<span style="font-weight: bold;">self</span>, costs: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>, candidates: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

@@ -44,18 +44,21 @@
 <body>
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 2463. Minimum Total Distance Traveled</h1>
+<p>
+<a href="https://leetcode.com/problems/minimum-total-distance-traveled/description/">Problem Statement</a>
+</p>
 
-<div id="outline-container-orgbb731da" class="outline-2">
-<h2 id="orgbb731da">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgbb731da">
+<div id="outline-container-org73d5858" class="outline-2">
+<h2 id="org73d5858">Understand the problem</h2>
+<div class="outline-text-2" id="text-org73d5858">
 <p>
 Given \(n\) moving-points and \(m\) storage-points, find the minimum total distance sum to store all moving-points in the storage-points.  Moving-points are represented by \(r[i]\) which is the coordinate of the point, and \(f[i]=[x, c]\) represents a storage-point in the position \(x\) and capacity \(c\).  Moving-points are moving in constant speed and all you have to decide is what directions they will move: left or right.
 </p>
 </div>
 
-<div id="outline-container-org368fd3d" class="outline-3">
-<h3 id="org368fd3d">Useful prompts</h3>
-<div class="outline-text-3" id="text-org368fd3d">
+<div id="outline-container-org6c39eca" class="outline-3">
+<h3 id="org6c39eca">Useful prompts</h3>
+<div class="outline-text-3" id="text-org6c39eca">
 <ul class="org-ul">
 <li><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a>  We can sort the moving-points and storage-points from left to right to make it easier to process.</li>
 
@@ -65,17 +68,17 @@ Given \(n\) moving-points and \(m\) storage-points, find the minimum total dista
 </div>
 </div>
 
-<div id="outline-container-orgaa8e5f8" class="outline-2">
-<h2 id="orgaa8e5f8">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgaa8e5f8">
+<div id="outline-container-orgd59c8ef" class="outline-2">
+<h2 id="orgd59c8ef">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgd59c8ef">
 <p>
 Sort the moving-points and storage-points from left to right.  Compute \(dfs(i, j, k)\) which is the minimum total sum of putting moving-points \(i..n\) on the storage-points \(j..m\) where \(k\) slots of \(j\) storage-point is already used.
 </p>
 </div>
 
-<div id="outline-container-orgdf14dde" class="outline-3">
-<h3 id="orgdf14dde">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgdf14dde">
+<div id="outline-container-org94774fc" class="outline-3">
+<h3 id="org94774fc">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org94774fc">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumTotalDistance</span>(<span style="font-weight: bold;">self</span>, robot: List[<span style="font-weight: bold;">int</span>], factory: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:

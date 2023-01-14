@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 4. Median of Two Sorted Arrays</h1>
 
-<div id="outline-container-orgea1347f" class="outline-2">
-<h2 id="orgea1347f">Brute Force</h2>
-<div class="outline-text-2" id="text-orgea1347f">
+<div id="outline-container-org34e003f" class="outline-2">
+<h2 id="org34e003f">Brute Force</h2>
+<div class="outline-text-2" id="text-org34e003f">
 <p>
 <a href="merge_two_sorted_arrays.html#ID-1C032394-9D5B-4A8C-8ACE-21ED5B0B4838">Merge Two Sorted Arrays</a> and then compute the median from the resulting array.
 </p>
@@ -89,9 +89,9 @@
 </div>
 </div>
 
-<div id="outline-container-org951ab52" class="outline-2">
-<h2 id="org951ab52">Two binary-searches</h2>
-<div class="outline-text-2" id="text-org951ab52">
+<div id="outline-container-org3e003fe" class="outline-2">
+<h2 id="org3e003fe">Two binary-searches</h2>
+<div class="outline-text-2" id="text-org3e003fe">
 <p>
 Be \(u(x)\) the count of numbers in \(b\) that are less or equal than \(x\).  With that, we could compute for each position \(i\) in \(a\) the size of the left partition which contains the values \(a[0..i]\) and \(b[0..u(a[i])]\).  The solution for the problem is to find such the position in \(a\), if it exists, that cuts the array \(a+b\) on the half.  When it isn't possible, we know that all elements of \(a\) should be part of the left partition and the problem becomes finding the index on \(b\) that cuts the whole array in the half.  The following algorithm uses one <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the position \(i\) where \(i=\lfloor\(|a|+|b|\) / 2\rfloor\), and for each candidate it uses other <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to compute \(u(a[i])\).
 </p>
@@ -160,18 +160,18 @@ Be \(u(x)\) the count of numbers in \(b\) that are less or equal than \(x\).  Wi
 </div>
 </div>
 
-<div id="outline-container-org9f08642" class="outline-2">
-<h2 id="org9f08642"><span class="todo TODO">TODO</span> Write algorithm \(O(log(|a|+|b|))\)</h2>
-<div class="outline-text-2" id="text-org9f08642">
+<div id="outline-container-orgfd3108d" class="outline-2">
+<h2 id="orgfd3108d"><span class="todo TODO">TODO</span> Write algorithm \(O(log(|a|+|b|))\)</h2>
+<div class="outline-text-2" id="text-orgfd3108d">
 <p>
 The above <code>upper_bound_index</code> function is not necessary, since if \(a[x + k / 2 - 1] < b[y + k / 2 - 1]\) where \(k\) is an index in the merged sorted arrays, and \(x\) and \(y\) are indexes on \(a\) and \(b\) respectively, then we know that \(a[0..(x + k / 2 - 1)]\) are in the left partition.  Otherwise, we know that \(b[y..(y + k / 2 - 1)]\) are in the left partition.  In both cases, we discovered \(k/2\) elements of the left partition.  We can continue the process until there is no more elements in the left partition to find what gives us the searched element.  (<a href="https://leetcode.com/problems/median-of-two-sorted-arrays/discuss/2496/Concise-JAVA-solution-based-on-Binary-Search">Reference Implementation</a>)
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb8bf2f4" class="outline-2">
-<h2 id="orgb8bf2f4">Resources</h2>
-<div class="outline-text-2" id="text-orgb8bf2f4">
+<div id="outline-container-orgb9f12fc" class="outline-2">
+<h2 id="orgb9f12fc">Resources</h2>
+<div class="outline-text-2" id="text-orgb9f12fc">
 <ul class="org-ul">
 <li><a href="https://www.youtube.com/watch?v=LPFhl65R7ww">Tushar Roy's Binary Search : Median of two sorted arrays of different sizes</a></li>
 </ul>
@@ -179,9 +179,9 @@ The above <code>upper_bound_index</code> function is not necessary, since if \(a
 </div>
 
 
-<div id="outline-container-orgb2f45ed" class="outline-2">
-<h2 id="orgb2f45ed">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgb2f45ed">
+<div id="outline-container-org343ce44" class="outline-2">
+<h2 id="org343ce44">Cited by 1</h2>
+<div class="outline-text-2" id="text-org343ce44">
 <ul class="org-ul">
 <li><a href="array.html#ID-21C2B5E5-78D0-4A47-B69E-7B1FBA6A69A1">Array</a></li>
 </ul>

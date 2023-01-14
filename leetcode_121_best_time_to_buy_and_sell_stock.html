@@ -44,10 +44,13 @@
 <body>
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 121. Best Time to Buy and Sell Stock</h1>
+<p>
+<a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/">Problem Statement</a>
+</p>
 
-<div id="outline-container-orge6f210d" class="outline-2">
-<h2 id="orge6f210d">Patterns</h2>
-<div class="outline-text-2" id="text-orge6f210d">
+<div id="outline-container-orgd26dab6" class="outline-2">
+<h2 id="orgd26dab6">Patterns</h2>
+<div class="outline-text-2" id="text-orgd26dab6">
 <ul class="org-ul">
 <li><a href="pattern_search_for_max_min_value_in_unsorted_array.html#ID-D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6">Pattern: Search for max/min value in unsorted array</a>.</li>
 
@@ -56,18 +59,18 @@
 </div>
 </div>
 
-<div id="outline-container-org9f103b4" class="outline-2">
-<h2 id="org9f103b4">Prompts</h2>
-<div class="outline-text-2" id="text-org9f103b4">
+<div id="outline-container-org26761ee" class="outline-2">
+<h2 id="org26761ee">Prompts</h2>
+<div class="outline-text-2" id="text-org26761ee">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org0df5cf1" class="outline-2">
-<h2 id="org0df5cf1">Solution</h2>
-<div class="outline-text-2" id="text-org0df5cf1">
+<div id="outline-container-org7290cd9" class="outline-2">
+<h2 id="org7290cd9">Solution</h2>
+<div class="outline-text-2" id="text-org7290cd9">
 <p>
 Suppose we know that the best day to buy is on \(i\)th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index \(j\) where \(j > i\) and \(prices[j]-prices[i]\) is the maximum possible profit.  The naive approach to find \(j\) consists on iterating over \(i+1,i+2,...,n-1\).  While it solves the problem, this solution is \(O(n^2)\) and does not pass on all tests.  Therefore, we have to come up with a more efficient way to find \(j\).
 </p>
@@ -94,9 +97,9 @@ The problem of finding \(j\) became trivial if we use \(f\).  We first compute \
 </div>
 
 
-<div id="outline-container-orge556e0a" class="outline-2">
-<h2 id="orge556e0a">Cited by 1</h2>
-<div class="outline-text-2" id="text-orge556e0a">
+<div id="outline-container-org5a82af9" class="outline-2">
+<h2 id="org5a82af9">Cited by 1</h2>
+<div class="outline-text-2" id="text-org5a82af9">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>
