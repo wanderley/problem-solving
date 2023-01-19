@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/maximum-subarray/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org076cc79" class="outline-2">
-<h2 id="org076cc79">Patterns</h2>
-<div class="outline-text-2" id="text-org076cc79">
+<div id="outline-container-orga5d1428" class="outline-2">
+<h2 id="orga5d1428">Patterns</h2>
+<div class="outline-text-2" id="text-orga5d1428">
 <ul class="org-ul">
 <li><a href="pattern_find_optimal_subarray.html#ID-C715BAE2-002C-4F72-B5FC-5E727F0BA19E">Pattern: Find optimal subarray</a>.</li>
 
@@ -59,9 +59,9 @@
 </div>
 </div>
 
-<div id="outline-container-org4578c16" class="outline-2">
-<h2 id="org4578c16">Prompts</h2>
-<div class="outline-text-2" id="text-org4578c16">
+<div id="outline-container-org19fc923" class="outline-2">
+<h2 id="org19fc923">Prompts</h2>
+<div class="outline-text-2" id="text-org19fc923">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_as_sliding_window.html#ID-46522C06-DAC3-4986-A13A-17C2ED44ADD1">Can we formulate the problem as sliding window?</a></li>
 
@@ -70,9 +70,9 @@
 </div>
 </div>
 
-<div id="outline-container-org1d2bfb4" class="outline-2">
-<h2 id="org1d2bfb4">Solution</h2>
-<div class="outline-text-2" id="text-org1d2bfb4">
+<div id="outline-container-org04dea82" class="outline-2">
+<h2 id="org04dea82">Solution</h2>
+<div class="outline-text-2" id="text-org04dea82">
 <p>
 Let's start by re-stating the problem in terms of <a href="fix_one_find_other_template.html#ID-8F498120-1895-4E22-AE25-10FC78432B7C">Fix One and Search Other Template</a>.  For each \(i\) representing the right-most indexed of the subarray, search the right-most index \(j\) such that \(nums[j] + nums[j+1] + ... + nums[i]\) is maximum.  To search in constant time, we have to compute the value of \(j\) knowing something about \(nums[0,1,...,i]\) or have this information already computed as we iterated over each index \(i\).  Let's use the second option.  As we iterate over indexes \(i\), compute \(cur\) which means the maximum subarray sum ending on \(i\).  Let \(prev\) be the maximum subarray sum ending on \(i-1\).  We can write \(cur\) in terms of \(prev\) since \(cur = nums[i]\) if \(prev+nums[i]<0\) (starting a new subarray) or \(cur = prev + nums[i]\).  After this iteration, \(prev\) becomes \(cur\) and we continue to the next iteration.  Time complexity is \(O(n)\) and space is \(O(1)\).
 </p>
@@ -91,9 +91,9 @@ Let's start by re-stating the problem in terms of <a href="fix_one_find_other_te
 </div>
 
 
-<div id="outline-container-org7187197" class="outline-2">
-<h2 id="org7187197">Cited by 2</h2>
-<div class="outline-text-2" id="text-org7187197">
+<div id="outline-container-orgf01da3f" class="outline-2">
+<h2 id="orgf01da3f">Cited by 2</h2>
+<div class="outline-text-2" id="text-orgf01da3f">
 <ul class="org-ul">
 <li><a href="leetcode_152_maximum_product_subarray.html#ID-D821DCA2-8A6A-4650-BD9E-D9B78F446901">Leetcode: 152. Maximum Product Subarray</a></li>
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>

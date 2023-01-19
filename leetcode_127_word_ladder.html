@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/word-ladder/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orge665254" class="outline-2">
-<h2 id="orge665254">Understand the problem</h2>
-<div class="outline-text-2" id="text-orge665254">
+<div id="outline-container-org33bf0b3" class="outline-2">
+<h2 id="org33bf0b3">Understand the problem</h2>
+<div class="outline-text-2" id="text-org33bf0b3">
 <p>
 <a href="pattern_find_shortest_path_between_two_vertices_in_a_graph.html#ID-3283AA3B-67CD-4F8E-960E-442AAE3FD7DC">Pattern: Find shortest path between two vertices in a graph</a> where vertices are words and two words are adjacent if they differ only by one letter.
 </p>
 </div>
 
-<div id="outline-container-org611b556" class="outline-3">
-<h3 id="org611b556">Useful prompts</h3>
-<div class="outline-text-3" id="text-org611b556">
+<div id="outline-container-org19156d5" class="outline-3">
+<h3 id="org19156d5">Useful prompts</h3>
+<div class="outline-text-3" id="text-org19156d5">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -68,17 +68,17 @@
 </div>
 </div>
 
-<div id="outline-container-org96b5c9c" class="outline-2">
-<h2 id="org96b5c9c">Devise a plan</h2>
-<div class="outline-text-2" id="text-org96b5c9c">
+<div id="outline-container-org1f0014b" class="outline-2">
+<h2 id="org1f0014b">Devise a plan</h2>
+<div class="outline-text-2" id="text-org1f0014b">
 <p>
 This is a classic example of <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a>.  The only thing to look out is how to efficiently generate the edges of the graph.  By inspecting the constraints, you will find that we can generate the next word and then check if it is an vertex in the graph.  Time complexity is \(O(n^2)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-orge1dff16" class="outline-3">
-<h3 id="orge1dff16">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orge1dff16">
+<div id="outline-container-org943cbd8" class="outline-3">
+<h3 id="org943cbd8">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org943cbd8">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 <span style="font-weight: bold;">import</span> string

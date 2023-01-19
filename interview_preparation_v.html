@@ -44,7 +44,7 @@
 <body>
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Interview preparation: V</h1>
-<div class="ABSTRACT" id="org89d8083">
+<div class="ABSTRACT" id="org3ef333d">
 <p>
 This note tracks my experience of helping my friend V on their preparation for coding interviews.  It has been awhile since last time that V solved a coding challenge, and as any other skill if you don't practice it you lose it.  I have two purposes for this note: track V's evolution through the preparation and use it as a place to formalize my method on how to improve in problem solving.  By method, I mean the result of experiments that I did on myself (2022) after getting back from many years without practice to coding competitions.  This is a living document and you might visit it multiple times if you want to follow V's journey.
 </p>
@@ -54,36 +54,36 @@ This note tracks my experience of helping my friend V on their preparation for c
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org9eb9415">Coding Interviews</a></li>
-<li><a href="#org067249d">Spaced-repetition</a></li>
-<li><a href="#org27e1dca">Method</a>
+<li><a href="#org1e2ce8e">Coding Interviews</a></li>
+<li><a href="#org277af77">Spaced-repetition</a></li>
+<li><a href="#org49c05a6">Method</a>
 <ul>
-<li><a href="#org443d6f1">Creating a new card</a></li>
+<li><a href="#orgfcea442">Creating a new card</a></li>
 </ul>
 </li>
-<li><a href="#orgea0eda4">FAQ</a>
+<li><a href="#org29ad8b2">FAQ</a>
 <ul>
-<li><a href="#org51df0bb">When should I work in a new problem?</a></li>
-<li><a href="#orgb709db0">Should I code the solution on every review?</a></li>
-<li><a href="#orgf2d6d1e">What should I do if I can't solve a problem?</a></li>
+<li><a href="#org06b182f">When should I work in a new problem?</a></li>
+<li><a href="#orga9d1354">Should I code the solution on every review?</a></li>
+<li><a href="#orgdfa3e25">What should I do if I can't solve a problem?</a></li>
 </ul>
 </li>
-<li><a href="#orgbf26bc2">Meetings</a>
+<li><a href="#org231388e">Meetings</a>
 <ul>
-<li><a href="#org0f5080d">December 2, 2022</a></li>
-<li><a href="#org9c33326">December 9, 2022</a></li>
-<li><a href="#org4c03b37">December 14, 2022</a></li>
-<li><a href="#org672006d">December 30, 2022</a></li>
+<li><a href="#org395f85a">December 2, 2022</a></li>
+<li><a href="#org1be9460">December 9, 2022</a></li>
+<li><a href="#orgc68dbef">December 14, 2022</a></li>
+<li><a href="#org9c107f8">December 30, 2022</a></li>
 </ul>
 </li>
-<li><a href="#org00490cf">Cited by 1</a></li>
+<li><a href="#org16a75e2">Cited by 1</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org9eb9415" class="outline-2">
-<h2 id="org9eb9415">Coding Interviews</h2>
-<div class="outline-text-2" id="text-org9eb9415">
+<div id="outline-container-org1e2ce8e" class="outline-2">
+<h2 id="org1e2ce8e">Coding Interviews</h2>
+<div class="outline-text-2" id="text-org1e2ce8e">
 <p>
 To best define the preparation required for coding interviews, let's compare (coding) interview problems with problems that we usually see on Computer Science's courses.  They require application of knowledge in Data Structure, Algorithms on Graphs and ad-hoc strategies (e.g. Dynamic Programming, Line-Sweeping, Sliding-Window etc).  They differ in two aspects: time to solve and difficult.  You have many days to solve an assignment exercise, but only have 15-20 minutes to solve an interview problem.  Due this difference in time to solve, you can expect interview problems to be easier than most of the assignments that you've done on University.
 </p>
@@ -103,9 +103,9 @@ A popular way to study is using a curated lists like <a href="https://leetcode.c
 </div>
 
 
-<div id="outline-container-org067249d" class="outline-2">
-<h2 id="org067249d">Spaced-repetition</h2>
-<div class="outline-text-2" id="text-org067249d">
+<div id="outline-container-org277af77" class="outline-2">
+<h2 id="org277af77">Spaced-repetition</h2>
+<div class="outline-text-2" id="text-org277af77">
 <p>
 Spaced-repetition is a study-technique commonly used to memorization of factual information.  It uses flashcard as way to store and review content.  A flashcard has two sides: front and back.  A question or prompt goes in the front of the card, and the information to memorize goes on the back.  For example, you have a picture of someone in the front of the card and their name on the back.  The technique uses the <a href="https://en.wikipedia.org/wiki/Spacing_effect">spacing effect</a> to encode information in the long-term memory by spacing the study sessions, and it is known to have better results than <a href="https://en.wikipedia.org/wiki/Cramming_(education)">cramming</a> (repeat many times in a single session).  Difficult cards appear more often while easier ones are less frequent.  <a href="https://ankiweb.net/">Anki</a> is a well-know and flexible program to manage cards.
 </p>
@@ -123,15 +123,15 @@ How spaced-repetition can be applied to problem solving.  While this technique h
 </div>
 
 
-<div id="outline-container-org27e1dca" class="outline-2">
-<h2 id="org27e1dca">Method</h2>
-<div class="outline-text-2" id="text-org27e1dca">
+<div id="outline-container-org49c05a6" class="outline-2">
+<h2 id="org49c05a6">Method</h2>
+<div class="outline-text-2" id="text-org49c05a6">
 <p>
 An studying session is divided in two parts: solving new problems and reviewing old problems.
 </p>
 
 <p>
-<b>For new problems</b>, you pick one or two problems per day and spend as much time you need to solve them.  If you solved the problem, follow the instructions on <a href="#org443d6f1">Creating a new card</a>.  Otherwise, give at least one day to try again.  On the second day, you can check a solution to the problem.  The goal is to understand the solution and find the gaps on your knowledge.  There is a data structure that you are not familiar, a particular technique or idea that makes the problem dead easy to solve.  After you learned how to solve the problem (congrats!), <a href="#org443d6f1">create a card</a> for it and move on.
+<b>For new problems</b>, you pick one or two problems per day and spend as much time you need to solve them.  If you solved the problem, follow the instructions on <a href="#orgfcea442">Creating a new card</a>.  Otherwise, give at least one day to try again.  On the second day, you can check a solution to the problem.  The goal is to understand the solution and find the gaps on your knowledge.  There is a data structure that you are not familiar, a particular technique or idea that makes the problem dead easy to solve.  After you learned how to solve the problem (congrats!), <a href="#orgfcea442">create a card</a> for it and move on.
 </p>
 
 <p>
@@ -140,9 +140,9 @@ An studying session is divided in two parts: solving new problems and reviewing 
 </div>
 
 
-<div id="outline-container-org443d6f1" class="outline-3">
-<h3 id="org443d6f1">Creating a new card</h3>
-<div class="outline-text-3" id="text-org443d6f1">
+<div id="outline-container-orgfcea442" class="outline-3">
+<h3 id="orgfcea442">Creating a new card</h3>
+<div class="outline-text-3" id="text-orgfcea442">
 <p>
 The front of the card has a link for the problem.  The back of the card has the steps to solve the problem and optionally an example for the solution.  You might get stuck trying to write the <i>perfect</i> card.  Don't bother with this.  You will have many opportunities to improve them after a review session.
 </p>
@@ -151,31 +151,31 @@ The front of the card has a link for the problem.  The back of the card has the 
 </div>
 
 
-<div id="outline-container-orgea0eda4" class="outline-2">
-<h2 id="orgea0eda4">FAQ</h2>
-<div class="outline-text-2" id="text-orgea0eda4">
+<div id="outline-container-org29ad8b2" class="outline-2">
+<h2 id="org29ad8b2">FAQ</h2>
+<div class="outline-text-2" id="text-org29ad8b2">
 </div>
-<div id="outline-container-org51df0bb" class="outline-3">
-<h3 id="org51df0bb">When should I work in a new problem?</h3>
-<div class="outline-text-3" id="text-org51df0bb">
+<div id="outline-container-org06b182f" class="outline-3">
+<h3 id="org06b182f">When should I work in a new problem?</h3>
+<div class="outline-text-3" id="text-org06b182f">
 <p>
 Don't start working in a new problem if you have more reviews than you have time to get them done in a day, or you already have new cards waiting for you.  It is easy to get overwhelmed with the number of reviews.  Striving for consistency will bring better results than rushing every other day.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb709db0" class="outline-3">
-<h3 id="orgb709db0">Should I code the solution on every review?</h3>
-<div class="outline-text-3" id="text-orgb709db0">
+<div id="outline-container-orga9d1354" class="outline-3">
+<h3 id="orga9d1354">Should I code the solution on every review?</h3>
+<div class="outline-text-3" id="text-orga9d1354">
 <p>
 Yes!  Reconstructing your steps to the solution and writing the code again will cement the building blocks on your memory.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf2d6d1e" class="outline-3">
-<h3 id="orgf2d6d1e">What should I do if I can't solve a problem?</h3>
-<div class="outline-text-3" id="text-orgf2d6d1e">
+<div id="outline-container-orgdfa3e25" class="outline-3">
+<h3 id="orgdfa3e25">What should I do if I can't solve a problem?</h3>
+<div class="outline-text-3" id="text-orgdfa3e25">
 <p>
 First of all, that is fine and will happen more frequently than you imagine.  Give at least one day before looking to solutions.  After you read and <b>understand</b> a solution, ask yourself "what steps should I have done to solve this problem?".  Create a card with these steps and review it as any other card.
 </p>
@@ -184,13 +184,13 @@ First of all, that is fine and will happen more frequently than you imagine.  Gi
 </div>
 
 
-<div id="outline-container-orgbf26bc2" class="outline-2">
-<h2 id="orgbf26bc2">Meetings</h2>
-<div class="outline-text-2" id="text-orgbf26bc2">
+<div id="outline-container-org231388e" class="outline-2">
+<h2 id="org231388e">Meetings</h2>
+<div class="outline-text-2" id="text-org231388e">
 </div>
-<div id="outline-container-org0f5080d" class="outline-3">
-<h3 id="org0f5080d">December 2, 2022</h3>
-<div class="outline-text-3" id="text-org0f5080d">
+<div id="outline-container-org395f85a" class="outline-3">
+<h3 id="org395f85a">December 2, 2022</h3>
+<div class="outline-text-3" id="text-org395f85a">
 <p>
 The goal of this method is to use spaced-repetition to build your intuition to solve coding challenges.  The card has the path to solve the problem and this will be internalized after many repetitions.  When solving new problems, a thought will scream at you "Binary Search!" or "This is a Graph Problem".  In fact, this is not much different of how we learned math.  How many times did you verbalize the steps to isolate \(x\) in an equation?  You used descriptive knowledge to build the intuition muscle that later on helped you to perform simplification without using much mental energy.
 </p>
@@ -208,13 +208,13 @@ For next session, you will work in <a href="https://leetcode.com/contest/weekly-
 </div>
 </div>
 
-<div id="outline-container-org9c33326" class="outline-3">
-<h3 id="org9c33326">December 9, 2022</h3>
-<div class="outline-text-3" id="text-org9c33326">
+<div id="outline-container-org1be9460" class="outline-3">
+<h3 id="org1be9460">December 9, 2022</h3>
+<div class="outline-text-3" id="text-org1be9460">
 </div>
-<div id="outline-container-org26a0866" class="outline-4">
-<h4 id="org26a0866">Performing a solution</h4>
-<div class="outline-text-4" id="text-org26a0866">
+<div id="outline-container-orgec0af29" class="outline-4">
+<h4 id="orgec0af29">Performing a solution</h4>
+<div class="outline-text-4" id="text-orgec0af29">
 <ul class="org-ul">
 <li>Found the worst case but didn't narrow the search for the optimal algorithm to that case.</li>
 <li>Explain what are chucks and how to use them.
@@ -235,9 +235,9 @@ For next session, you will work in <a href="https://leetcode.com/contest/weekly-
 </div>
 </div>
 
-<div id="outline-container-org89660b6" class="outline-4">
-<h4 id="org89660b6">Problems</h4>
-<div class="outline-text-4" id="text-org89660b6">
+<div id="outline-container-orgf4a9820" class="outline-4">
+<h4 id="orgf4a9820">Problems</h4>
+<div class="outline-text-4" id="text-orgf4a9820">
 <p>
 We will start with <a href="https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions">Blind 75</a> problems.  As we work through them, we will find that few areas should get more attention.  For those, I will add problems to increase your proficiency on specific building blocks.  Here is the list of problems for this week:
 </p>
@@ -258,13 +258,13 @@ We will start with <a href="https://leetcode.com/discuss/general-discussion/4605
 </div>
 </div>
 
-<div id="outline-container-org4c03b37" class="outline-3">
-<h3 id="org4c03b37">December 14, 2022</h3>
-<div class="outline-text-3" id="text-org4c03b37">
+<div id="outline-container-orgc68dbef" class="outline-3">
+<h3 id="orgc68dbef">December 14, 2022</h3>
+<div class="outline-text-3" id="text-orgc68dbef">
 </div>
-<div id="outline-container-orgc976523" class="outline-4">
-<h4 id="orgc976523">Review last week's problems</h4>
-<div class="outline-text-4" id="text-orgc976523">
+<div id="outline-container-org1118246" class="outline-4">
+<h4 id="org1118246">Review last week's problems</h4>
+<div class="outline-text-4" id="text-org1118246">
 <ul class="org-ul">
 <li>Done well.
 
@@ -314,9 +314,9 @@ We will start with <a href="https://leetcode.com/discuss/general-discussion/4605
 </div>
 </div>
 
-<div id="outline-container-org15f325e" class="outline-4">
-<h4 id="org15f325e">Next problems</h4>
-<div class="outline-text-4" id="text-org15f325e">
+<div id="outline-container-org41153a6" class="outline-4">
+<h4 id="org41153a6">Next problems</h4>
+<div class="outline-text-4" id="text-org41153a6">
 <ul class="org-ul">
 <li class="on"><input type='checkbox' checked='checked' disabled='disabled'/> <a href="https://leetcode.com/problems/product-of-array-except-self/">Product of Array Except Self</a> (<a href="leetcode_238_product_of_array_except_self.html#ID-489C947E-AD8A-4611-B8F7-DD0BB44ABAE5">solution</a>)</li>
 <li class="on"><input type='checkbox' checked='checked' disabled='disabled'/> <a href="https://leetcode.com/problems/maximum-subarray/">Maximum Subarray</a> (<a href="leetcode_53_maximum_subarray.html#ID-01AB9AC6-5E8D-49BB-9533-92B7032CFDE3">solution</a>)</li>
@@ -327,9 +327,9 @@ We will start with <a href="https://leetcode.com/discuss/general-discussion/4605
 </div>
 </div>
 
-<div id="outline-container-org672006d" class="outline-3">
-<h3 id="org672006d">December 30, 2022</h3>
-<div class="outline-text-3" id="text-org672006d">
+<div id="outline-container-org9c107f8" class="outline-3">
+<h3 id="org9c107f8">December 30, 2022</h3>
+<div class="outline-text-3" id="text-org9c107f8">
 <ul class="org-ul">
 <li>Review of a card
 <ul class="org-ul">
@@ -356,9 +356,9 @@ We will start with <a href="https://leetcode.com/discuss/general-discussion/4605
 </div>
 
 
-<div id="outline-container-org6b7f176" class="outline-4">
-<h4 id="org6b7f176">Next problems</h4>
-<div class="outline-text-4" id="text-org6b7f176">
+<div id="outline-container-orgb1ae6ec" class="outline-4">
+<h4 id="orgb1ae6ec">Next problems</h4>
+<div class="outline-text-4" id="text-orgb1ae6ec">
 <ul class="org-ul">
 <li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/search-in-rotated-sorted-array/">Search in Rotated Sorted Array</a></li>
 <li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/3sum/">3 Sum</a></li>
@@ -372,6 +372,26 @@ We will start with <a href="https://leetcode.com/discuss/general-discussion/4605
 <li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/coin-change/">Coin Change</a></li>
 <li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/longest-increasing-subsequence/">Longest Increasing Subsequence</a></li>
 <li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/longest-common-subsequence/">Longest Common Subsequence</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/word-break/">Word Break Problem</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/combination-sum-iv/">Combination Sum</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/house-robber/">House Robber</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/house-robber-ii/">House Robber II</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/decode-ways/">Decode Ways</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/unique-paths/">Unique Paths</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/jump-game/">Jump Game</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/clone-graph/">Clone Graph</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/course-schedule/">Course Schedule</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/pacific-atlantic-water-flow/">Pacific Atlantic Water Flow</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/number-of-islands/">Number of Islands</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/longest-consecutive-sequence/">Longest Consecutive Sequence</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/alien-dictionary/">Alien Dictionary (Leetcode Premium)</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/graph-valid-tree/">Graph Valid Tree (Leetcode Premium)</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/">Number of Connected Components in an Undirected Graph (Leetcode Premium)</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/insert-interval/">Insert Interval</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/merge-intervals/">Merge Intervals</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/non-overlapping-intervals/">Non-overlapping Intervals</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/meeting-rooms/">Meeting Rooms (Leetcode Premium)</a></li>
+<li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/meeting-rooms-ii/">Meeting Rooms II (Leetcode Premium)</a></li>
 <li>Extra:
 <ul class="org-ul">
 <li class="off"><input type='checkbox' disabled='disabled' /> <a href="https://leetcode.com/problems/find-peak-element/">Find Peak Element</a> (<a href="leetcode_162_find_peak_element.html#ID-E4E1316F-92A3-4C51-8FC6-16A39DD1C1CE">solution</a>)</li>
@@ -382,9 +402,9 @@ We will start with <a href="https://leetcode.com/discuss/general-discussion/4605
 </div>
 </div>
 
-<div id="outline-container-org00490cf" class="outline-2">
-<h2 id="org00490cf">Cited by 1</h2>
-<div class="outline-text-2" id="text-org00490cf">
+<div id="outline-container-org16a75e2" class="outline-2">
+<h2 id="org16a75e2">Cited by 1</h2>
+<div class="outline-text-2" id="text-org16a75e2">
 <ul class="org-ul">
 <li><a href="index.html#ID-8B3C6E28-3ACB-47BB-B6B0-E1A0F35719A0">Welcome to my problem solving notes!</a></li>
 </ul>
