@@ -48,26 +48,26 @@
 <a href="https://leetcode.com/problems/number-of-subarrays-with-gcd-equal-to-k/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org8b0f988" class="outline-2">
-<h2 id="org8b0f988">Understand the problem</h2>
-<div class="outline-text-2" id="text-org8b0f988">
+<div id="outline-container-org8aaf3a3" class="outline-2">
+<h2 id="org8aaf3a3">Understand the problem</h2>
+<div class="outline-text-2" id="text-org8aaf3a3">
 <p>
 Given an array of integers \(a\) and an integer \(k\), find all subarrays \(a[i..j]\) where \(gcd(a[i], a[i+1], ..., a[j])=k\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb638ec0" class="outline-2">
-<h2 id="orgb638ec0">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgb638ec0">
+<div id="outline-container-org7b8efbc" class="outline-2">
+<h2 id="org7b8efbc">Devise a plan</h2>
+<div class="outline-text-2" id="text-org7b8efbc">
 <p>
 <a href="pattern_small_constraints_could_allow_brute_force_solution.html#ID-BC81A358-FBCC-43AA-9928-E9778A107869">Pattern: Small constraints could allow a brute-force solution</a>, so iterate over all subarrays and compute GCD.
 </p>
 </div>
 
-<div id="outline-container-orge8bdc00" class="outline-3">
-<h3 id="orge8bdc00">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orge8bdc00">
+<div id="outline-container-org708c427" class="outline-3">
+<h3 id="org708c427">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org708c427">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">subarrayGCD</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

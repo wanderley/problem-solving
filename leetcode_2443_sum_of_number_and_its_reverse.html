@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/sum-of-number-and-its-reverse/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org13ccd08" class="outline-2">
-<h2 id="org13ccd08">Understand the problem</h2>
-<div class="outline-text-2" id="text-org13ccd08">
+<div id="outline-container-org747bb70" class="outline-2">
+<h2 id="org747bb70">Understand the problem</h2>
+<div class="outline-text-2" id="text-org747bb70">
 <p>
 Given an integer \(num\), return \(True\) if there is a non-negative integer \(x\) such that \(x+r(x)=num\) where \(r(x)\) is the integer generate by reverting the digits of \(x\).
 </p>
 </div>
 
-<div id="outline-container-orgbd1d08c" class="outline-3">
-<h3 id="orgbd1d08c">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgbd1d08c">
+<div id="outline-container-orgb98c7b0" class="outline-3">
+<h3 id="orgb98c7b0">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgb98c7b0">
 <ul class="org-ul">
 <li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a></li>
 </ul>
@@ -66,17 +66,17 @@ Given an integer \(num\), return \(True\) if there is a non-negative integer \(x
 </div>
 </div>
 
-<div id="outline-container-orgd64d97d" class="outline-2">
-<h2 id="orgd64d97d">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgd64d97d">
+<div id="outline-container-org4b3f1b2" class="outline-2">
+<h2 id="org4b3f1b2">Devise a plan</h2>
+<div class="outline-text-2" id="text-org4b3f1b2">
 <p>
 There are only \(num\) possible numbers.  Iterate over all them and return \(True\) if one satisfy the condition.
 </p>
 </div>
 
-<div id="outline-container-orgbed1f75" class="outline-3">
-<h3 id="orgbed1f75">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgbed1f75">
+<div id="outline-container-orge55bca1" class="outline-3">
+<h3 id="orge55bca1">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orge55bca1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">sumOfNumberAndReverse</span>(<span style="font-weight: bold;">self</span>, num: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">bool</span>:
