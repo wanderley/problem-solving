@@ -162,25 +162,40 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
 *** Next problems
 
-- [ ] [[https://leetcode.com/problems/search-in-rotated-sorted-array/][Search in Rotated Sorted Array]]
-- [ ] [[https://leetcode.com/problems/3sum/][3 Sum]]
-- [ ] [[https://leetcode.com/problems/container-with-most-water/][Container With Most Water]]
-- [ ] [[https://leetcode.com/problems/sum-of-two-integers/][Sum of Two Integers]]
-- [ ] [[https://leetcode.com/problems/number-of-1-bits/][Number of 1 Bits]]
-- [ ] [[https://leetcode.com/problems/counting-bits/][Counting Bits]]
-- [ ] [[https://leetcode.com/problems/missing-number/][Missing Number]]
-- [ ] [[https://leetcode.com/problems/reverse-bits/][Reverse Bits]]
-- [ ] [[https://leetcode.com/problems/climbing-stairs/][Climbing Stairs]]
-- [ ] [[https://leetcode.com/problems/coin-change/][Coin Change]]
-- [ ] [[https://leetcode.com/problems/longest-increasing-subsequence/][Longest Increasing Subsequence]]
-- [ ] [[https://leetcode.com/problems/longest-common-subsequence/][Longest Common Subsequence]]
-- [ ] [[https://leetcode.com/problems/word-break/][Word Break Problem]]
-- [ ] [[https://leetcode.com/problems/combination-sum-iv/][Combination Sum]]
-- [ ] [[https://leetcode.com/problems/house-robber/][House Robber]]
-- [ ] [[https://leetcode.com/problems/house-robber-ii/][House Robber II]]
-- [ ] [[https://leetcode.com/problems/decode-ways/][Decode Ways]]
+- [X] [[https://leetcode.com/problems/search-in-rotated-sorted-array/][Search in Rotated Sorted Array]]
+- [X] [[https://leetcode.com/problems/3sum/][3 Sum]]
+- [X] [[https://leetcode.com/problems/container-with-most-water/][Container With Most Water]]
+- [X] [[https://leetcode.com/problems/sum-of-two-integers/][Sum of Two Integers]]
+- [X] [[https://leetcode.com/problems/number-of-1-bits/][Number of 1 Bits]]
+- [X] [[https://leetcode.com/problems/counting-bits/][Counting Bits]]
+- [X] [[https://leetcode.com/problems/missing-number/][Missing Number]]
+- [X] [[https://leetcode.com/problems/reverse-bits/][Reverse Bits]]
+- [X] [[https://leetcode.com/problems/climbing-stairs/][Climbing Stairs]]
+- [X] [[https://leetcode.com/problems/coin-change/][Coin Change]]
+- [X] [[https://leetcode.com/problems/longest-increasing-subsequence/][Longest Increasing Subsequence]]
+- [X] [[https://leetcode.com/problems/longest-common-subsequence/][Longest Common Subsequence]]
+- [X] [[https://leetcode.com/problems/word-break/][Word Break Problem]]
+- [X] [[https://leetcode.com/problems/combination-sum-iv/][Combination Sum]]
+- [X] [[https://leetcode.com/problems/house-robber/][House Robber]]
+- [X] [[https://leetcode.com/problems/house-robber-ii/][House Robber II]]
+- [X] [[https://leetcode.com/problems/decode-ways/][Decode Ways]]
+- [X] [[https://leetcode.com/problems/jump-game/][Jump Game]]
+- [X] [[https://leetcode.com/problems/insert-interval/][Insert Interval]]
+- [X] [[https://leetcode.com/problems/merge-intervals/][Merge Intervals]]
+
+** February 3, 2023
+
+- Question from V :: How do you organize your knowledge about algorithms and techniques?
+
+  - Years ago, it was allowed to bring a booklet as reference material to competition.  So, I had my booklet with important algorithms and ideas that I judged useful to bring to the competitions.  I didn't include simple algorithms like DFS or BFS, but ones that are hard or trickier to write.  For interview preparation, this is not required since you will end up training frequent problems that appear on interviews and they won't use complex algorithms or ideas.  Besides that, there is a human need to organize knowledge into hierarchies.  You shouldn't fall in this trap.  Let the problems tell what topic you have to master, and let the space repetition decide what material you have to master or not.
+
+- Question from V :: Should we study algorithms or techniques in isolation?
+
+  - I don't think that it is necessary.  The review process takes care of exercising all components of the problem solving skill: extract the patterns from the text, recall algorithms/techniques/ideas using the patterns, adapting previous knowledge to the problem and implementing it.  If you focus to execute every single step to the perfection, you will not only sharp your algorithms and techniques but the necessary connections to apply them in practice.
+
+*** Next problems
+
 - [ ] [[https://leetcode.com/problems/unique-paths/][Unique Paths]]
-- [ ] [[https://leetcode.com/problems/jump-game/][Jump Game]]
 - [ ] [[https://leetcode.com/problems/clone-graph/][Clone Graph]]
 - [ ] [[https://leetcode.com/problems/course-schedule/][Course Schedule]]
 - [ ] [[https://leetcode.com/problems/pacific-atlantic-water-flow/][Pacific Atlantic Water Flow]]
@@ -189,13 +204,12 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 - [ ] [[https://leetcode.com/problems/alien-dictionary/][Alien Dictionary (Leetcode Premium)]]
 - [ ] [[https://leetcode.com/problems/graph-valid-tree/][Graph Valid Tree (Leetcode Premium)]]
 - [ ] [[https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/][Number of Connected Components in an Undirected Graph (Leetcode Premium)]]
-- [ ] [[https://leetcode.com/problems/insert-interval/][Insert Interval]]
-- [ ] [[https://leetcode.com/problems/merge-intervals/][Merge Intervals]]
 - [ ] [[https://leetcode.com/problems/non-overlapping-intervals/][Non-overlapping Intervals]]
 - [ ] [[https://leetcode.com/problems/meeting-rooms/][Meeting Rooms (Leetcode Premium)]]
 - [ ] [[https://leetcode.com/problems/meeting-rooms-ii/][Meeting Rooms II (Leetcode Premium)]]
 - Extra:
   - [ ] [[https://leetcode.com/problems/find-peak-element/][Find Peak Element]] ([[id:E4E1316F-92A3-4C51-8FC6-16A39DD1C1CE][solution]])
+
 
 * Blind 75 :noexport:
 
