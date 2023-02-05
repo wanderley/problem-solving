@@ -45,18 +45,18 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Practice #015: Leetcode - Binary Search</h1>
 
-<div id="outline-container-org8c051a2" class="outline-2">
-<h2 id="org8c051a2"><a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>: Template 1</h2>
-<div class="outline-text-2" id="text-org8c051a2">
+<div id="outline-container-orgf623717" class="outline-2">
+<h2 id="orgf623717"><a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>: Template 1</h2>
+<div class="outline-text-2" id="text-orgf623717">
 <ul class="org-ul">
 <li>Condition: Needed only the pivot to decide the direction of the search.</li>
 <li>Termination: \(s > e\) and there is no more candidates to process.</li>
 </ul>
 </div>
 
-<div id="outline-container-orgbff55fa" class="outline-3">
-<h3 id="orgbff55fa">Leetcode: 704. Binary Search</h3>
-<div class="outline-text-3" id="text-orgbff55fa">
+<div id="outline-container-orga1bc393" class="outline-3">
+<h3 id="orga1bc393">Leetcode: 704. Binary Search</h3>
+<div class="outline-text-3" id="text-orga1bc393">
 <p>
 <a href="https://leetcode.com/problems/binary-search/">Problem Statement</a>
 </p>
@@ -88,9 +88,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgcb0fb3e" class="outline-3">
-<h3 id="orgcb0fb3e">Leetcode: 69. Sqrt(x)</h3>
-<div class="outline-text-3" id="text-orgcb0fb3e">
+<div id="outline-container-org7952c8d" class="outline-3">
+<h3 id="org7952c8d">Leetcode: 69. Sqrt(x)</h3>
+<div class="outline-text-3" id="text-org7952c8d">
 <p>
 <a href="https://leetcode.com/problems/sqrtx/">Problem Statement</a>
 </p>
@@ -119,9 +119,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgb947e0b" class="outline-3">
-<h3 id="orgb947e0b">Leetcode: 374. Guess Number Higher or Lower</h3>
-<div class="outline-text-3" id="text-orgb947e0b">
+<div id="outline-container-org690bb2d" class="outline-3">
+<h3 id="org690bb2d">Leetcode: 374. Guess Number Higher or Lower</h3>
+<div class="outline-text-3" id="text-org690bb2d">
 <p>
 <a href="https://leetcode.com/problems/guess-number-higher-or-lower/">Problem Statement</a>
 </p>
@@ -152,64 +152,23 @@
 </div>
 </div>
 
-<div id="outline-container-orgd4fedac" class="outline-3">
-<h3 id="orgd4fedac">Leetcode: 33. Search in Rotated Sorted Array</h3>
-<div class="outline-text-3" id="text-orgd4fedac">
-<p>
-<a href="https://leetcode.com/problems/search-in-rotated-sorted-array/">Problem Statement</a>
-</p>
-
-<p>
-<a href="how_can_we_decided_which_side_to_continue_searching_using_the_problem_s_restrictions.html#ID-C65814C2-1833-4599-8443-AD0F94C8AA22">How can we decided which side to continue searching using the problem's constraints?</a>  Be \(m\) an index on the array.  If \(nums[m] > target\), then \(nums[n-1]<nums[0]\) and \(target\) will be in \(nums[(m+1)...(n-1)]\) if \(target \leq nums[n-1]\), otherwise it might be on \(nums[0...(m-1)]\). By the other hand, if \(nums[m] < target\), then \(target\) will be on \(nums[0..(m-1)]\) if \(target > nums[n-1]\), else it will be on \(nums[(m+1)...(n-1)]\).  Time complexity is \(O(\log n)\) and space is $O(1).
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
-
-
-<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
-    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">search</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
-        n = <span style="font-weight: bold;">len</span>(nums)
-        <span style="font-weight: bold; font-style: italic;">s</span> = 0
-        <span style="font-weight: bold; font-style: italic;">e</span> = n - 1
-        <span style="font-weight: bold;">while</span> s &lt;= <span style="font-weight: bold; font-style: italic;">e</span>:
-            m = s + (e - s) // 2
-            <span style="font-weight: bold;">if</span> nums[m] == target:
-                <span style="font-weight: bold;">return</span> m
-            <span style="font-weight: bold;">elif</span> nums[m] &gt; target:
-                <span style="font-weight: bold;">if</span> nums[m] &gt; nums[-1] <span style="font-weight: bold;">and</span> target &lt;= nums[-1]:
-                    s = m + 1
-                <span style="font-weight: bold;">else</span>:
-                    e = m - 1
-            <span style="font-weight: bold;">else</span>:
-                <span style="font-weight: bold;">if</span> nums[m] &lt; nums[-1] <span style="font-weight: bold;">and</span> target &gt; nums[-1]:
-                    e = m - 1
-                <span style="font-weight: bold;">else</span>:
-                    s = m + 1
-        <span style="font-weight: bold;">return</span> -1
-
-
-<span style="font-weight: bold;">assert</span> Solution().search([4, 5, 6, 7, 0, 1, 2], 0) == 4
-<span style="font-weight: bold;">assert</span> Solution().search([4, 5, 6, 7, 0, 1, 2], 3) == -1
-<span style="font-weight: bold;">assert</span> Solution().search([1], 0) == -1
-</pre>
-</div>
-</div>
+<div id="outline-container-org8e91d77" class="outline-3">
+<h3 id="org8e91d77"><a href="leetcode_33_search_in_rotated_sorted_array.html#ID-DE8C7F14-D36F-43BF-8AF1-B6940406EBF6">Leetcode: 33. Search in Rotated Sorted Array</a></h3>
 </div>
 </div>
 
-<div id="outline-container-orgb4aed27" class="outline-2">
-<h2 id="orgb4aed27"><a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>: Template 2</h2>
-<div class="outline-text-2" id="text-orgb4aed27">
+<div id="outline-container-org54d2576" class="outline-2">
+<h2 id="org54d2576"><a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>: Template 2</h2>
+<div class="outline-text-2" id="text-org54d2576">
 <ul class="org-ul">
 <li>Condition: Needed pivot and <b>next</b> element to decide the direction of the search.</li>
 <li>Termination: \(s = e\) and there is one candidate to process.</li>
 </ul>
 </div>
 
-<div id="outline-container-orgddb1ef5" class="outline-3">
-<h3 id="orgddb1ef5">Leetcode: 278. First Bad Version</h3>
-<div class="outline-text-3" id="text-orgddb1ef5">
+<div id="outline-container-orgbcf1a7b" class="outline-3">
+<h3 id="orgbcf1a7b">Leetcode: 278. First Bad Version</h3>
+<div class="outline-text-3" id="text-orgbcf1a7b">
 <p>
 <a href="https://leetcode.com/problems/first-bad-version/">Problem Statement</a>
 </p>
@@ -240,9 +199,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgfb5dcb1" class="outline-3">
-<h3 id="orgfb5dcb1">Leetcode: 162. Find Peak Element</h3>
-<div class="outline-text-3" id="text-orgfb5dcb1">
+<div id="outline-container-org76297d5" class="outline-3">
+<h3 id="org76297d5">Leetcode: 162. Find Peak Element</h3>
+<div class="outline-text-3" id="text-org76297d5">
 <p>
 <a href="https://leetcode.com/problems/find-peak-element/">Problem Statement</a>
 </p>
@@ -282,18 +241,18 @@
 </div>
 </div>
 
-<div id="outline-container-org6841e01" class="outline-2">
-<h2 id="org6841e01"><a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>: Template 3</h2>
-<div class="outline-text-2" id="text-org6841e01">
+<div id="outline-container-orgb33d518" class="outline-2">
+<h2 id="orgb33d518"><a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>: Template 3</h2>
+<div class="outline-text-2" id="text-orgb33d518">
 <ul class="org-ul">
 <li>Condition: Needed pivot and <b>prev</b> element to decide the direction of the search.</li>
 <li>Termination: \(s + 1 = e\) and there are two candidates to process.</li>
 </ul>
 </div>
 
-<div id="outline-container-org1f2d0c7" class="outline-3">
-<h3 id="org1f2d0c7">Leetcode: 34. Find First and Last Position of Element in Sorted Array</h3>
-<div class="outline-text-3" id="text-org1f2d0c7">
+<div id="outline-container-orgad7197f" class="outline-3">
+<h3 id="orgad7197f">Leetcode: 34. Find First and Last Position of Element in Sorted Array</h3>
+<div class="outline-text-3" id="text-orgad7197f">
 <p>
 <a href="can_we_state_the_problem_as_result_of_multiple_searches.html#ID-3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE">Can we state the problem as result of multiple searches?</a>  Find the first occurrence of \(target\) in the array and the first occurrence of \(target+1\) and derive the range from them.
 </p>
@@ -335,9 +294,9 @@
 </div>
 </div>
 
-<div id="outline-container-org2aabad3" class="outline-3">
-<h3 id="org2aabad3">Leetcode: 658. Find K Closest Elements</h3>
-<div class="outline-text-3" id="text-org2aabad3">
+<div id="outline-container-orgac4ee06" class="outline-3">
+<h3 id="orgac4ee06">Leetcode: 658. Find K Closest Elements</h3>
+<div class="outline-text-3" id="text-orgac4ee06">
 <p>
 <a href="https://leetcode.com/problems/find-k-closest-elements/">Problem Statement</a>
 </p>
@@ -393,17 +352,17 @@
 </div>
 
 
-<div id="outline-container-org0b9862e" class="outline-2">
-<h2 id="org0b9862e"><span class="todo TODO">TODO</span> Template Analysis</h2>
+<div id="outline-container-org36b0239" class="outline-2">
+<h2 id="org36b0239"><span class="todo TODO">TODO</span> Template Analysis</h2>
 </div>
-<div id="outline-container-org4f22bfd" class="outline-2">
-<h2 id="org4f22bfd"><span class="todo TODO">TODO</span> Conclusion</h2>
+<div id="outline-container-orgb837fd7" class="outline-2">
+<h2 id="orgb837fd7"><span class="todo TODO">TODO</span> Conclusion</h2>
 </div>
-<div id="outline-container-orgffdee40" class="outline-2">
-<h2 id="orgffdee40"><span class="todo TODO">TODO</span> More Practices</h2>
+<div id="outline-container-org9877f77" class="outline-2">
+<h2 id="org9877f77"><span class="todo TODO">TODO</span> More Practices</h2>
 </div>
-<div id="outline-container-org44e0433" class="outline-2">
-<h2 id="org44e0433"><span class="todo TODO">TODO</span> More Practices II</h2>
+<div id="outline-container-org88b0ad1" class="outline-2">
+<h2 id="org88b0ad1"><span class="todo TODO">TODO</span> More Practices II</h2>
 </div>
 </div>
 </body>

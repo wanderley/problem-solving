@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 33. Search in Rotated Sorted Array</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 33. Search in Rotated Sorted Array</h1>
+<p>
+<a href="https://leetcode.com/problems/search-in-rotated-sorted-array/">Problem Statement</a>
+</p>
+
+<div id="outline-container-org23f38d9" class="outline-2">
+<h2 id="org23f38d9">Patterns</h2>
+<div class="outline-text-2" id="text-org23f38d9">
+<ul class="org-ul">
+<li><a href="pattern_search_in_array_quasi_sorted.html#ID-0C70A015-3BAA-4CC2-8EF0-2E39DD4C53D0">Pattern: Search in array quasi-sorted</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgacd4d16" class="outline-2">
+<h2 id="orgacd4d16">Solution</h2>
+<div class="outline-text-2" id="text-orgacd4d16">
+<p>
+Given an array \(a\) which is either sorted or it can be divided into two sorted subarrays such that the first subarray has numbers greater than the other one (e.g. \(a=[3, 4, 5, 1, 2]\)), return the index of \(target\) in the array or \(-1\) if it is not in the array.
+</p>
+
+<p>
+An important observation is that either the array is sorted or for any index \(m\) either \(a[0..m]\) is sorted or \(a[m..(n-1)]\) is sorted.  Let's use <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to solve the problem.  Denote \(s\), \(e\) and \(m\) as the start, end and pivot of the binary search.  Consider the following for each iteration:
+</p>
+
+<ul class="org-ul">
+<li>If \(a[m]=target\), the solution is \(m\).</li>
+
+<li>If \(a[s..m]\) is sorted, search the left half of the array if \(a[s] \leq target \leq a[m]\); otherwise search the right half.</li>
+
+<li>If \(a[m...e]\) is sorted, search the right half if \(a[m] \leq target \leq a[e]\); otherwise search the left half.</li>
+</ul>
+
+<p>
+Time complexity of the solution is \(O(\log n)\) as the search space reduces by half on every iteration.  The space complexity is \(O(1)\) as no extra memory is used.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
+
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">search</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold; font-style: italic;">start</span>, <span style="font-weight: bold; font-style: italic;">end</span> = 0, <span style="font-weight: bold;">len</span>(nums) - 1
+        <span style="font-weight: bold;">while</span> start &lt;= <span style="font-weight: bold; font-style: italic;">end</span>:
+            mid = start + (end - start) // 2
+            <span style="font-weight: bold;">if</span> nums[mid] == target:
+                <span style="font-weight: bold;">return</span> mid
+            <span style="font-weight: bold;">elif</span> nums[0] &lt;= nums[mid]:
+                <span style="font-weight: bold;">if</span> nums[0] &lt;= target &lt; nums[mid]:
+                    end = mid - 1
+                <span style="font-weight: bold;">else</span>:
+                    start = mid + 1
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">if</span> nums[mid] &lt; target &lt;= nums[-1]:
+                    start = mid + 1
+                <span style="font-weight: bold;">else</span>:
+                    end = mid - 1
+        <span style="font-weight: bold;">return</span> -1
+
+
+<span style="font-weight: bold;">assert</span> Solution().search([4, 5, 6, 7, 0, 1, 2], 0) == 4
+<span style="font-weight: bold;">assert</span> Solution().search([4, 5, 6, 7, 0, 1, 2], 3) == -1
+<span style="font-weight: bold;">assert</span> Solution().search([1], 0) == -1
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga409ffe" class="outline-2">
+<h2 id="orga409ffe">Cited by 2</h2>
+<div class="outline-text-2" id="text-orga409ffe">
+<ul class="org-ul">
+<li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
+<li><a href="practice_015_leetcode_binary_search.html#ID-A4CBDBD9-466F-480F-B495-C92F72CEFD4C">Practice #015: Leetcode - Binary Search</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

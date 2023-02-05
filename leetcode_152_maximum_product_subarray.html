@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/maximum-product-subarray/description/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org86894e9" class="outline-2">
-<h2 id="org86894e9">Pattern</h2>
-<div class="outline-text-2" id="text-org86894e9">
+<div id="outline-container-orgf0e05b8" class="outline-2">
+<h2 id="orgf0e05b8">Pattern</h2>
+<div class="outline-text-2" id="text-orgf0e05b8">
 <ul class="org-ul">
 <li><a href="pattern_find_cumulative_product_of_an_array.html#ID-E531AE8D-3BE5-486D-A28E-58828790F8E3">Pattern: Find cumulative product of an array</a>.</li>
 
@@ -59,9 +59,9 @@
 </div>
 </div>
 
-<div id="outline-container-org92cfaa9" class="outline-2">
-<h2 id="org92cfaa9">Prompts</h2>
-<div class="outline-text-2" id="text-org92cfaa9">
+<div id="outline-container-org230817e" class="outline-2">
+<h2 id="org230817e">Prompts</h2>
+<div class="outline-text-2" id="text-org230817e">
 <ul class="org-ul">
 <li><a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a></li>
 
@@ -70,9 +70,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgaed15a7" class="outline-2">
-<h2 id="orgaed15a7">Solution 1</h2>
-<div class="outline-text-2" id="text-orgaed15a7">
+<div id="outline-container-org74e4496" class="outline-2">
+<h2 id="org74e4496">Solution 1</h2>
+<div class="outline-text-2" id="text-org74e4496">
 <p>
 Have I solved a similar problem?  Yes, I solved <a href="leetcode_53_maximum_subarray.html#ID-01AB9AC6-5E8D-49BB-9533-92B7032CFDE3">Leetcode: 53. Maximum Subarray</a> which is about finding the subarray with maximum <a href="cumulative_sum.html#ID-239E05AC-0313-4A15-A5E5-3F9A7C857804">Cumulative Sum</a>.  But I discarded it since I failed in past to transfer ideas from problems that use additions or subtractions to similar problems that use multiplications and divisions;  I couldn't keep the same time complexity or needed extra memory.  Then I decided to go for a quadratic solution due the problem's constraints of \(|nums|=n \le (2 \times 10^4)^2 = 4 \times 10^8\).  Fix the left index of the subarray and search for the best right index.  While searching for the best right index, extend the <a href="cumulative_product.html#ID-9734F433-D5A0-430A-8E8A-FE243846C444">Cumulative Product</a> for each new index, and update the answer accordingly.  The solution timed out what sent me back to the blackboard.
 </p>
@@ -127,9 +127,9 @@ Let's find \(j\) by keeping two segments negative and total subarray called resp
 </div>
 </div>
 
-<div id="outline-container-org76c6946" class="outline-2">
-<h2 id="org76c6946">Solution 2</h2>
-<div class="outline-text-2" id="text-org76c6946">
+<div id="outline-container-org3799a74" class="outline-2">
+<h2 id="org3799a74">Solution 2</h2>
+<div class="outline-text-2" id="text-org3799a74">
 <p>
 Be \(maxp_{i-1} = nums[p] \times nums[p+1] \times ... \times nums[i-1]\) the <b>maximum</b> possible product ending on \(i-1\) and \(minp_{i-1} = nums[q] \times nums[q+1] \times ... \times nums[i-1]\)  the <b>minimum</b> possible product ending on \(i-1\).  Note that the problem is solved if we can compute \(maxp_{n-1}\).  <a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for i to i+1?</a>  The maximum possible product ending on \(i\) is either \(nums[i]\) if the product started on \(i\), \(nums[i] \times maxp_{i-1}\) if the product extends the maximum product so far or \(nums[i] \times minp_{i-1}\) if the minimum product so far became positive when multiplied by \(nums[i]\).  The minimum possible product ending on \(i\) is the minimum of the same values.
 </p>
@@ -148,9 +148,9 @@ Be \(maxp_{i-1} = nums[p] \times nums[p+1] \times ... \times nums[i-1]\) the <b>
 </div>
 
 
-<div id="outline-container-org172ae71" class="outline-2">
-<h2 id="org172ae71">Cited by 1</h2>
-<div class="outline-text-2" id="text-org172ae71">
+<div id="outline-container-org73ae61d" class="outline-2">
+<h2 id="org73ae61d">Cited by 1</h2>
+<div class="outline-text-2" id="text-org73ae61d">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

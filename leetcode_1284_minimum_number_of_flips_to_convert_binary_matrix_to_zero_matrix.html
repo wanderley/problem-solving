@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/minimum-number-of-flips-to-convert-binary-matrix-to-zero-matrix/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org137c3cd" class="outline-2">
-<h2 id="org137c3cd">Understand the problem</h2>
-<div class="outline-text-2" id="text-org137c3cd">
+<div id="outline-container-orga6ab357" class="outline-2">
+<h2 id="orga6ab357">Understand the problem</h2>
+<div class="outline-text-2" id="text-orga6ab357">
 <p>
 Modeling as graph problem, the problem is to <a href="pattern_find_shortest_path_between_two_vertices_in_a_graph.html#ID-3283AA3B-67CD-4F8E-960E-442AAE3FD7DC">Pattern: Find shortest path between two vertices in a graph</a>.  A binary matrix is a vertex and two binary matrices are connected if you can flip one of it's cells and get from one to the other.  There are at most \(2^{n \times m }= 2^9 = 512\) vertices with 4 edges ending on each one of them.
 </p>
 </div>
 
-<div id="outline-container-org8cf33ae" class="outline-3">
-<h3 id="org8cf33ae">Useful prompts</h3>
-<div class="outline-text-3" id="text-org8cf33ae">
+<div id="outline-container-org1e756f7" class="outline-3">
+<h3 id="org1e756f7">Useful prompts</h3>
+<div class="outline-text-3" id="text-org1e756f7">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_using_graphs.html#ID-DA1E3A63-73BB-475E-B087-128602B13450">Can we formulate the problem using graphs?</a></li>
 
@@ -68,17 +68,17 @@ Modeling as graph problem, the problem is to <a href="pattern_find_shortest_path
 </div>
 </div>
 
-<div id="outline-container-orgde18b4b" class="outline-2">
-<h2 id="orgde18b4b">Devise a plan (1)</h2>
-<div class="outline-text-2" id="text-orgde18b4b">
+<div id="outline-container-orgbfb99a2" class="outline-2">
+<h2 id="orgbfb99a2">Devise a plan (1)</h2>
+<div class="outline-text-2" id="text-orgbfb99a2">
 <p>
 A <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Breadth-first search</a> from the given binary matrix to the zero matrix is enough to solve the problem, since there are no costs associated to the edges.  Time and space complexity are \(O(2^{n \times m})\), given that the <a href="pattern_small_constraints.html#ID-C767BE5B-4E2C-44F9-8410-F4E920DCFCBC">Pattern: Small constraints</a> allows the representation of the binary matrix using at most \(3 \times 3\) bits.
 </p>
 </div>
 
-<div id="outline-container-orgdb8b63e" class="outline-3">
-<h3 id="orgdb8b63e">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgdb8b63e">
+<div id="outline-container-orga595110" class="outline-3">
+<h3 id="orga595110">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orga595110">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> typing <span style="font-weight: bold;">import</span> List
 
@@ -129,17 +129,17 @@ A <a href="breadth_first_search.html#ID-AF8E855B-7F09-4A2C-BA75-DBA1FFEEF56F">Br
 </div>
 </div>
 
-<div id="outline-container-orge189f69" class="outline-2">
-<h2 id="orge189f69">Devise a plan (2)</h2>
-<div class="outline-text-2" id="text-orge189f69">
+<div id="outline-container-orgde6182c" class="outline-2">
+<h2 id="orgde6182c">Devise a plan (2)</h2>
+<div class="outline-text-2" id="text-orgde6182c">
 <p>
 A <a href="depth_first_search.html#ID-212DBFC3-FE3C-493E-86A6-42FF3F82CD53">Depth-first search</a> can be used to search the minimum number of flips given an instance \((m, i, j)\) of the problem where \(m\) is a binary matrix, and \(i,j\) is a cell position.  <b>Optimization:</b> We don't need to flip all cells but only cells on the first row or ones that will make the above cell a zero (inspired on <a href="https://leetcode.com/problems/minimum-number-of-flips-to-convert-binary-matrix-to-zero-matrix/discuss/447012/O(2-mn)">StefanPochamann's solution</a>).  There are \(O(2^{n \times m} \times n \times m)\) with \(5\) possible transitions (<a href="pattern_small_constraints.html#ID-C767BE5B-4E2C-44F9-8410-F4E920DCFCBC">Pattern: Small constraints</a>).
 </p>
 </div>
 
-<div id="outline-container-org40201a5" class="outline-3">
-<h3 id="org40201a5">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org40201a5">
+<div id="outline-container-org8d08e10" class="outline-3">
+<h3 id="org8d08e10">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org8d08e10">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minFlips</span>(<span style="font-weight: bold;">self</span>, mat: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
@@ -179,9 +179,9 @@ A <a href="depth_first_search.html#ID-212DBFC3-FE3C-493E-86A6-42FF3F82CD53">Dept
 </div>
 </div>
 
-<div id="outline-container-org0599c74" class="outline-2">
-<h2 id="org0599c74">Common mistakes</h2>
-<div class="outline-text-2" id="text-org0599c74">
+<div id="outline-container-org22a4eaf" class="outline-2">
+<h2 id="org22a4eaf">Common mistakes</h2>
+<div class="outline-text-2" id="text-org22a4eaf">
 <ul class="org-ul">
 <li><a href="mistake_misread_the_problem.html#ID-192401C2-DA6F-4496-B530-89A3546712FD">Mistake: Misread the problem</a>: Missed that I could also flip cells with 0.</li>
 </ul>
