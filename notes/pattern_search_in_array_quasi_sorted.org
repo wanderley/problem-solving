@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       0C70A015-3BAA-4CC2-8EF0-2E39DD4C53D0
+:END:
+#+TITLE: Pattern: Search in array quasi-sorted
