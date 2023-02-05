@@ -16,7 +16,7 @@
 
 Given an array $a$ which is either sorted or it can be divided into two sorted subarrays such that the first subarray has numbers greater than the other one (e.g. $a=[3, 4, 5, 1, 2]$), return the index of $target$ in the array or $-1$ if it is not in the array.
 
-An important observation is that either the array is sorted or for any index $m$ either $a[0..m]$ is sorted or $a[m..(n-1)]$ is sorted.  Let's use [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to solve the problem.  Denote $s$, $e$ and $m$ as the start, end and pivot of the binary search.  Consider the following for each iteration:
+An important observation is that either the array is sorted or for any index $m$ either $a[0..m]$ is sorted or $a[m..(n-1)]$ is sorted.  Let's use [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] to solve the problem.  Denote $s$, $e$ and $m$ as the start, end and pivot of the binary search.  Consider the following for each iteration:
 
 - If $a[m]=target$, the solution is $m$.
 

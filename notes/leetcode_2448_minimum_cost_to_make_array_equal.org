@@ -18,7 +18,7 @@ Given an array of integers $a$ and an array of costs $c$, find the minimum total
 
 * Devise a plan
 
-[[id:B39B7723-9DCB-4C18-BE7D-51086F1F2A81][Pattern: Search & Validate]] to find the optimal value $x$ using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Note that if $f(x)=f(x+1)=f(x-1)$, then all elements in $a$ are already equal and the solution is 0.  Other important fact about this problem is that $f$ is a convex function and has a shape like a parabola.  Be $x'$ a guess.  If $f(x') < f(x' + 1)$, then we know that the optimal value is on the left, and it is on the right if $f(x') > f(x' + 1)$.  Time complexity is $O(n \log \max(a))$ and space is $O(1)$.
+[[id:B39B7723-9DCB-4C18-BE7D-51086F1F2A81][Pattern: Search & Validate]] to find the optimal value $x$ using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]].  Note that if $f(x)=f(x+1)=f(x-1)$, then all elements in $a$ are already equal and the solution is 0.  Other important fact about this problem is that $f$ is a convex function and has a shape like a parabola.  Be $x'$ a guess.  If $f(x') < f(x' + 1)$, then we know that the optimal value is on the left, and it is on the right if $f(x') > f(x' + 1)$.  Time complexity is $O(n \log \max(a))$ and space is $O(1)$.
 
 ** Carry out the plan
 

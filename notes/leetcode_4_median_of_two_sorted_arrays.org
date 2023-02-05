@@ -44,7 +44,7 @@
 
 * Two binary-searches
 
-Be $u(x)$ the count of numbers in $b$ that are less or equal than $x$.  With that, we could compute for each position $i$ in $a$ the size of the left partition which contains the values $a[0..i]$ and $b[0..u(a[i])]$.  The solution for the problem is to find such the position in $a$, if it exists, that cuts the array $a+b$ on the half.  When it isn't possible, we know that all elements of $a$ should be part of the left partition and the problem becomes finding the index on $b$ that cuts the whole array in the half.  The following algorithm uses one [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the position $i$ where $i=\lfloor\(|a|+|b|\) / 2\rfloor$, and for each candidate it uses other [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to compute $u(a[i])$.
+Be $u(x)$ the count of numbers in $b$ that are less or equal than $x$.  With that, we could compute for each position $i$ in $a$ the size of the left partition which contains the values $a[0..i]$ and $b[0..u(a[i])]$.  The solution for the problem is to find such the position in $a$, if it exists, that cuts the array $a+b$ on the half.  When it isn't possible, we know that all elements of $a$ should be part of the left partition and the problem becomes finding the index on $b$ that cuts the whole array in the half.  The following algorithm uses one [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] to find the position $i$ where $i=\lfloor\(|a|+|b|\) / 2\rfloor$, and for each candidate it uses other [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] to compute $u(a[i])$.
 
 - Time complexity: $O(log(|a|) \times log(|b|))$
 - Space complexity: $O(1)$

@@ -3,7 +3,7 @@
 :END:
 #+TITLE: Practice #015: Leetcode - Binary Search
 
-* [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]]: Template 1
+* [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]]: Template 1
 
 - Condition: Needed only the pivot to decide the direction of the search.
 - Termination: $s > e$ and there is no more candidates to process.
@@ -96,7 +96,7 @@
 
 ** [[id:DE8C7F14-D36F-43BF-8AF1-B6940406EBF6][Leetcode: 33. Search in Rotated Sorted Array]]
 
-* [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]]: Template 2
+* [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]]: Template 2
 
 - Condition: Needed pivot and *next* element to decide the direction of the search.
 - Termination: $s = e$ and there is one candidate to process.
@@ -158,7 +158,7 @@
 
 - [[id:C1F8B8F2-72CF-4085-852C-4D1EF8E19195][Leetcode: 153. Find Minimum in Rotated Sorted Array]]
 
-* [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]]: Template 3
+* [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]]: Template 3
 
 - Condition: Needed pivot and *prev* element to decide the direction of the search.
 - Termination: $s + 1 = e$ and there are two candidates to process.

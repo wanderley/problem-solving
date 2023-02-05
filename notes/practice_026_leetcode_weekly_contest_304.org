@@ -54,7 +54,7 @@ Linear solution:
   assert Solution().maximumGroups([8, 8]) == 1
 #+end_src
 
-[[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] solution:
+[[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] solution:
 #+begin_src python
   from typing import List
 

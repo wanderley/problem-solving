@@ -7,7 +7,7 @@
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
 
-- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Given a candidate answer, check if it is possible to partition the array in at most $m$ parts.  If so, the candidate is valid, otherwise you have to increase it.  The optimal answer can be found using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \log \sum a[i])$ and space is $O(1)$.
+- [[id:64E7E55B-09A9-4022-AB5E-1D25FC64EAC9][Is there an alternative problem easier to solve?]]  Given a candidate answer, check if it is possible to partition the array in at most $m$ parts.  If so, the candidate is valid, otherwise you have to increase it.  The optimal answer can be found using a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]].  Time complexity is $O(n \log \sum a[i])$ and space is $O(1)$.
 
 #+begin_src python
   class Solution:

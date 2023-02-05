@@ -7,7 +7,7 @@
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
 
-- [[id:A18543C4-83BC-40F1-A243-B85FD935FAC0][Pattern: Answer query on sorted data]].  For each instructions, keep the previous instructions sorted and use [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to compute the number of strictly less and greater.  Time complexity is $O(n \log n)$ and space is $O(n)$.
+- [[id:A18543C4-83BC-40F1-A243-B85FD935FAC0][Pattern: Answer query on sorted data]].  For each instructions, keep the previous instructions sorted and use [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] to compute the number of strictly less and greater.  Time complexity is $O(n \log n)$ and space is $O(n)$.
 
 #+begin_src python
   from sortedcontainers import SortedList

@@ -7,7 +7,7 @@
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
 
-- [[id:BA8FA096-1785-4100-BF9F-E1D101994F21][Can we formulate the problem as searching the last element that satisfy a condition?]]  We want to find the max (or last) $k$ such that there are two equal substrings of $s$ of length $k$.  To find $k$, we can use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] and to check if there are such substrings we can use [[id:85E6E394-A1B3-4DE0-835C-CCE7D2830150][Rabin-Karp Algorithm for string matching]].  Time complexity is $O(n \log n)$ and space $O(n)$.
+- [[id:BA8FA096-1785-4100-BF9F-E1D101994F21][Can we formulate the problem as searching the last element that satisfy a condition?]]  We want to find the max (or last) $k$ such that there are two equal substrings of $s$ of length $k$.  To find $k$, we can use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] and to check if there are such substrings we can use [[id:85E6E394-A1B3-4DE0-835C-CCE7D2830150][Rabin-Karp Algorithm for string matching]].  Time complexity is $O(n \log n)$ and space $O(n)$.
 
 #+begin_src python
   class Solution:

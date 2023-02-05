@@ -36,7 +36,7 @@ Keep a pointer $i$ for the last letter matched on $s$ while iterating on letters
 :END:
 [[https://leetcode.com/problems/maximal-square/][Problem Statement]]
 
-[[id:02D11D2D-72DB-4E18-8843-56A90935B5EC][Can we define the problem in terms of continuous sums?]]  We can check if a squared sub-matrix sums up to square of its sizes.  A [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] can help to find the size of the largest squared sub-matrix with all ones.  The time complexity is $O(n \times m \times \log(\max(n, m)^2))$ and space is $O(n \times m)$.  Note that this problem has a similar solution of [[id:A2E67F80-1104-4549-BF6E-747F4C618296][Leetcode: 1314. Matrix Block Sum]].
+[[id:02D11D2D-72DB-4E18-8843-56A90935B5EC][Can we define the problem in terms of continuous sums?]]  We can check if a squared sub-matrix sums up to square of its sizes.  A [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] can help to find the size of the largest squared sub-matrix with all ones.  The time complexity is $O(n \times m \times \log(\max(n, m)^2))$ and space is $O(n \times m)$.  Note that this problem has a similar solution of [[id:A2E67F80-1104-4549-BF6E-747F4C618296][Leetcode: 1314. Matrix Block Sum]].
 
 #+begin_src python
   from typing import List

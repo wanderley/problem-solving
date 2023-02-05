@@ -7,7 +7,7 @@
 #+LEETCODE_LEVEL: Hard
 #+ANKI_DECK: Problem Solving
 
-- [[id:3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE][Can we state the problem as result of multiple searches?]]  Use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the value of the \(k\)th smallest pair distance.  To verify if the value $a$ is a valid answer, count the number of pairs starting on $i$: $j - i - 1$ where $nums[j] < nums[i] + a$.  The value for $j$ can be found using a second [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \log n \log m)$ where $m=max(nums) - min(nums)$.  Space complexity is $O(1)$.
+- [[id:3ECFA6C4-B482-49CA-B8C6-C67DA07B6EAE][Can we state the problem as result of multiple searches?]]  Use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] to find the value of the \(k\)th smallest pair distance.  To verify if the value $a$ is a valid answer, count the number of pairs starting on $i$: $j - i - 1$ where $nums[j] < nums[i] + a$.  The value for $j$ can be found using a second [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]].  Time complexity is $O(n \log n \log m)$ where $m=max(nums) - min(nums)$.  Space complexity is $O(1)$.
 
 #+begin_src python
   from typing import List

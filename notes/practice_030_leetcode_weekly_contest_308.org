@@ -9,7 +9,7 @@
 :END:
 [[https://leetcode.com/problems/longest-subsequence-with-limited-sum/][Problem Statement]]
 
-- Category :: [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]]
+- Category :: [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]]
 
 #+begin_src python
   from typing import List

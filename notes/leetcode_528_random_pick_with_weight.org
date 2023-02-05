@@ -22,7 +22,7 @@
 
 * Solution
 
-Compute the accumulate probability of picking any of $0..i$ elements and use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]] to find the index of one random element.  Time complexity is $O(n)$ for pre-processing and $O(\log n)$ to answer each query.  Space complexity is $O(n)$ to store the accumulated probabilities.
+Compute the accumulate probability of picking any of $0..i$ elements and use a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]] to find the index of one random element.  Time complexity is $O(n)$ for pre-processing and $O(\log n)$ to answer each query.  Space complexity is $O(n)$ to store the accumulated probabilities.
 
 #+begin_src python
   class Solution:

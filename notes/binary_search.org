@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID:       1217FC3D-A9F9-49EC-BA5D-A68E50338DBD
 :END:
-#+TITLE: Binary-search
+#+TITLE: Binary Search
 
 * Find index of first greater in sorted array
 :PROPERTIES:

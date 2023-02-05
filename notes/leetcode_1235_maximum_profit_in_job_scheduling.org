@@ -9,7 +9,7 @@
 
 - [[id:40E38FD2-DDF0-4C25-BB8C-43D07F3D5136][Mistake: Overcomplicated solution]].  Tried to save memory by keeping
 
-- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  Sort the jobs by start time.  [[id:29DB5011-3209-4B10-BAA5-823D1ADB9F47][How could we find the optimal interval knowing a tiny part of it?]]  If the job is part of the solution, it means that you can only extend it after the job's end.  To find the next job, we can search for the job that starts on that time with a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]].  Time complexity is $O(n \log n)$ and space is $O(n)$.
+- [[id:42B21DBC-4951-4AF2-8C41-A646F5675365][Can we pre-process the input in a way to make easy to solve the problem?]]  Sort the jobs by start time.  [[id:29DB5011-3209-4B10-BAA5-823D1ADB9F47][How could we find the optimal interval knowing a tiny part of it?]]  If the job is part of the solution, it means that you can only extend it after the job's end.  To find the next job, we can search for the job that starts on that time with a [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]].  Time complexity is $O(n \log n)$ and space is $O(n)$.
 
 #+begin_src python
   from typing import List

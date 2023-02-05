@@ -39,7 +39,7 @@ Same as [[id:1B312D82-8DED-49FE-8521-F8C2B6AAB660][Leetcode: 162. Find Peak Elem
 :END:
 [[https://leetcode.com/problems/find-in-mountain-array/][Problem Statement]]
 
-We can solve the problem using three [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary-search]]es: (1) to find the peak, (2) to find the target on the left side of the peak and (3) to find the target on the right side of the peak.  Time complexity is $O(\log(n))$ and space is $O(1)$.
+We can solve the problem using three [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]]es: (1) to find the peak, (2) to find the target on the left side of the peak and (3) to find the target on the right side of the peak.  Time complexity is $O(\log(n))$ and space is $O(1)$.
 
 #+begin_src python
   # """
