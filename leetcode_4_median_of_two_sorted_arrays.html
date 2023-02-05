@@ -45,9 +45,9 @@
 <!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
 <h1 class="title">Leetcode: 4. Median of Two Sorted Arrays</h1>
 
-<div id="outline-container-orgcc69c5e" class="outline-2">
-<h2 id="orgcc69c5e">Brute Force</h2>
-<div class="outline-text-2" id="text-orgcc69c5e">
+<div id="outline-container-org6ea3956" class="outline-2">
+<h2 id="org6ea3956">Brute Force</h2>
+<div class="outline-text-2" id="text-org6ea3956">
 <p>
 <a href="merge_two_sorted_arrays.html#ID-1C032394-9D5B-4A8C-8ACE-21ED5B0B4838">Merge Two Sorted Arrays</a> and then compute the median from the resulting array.
 </p>
@@ -89,11 +89,11 @@
 </div>
 </div>
 
-<div id="outline-container-org3e47d0d" class="outline-2">
-<h2 id="org3e47d0d">Two binary-searches</h2>
-<div class="outline-text-2" id="text-org3e47d0d">
+<div id="outline-container-org06a9a29" class="outline-2">
+<h2 id="org06a9a29">Two binary-searches</h2>
+<div class="outline-text-2" id="text-org06a9a29">
 <p>
-Be \(u(x)\) the count of numbers in \(b\) that are less or equal than \(x\).  With that, we could compute for each position \(i\) in \(a\) the size of the left partition which contains the values \(a[0..i]\) and \(b[0..u(a[i])]\).  The solution for the problem is to find such the position in \(a\), if it exists, that cuts the array \(a+b\) on the half.  When it isn't possible, we know that all elements of \(a\) should be part of the left partition and the problem becomes finding the index on \(b\) that cuts the whole array in the half.  The following algorithm uses one <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to find the position \(i\) where \(i=\lfloor\(|a|+|b|\) / 2\rfloor\), and for each candidate it uses other <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a> to compute \(u(a[i])\).
+Be \(u(x)\) the count of numbers in \(b\) that are less or equal than \(x\).  With that, we could compute for each position \(i\) in \(a\) the size of the left partition which contains the values \(a[0..i]\) and \(b[0..u(a[i])]\).  The solution for the problem is to find such the position in \(a\), if it exists, that cuts the array \(a+b\) on the half.  When it isn't possible, we know that all elements of \(a\) should be part of the left partition and the problem becomes finding the index on \(b\) that cuts the whole array in the half.  The following algorithm uses one <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a> to find the position \(i\) where \(i=\lfloor\(|a|+|b|\) / 2\rfloor\), and for each candidate it uses other <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a> to compute \(u(a[i])\).
 </p>
 
 <ul class="org-ul">
@@ -160,18 +160,18 @@ Be \(u(x)\) the count of numbers in \(b\) that are less or equal than \(x\).  Wi
 </div>
 </div>
 
-<div id="outline-container-orga1a223d" class="outline-2">
-<h2 id="orga1a223d"><span class="todo TODO">TODO</span> Write algorithm \(O(log(|a|+|b|))\)</h2>
-<div class="outline-text-2" id="text-orga1a223d">
+<div id="outline-container-orgde44895" class="outline-2">
+<h2 id="orgde44895"><span class="todo TODO">TODO</span> Write algorithm \(O(log(|a|+|b|))\)</h2>
+<div class="outline-text-2" id="text-orgde44895">
 <p>
 The above <code>upper_bound_index</code> function is not necessary, since if \(a[x + k / 2 - 1] < b[y + k / 2 - 1]\) where \(k\) is an index in the merged sorted arrays, and \(x\) and \(y\) are indexes on \(a\) and \(b\) respectively, then we know that \(a[0..(x + k / 2 - 1)]\) are in the left partition.  Otherwise, we know that \(b[y..(y + k / 2 - 1)]\) are in the left partition.  In both cases, we discovered \(k/2\) elements of the left partition.  We can continue the process until there is no more elements in the left partition to find what gives us the searched element.  (<a href="https://leetcode.com/problems/median-of-two-sorted-arrays/discuss/2496/Concise-JAVA-solution-based-on-Binary-Search">Reference Implementation</a>)
 </p>
 </div>
 </div>
 
-<div id="outline-container-org4d1b224" class="outline-2">
-<h2 id="org4d1b224">Resources</h2>
-<div class="outline-text-2" id="text-org4d1b224">
+<div id="outline-container-org5ea2280" class="outline-2">
+<h2 id="org5ea2280">Resources</h2>
+<div class="outline-text-2" id="text-org5ea2280">
 <ul class="org-ul">
 <li><a href="https://www.youtube.com/watch?v=LPFhl65R7ww">Tushar Roy's Binary Search : Median of two sorted arrays of different sizes</a></li>
 </ul>
@@ -179,9 +179,9 @@ The above <code>upper_bound_index</code> function is not necessary, since if \(a
 </div>
 
 
-<div id="outline-container-org53463f9" class="outline-2">
-<h2 id="org53463f9">Cited by 1</h2>
-<div class="outline-text-2" id="text-org53463f9">
+<div id="outline-container-orga101f3f" class="outline-2">
+<h2 id="orga101f3f">Cited by 1</h2>
+<div class="outline-text-2" id="text-orga101f3f">
 <ul class="org-ul">
 <li><a href="array.html#ID-21C2B5E5-78D0-4A47-B69E-7B1FBA6A69A1">Array</a></li>
 </ul>

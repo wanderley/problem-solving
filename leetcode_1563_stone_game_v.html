@@ -48,9 +48,9 @@
 Check out the problem statement <a href="https://leetcode.com/problems/stone-game-v">here</a>.
 </p>
 
-<div id="outline-container-org581c67b" class="outline-2">
-<h2 id="org581c67b">Slow Dynamic Programming</h2>
-<div class="outline-text-2" id="text-org581c67b">
+<div id="outline-container-org9720afc" class="outline-2">
+<h2 id="org9720afc">Slow Dynamic Programming</h2>
+<div class="outline-text-2" id="text-org9720afc">
 <p>
 Be \(s(i,j)\) the sum of stone values from \(i\) to \(j\), and be \(f(i, j)\) the max score Alice can obtain using stones \(i..j\).  When \(i=j\), the game has finished and the score is 0.  Otherwise, \(i<j\) and \(f(i,j)\) is the maximum score between all possible ways to split the interval in two: \(i..k\) and \(k..j\) where \(i<\leq k\leq j\).  For each \(k\), the score is either \(s(i,k)+f(i,k)\) or \(s(k+1,j)+f(k+1,j)\) if one side is smaller than the other or the max of both sides if \(s(i,k)=s(k+1,j)\).  The following algorithm implements this idea by trying all possible \(k\) for each interval \(i..j\).
 </p>
@@ -114,9 +114,9 @@ With \(n\) being the number of stones, we have that
 </div>
 </div>
 
-<div id="outline-container-org0a61d62" class="outline-2">
-<h2 id="org0a61d62"><a href="dynamic_programming_on_multiple_optimizations.html#ID-3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2">Dynamic Programming on multiple optimizations</a></h2>
-<div class="outline-text-2" id="text-org0a61d62">
+<div id="outline-container-org9822048" class="outline-2">
+<h2 id="org9822048"><a href="dynamic_programming_on_multiple_optimizations.html#ID-3ACB35B4-3C58-45BE-A9E9-6FDD453B52B2">Dynamic Programming on multiple optimizations</a></h2>
+<div class="outline-text-2" id="text-org9822048">
 <p>
 To speed up the solution above, we have to avoid checking all possible intervals when computing \(f(i,j)\).  But, how could we do that?  Is the cubic solution using all constraints of the problem?  The answer is <b>"No! The cubic solution is not using the fact that stone values are integers greater than 0"</b>.  How does this constraint help us when deciding where to split an interval?  Let's take \([1, 2, 1, 1, 1, 1]\) as example and \(i=0\) (first stone) and \(j=5\) (last stone).  These are all ways to split on an index \(k\):
 </p>
@@ -183,7 +183,7 @@ To speed up the solution above, we have to avoid checking all possible intervals
 </table>
 
 <p>
-Note that for \(k<3\), the left side sum is always <b>smaller</b> than the right side sum.  For \(k>=3\), the left side sum is always <b>greater</b> than the right side sum.  Such \(k\) will always exist due the constraint of the problem and can be found using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary-search</a>.  Be \(l(i, j)=\max(s(i,j) + f(i, j), l(i, j - 1))\) for \(i<j\), \(l(i, i)=0\), \(r(i, j)=\max(s(i, j) + f(i, j), r(i+1, j))\) for \(i<j\) and \(r(i,i)=0\) the max score obtained using stones exclusively from the left and right side, respectively.  If \(s(i, k)=s(k+1, j)\), the best score can be in either side: \(f(i,j)=\max(l(i, k), r(k+1, j))\).  Otherwise, \(f(i,j)=\max(l(i, k-1), r(k+1, j))\).  There is a dependency between \(f\), \(l\) and \(r\).  As one always reference to a smaller problem in the other, the dependency is acyclic.
+Note that for \(k<3\), the left side sum is always <b>smaller</b> than the right side sum.  For \(k>=3\), the left side sum is always <b>greater</b> than the right side sum.  Such \(k\) will always exist due the constraint of the problem and can be found using a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a>.  Be \(l(i, j)=\max(s(i,j) + f(i, j), l(i, j - 1))\) for \(i<j\), \(l(i, i)=0\), \(r(i, j)=\max(s(i, j) + f(i, j), r(i+1, j))\) for \(i<j\) and \(r(i,i)=0\) the max score obtained using stones exclusively from the left and right side, respectively.  If \(s(i, k)=s(k+1, j)\), the best score can be in either side: \(f(i,j)=\max(l(i, k), r(k+1, j))\).  Otherwise, \(f(i,j)=\max(l(i, k-1), r(k+1, j))\).  There is a dependency between \(f\), \(l\) and \(r\).  As one always reference to a smaller problem in the other, the dependency is acyclic.
 </p>
 
 <ul class="org-ul">
@@ -278,9 +278,9 @@ Note that for \(k<3\), the left side sum is always <b>smaller</b> than the right
 </div>
 
 
-<div id="outline-container-orgede29b0" class="outline-2">
-<h2 id="orgede29b0">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgede29b0">
+<div id="outline-container-org56989cc" class="outline-2">
+<h2 id="org56989cc">Cited by 1</h2>
+<div class="outline-text-2" id="text-org56989cc">
 <ul class="org-ul">
 <li><a href="leetcode_1289_minimum_falling_path_sum_ii.html#ID-FEF4EFF1-C8BA-4959-A87C-58642407EF0C">Leetcode: 1289. Minimum Falling Path Sum II</a></li>
 </ul>

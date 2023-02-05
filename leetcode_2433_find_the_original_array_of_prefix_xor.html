@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/find-the-original-array-of-prefix-xor/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org003d5a9" class="outline-2">
-<h2 id="org003d5a9">Understand the problem</h2>
-<div class="outline-text-2" id="text-org003d5a9">
+<div id="outline-container-orgeaa4c95" class="outline-2">
+<h2 id="orgeaa4c95">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgeaa4c95">
 <p>
 Given an array \(p\), find an array \(a\) given that \(p_0=a_0\), \(p_1=a_0 \oplus a_1\) and so on.
 </p>
 </div>
 
-<div id="outline-container-org03a35de" class="outline-3">
-<h3 id="org03a35de">Useful prompts</h3>
-<div class="outline-text-3" id="text-org03a35de">
+<div id="outline-container-orge48b5d2" class="outline-3">
+<h3 id="orge48b5d2">Useful prompts</h3>
+<div class="outline-text-3" id="text-orge48b5d2">
 <ul class="org-ul">
 <li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
 </ul>
@@ -66,17 +66,17 @@ Given an array \(p\), find an array \(a\) given that \(p_0=a_0\), \(p_1=a_0 \opl
 </div>
 </div>
 
-<div id="outline-container-orgabffcb3" class="outline-2">
-<h2 id="orgabffcb3">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgabffcb3">
+<div id="outline-container-orgee73d31" class="outline-2">
+<h2 id="orgee73d31">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgee73d31">
 <p>
 Since \(p_i = p_{i-1} \oplus a_i\), then \(a_i=p_{i-1} \oplus p_i\).
 </p>
 </div>
 
-<div id="outline-container-org0b7e579" class="outline-3">
-<h3 id="org0b7e579">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org0b7e579">
+<div id="outline-container-org7f5474d" class="outline-3">
+<h3 id="org7f5474d">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org7f5474d">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">hardestWorker</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>, logs: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:
