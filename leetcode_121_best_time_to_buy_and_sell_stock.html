@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org36710d6" class="outline-2">
-<h2 id="org36710d6">Patterns</h2>
-<div class="outline-text-2" id="text-org36710d6">
+<div id="outline-container-org37b2d29" class="outline-2">
+<h2 id="org37b2d29">Patterns</h2>
+<div class="outline-text-2" id="text-org37b2d29">
 <ul class="org-ul">
 <li><a href="pattern_search_for_max_min_value_in_unsorted_array.html#ID-D4CE3EFB-3F15-4FA2-80A2-9B8E1A1E0EA6">Pattern: Search for max/min value in unsorted array</a>.</li>
 
@@ -59,18 +59,18 @@
 </div>
 </div>
 
-<div id="outline-container-org2ec267e" class="outline-2">
-<h2 id="org2ec267e">Prompts</h2>
-<div class="outline-text-2" id="text-org2ec267e">
+<div id="outline-container-org998ec43" class="outline-2">
+<h2 id="org998ec43">Prompts</h2>
+<div class="outline-text-2" id="text-org998ec43">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_by_iterating_from_left_to_right_or_right_to_left.html#ID-C4FCF1BD-0D05-4D47-8FAB-B6002A8F4F09">Can we solve the problem by iterating from left to right (or right to left)?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org2eac916" class="outline-2">
-<h2 id="org2eac916">Solution</h2>
-<div class="outline-text-2" id="text-org2eac916">
+<div id="outline-container-orgc7cf98e" class="outline-2">
+<h2 id="orgc7cf98e">Solution</h2>
+<div class="outline-text-2" id="text-orgc7cf98e">
 <p>
 Suppose we know that the best day to buy is on \(i\)th day but we don't know when to sell the stock to maximize the profit.  In this case, the problem becomes finding the index \(j\) where \(j > i\) and \(prices[j]-prices[i]\) is the maximum possible profit.  The naive approach to find \(j\) consists on iterating over \(i+1,i+2,...,n-1\).  While it solves the problem, this solution is \(O(n^2)\) and does not pass on all tests.  Therefore, we have to come up with a more efficient way to find \(j\).
 </p>
@@ -97,9 +97,9 @@ The problem of finding \(j\) became trivial if we use \(f\).  We first compute \
 </div>
 
 
-<div id="outline-container-orgf07654d" class="outline-2">
-<h2 id="orgf07654d">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgf07654d">
+<div id="outline-container-org29d9910" class="outline-2">
+<h2 id="org29d9910">Cited by 1</h2>
+<div class="outline-text-2" id="text-org29d9910">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

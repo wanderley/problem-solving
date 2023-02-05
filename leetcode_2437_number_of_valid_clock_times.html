@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/number-of-valid-clock-times/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org1571b29" class="outline-2">
-<h2 id="org1571b29">Understand the problem</h2>
-<div class="outline-text-2" id="text-org1571b29">
+<div id="outline-container-org454e342" class="outline-2">
+<h2 id="org454e342">Understand the problem</h2>
+<div class="outline-text-2" id="text-org454e342">
 <p>
 Count the number of valid time string by filling out the position with <code>?</code>.
 </p>
 </div>
 
-<div id="outline-container-orgb57ce58" class="outline-3">
-<h3 id="orgb57ce58">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgb57ce58">
+<div id="outline-container-org245041b" class="outline-3">
+<h3 id="org245041b">Useful prompts</h3>
+<div class="outline-text-3" id="text-org245041b">
 <ul class="org-ul">
 <li><a href="can_we_use_brute_force_to_solve_the_problem.html#ID-29512D97-A54D-42F9-A8C7-C3422881933B">Can we use brute-force to solve the problem?</a></li>
 </ul>
@@ -66,17 +66,17 @@ Count the number of valid time string by filling out the position with <code>?</
 </div>
 </div>
 
-<div id="outline-container-org0e4aca0" class="outline-2">
-<h2 id="org0e4aca0">Devise a plan</h2>
-<div class="outline-text-2" id="text-org0e4aca0">
+<div id="outline-container-org6d805e5" class="outline-2">
+<h2 id="org6d805e5">Devise a plan</h2>
+<div class="outline-text-2" id="text-org6d805e5">
 <p>
 In this problem, the <a href="pattern_small_constraints_could_allow_brute_force_solution.html#ID-BC81A358-FBCC-43AA-9928-E9778A107869">Pattern: Small constraints could allow a brute-force solution</a>.  For each unknown position, we try to fill with numbers from 0 to 9.  On the end, we count 1 if the time is valid or 0 otherwise.  Time complexity is \(O(9^4)=O(1)\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-org7354ba9" class="outline-3">
-<h3 id="org7354ba9">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org7354ba9">
+<div id="outline-container-orga93cb85" class="outline-3">
+<h3 id="orga93cb85">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orga93cb85">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">countTime</span>(<span style="font-weight: bold;">self</span>, time: <span style="font-weight: bold;">str</span>) -&gt; <span style="font-weight: bold;">int</span>:
