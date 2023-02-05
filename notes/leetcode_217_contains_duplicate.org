@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       2E185F52-087B-4CBC-B927-1DD24C880E04
+:ROAM_REFS: https://leetcode.com/problems/contains-duplicate/description/
+:END:
+#+TITLE: Leetcode: 217. Contains Duplicate
+#+ROAM_REFS: https://leetcode.com/problems/contains-duplicate/description/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1675576264386
+
+* Patterns
+
+- [[id:12D16A10-EB7A-4EF8-A0E8-91B5EE694582][Pattern: Searching in Array]]
+- [[id:FCF0DB21-F99D-4A98-B592-6889DB9FE1F4][Pattern: Problem's constraints disallow $O(n^2)$ solutions]]
+
+* Solution
+
+Given an array of integers, determine if there are any duplicate integers.  We can use a set to store the distinct numbers of the array.  If the length of the set is equal to $n$, then all numbers are distinct and the answer is $false$.  Otherwise, the answer is $true$ since there is at least one duplicate integer in the array.  The time and space complexity is $O(n)$ as all numbers to the set.
+
+#+begin_src python
+  class Solution:
+      def containsDuplicate(self, nums: List[int]) -> bool:
+          return len(nums) > len(set(nums))
+#+end_src
+
+Alternatively, the problem can be solved as a search problem.  For each integer $i$, search $a[i]$ in $a[0...(i-1)]$ returning $true$ if it is found.  If the search failed for all integers, then the answer is $false$ since all integers are distinct.  A linear search does not consume extra memory, but it is too slow for the problem's constraints.  We can sort the array what makes the search trivial as $a[i]$ needs to be only checked against $a[i-1]$ to determine if it is duplicated or not.  The time complexity of this solution is $O(n \log n)$.  Other approach is to use extra memory: [[id:84CF1D07-B0AD-4BC1-9A20-D2565CD9FFBD][Binary Search Tree]] or [[id:0573B9FD-E008-400B-B6B7-75F5E54994E2][Hash Table]].  The former supports insertion and look up in $O(\log n)$ resulting in the same time complexity as sorting the array, while the latter supports the same operation in $O(1)$ resulting in same time complexity as counting the number of distinct integers.

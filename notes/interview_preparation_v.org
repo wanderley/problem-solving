@@ -99,7 +99,7 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 - Blind 75:
   - [X] [[https://leetcode.com/problems/two-sum/][Two Sum]] ([[id:5F25DCD8-CE46-4F18-A1B1-952BC35382A9][solution]]).
   - [X] [[https://leetcode.com/problems/best-time-to-buy-and-sell-stock/][Best Time to Buy and Sell Stock]] ([[id:81682CDD-4D5A-485C-9C1C-5689B6AF1A41][solution]]).
-  - [X] [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]].
+  - [X] [[https://leetcode.com/problems/contains-duplicate/][Contains Duplicate]] ([[id:2E185F52-087B-4CBC-B927-1DD24C880E04][solution]] *NEW!*).
 - Supplement:
   - [X] [[https://leetcode.com/problems/binary-tree-inorder-traversal/][Binary Tree Inorder Traversal]].
 
