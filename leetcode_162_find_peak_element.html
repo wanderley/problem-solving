@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/find-peak-element/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orgeec892b" class="outline-2">
-<h2 id="orgeec892b">Patterns</h2>
-<div class="outline-text-2" id="text-orgeec892b">
+<div id="outline-container-orgd74ac54" class="outline-2">
+<h2 id="orgd74ac54">Patterns</h2>
+<div class="outline-text-2" id="text-orgd74ac54">
 <ul class="org-ul">
 <li><a href="pattern_searching_in_array.html#ID-12D16A10-EB7A-4EF8-A0E8-91B5EE694582">Pattern: Searching in Array</a>.</li>
 
@@ -59,18 +59,18 @@
 </div>
 </div>
 
-<div id="outline-container-orga4b878d" class="outline-2">
-<h2 id="orga4b878d">Prompts</h2>
-<div class="outline-text-2" id="text-orga4b878d">
+<div id="outline-container-org286be1a" class="outline-2">
+<h2 id="org286be1a">Prompts</h2>
+<div class="outline-text-2" id="text-org286be1a">
 <ul class="org-ul">
 <li><a href="can_we_formulate_the_problem_as_a_classical_problem.html#ID-1CFF662A-6F16-43CE-BB07-EA12BA382690">Can we formulate the problem as a classical problem?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org248f2e8" class="outline-2">
-<h2 id="org248f2e8">Solution</h2>
-<div class="outline-text-2" id="text-org248f2e8">
+<div id="outline-container-org1b35163" class="outline-2">
+<h2 id="org1b35163">Solution</h2>
+<div class="outline-text-2" id="text-org1b35163">
 <p>
 There are two ways to search for elements in an array: linear search of <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a>.  The problem statement rules out the first possibility, so the problem becomes finding a way to use <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a> to solve the problem.  Be \(m\) the index of the pivot.  If \(nums[m-1]<nums[m]\) and \(nums[m+1]>nums[m]\), \(m\) is a valid answer.  Otherwise, one neighbor is greater than \(nums[m]\).  If \(nums[m-1]>nums[m]\), then \(m-1\) can be an answer iff \(nums[m-2]<nums[m]\).  Instead of checking this neighbor, we can conclude that there is a valid solution on the left side of \(m\).  In case of \(m-1=0\), then \(0\) is a valid answer since by definition \(nums[-1]=-\infin\).  When this is not the case, we are back to the same situation as in \(m\) if \(nums[m-2]>nums[m-1]\).  The same argument can be done for \(nums[m+1]\).  The time complexity of the search is \(O(\log n)\) and space is \(O(1)\).
 </p>
@@ -95,9 +95,9 @@ There are two ways to search for elements in an array: linear search of <a href=
 </div>
 
 
-<div id="outline-container-orgb4efbe1" class="outline-2">
-<h2 id="orgb4efbe1">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgb4efbe1">
+<div id="outline-container-orgf5aeb07" class="outline-2">
+<h2 id="orgf5aeb07">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgf5aeb07">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

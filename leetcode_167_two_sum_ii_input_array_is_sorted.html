@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 167. Two Sum II - Input Array Is Sorted</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 167. Two Sum II - Input Array Is Sorted</h1>
+<p>
+<a href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/">Problem Statement</a>
+</p>
+
+<div id="outline-container-org10fc4ce" class="outline-2">
+<h2 id="org10fc4ce">Pattern</h2>
+<div class="outline-text-2" id="text-org10fc4ce">
+<ul class="org-ul">
+<li><a href="pattern_search_for_pair_in_sorted_array.html#ID-2F86E081-6373-4D5F-BD90-51E5B18A9F6F">Pattern: Search for pair in sorted array</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org812bdef" class="outline-2">
+<h2 id="org812bdef">Problem</h2>
+<div class="outline-text-2" id="text-org812bdef">
+<p>
+Given a sorted array of integers \(a\) and an integer \(target\), find a pair of index \(i\) and \(j\) such that \(a[i]+a[j]=target\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb66e069" class="outline-2">
+<h2 id="orgb66e069">Solution 1: <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a></h2>
+<div class="outline-text-2" id="text-orgb66e069">
+<p>
+We can use the <a href="fix_one_find_other_template.html#ID-8F498120-1895-4E22-AE25-10FC78432B7C">Fix One and Search Other Template</a> to solve this problem.  For each index \(i\), search for a index \(j\) such that \(a[j]=target-a[i]\).  As the array is sorted, we can use a binary search to find \(j\) efficiently.  Time complexity is \(O(n \log n)\) since we perform a binary search for each index of the array.  The space complexity is \(O(1)\) as no extra memory is used but few variable to track the search.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">twoSum</span>(<span style="font-weight: bold;">self</span>, numbers: List[<span style="font-weight: bold;">int</span>], target: <span style="font-weight: bold;">int</span>) -&gt; List[<span style="font-weight: bold;">int</span>]:
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(numbers) - 1):
+            <span style="font-weight: bold; font-style: italic;">start</span>, <span style="font-weight: bold; font-style: italic;">end</span> = i + 1, <span style="font-weight: bold;">len</span>(numbers) - 1
+            <span style="font-weight: bold;">while</span> start &lt;= <span style="font-weight: bold; font-style: italic;">end</span>:
+                mid = start + (end - start) // 2
+                <span style="font-weight: bold; font-style: italic;">cur</span> = numbers[i] + numbers[mid]
+                <span style="font-weight: bold;">if</span> cur == target:
+                    <span style="font-weight: bold;">return</span> [i + 1, mid + 1]
+                <span style="font-weight: bold;">elif</span> cur &gt; target:
+                    end = mid - 1
+                <span style="font-weight: bold;">else</span>:
+                    start = mid + 1
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4dc0e4f" class="outline-2">
+<h2 id="org4dc0e4f">Solution 2: <a href="two_pointers_technique.html#ID-1359F635-B3D9-4265-A6A5-BF76D6E06D13">Two pointers technique</a></h2>
+<div class="outline-text-2" id="text-org4dc0e4f">
+<p>
+This solution takes advantage of the array being sorted.  We use the first and last value of the array as a pair, \(i\) and \(j\), respectively.  In each iteration, we either increase the value of \(i\) or decrease the value of \(j\).  If \(a[i]+a[j]=target\), \([i+1, j+1]\) is the solution.  If \(a[i]+a[j]>target\), reduce sum as little as possible by decreasing \(j\).  Otherwise, increase the sum as little as possible by increasing \(i\).
+</p>
+
+<p>
+The problem guarantees that there is at least one pair with sum \(target\).  Let's show how the algorithm finds it.  Observe that each iteration decreases the interval \(i..j\) by one.  Therefore, the algorithm terminates in at most \(n\) iterations.  Let \(p\) and \(q\) be the optimal solution.  If \(i\) becomes equal to \(p\), we have that \(j>q\) and \(a[i]+a[j]>a[i]+a[q]\).  From this iteration forward, \(i\) does not change and \(j\) decreases until it becomes equal to \(p\).  Thus, the algorithm finds the optimal solution.  A similar argument holds if \(j\) decreases and becomes equal to \(q\) first.
+</p>
+
+<p>
+The time complexity is linear since the interval from \(i\) to \(j\) decreases by one at most \(n\) times.  The space complexity is constant as only few variables are used to track the two pointers.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">twoSum</span>(<span style="font-weight: bold;">self</span>, numbers: List[<span style="font-weight: bold;">int</span>], target: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold; font-style: italic;">List</span>[<span style="font-weight: bold;">int</span>]:
+        <span style="font-weight: bold; font-style: italic;">start</span>, <span style="font-weight: bold; font-style: italic;">end</span> = 0, <span style="font-weight: bold;">len</span>(numbers) - 1
+        <span style="font-weight: bold;">while</span> start &lt;= <span style="font-weight: bold; font-style: italic;">end</span>:
+            cur = numbers[start] + numbers[end]
+            <span style="font-weight: bold;">if</span> cur == target:
+                <span style="font-weight: bold;">return</span> [start + 1, end + 1]
+            <span style="font-weight: bold;">elif</span> cur &gt; target:
+                end = end - 1
+            <span style="font-weight: bold;">else</span>:
+                start = start + 1
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6ea4c26" class="outline-2">
+<h2 id="org6ea4c26">Reference</h2>
+<div class="outline-text-2" id="text-org6ea4c26">
+<ul class="org-ul">
+<li><a href="https://people.csail.mit.edu/virgi/6.s078/lecture9.pdf">6.S078 Fine-Grained Algorithms and Complexity - Lecture 9: Algorithms for k-SUM</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgd73ab17" class="outline-2">
+<h2 id="orgd73ab17">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgd73ab17">
+<ul class="org-ul">
+<li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

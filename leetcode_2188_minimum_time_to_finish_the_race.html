@@ -48,18 +48,18 @@
 <a href="https://leetcode.com/problems/minimum-time-to-finish-the-race/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orge17c778" class="outline-2">
-<h2 id="orge17c778">Understand the problem</h2>
-<div class="outline-text-2" id="text-orge17c778">
+<div id="outline-container-orgfa13141" class="outline-2">
+<h2 id="orgfa13141">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgfa13141">
 <p>
 Given an array representing tires where \(tires[i] = [f_i, r_i]\), a cost to change tires and number of laps in the race.  The time \(t\) for the tire \(i\) to make \(j\)th lap is \(t(i, j) = t(i, j - 1) + f_i \times r_i^j\).  Determine the minimum times to finish the race.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgfd86db2" class="outline-2">
-<h2 id="orgfd86db2">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgfd86db2">
+<div id="outline-container-org2a39310" class="outline-2">
+<h2 id="org2a39310">Devise a plan</h2>
+<div class="outline-text-2" id="text-org2a39310">
 <ul class="org-ul">
 <li><a href="can_we_simplify_the_problem_which_keeping_it_the_same.html#ID-F19C9539-EE46-41EE-8DEF-24C3076C6DC2">Can we simplify the problem while keeping it the same?</a>  As the cost of change tires is at most \(10^5\), we don't need to use a tire for more than 17 laps at most since \(r_i^17 \geq 2^17 \geq 10^5\).</li>
 
@@ -67,9 +67,9 @@ Given an array representing tires where \(tires[i] = [f_i, r_i]\), a cost to cha
 </ul>
 </div>
 
-<div id="outline-container-org45d93b8" class="outline-3">
-<h3 id="org45d93b8">Carry out the solution</h3>
-<div class="outline-text-3" id="text-org45d93b8">
+<div id="outline-container-org9bf8f14" class="outline-3">
+<h3 id="org9bf8f14">Carry out the solution</h3>
+<div class="outline-text-3" id="text-org9bf8f14">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimumFinishTime</span>(

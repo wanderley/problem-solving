@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org4c41d41" class="outline-2">
-<h2 id="org4c41d41">Understand the problem</h2>
-<div class="outline-text-2" id="text-org4c41d41">
+<div id="outline-container-org1ed4513" class="outline-2">
+<h2 id="org1ed4513">Understand the problem</h2>
+<div class="outline-text-2" id="text-org1ed4513">
 <p>
 <a href="pattern_find_optimal_arrangement.html#ID-F431A436-0E2F-42F4-9EB9-13A82272F944">Pattern: Find optimal arrangement</a> where you can do two operations: (1) remove first char from the input and add to a stack, (2) remove char from stack and put on the answer.  Find the smallest string that can be formed using these rules.
 </p>
 </div>
 
-<div id="outline-container-org9815cdf" class="outline-3">
-<h3 id="org9815cdf">Useful prompts</h3>
-<div class="outline-text-3" id="text-org9815cdf">
+<div id="outline-container-org031eef5" class="outline-3">
+<h3 id="org031eef5">Useful prompts</h3>
+<div class="outline-text-3" id="text-org031eef5">
 <ul class="org-ul">
 <li><a href="how_can_we_extend_the_solution_for_i_to_i_1.html#ID-45B9F3C8-D007-4980-95EF-4361906245A8">How can we extend the solution for \(i\) to \(i+1\)?</a></li>
 </ul>
@@ -66,17 +66,17 @@
 </div>
 </div>
 
-<div id="outline-container-orgd59f5f0" class="outline-2">
-<h2 id="orgd59f5f0">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgd59f5f0">
+<div id="outline-container-orgabf7b7c" class="outline-2">
+<h2 id="orgabf7b7c">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgabf7b7c">
 <p>
 For each char in the input, add it to the answer if there is no char on the right (rest of the string) that comes first than it.  Otherwise, drop all chars from the current stack to the answer while they are smaller than the smaller char to the right.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-org79ee804" class="outline-3">
-<h3 id="org79ee804">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org79ee804">
+<div id="outline-container-org0794696" class="outline-3">
+<h3 id="org0794696">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org0794696">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">from</span> sortedcontainers <span style="font-weight: bold;">import</span> SortedList
 

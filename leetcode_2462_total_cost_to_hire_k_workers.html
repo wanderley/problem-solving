@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/total-cost-to-hire-k-workers/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org3e77502" class="outline-2">
-<h2 id="org3e77502">Understand the problem</h2>
-<div class="outline-text-2" id="text-org3e77502">
+<div id="outline-container-org65bd1bb" class="outline-2">
+<h2 id="org65bd1bb">Understand the problem</h2>
+<div class="outline-text-2" id="text-org65bd1bb">
 <p>
 Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the cost of picking \(k\) integers from \(a\) as following:
 </p>
@@ -61,9 +61,9 @@ Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the 
 </ol>
 </div>
 
-<div id="outline-container-orgb7f21ee" class="outline-3">
-<h3 id="orgb7f21ee">Useful prompts</h3>
-<div class="outline-text-3" id="text-orgb7f21ee">
+<div id="outline-container-org530153b" class="outline-3">
+<h3 id="org530153b">Useful prompts</h3>
+<div class="outline-text-3" id="text-org530153b">
 <ul class="org-ul">
 <li><a href="can_we_simulate_the_problem.html#ID-48E699CB-3125-47FF-AA1A-5FCCF0EF235E">Can we simulate the problem?</a></li>
 </ul>
@@ -71,17 +71,17 @@ Given a non-negative integer array \(a\) and integers \(k\) and \(m\), find the 
 </div>
 </div>
 
-<div id="outline-container-orgad800f8" class="outline-2">
-<h2 id="orgad800f8">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgad800f8">
+<div id="outline-container-orgbdc2a86" class="outline-2">
+<h2 id="orgbdc2a86">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgbdc2a86">
 <p>
 On every turn, the array reduces in one.  Because of that, we have to efficiently resize the pool of candidates to pick.  To do so, we keep a priority queue with the candidates to pick.  After removing the best candidate from the pool, we add the next one from the left or the right depending on each side the best candidate is.  Time complexity is \(O(n \log n)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-org73f23f7" class="outline-3">
-<h3 id="org73f23f7">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org73f23f7">
+<div id="outline-container-org3349d28" class="outline-3">
+<h3 id="org3349d28">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org3349d28">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">totalCost</span>(<span style="font-weight: bold;">self</span>, costs: List[<span style="font-weight: bold;">int</span>], k: <span style="font-weight: bold;">int</span>, candidates: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:

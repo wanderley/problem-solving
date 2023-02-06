@@ -48,26 +48,26 @@
 <a href="https://leetcode.com/problems/determine-if-two-events-have-conflict/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orgd12fe9c" class="outline-2">
-<h2 id="orgd12fe9c">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgd12fe9c">
+<div id="outline-container-orgf401239" class="outline-2">
+<h2 id="orgf401239">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgf401239">
 <p>
 Determine if two segments intersect.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org46fcf95" class="outline-2">
-<h2 id="org46fcf95">Devise a plan</h2>
-<div class="outline-text-2" id="text-org46fcf95">
+<div id="outline-container-org55f31f3" class="outline-2">
+<h2 id="org55f31f3">Devise a plan</h2>
+<div class="outline-text-2" id="text-org55f31f3">
 <p>
 If two segments intersect, then they have a point \(x\) in common which \(s_1[0] \leq x s_1[1]\) and \(s_2[0] \leq x s_2[1]\).  Therefore, \(\max(s_1[0], s_2[0]) \leq x\) and \(x \leq \min(s_1[1], s_2[1])\).  To answer the question, we can just check if \(\max(s_1[0], s_2[0]) \leq \min(s_1[1], s_2[1])\).
 </p>
 </div>
 
-<div id="outline-container-org315dd5a" class="outline-3">
-<h3 id="org315dd5a">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org315dd5a">
+<div id="outline-container-org76faec6" class="outline-3">
+<h3 id="org76faec6">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org76faec6">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">haveConflict</span>(<span style="font-weight: bold;">self</span>, event1: List[<span style="font-weight: bold;">str</span>], event2: List[<span style="font-weight: bold;">str</span>]) -&gt; <span style="font-weight: bold;">bool</span>:
