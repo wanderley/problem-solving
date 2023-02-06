@@ -1,0 +1,63 @@
+:PROPERTIES:
+:ID:       1C65AE58-2344-4F0A-A336-77E587E81033
+:ROAM_REFS: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+:END:
+#+TITLE: Leetcode: 167. Two Sum II - Input Array Is Sorted
+#+ROAM_REFS: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1675667322575
+
+* Pattern
+
+- [[id:2F86E081-6373-4D5F-BD90-51E5B18A9F6F][Pattern: Search for pair in sorted array]]
+
+* Problem
+
+Given a sorted array of integers $a$ and an integer $target$, find a pair of index $i$ and $j$ such that $a[i]+a[j]=target$.
+
+* Solution 1: [[id:1217FC3D-A9F9-49EC-BA5D-A68E50338DBD][Binary Search]]
+
+We can use the [[id:8F498120-1895-4E22-AE25-10FC78432B7C][Fix One and Search Other Template]] to solve this problem.  For each index $i$, search for a index $j$ such that $a[j]=target-a[i]$.  As the array is sorted, we can use a binary search to find $j$ efficiently.  Time complexity is $O(n \log n)$ since we perform a binary search for each index of the array.  The space complexity is $O(1)$ as no extra memory is used but few variable to track the search.
+
+#+begin_src python
+  class Solution:
+      def twoSum(self, numbers: List[int], target: int) -> List[int]:
+          for i in range(len(numbers) - 1):
+              start, end = i + 1, len(numbers) - 1
+              while start <= end:
+                  mid = start + (end - start) // 2
+                  cur = numbers[i] + numbers[mid]
+                  if cur == target:
+                      return [i + 1, mid + 1]
+                  elif cur > target:
+                      end = mid - 1
+                  else:
+                      start = mid + 1
+#+end_src
+
+* Solution 2: [[id:1359F635-B3D9-4265-A6A5-BF76D6E06D13][Two pointers technique]]
+
+This solution takes advantage of the array being sorted.  We use the first and last value of the array as a pair, $i$ and $j$, respectively.  In each iteration, we either increase the value of $i$ or decrease the value of $j$.  If $a[i]+a[j]=target$, $[i+1, j+1]$ is the solution.  If $a[i]+a[j]>target$, reduce sum as little as possible by decreasing $j$.  Otherwise, increase the sum as little as possible by increasing $i$.
+
+The problem guarantees that there is at least one pair with sum $target$.  Let's show how the algorithm finds it.  Observe that each iteration decreases the interval $i..j$ by one.  Therefore, the algorithm terminates in at most $n$ iterations.  Let $p$ and $q$ be the optimal solution.  If $i$ becomes equal to $p$, we have that $j>q$ and $a[i]+a[j]>a[i]+a[q]$.  From this iteration forward, $i$ does not change and $j$ decreases until it becomes equal to $p$.  Thus, the algorithm finds the optimal solution.  A similar argument holds if $j$ decreases and becomes equal to $q$ first.
+
+The time complexity is linear since the interval from $i$ to $j$ decreases by one at most $n$ times.  The space complexity is constant as only few variables are used to track the two pointers.
+
+#+begin_src python
+  class Solution:
+      def twoSum(self, numbers: List[int], target: int) -> List[int]:
+          start, end = 0, len(numbers) - 1
+          while start <= end:
+              cur = numbers[start] + numbers[end]
+              if cur == target:
+                  return [start + 1, end + 1]
+              elif cur > target:
+                  end = end - 1
+              else:
+                  start = start + 1
+#+end_src
+
+* Reference
+
+- [[https://people.csail.mit.edu/virgi/6.s078/lecture9.pdf][6.S078 Fine-Grained Algorithms and Complexity - Lecture 9: Algorithms for k-SUM]]

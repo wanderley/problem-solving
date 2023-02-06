@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       2F86E081-6373-4D5F-BD90-51E5B18A9F6F
+:END:
+#+TITLE: Pattern: Search for pair in sorted array

@@ -209,6 +209,7 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 - [ ] [[https://leetcode.com/problems/meeting-rooms-ii/][Meeting Rooms II (Leetcode Premium)]]
 - Extra:
   - [ ] [[https://leetcode.com/problems/find-peak-element/][Find Peak Element]] ([[id:E4E1316F-92A3-4C51-8FC6-16A39DD1C1CE][solution]])
+  - [ ] [[https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/][Two Sum II - Input Array Is Sorted]] ([[id:1C65AE58-2344-4F0A-A336-77E587E81033][solution]] *NEW!*)
 
 
 * Blind 75 :noexport:
