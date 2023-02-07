@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       E1B22D6A-80D2-403E-A4A9-98832DA45C83
+:END:
+#+TITLE: Pattern: Count triplets in array

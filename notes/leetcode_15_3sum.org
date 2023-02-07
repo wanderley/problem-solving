@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       F46A0FDA-FF12-42FF-8BA1-FEAC7D9B6A4B
+:ROAM_REFS: https://leetcode.com/problems/3sum/
+:END:
+#+TITLE: Leetcode: 15. 3Sum
+#+ROAM_REFS: https://leetcode.com/problems/3sum/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1675752446870
+
+* Pattern
+
+- [[id:E1B22D6A-80D2-403E-A4A9-98832DA45C83][Pattern: Count triplets in array]]
+
+* Solution
+
+Given an array of integers $a$, find all triplets that sums to $0$.  Here are two ways to solve this problem.
+
+The first method uses [[id:8F498120-1895-4E22-AE25-10FC78432B7C][Fix One and Search Other Template]] to solve this problem after sorting $a$: for each index $i$, find all pairs that sums to $-a[i]$ using a variation of [[id:1C65AE58-2344-4F0A-A336-77E587E81033][Leetcode: 167. Two Sum II - Input Array Is Sorted]].  The time complexity is $O(n^2)$ as the two sum algorithm is $O(n)$ and it is executed at most $n$ times.  The space complexity is $O(\log n)$ due the sorting algorithm.
+
+The second method does not require sorting the input but it uses extra memory to achieve the same time complexity (see [[id:AF49B2EA-A026-4E91-A4EC-423123E63A9B][Improve Performance Using More Memory]]).  The idea is similar to [[id:5F25DCD8-CE46-4F18-A1B1-952BC35382A9][Leetcode: 1. Two Sum]].  We use a dictionary to store indexes of values of $a$.  For each $i$ in $0..(n-1)$ and $j$ in $(i+1)..(n-1)$, add a triplet to the answer if $-a[i] - a[j]$ appears in an index different than $i$ and $j$.  To avoid duplicates, add sorted tuples to the answer.  The time complexity is $O(n^2)$ as the solution iterates over $n \times (n - 1) / 2$ pairs and spends $O(1)$ to decide and add it to the solution.  The space complexity is $O(n)$ as the input values are stored in the dictionary.
+
+#+begin_src python
+  class Solution:
+      def threeSum(self, nums: List[int]) -> List[List[int]]:
+          N = len(nums)
+
+          seen = {}
+          for i, x in enumerate(nums):
+              seen.setdefault(x, set()).add(i)
+
+          ans = set()
+          for i in range(N):
+              for j in range(i + 1, N):
+                  x = nums[i] + nums[j]
+                  if -x in seen and len(seen[-x]) - (i in seen[-x]) - (j in seen[-x]):
+                      ans.add(tuple(sorted([nums[i], nums[j], -x])))
+          return [*ans]
+#+end_src
