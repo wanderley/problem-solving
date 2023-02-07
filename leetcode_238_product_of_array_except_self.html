@@ -48,18 +48,18 @@
 <a href="https://leetcode.com/problems/product-of-array-except-self/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orgfc4a71f" class="outline-2">
-<h2 id="orgfc4a71f">Patterns</h2>
-<div class="outline-text-2" id="text-orgfc4a71f">
+<div id="outline-container-org9eb1848" class="outline-2">
+<h2 id="org9eb1848">Patterns</h2>
+<div class="outline-text-2" id="text-org9eb1848">
 <ul class="org-ul">
 <li><a href="pattern_find_cumulative_product_of_an_array.html#ID-E531AE8D-3BE5-486D-A28E-58828790F8E3">Pattern: Find cumulative product of an array</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgc6ba1c0" class="outline-2">
-<h2 id="orgc6ba1c0">Prompts</h2>
-<div class="outline-text-2" id="text-orgc6ba1c0">
+<div id="outline-container-orgd1c0660" class="outline-2">
+<h2 id="orgd1c0660">Prompts</h2>
+<div class="outline-text-2" id="text-orgd1c0660">
 <ul class="org-ul">
 <li><a href="can_you_break_down_the_problem_in_small_and_easily_to_solve_parts.html#ID-69D68202-BF1A-4D72-A0EC-DDCBAF112500">Can we break-down the problem in small and easily to solve parts?</a></li>
 
@@ -68,9 +68,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgbfe3182" class="outline-2">
-<h2 id="orgbfe3182">Solution</h2>
-<div class="outline-text-2" id="text-orgbfe3182">
+<div id="outline-container-org1fb3dda" class="outline-2">
+<h2 id="org1fb3dda">Solution</h2>
+<div class="outline-text-2" id="text-org1fb3dda">
 <p>
 The problem is specific about the time and space complexity.  It expects a solution with time complexity of \(O(n)\) and space complexity of \(O(1)\).  This is already a big hint for us, since we know that it is possible to solve the problem without using extra memory.  <a href="is_there_an_alternative_problem_easier_to_solve.html#ID-64E7E55B-09A9-4022-AB5E-1D25FC64EAC9">Is there an alternative problem easier to solve?</a>  Yes, there is: return \(answer\) where \(answer[i]=nums[0] \times nums[1] \times ... \times nums[i-1]\).  With a simple iteration, we can compute this \(answer\) without using extra memory.  If the problem were to find \(answer\) where \(answer[i]=nums[n-1] \times nums[n-2] \times ... \times nums[i+1]\), it can also be solved with a simple iteration.  Is it possible to combine these two problem and solve the original one?  Yes, but I will leave it for you to do.
 </p>
@@ -94,9 +94,9 @@ The problem is specific about the time and space complexity.  It expects a solut
 </div>
 
 
-<div id="outline-container-org3fe8cb8" class="outline-2">
-<h2 id="org3fe8cb8">Cited by 1</h2>
-<div class="outline-text-2" id="text-org3fe8cb8">
+<div id="outline-container-org0990714" class="outline-2">
+<h2 id="org0990714">Cited by 1</h2>
+<div class="outline-text-2" id="text-org0990714">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

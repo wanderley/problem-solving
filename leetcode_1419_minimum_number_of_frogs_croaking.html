@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/minimum-number-of-frogs-croaking/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org8378169" class="outline-2">
-<h2 id="org8378169">Patterns</h2>
-<div class="outline-text-2" id="text-org8378169">
+<div id="outline-container-org4524b56" class="outline-2">
+<h2 id="org4524b56">Patterns</h2>
+<div class="outline-text-2" id="text-org4524b56">
 <ul class="org-ul">
 <li><a href="pattern_optimization_problem_to_find_minimum_maximum_number_of_x_to_cover_y.html#ID-45D8FD21-992F-4073-8EC6-7695FAA0E3AB">Pattern: Optimization problem to find minimum/maximum number of X to cover Y</a>.</li>
 
@@ -59,18 +59,18 @@
 </div>
 </div>
 
-<div id="outline-container-orge48b8a8" class="outline-2">
-<h2 id="orge48b8a8">Prompts</h2>
-<div class="outline-text-2" id="text-orge48b8a8">
+<div id="outline-container-orgf1a131a" class="outline-2">
+<h2 id="orgf1a131a">Prompts</h2>
+<div class="outline-text-2" id="text-orgf1a131a">
 <ul class="org-ul">
 <li><a href="can_we_solve_the_problem_using_a_greedy_approach.html#ID-1CA3366B-D045-4BF4-9E39-DFA5131EF937">Can we solve the problem using a greedy approach?</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org6294a15" class="outline-2">
-<h2 id="org6294a15">Solution</h2>
-<div class="outline-text-2" id="text-org6294a15">
+<div id="outline-container-orgeefd4fb" class="outline-2">
+<h2 id="orgeefd4fb">Solution</h2>
+<div class="outline-text-2" id="text-orgeefd4fb">
 <p>
 The fact that one frog can croak multiple times means that two independent croaks can be performed by the same frog.  For example, one frog can produce "croakcroak" while two frogs are required to produce "crcroakoakcroak" ("aabbbbbaaaaaaaa" or "aabbbbbaaabbbbb" where \(a\) and \(b\) represents two frogs).  Thus, we can postpone the decision to add one frog to the answer iff all other frogs are in busy croaking.  Doing so, the algorithm is making a locally optimal choice (<a href="greedy_algorithm.html#ID-FFC75108-C74E-44B1-9B60-B3A22B15E617">Greedy algorithm</a>).
 </p>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 15. 3Sum</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 15. 3Sum</h1>
+<p>
+<a href="https://leetcode.com/problems/3sum/">Problem Statement</a>
+</p>
+
+<div id="outline-container-org271401f" class="outline-2">
+<h2 id="org271401f">Pattern</h2>
+<div class="outline-text-2" id="text-org271401f">
+<ul class="org-ul">
+<li><a href="pattern_count_triplets_in_array.html#ID-E1B22D6A-80D2-403E-A4A9-98832DA45C83">Pattern: Count triplets in array</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org48367da" class="outline-2">
+<h2 id="org48367da">Solution</h2>
+<div class="outline-text-2" id="text-org48367da">
+<p>
+Given an array of integers \(a\), find all triplets that sums to \(0\).  Here are two ways to solve this problem.
+</p>
+
+<p>
+The first method uses <a href="fix_one_find_other_template.html#ID-8F498120-1895-4E22-AE25-10FC78432B7C">Fix One and Search Other Template</a> to solve this problem after sorting \(a\): for each index \(i\), find all pairs that sums to \(-a[i]\) using a variation of <a href="leetcode_167_two_sum_ii_input_array_is_sorted.html#ID-1C65AE58-2344-4F0A-A336-77E587E81033">Leetcode: 167. Two Sum II - Input Array Is Sorted</a>.  The time complexity is \(O(n^2)\) as the two sum algorithm is \(O(n)\) and it is executed at most \(n\) times.  The space complexity is \(O(\log n)\) due the sorting algorithm.
+</p>
+
+<p>
+The second method does not require sorting the input but it uses extra memory to achieve the same time complexity (see <a href="improve_performance_using_more_memory.html#ID-AF49B2EA-A026-4E91-A4EC-423123E63A9B">Improve Performance Using More Memory</a>).  The idea is similar to <a href="leetcode_1_two_sum.html#ID-5F25DCD8-CE46-4F18-A1B1-952BC35382A9">Leetcode: 1. Two Sum</a>.  We use a dictionary to store indexes of values of \(a\).  For each \(i\) in \(0..(n-1)\) and \(j\) in \((i+1)..(n-1)\), add a triplet to the answer if \(-a[i] - a[j]\) appears in an index different than \(i\) and \(j\).  To avoid duplicates, add sorted tuples to the answer.  The time complexity is \(O(n^2)\) as the solution iterates over \(n \times (n - 1) / 2\) pairs and spends \(O(1)\) to decide and add it to the solution.  The space complexity is \(O(n)\) as the input values are stored in the dictionary.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">threeSum</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; List[List[<span style="font-weight: bold;">int</span>]]:
+        <span style="font-weight: bold; font-style: italic;">N</span> = <span style="font-weight: bold;">len</span>(nums)
+
+        <span style="font-weight: bold; font-style: italic;">seen</span> = {}
+        <span style="font-weight: bold;">for</span> i, x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">enumerate</span>(nums):
+            seen.setdefault(x, <span style="font-weight: bold;">set</span>()).add(i)
+
+        <span style="font-weight: bold; font-style: italic;">ans</span> = <span style="font-weight: bold;">set</span>()
+        <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(N):
+            <span style="font-weight: bold;">for</span> j <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(i + 1, N):
+                <span style="font-weight: bold; font-style: italic;">x</span> = nums[i] + nums[j]
+                <span style="font-weight: bold;">if</span> -x <span style="font-weight: bold;">in</span> seen <span style="font-weight: bold;">and</span> <span style="font-weight: bold;">len</span>(seen[-x]) - (i <span style="font-weight: bold;">in</span> seen[-x]) - (j <span style="font-weight: bold;">in</span> seen[-x]):
+                    ans.add(<span style="font-weight: bold;">tuple</span>(<span style="font-weight: bold;">sorted</span>([nums[i], nums[j], -x])))
+        <span style="font-weight: bold;">return</span> [*ans]
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org0af99da" class="outline-2">
+<h2 id="org0af99da">Cited by 1</h2>
+<div class="outline-text-2" id="text-org0af99da">
+<ul class="org-ul">
+<li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>
