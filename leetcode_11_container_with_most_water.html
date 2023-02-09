@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 11. Container With Most Water</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 11. Container With Most Water</h1>
+<p>
+<a href="https://leetcode.com/problems/container-with-most-water/">Problem Statement</a>
+</p>
+
+<div id="outline-container-orgcc1dd15" class="outline-2">
+<h2 id="orgcc1dd15">Patterns</h2>
+<div class="outline-text-2" id="text-orgcc1dd15">
+<ul class="org-ul">
+<li><a href="pattern_find_optimal_pair_in_array.html#ID-D4FEF50E-7632-4A0E-8E68-550C46F9D538">Pattern: Find optimal pair in array</a></li>
+<li><a href="pattern_problem_s_constraints_disallow_o_n_2_solutions.html#ID-FCF0DB21-F99D-4A98-B592-6889DB9FE1F4">Pattern: Problem's constraints disallow \(O(n^2)\) solutions</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga080a7e" class="outline-2">
+<h2 id="orga080a7e">Solution</h2>
+<div class="outline-text-2" id="text-orga080a7e">
+<p>
+Given an integer array \(height\) of length \(n\).  A container is defined as a pair of indexes in \(height\), and it's volume as \(v(i, j)=\min(height[i], heght[j]) \times (i - j)\).  The task is to find the container with maximum volume.
+</p>
+
+<p>
+Let's use <a href="two_pointers_technique.html#ID-1359F635-B3D9-4265-A6A5-BF76D6E06D13">Two pointers technique</a> to solve this problem.  Let \(i=0\) and \(j=n-1\) be the two pointers starting on the beginning and end of the array.  On each iteration, update the maximum volume found so far and move the pointers toward each other as following.  If \(height[i]<height[j]\), increment \(i\).  Otherwise, decrement \(j\).  The algorithm terminates when \(i>j\).  It works since if \((i, j)\) isn't an optimal container, then the optimal container \((i', j')\) has height greater than \(min(height[i], height[j])\).  In such case, the algorithm moves the side with smaller height since it certainly can't be part of an optimal container.
+</p>
+
+<p>
+The time complexity is linear because each index of the array is used only once, and space complexity is constant as only variables to track the two points are necessary.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">maxArea</span>(<span style="font-weight: bold;">self</span>, height: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:
+        <span style="font-weight: bold; font-style: italic;">start</span>, <span style="font-weight: bold; font-style: italic;">end</span> = 0, <span style="font-weight: bold;">len</span>(height) - 1
+        <span style="font-weight: bold; font-style: italic;">ans</span> = -inf
+        <span style="font-weight: bold;">while</span> start &lt;= <span style="font-weight: bold; font-style: italic;">end</span>:
+            ans = <span style="font-weight: bold;">max</span>(ans, <span style="font-weight: bold;">min</span>(height[start], height[end]) * (end - start))
+            <span style="font-weight: bold;">if</span> height[start] &lt; <span style="font-weight: bold; font-style: italic;">height</span>[end]:
+                start += 1
+            <span style="font-weight: bold;">else</span>:
+                end -= 1
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orge79c3ac" class="outline-2">
+<h2 id="orge79c3ac">Cited by 1</h2>
+<div class="outline-text-2" id="text-orge79c3ac">
+<ul class="org-ul">
+<li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -48,27 +48,27 @@
 <a href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orga1a2a4f" class="outline-2">
-<h2 id="orga1a2a4f">Pattern</h2>
-<div class="outline-text-2" id="text-orga1a2a4f">
+<div id="outline-container-org24351bc" class="outline-2">
+<h2 id="org24351bc">Pattern</h2>
+<div class="outline-text-2" id="text-org24351bc">
 <ul class="org-ul">
-<li><a href="pattern_search_for_pair_in_sorted_array.html#ID-2F86E081-6373-4D5F-BD90-51E5B18A9F6F">Pattern: Search for pair in sorted array</a></li>
+<li><a href="pattern_search_for_pair_in_sorted_array.html#ID-2F86E081-6373-4D5F-BD90-51E5B18A9F6F">Pattern: Find optimal pair in sorted array</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org163a11d" class="outline-2">
-<h2 id="org163a11d">Problem</h2>
-<div class="outline-text-2" id="text-org163a11d">
+<div id="outline-container-org5b92701" class="outline-2">
+<h2 id="org5b92701">Problem</h2>
+<div class="outline-text-2" id="text-org5b92701">
 <p>
 Given a sorted array of integers \(a\) and an integer \(target\), find a pair of index \(i\) and \(j\) such that \(a[i]+a[j]=target\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-orga069cbe" class="outline-2">
-<h2 id="orga069cbe">Solution 1: <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a></h2>
-<div class="outline-text-2" id="text-orga069cbe">
+<div id="outline-container-orga4b2623" class="outline-2">
+<h2 id="orga4b2623">Solution 1: <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a></h2>
+<div class="outline-text-2" id="text-orga4b2623">
 <p>
 We can use the <a href="fix_one_find_other_template.html#ID-8F498120-1895-4E22-AE25-10FC78432B7C">Fix One and Search Other Template</a> to solve this problem.  For each index \(i\), search for a index \(j\) such that \(a[j]=target-a[i]\).  As the array is sorted, we can use a binary search to find \(j\) efficiently.  Time complexity is \(O(n \log n)\) since we perform a binary search for each index of the array.  The space complexity is \(O(1)\) as no extra memory is used but few variable to track the search.
 </p>
@@ -92,9 +92,9 @@ We can use the <a href="fix_one_find_other_template.html#ID-8F498120-1895-4E22-A
 </div>
 </div>
 
-<div id="outline-container-org793ab45" class="outline-2">
-<h2 id="org793ab45">Solution 2: <a href="two_pointers_technique.html#ID-1359F635-B3D9-4265-A6A5-BF76D6E06D13">Two pointers technique</a></h2>
-<div class="outline-text-2" id="text-org793ab45">
+<div id="outline-container-orgfc1e9a0" class="outline-2">
+<h2 id="orgfc1e9a0">Solution 2: <a href="two_pointers_technique.html#ID-1359F635-B3D9-4265-A6A5-BF76D6E06D13">Two pointers technique</a></h2>
+<div class="outline-text-2" id="text-orgfc1e9a0">
 <p>
 This solution takes advantage of the array being sorted.  We use the first and last value of the array as a pair, \(i\) and \(j\), respectively.  In each iteration, we either increase the value of \(i\) or decrease the value of \(j\).  If \(a[i]+a[j]=target\), \([i+1, j+1]\) is the solution.  If \(a[i]+a[j]>target\), reduce sum as little as possible by decreasing \(j\).  Otherwise, increase the sum as little as possible by increasing \(i\).
 </p>
@@ -124,9 +124,9 @@ The time complexity is linear since the interval from \(i\) to \(j\) decreases b
 </div>
 </div>
 
-<div id="outline-container-org335e0e1" class="outline-2">
-<h2 id="org335e0e1">Reference</h2>
-<div class="outline-text-2" id="text-org335e0e1">
+<div id="outline-container-orgfea2f62" class="outline-2">
+<h2 id="orgfea2f62">Reference</h2>
+<div class="outline-text-2" id="text-orgfea2f62">
 <ul class="org-ul">
 <li><a href="https://people.csail.mit.edu/virgi/6.s078/lecture9.pdf">6.S078 Fine-Grained Algorithms and Complexity - Lecture 9: Algorithms for k-SUM</a></li>
 </ul>
@@ -134,9 +134,9 @@ The time complexity is linear since the interval from \(i\) to \(j\) decreases b
 </div>
 
 
-<div id="outline-container-org0144bcf" class="outline-2">
-<h2 id="org0144bcf">Cited by 2</h2>
-<div class="outline-text-2" id="text-org0144bcf">
+<div id="outline-container-orgf576e60" class="outline-2">
+<h2 id="orgf576e60">Cited by 2</h2>
+<div class="outline-text-2" id="text-orgf576e60">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 <li><a href="leetcode_15_3sum.html#ID-F46A0FDA-FF12-42FF-8BA1-FEAC7D9B6A4B">Leetcode: 15. 3Sum</a></li>

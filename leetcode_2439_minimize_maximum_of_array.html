@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/minimize-maximum-of-array/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org8bddd3d" class="outline-2">
-<h2 id="org8bddd3d">Understand the problem</h2>
-<div class="outline-text-2" id="text-org8bddd3d">
+<div id="outline-container-org4e5b459" class="outline-2">
+<h2 id="org4e5b459">Understand the problem</h2>
+<div class="outline-text-2" id="text-org4e5b459">
 <p>
 Given an array of integers which you can do operations to transfer 1 from any positive number to its right-neighbor, compute the minimum possible values after performing any number of operations.
 </p>
 </div>
 
-<div id="outline-container-org676986d" class="outline-3">
-<h3 id="org676986d">Useful prompts</h3>
-<div class="outline-text-3" id="text-org676986d">
+<div id="outline-container-orgfbcdb13" class="outline-3">
+<h3 id="orgfbcdb13">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgfbcdb13">
 <ul class="org-ul">
 <li><a href="can_we_state_the_problem_as_a_searching_problem.html#ID-60DEC3A8-810C-41E3-96E3-98145F4AAC3F">Can we state the problem as a searching problem?</a></li>
 </ul>
@@ -66,17 +66,17 @@ Given an array of integers which you can do operations to transfer 1 from any po
 </div>
 </div>
 
-<div id="outline-container-org04b100e" class="outline-2">
-<h2 id="org04b100e">Devise a plan</h2>
-<div class="outline-text-2" id="text-org04b100e">
+<div id="outline-container-org824581e" class="outline-2">
+<h2 id="org824581e">Devise a plan</h2>
+<div class="outline-text-2" id="text-org824581e">
 <p>
 For a given input, suppose that we know the answer and it is \(x\) (<a href="pattern_search_validate.html#ID-B39B7723-9DCB-4C18-BE7D-51086F1F2A81">Pattern: Search &amp; Validate</a>).  We can go from left to right applying operations to make each number less than \(x\).  For example, \(a=[3,2,9]\) and \(x=5\). We can apply the following operations: \([3,6,5] \rightarrow [4,5,5]\).  After the first operation, we changed \(a[2]\) from \(9\) to \(5\) what left \(4\) remained which was added to \(a[1]\).  When the remainder is negative, we can set it to zero, since there is no way to transfer values from right to left.  On the end, if the remainder is zero, we know that \(x\) was a valid answer.  If \(x\) is an optimal answer, then \(x+1\) is also a valid answer and \(x-1\) is an invalid answer.  So, a value \(y\) between \(0\) and \(\sum a[i]\), we have that it is invalid if \(y<x\) and valid otherwise.  We can use this property and use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a> to find the optimal value \(x\).  Time complexity is \(O(n \times \log \sum a[i])\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-org3f85ea6" class="outline-3">
-<h3 id="org3f85ea6">Carry out the plan</h3>
-<div class="outline-text-3" id="text-org3f85ea6">
+<div id="outline-container-orgac51e3b" class="outline-3">
+<h3 id="orgac51e3b">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgac51e3b">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">minimizeArrayValue</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>]) -&gt; <span style="font-weight: bold;">int</span>:

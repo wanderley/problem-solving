@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/merge-k-sorted-lists">Problem Statement</a>
 </p>
 
-<div id="outline-container-orgd9b68d3" class="outline-2">
-<h2 id="orgd9b68d3">Understand the problem</h2>
-<div class="outline-text-2" id="text-orgd9b68d3">
+<div id="outline-container-orge03c3f1" class="outline-2">
+<h2 id="orge03c3f1">Understand the problem</h2>
+<div class="outline-text-2" id="text-orge03c3f1">
 <p>
 Given an array of sorted linked lists, return a linked list that contains all elements sorted.
 </p>
 </div>
 
-<div id="outline-container-org4d7c2fa" class="outline-3">
-<h3 id="org4d7c2fa">Useful prompts</h3>
-<div class="outline-text-3" id="text-org4d7c2fa">
+<div id="outline-container-orgffd0c24" class="outline-3">
+<h3 id="orgffd0c24">Useful prompts</h3>
+<div class="outline-text-3" id="text-orgffd0c24">
 <ul class="org-ul">
 <li><a href="can_you_derive_an_invariant_based_on_the_smallest_possible_examples.html#ID-BA632D61-93B6-47AB-B11A-7E9EBE3FC71D">Can we derive an invariant based on the smallest possible examples?</a></li>
 </ul>
@@ -66,17 +66,17 @@ Given an array of sorted linked lists, return a linked list that contains all el
 </div>
 </div>
 
-<div id="outline-container-org9f586dd" class="outline-2">
-<h2 id="org9f586dd">Devise a plan</h2>
-<div class="outline-text-2" id="text-org9f586dd">
+<div id="outline-container-org43eb816" class="outline-2">
+<h2 id="org43eb816">Devise a plan</h2>
+<div class="outline-text-2" id="text-org43eb816">
 <p>
 Use a sorted list to store the head of each list, pick the smallest one and add to the end of the answer.  If the list has a next element, add it back to the sorted list.  Time complexity is \(O(n \log n)\) and space is \(O(1)\).
 </p>
 </div>
 
-<div id="outline-container-orgb4850aa" class="outline-3">
-<h3 id="orgb4850aa">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgb4850aa">
+<div id="outline-container-org8caff43" class="outline-3">
+<h3 id="org8caff43">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org8caff43">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for singly-linked list.</span>
 <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class ListNode:</span>
@@ -107,9 +107,9 @@ Use a sorted list to store the head of each list, pick the smallest one and add 
 </div>
 </div>
 
-<div id="outline-container-org1359320" class="outline-2">
-<h2 id="org1359320">Common mistakes</h2>
-<div class="outline-text-2" id="text-org1359320">
+<div id="outline-container-org77d5981" class="outline-2">
+<h2 id="org77d5981">Common mistakes</h2>
+<div class="outline-text-2" id="text-org77d5981">
 <ul class="org-ul">
 <li><a href="mistake_misread_the_problem.html#ID-192401C2-DA6F-4496-B530-89A3546712FD">Mistake: Misread the problem</a>: Had to fix my code multiple times since the input and output didn't match the problem's expectations.</li>
 </ul>
@@ -117,9 +117,9 @@ Use a sorted list to store the head of each list, pick the smallest one and add 
 </div>
 
 
-<div id="outline-container-org9a48eca" class="outline-2">
-<h2 id="org9a48eca">Cited by 2</h2>
-<div class="outline-text-2" id="text-org9a48eca">
+<div id="outline-container-org86f5dcf" class="outline-2">
+<h2 id="org86f5dcf">Cited by 2</h2>
+<div class="outline-text-2" id="text-org86f5dcf">
 <ul class="org-ul">
 <li><a href="leetcode_632_smallest_range_covering_elements_from_k_lists.html#ID-30CE632C-B965-4C3B-A1B4-5A38F9A1EF36">Leetcode: 632. Smallest Range Covering Elements from K Lists</a></li>
 <li><a href="leetcode_759_employee_free_time.html#ID-2F0C81A4-4B76-4512-BC1A-9FF535D93660">Leetcode: 759. Employee Free Time</a></li>
