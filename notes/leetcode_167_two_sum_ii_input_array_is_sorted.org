@@ -10,7 +10,7 @@
 
 * Pattern
 
-- [[id:2F86E081-6373-4D5F-BD90-51E5B18A9F6F][Pattern: Search for pair in sorted array]]
+- [[id:2F86E081-6373-4D5F-BD90-51E5B18A9F6F][Pattern: Find optimal pair in sorted array]]
 
 * Problem
 

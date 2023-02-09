@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       2EA371C3-FF87-4506-BE17-1AA2BDF0AB42
+:ROAM_REFS: https://leetcode.com/problems/container-with-most-water/
+:END:
+#+TITLE: Leetcode: 11. Container With Most Water
+#+ROAM_REFS: https://leetcode.com/problems/container-with-most-water/
+#+LEETCODE_LEVEL: Medium
+#+ANKI_DECK: Problem Solving
+
+* Patterns
+
+- [[id:D4FEF50E-7632-4A0E-8E68-550C46F9D538][Pattern: Find optimal pair in array]]
+- [[id:FCF0DB21-F99D-4A98-B592-6889DB9FE1F4][Pattern: Problem's constraints disallow $O(n^2)$ solutions]]
+
+* Solution
+
+Given an integer array $height$ of length $n$.  A container is defined as a pair of indexes in $height$, and it's volume as $v(i, j)=\min(height[i], heght[j]) \times (i - j)$.  The task is to find the container with maximum volume.
+
+Let's use [[id:1359F635-B3D9-4265-A6A5-BF76D6E06D13][Two pointers technique]] to solve this problem.  Let $i=0$ and $j=n-1$ be the two pointers starting on the beginning and end of the array.  On each iteration, update the maximum volume found so far and move the pointers toward each other as following.  If $height[i]<height[j]$, increment $i$.  Otherwise, decrement $j$.  The algorithm terminates when $i>j$.  It works since if $(i, j)$ isn't an optimal container, then the optimal container $(i', j')$ has height greater than $min(height[i], height[j])$.  In such case, the algorithm moves the side with smaller height since it certainly can't be part of an optimal container.
+
+The time complexity is linear because each index of the array is used only once, and space complexity is constant as only variables to track the two points are necessary.
+
+#+begin_src python
+  class Solution:
+      def maxArea(self, height: List[int]) -> int:
+          start, end = 0, len(height) - 1
+          ans = -inf
+          while start <= end:
+              ans = max(ans, min(height[start], height[end]) * (end - start))
+              if height[start] < height[end]:
+                  start += 1
+              else:
+                  end -= 1
+          return ans
+#+end_src

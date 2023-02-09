@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       D4FEF50E-7632-4A0E-8E68-550C46F9D538
+:END:
+#+TITLE: Pattern: Find optimal pair in array

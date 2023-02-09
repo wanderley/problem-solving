@@ -164,7 +164,7 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
 - [X] [[https://leetcode.com/problems/search-in-rotated-sorted-array/][Search in Rotated Sorted Array]] ([[id:DE8C7F14-D36F-43BF-8AF1-B6940406EBF6][solution]] *NEW!*)
 - [X] [[https://leetcode.com/problems/3sum/][3 Sum]] ([[id:F46A0FDA-FF12-42FF-8BA1-FEAC7D9B6A4B][solution]] *NEW!*)
-- [X] [[https://leetcode.com/problems/container-with-most-water/][Container With Most Water]]
+- [X] [[https://leetcode.com/problems/container-with-most-water/][Container With Most Water]] ([[id:2EA371C3-FF87-4506-BE17-1AA2BDF0AB42][solution]] *NEW!*)
 - [X] [[https://leetcode.com/problems/sum-of-two-integers/][Sum of Two Integers]]
 - [X] [[https://leetcode.com/problems/number-of-1-bits/][Number of 1 Bits]]
 - [X] [[https://leetcode.com/problems/counting-bits/][Counting Bits]]
