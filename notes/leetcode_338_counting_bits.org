@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       BEB1C18C-3B4F-4805-913A-6E3EF9573515
+:ROAM_REFS: https://leetcode.com/problems/counting-bits/
+:END:
+#+TITLE: Leetcode: 338. Counting Bits
+#+ROAM_REFS: https://leetcode.com/problems/counting-bits/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1676270571176
+
+* Pattern
+
+- [[id:092270C4-16DA-461A-AC1C-62CED4314E34][Pattern: Compute a sequence of values of a function]]
+- [[id:196F904D-BBEF-43CD-BAB5-B8BC563280F8][Pattern: Bitwise problem]]
+
+* Solution
+
+Given an integer $n$, the task is to generate an array $a$ of $n+1$ elements where $a[i]$ is equal to the number of 1 bits in $i$.  The simplest solution is to iterate over each index $i$ and use [[id:9C506DBD-693B-46D8-9CA4-8B7C7D573092][Leetcode: 191. Number of 1 Bits]] to compute $a[i]$.  The time complexity of this solution is $O(n \log n)$.  We can do better.  Note that $a[i]$ is equal to one plus $a[j]$ where $j$ is $i$ with the last significant digit turned of.  For example, $i=3 (0b011)$ then $j=2 (0b010)$ and $i=12 (0b01100)$ then $j=8 (0b01000)$.  Luckily, it is easy to compute $j$: $i & (i - 1)$.  With this observation, we can solve the problem in time complexity $O(n).
+
+#+begin_src python
+  class Solution:
+      def countBits(self, n: int) -> List[int]:
+          ans = [0] * (n + 1)
+          for i in range(1, n + 1):
+              ans[i] = ans[i & (i - 1)] + 1
+          return ans
+#+end_src

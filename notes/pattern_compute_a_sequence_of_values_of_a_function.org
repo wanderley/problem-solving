@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       092270C4-16DA-461A-AC1C-62CED4314E34
+:END:
+#+TITLE: Pattern: Compute a sequence of values of a function

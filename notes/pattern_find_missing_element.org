@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       152C471F-C879-4FB1-93CF-243B6643774C
+:END:
+#+TITLE: Pattern: Find missing element in an interval

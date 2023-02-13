@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       A3920C94-A219-445F-987A-E2A08FFE8C46
+:ROAM_REFS: https://leetcode.com/problems/missing-number/
+:END:
+#+TITLE: Leetcode: 268. Missing Number
+#+ROAM_REFS: https://leetcode.com/problems/missing-number/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1676270557865
+
+* Pattern
+
+- [[id:152C471F-C879-4FB1-93CF-243B6643774C][Pattern: Find missing element in an interval]]
+
+* Solution
+
+Given an integer array $a$ with $n$ distinct numbers between $0$ and $n$, the task is to find the number from $0$ to $n$ missing in $a$.  To solve this problem, we can use two properties of XOR: $a \oplus a = 0$ and $a \oplus 0 = a$ for any integer $a$.  We compute $X = 0 \oplus 1 \oplus 2 \oplus ... \oplus n$ and $Y = a[0] \oplus a[1] \oplus ... \oplus a[n-1]$.  As there is only one number missing from $0$ to $n$ in $a$, we know that $X \oplus Y$ will cancel out the duplicates and leave the only missing number.  The solution has time complexity $O(n)$ and space complexity $O(1)$.
+
+#+begin_src python
+  class Solution:
+      def missingNumber(self, nums: List[int]) -> int:
+          ans = 0
+          for n in nums:
+              ans = ans ^ n
+          for i in range(len(nums) + 1):
+              ans = ans ^ i
+          return ans
+#+end_src

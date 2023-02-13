@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       196F904D-BBEF-43CD-BAB5-B8BC563280F8
+:END:
+#+TITLE: Pattern: Bitwise problem

@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       9C506DBD-693B-46D8-9CA4-8B7C7D573092
+:ROAM_REFS: https://leetcode.com/problems/number-of-1-bits/
+:END:
+#+TITLE: Leetcode: 191. Number of 1 Bits
+#+ROAM_REFS: https://leetcode.com/problems/number-of-1-bits/
+#+LEETCODE_LEVEL: Easy
+#+ANKI_DECK: Problem Solving
+#+ANKI_CARD_ID: 1676270563827
+
+* Pattern
+
+- [[id:196F904D-BBEF-43CD-BAB5-B8BC563280F8][Pattern: Bitwise problem]]
+
+* Solution
+
+Given an integer $n$, the task is to find the number of 1 bits in $n$.  If $n=0$, the answer is clearly $0$.  Otherwise, the answer is the sum of $n \mod 2$ and the number of 1 bits in $\lfloor \frac{n}{2} \rfloor$.  The following algorithm implements this process iteratively using logical operators.  The time complexity is constant since the loop executes at most 32 times.
+
+#+begin_src python
+  class Solution:
+      def hammingWeight(self, n: int) -> int:
+          ans = 0
+          while n:
+              ans += n & 1
+              n = n >> 1
+          return ans
+#+end_src
