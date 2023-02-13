@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leetcode: 191. Number of 1 Bits</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<!--  --><nav><span class="nav-header">Problem Solving</span><span class="nav-items"><a href="index.html">Home</a><span></nav><div id="content" class="content">
+<h1 class="title">Leetcode: 191. Number of 1 Bits</h1>
+<p>
+<a href="https://leetcode.com/problems/number-of-1-bits/">Problem Statement</a>
+</p>
+
+<div id="outline-container-org7ab55ba" class="outline-2">
+<h2 id="org7ab55ba">Pattern</h2>
+<div class="outline-text-2" id="text-org7ab55ba">
+<ul class="org-ul">
+<li><a href="pattern_bitwise_problem.html#ID-196F904D-BBEF-43CD-BAB5-B8BC563280F8">Pattern: Bitwise problem</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga89023e" class="outline-2">
+<h2 id="orga89023e">Solution</h2>
+<div class="outline-text-2" id="text-orga89023e">
+<p>
+Given an integer \(n\), the task is to find the number of 1 bits in \(n\).  If \(n=0\), the answer is clearly \(0\).  Otherwise, the answer is the sum of \(n \mod 2\) and the number of 1 bits in \(\lfloor \frac{n}{2} \rfloor\).  The following algorithm implements this process iteratively using logical operators.  The time complexity is constant since the loop executes at most 32 times.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">hammingWeight</span>(<span style="font-weight: bold;">self</span>, n: <span style="font-weight: bold;">int</span>) -&gt; <span style="font-weight: bold;">int</span>:
+        ans = 0
+        <span style="font-weight: bold;">while</span> <span style="font-weight: bold; font-style: italic;">n</span>:
+            ans += n &amp; 1
+            <span style="font-weight: bold; font-style: italic;">n</span> = n &gt;&gt; 1
+        <span style="font-weight: bold;">return</span> ans
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org7ce5620" class="outline-2">
+<h2 id="org7ce5620">Cited by 2</h2>
+<div class="outline-text-2" id="text-org7ce5620">
+<ul class="org-ul">
+<li><a href="leetcode_338_counting_bits.html#ID-BEB1C18C-3B4F-4805-913A-6E3EF9573515">Leetcode: 338. Counting Bits</a></li>
+<li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

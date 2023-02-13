@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/create-components-with-same-value/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org5b4925b" class="outline-2">
-<h2 id="org5b4925b">Understand the problem</h2>
-<div class="outline-text-2" id="text-org5b4925b">
+<div id="outline-container-org32da2d8" class="outline-2">
+<h2 id="org32da2d8">Understand the problem</h2>
+<div class="outline-text-2" id="text-org32da2d8">
 <p>
 Split an tree in a forest with maximum number of trees where each component has the same weight.
 </p>
 </div>
 
-<div id="outline-container-org3f6371c" class="outline-3">
-<h3 id="org3f6371c">Useful prompts</h3>
-<div class="outline-text-3" id="text-org3f6371c">
+<div id="outline-container-org981d241" class="outline-3">
+<h3 id="org981d241">Useful prompts</h3>
+<div class="outline-text-3" id="text-org981d241">
 <ul class="org-ul">
 <li><a href="can_we_state_the_problem_as_a_searching_problem.html#ID-60DEC3A8-810C-41E3-96E3-98145F4AAC3F">Can we state the problem as a searching problem?</a></li>
 </ul>
@@ -66,17 +66,17 @@ Split an tree in a forest with maximum number of trees where each component has 
 </div>
 </div>
 
-<div id="outline-container-orgcde258d" class="outline-2">
-<h2 id="orgcde258d">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgcde258d">
+<div id="outline-container-orgd4bfdd2" class="outline-2">
+<h2 id="orgd4bfdd2">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgd4bfdd2">
 <p>
 We are going to use <a href="pattern_search_validate.html#ID-B39B7723-9DCB-4C18-BE7D-51086F1F2A81">Pattern: Search &amp; Validate</a>.  Be \(S=\sum a[i]\).  There are \(N+1\) possible weights \(0, S/1, S/2, ..., S/N\).  For each one of them \(x\) from \(S/N\) to \(0\), break the tree in forest where each tree has weight \(x\).  Compute <a href="pattern_postorder_traversal_of_tree.html#ID-D6AFDCD1-B93D-4F4F-9AA6-B2A540BFAA42">Pattern: Postorder traversal of tree</a> and for each vertex on this order, merge it with it's parent if the weight is less than \(x\), continue to the next one if the weight is exactly \(x\) and stop the search if the weight exceeds \(x\).  Time complexity is \(O(n ^ 2)\) and space is \(O(n)\).
 </p>
 </div>
 
-<div id="outline-container-orgbe5b0b1" class="outline-3">
-<h3 id="orgbe5b0b1">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgbe5b0b1">
+<div id="outline-container-org574e082" class="outline-3">
+<h3 id="org574e082">Carry out the plan</h3>
+<div class="outline-text-3" id="text-org574e082">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">componentValue</span>(<span style="font-weight: bold;">self</span>, nums: List[<span style="font-weight: bold;">int</span>], edges: List[List[<span style="font-weight: bold;">int</span>]]) -&gt; <span style="font-weight: bold;">int</span>:

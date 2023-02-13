@@ -48,9 +48,9 @@
 Both solution uses the fact that picking \(x>1\) stones (\(0..x\)) and replacing them with their sum is the same as saying that the next player is obligated to pick \(y>x>1\) stones (\(0..y\)).  So, we can first compute <a href="prefix_sum.html#ID-1E82ABF5-661B-47CC-8656-26B50FE472B8">One-dimensional Prefix Sum</a> of the given array and use it quickly compute value that each player is adding to their score.
 </p>
 
-<div id="outline-container-org0af8a25" class="outline-2">
-<h2 id="org0af8a25">Quadratic solution</h2>
-<div class="outline-text-2" id="text-org0af8a25">
+<div id="outline-container-orge36c1b0" class="outline-2">
+<h2 id="orge36c1b0">Quadratic solution</h2>
+<div class="outline-text-2" id="text-orge36c1b0">
 <p>
 Suppose that it is Alice turn to pick a stone and \(i\) stones were already picked.  Since Alice has to take at least two stones, she will pick \(j>i\) stones (\(0..j\)) which maximize the difference of the scores when Bob pick his stones (optimally).  So, for a given \(i\), we can iterate over all positions \(j\) from \(i+1\) to \(|stones|-1\) that maximizes the selection for the given player.
 </p>
@@ -104,9 +104,9 @@ Suppose that it is Alice turn to pick a stone and \(i\) stones were already pick
 </div>
 </div>
 
-<div id="outline-container-orga6656c1" class="outline-2">
-<h2 id="orga6656c1">Linear solution</h2>
-<div class="outline-text-2" id="text-orga6656c1">
+<div id="outline-container-org9b1b8c2" class="outline-2">
+<h2 id="org9b1b8c2">Linear solution</h2>
+<div class="outline-text-2" id="text-org9b1b8c2">
 <p>
 To reduce the time complexity, we have to use the fact that at any given position \(i\), the player can take the best of picking the stones at position \(i\) or picking the stones at the position \(i+1\).  Due the restriction of the problem, the player always pick the two left stones.
 </p>

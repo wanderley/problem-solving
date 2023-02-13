@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/random-pick-with-weight/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org425c08d" class="outline-2">
-<h2 id="org425c08d">Patterns</h2>
-<div class="outline-text-2" id="text-org425c08d">
+<div id="outline-container-org5ea0350" class="outline-2">
+<h2 id="org5ea0350">Patterns</h2>
+<div class="outline-text-2" id="text-org5ea0350">
 <ul class="org-ul">
 <li><a href="pattern_cumulative_sum.html#ID-0679DF6C-5271-409F-A4EF-AD92EE1C3036">Pattern: Cumulative Sum</a>.</li>
 
@@ -59,9 +59,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgbd84391" class="outline-2">
-<h2 id="orgbd84391">Prompts</h2>
-<div class="outline-text-2" id="text-orgbd84391">
+<div id="outline-container-org02baf18" class="outline-2">
+<h2 id="org02baf18">Prompts</h2>
+<div class="outline-text-2" id="text-org02baf18">
 <dl class="org-dl">
 <dt><a href="pre_processing_the_input_can_make_easier_to_solve_the_original_problem.html#ID-42B21DBC-4951-4AF2-8C41-A646F5675365">Can we pre-process the input in a way to make easy to solve the problem?</a></dt><dd>Compute the accumulate probability of picking any of \(0..i\) elements using <a href="prefix_sum.html#ID-6C76A007-72FB-4495-904F-CC3407193847">Prefix Sum</a>.</dd>
 
@@ -70,9 +70,9 @@
 </div>
 </div>
 
-<div id="outline-container-org4fa63a5" class="outline-2">
-<h2 id="org4fa63a5">Solution</h2>
-<div class="outline-text-2" id="text-org4fa63a5">
+<div id="outline-container-org87854ed" class="outline-2">
+<h2 id="org87854ed">Solution</h2>
+<div class="outline-text-2" id="text-org87854ed">
 <p>
 Compute the accumulate probability of picking any of \(0..i\) elements and use a <a href="binary_search.html#ID-1217FC3D-A9F9-49EC-BA5D-A68E50338DBD">Binary Search</a> to find the index of one random element.  Time complexity is \(O(n)\) for pre-processing and \(O(\log n)\) to answer each query.  Space complexity is \(O(n)\) to store the accumulated probabilities.
 </p>

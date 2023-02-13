@@ -48,26 +48,26 @@
 <a href="https://leetcode.com/problems/words-within-two-edits-of-dictionary/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org08931f4" class="outline-2">
-<h2 id="org08931f4">Understand the problem</h2>
-<div class="outline-text-2" id="text-org08931f4">
+<div id="outline-container-orgf13aef1" class="outline-2">
+<h2 id="orgf13aef1">Understand the problem</h2>
+<div class="outline-text-2" id="text-orgf13aef1">
 <p>
 Given a dictionary and queries, return a subarray of queries which each query \(q\) appear in the dictionary if edit distance (only change) at most 2.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgce4f2a1" class="outline-2">
-<h2 id="orgce4f2a1">Devise a plan</h2>
-<div class="outline-text-2" id="text-orgce4f2a1">
+<div id="outline-container-org303d5ab" class="outline-2">
+<h2 id="org303d5ab">Devise a plan</h2>
+<div class="outline-text-2" id="text-org303d5ab">
 <p>
 <a href="pattern_small_constraints_could_allow_brute_force_solution.html#ID-BC81A358-FBCC-43AA-9928-E9778A107869">Pattern: Small constraints could allow a brute-force solution</a>.  For each query, compute the edit distance to all words in the dictionary and add it to the output if the distance is at most 2.
 </p>
 </div>
 
-<div id="outline-container-orgfa0c1ac" class="outline-3">
-<h3 id="orgfa0c1ac">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgfa0c1ac">
+<div id="outline-container-orgaca053b" class="outline-3">
+<h3 id="orgaca053b">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgaca053b">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Solution</span>:
     <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">twoEditWords</span>(<span style="font-weight: bold;">self</span>, queries: List[<span style="font-weight: bold;">str</span>], dictionary: List[<span style="font-weight: bold;">str</span>]) -&gt; List[<span style="font-weight: bold;">str</span>]:
