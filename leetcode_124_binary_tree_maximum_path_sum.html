@@ -48,17 +48,17 @@
 <a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orgbfbe777" class="outline-2">
-<h2 id="orgbfbe777">Understand the Problem</h2>
-<div class="outline-text-2" id="text-orgbfbe777">
+<div id="outline-container-orgc79edbc" class="outline-2">
+<h2 id="orgc79edbc">Understand the Problem</h2>
+<div class="outline-text-2" id="text-orgc79edbc">
 <p>
 Find the maximum path (sum of vertex values) in a tree.
 </p>
 </div>
 
-<div id="outline-container-org6882632" class="outline-3">
-<h3 id="org6882632">Useful prompts</h3>
-<div class="outline-text-3" id="text-org6882632">
+<div id="outline-container-org3b93500" class="outline-3">
+<h3 id="org3b93500">Useful prompts</h3>
+<div class="outline-text-3" id="text-org3b93500">
 <ul class="org-ul">
 <li><a href="can_we_divide_the_search_space_in_two_parts_and_combine_solutions_from_both_sides_to_solve_the_original_problem.html#ID-31D0B1E0-6881-478A-8F48-160BCFD94F31">Can we divide the search-space in two parts and combine solutions from both sides to solve the original problem?</a></li>
 
@@ -70,17 +70,17 @@ Find the maximum path (sum of vertex values) in a tree.
 </div>
 </div>
 
-<div id="outline-container-org961325b" class="outline-2">
-<h2 id="org961325b">Devise a plan</h2>
-<div class="outline-text-2" id="text-org961325b">
+<div id="outline-container-orgee97b42" class="outline-2">
+<h2 id="orgee97b42">Devise a plan</h2>
+<div class="outline-text-2" id="text-orgee97b42">
 <p>
 <a href="pattern_find_optimal_path_in_a_tree.html#ID-6DFC6B45-0302-44F2-AC2B-842531C4639B">Pattern: Find optimal path in a tree</a> by <a href="building_the_solution_as_you_process_the_input.html#ID-C22502E9-D2E4-4874-BE0A-27E52B1E6499">Building the solution as you process the input</a>.  Be \(u\) a node in the tree.  Find the maximum path starting from the left \(l\) and from the right \(r\) of \(u\).  The maximum path starting from \(u\) is either \(val(u)\), \(val(u)+l\) or \(val(u)+r\).  To compute the final answer, we still have to consider \(u\) as the root of the maximum path: \(val(u)+l+r\).  Time complexity is \(O(n)\) and space complexity is \(O(depth)\).
 </p>
 </div>
 
-<div id="outline-container-orgcc0e7fe" class="outline-3">
-<h3 id="orgcc0e7fe">Carry out the plan</h3>
-<div class="outline-text-3" id="text-orgcc0e7fe">
+<div id="outline-container-orgf7b7c1e" class="outline-3">
+<h3 id="orgf7b7c1e">Carry out the plan</h3>
+<div class="outline-text-3" id="text-orgf7b7c1e">
 <div class="org-src-container">
 <pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Definition for a binary tree node.</span>
 <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">class TreeNode:</span>
@@ -130,9 +130,9 @@ Find the maximum path (sum of vertex values) in a tree.
 </div>
 </div>
 
-<div id="outline-container-org27dfb5a" class="outline-2">
-<h2 id="org27dfb5a">Common mistakes</h2>
-<div class="outline-text-2" id="text-org27dfb5a">
+<div id="outline-container-org5fe7569" class="outline-2">
+<h2 id="org5fe7569">Common mistakes</h2>
+<div class="outline-text-2" id="text-org5fe7569">
 <ul class="org-ul">
 <li><a href="mistake_missing_edge_case.html#ID-29B5FD8A-98FD-48CE-8C30-04671E44AD27">Mistake: Missing edge case</a>.  The problem felt simple and I skipped the phase to create edge cases.</li>
 </ul>

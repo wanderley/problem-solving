@@ -48,18 +48,18 @@
 <a href="https://leetcode.com/problems/missing-number/">Problem Statement</a>
 </p>
 
-<div id="outline-container-orgeeb5632" class="outline-2">
-<h2 id="orgeeb5632">Pattern</h2>
-<div class="outline-text-2" id="text-orgeeb5632">
+<div id="outline-container-orgaa6838a" class="outline-2">
+<h2 id="orgaa6838a">Pattern</h2>
+<div class="outline-text-2" id="text-orgaa6838a">
 <ul class="org-ul">
 <li><a href="pattern_find_missing_element.html#ID-152C471F-C879-4FB1-93CF-243B6643774C">Pattern: Find missing element in an interval</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgb95b4ea" class="outline-2">
-<h2 id="orgb95b4ea">Solution</h2>
-<div class="outline-text-2" id="text-orgb95b4ea">
+<div id="outline-container-org35083ce" class="outline-2">
+<h2 id="org35083ce">Solution</h2>
+<div class="outline-text-2" id="text-org35083ce">
 <p>
 Given an integer array \(a\) with \(n\) distinct numbers between \(0\) and \(n\), the task is to find the number from \(0\) to \(n\) missing in \(a\).  To solve this problem, we can use two properties of XOR: \(a \oplus a = 0\) and \(a \oplus 0 = a\) for any integer \(a\).  We compute \(X = 0 \oplus 1 \oplus 2 \oplus ... \oplus n\) and \(Y = a[0] \oplus a[1] \oplus ... \oplus a[n-1]\).  As there is only one number missing from \(0\) to \(n\) in \(a\), we know that \(X \oplus Y\) will cancel out the duplicates and leave the only missing number.  The solution has time complexity \(O(n)\) and space complexity \(O(1)\).
 </p>
@@ -79,9 +79,9 @@ Given an integer array \(a\) with \(n\) distinct numbers between \(0\) and \(n\)
 </div>
 
 
-<div id="outline-container-org58c91a7" class="outline-2">
-<h2 id="org58c91a7">Cited by 1</h2>
-<div class="outline-text-2" id="text-org58c91a7">
+<div id="outline-container-orgd5a116b" class="outline-2">
+<h2 id="orgd5a116b">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgd5a116b">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>

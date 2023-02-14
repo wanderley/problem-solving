@@ -48,9 +48,9 @@
 <a href="https://leetcode.com/problems/counting-bits/">Problem Statement</a>
 </p>
 
-<div id="outline-container-org57908ab" class="outline-2">
-<h2 id="org57908ab">Pattern</h2>
-<div class="outline-text-2" id="text-org57908ab">
+<div id="outline-container-org8a4622a" class="outline-2">
+<h2 id="org8a4622a">Pattern</h2>
+<div class="outline-text-2" id="text-org8a4622a">
 <ul class="org-ul">
 <li><a href="pattern_compute_a_sequence_of_values_of_a_function.html#ID-092270C4-16DA-461A-AC1C-62CED4314E34">Pattern: Compute a sequence of values of a function</a></li>
 <li><a href="pattern_bitwise_problem.html#ID-196F904D-BBEF-43CD-BAB5-B8BC563280F8">Pattern: Bitwise problem</a></li>
@@ -58,9 +58,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgd913e87" class="outline-2">
-<h2 id="orgd913e87">Solution</h2>
-<div class="outline-text-2" id="text-orgd913e87">
+<div id="outline-container-org8f1f360" class="outline-2">
+<h2 id="org8f1f360">Solution</h2>
+<div class="outline-text-2" id="text-org8f1f360">
 <p>
 Given an integer \(n\), the task is to generate an array \(a\) of \(n+1\) elements where \(a[i]\) is equal to the number of 1 bits in \(i\).  The simplest solution is to iterate over each index \(i\) and use <a href="leetcode_191_number_of_1_bits.html#ID-9C506DBD-693B-46D8-9CA4-8B7C7D573092">Leetcode: 191. Number of 1 Bits</a> to compute \(a[i]\).  The time complexity of this solution is \(O(n \log n)\).  We can do better.  Note that \(a[i]\) is equal to one plus \(a[j]\) where \(j\) is \(i\) with the last significant digit turned of.  For example, \(i=3 (0b011)\) then \(j=2 (0b010)\) and \(i=12 (0b01100)\) then \(j=8 (0b01000)\).  Luckily, it is easy to compute \(j\): \(i & (i - 1)\).  With this observation, we can solve the problem in time complexity $O(n).
 </p>
@@ -78,9 +78,9 @@ Given an integer \(n\), the task is to generate an array \(a\) of \(n+1\) elemen
 </div>
 
 
-<div id="outline-container-orgc9b8882" class="outline-2">
-<h2 id="orgc9b8882">Cited by 1</h2>
-<div class="outline-text-2" id="text-orgc9b8882">
+<div id="outline-container-orgb54df86" class="outline-2">
+<h2 id="orgb54df86">Cited by 1</h2>
+<div class="outline-text-2" id="text-orgb54df86">
 <ul class="org-ul">
 <li><a href="interview_preparation_v.html#ID-8C7E9E52-9220-4A7B-B0E6-54F960E17CA8">Interview preparation: V</a></li>
 </ul>
