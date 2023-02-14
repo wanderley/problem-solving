@@ -213,7 +213,7 @@ We will start with [[https://leetcode.com/discuss/general-discussion/460599/blin
 
 ** February 10, 2023
 
-In this meeting, we discussed the challenges of understanding problems before solving them.  We asked question like how is our state of mind before and after we understand something?  Why is it so difficult to hold the urge to starting solve the problem while we are reading it?  What we can use to improve our reading skills?  We discovered that by using active reading techniques, we can enhance our understanding of problems and improve our ability to them.
+In this meeting, we discussed the challenges of understanding problems before solving them.  We asked questions like what is our state of mind before and after we understand something?  Why is it so difficult to hold the urge to start solving the problem while we are reading it?  What can we use to improve our reading skills?  We discovered that by using active reading techniques, we can enhance our understanding of problems and improve our ability to solve them.
 
 Let's start with an experiment:
 
@@ -222,11 +222,11 @@ Let's start with an experiment:
 - Close the book or switch to other tab in your browser and explain what you've read.
 - Do it again 3 to 5 times.
 
-You will find that the recalls became better and better with each repetition.  The first recall was disorganized while the last one was organized and fluid like a story.  You might have tried to see with your mind's eye part of the page on the first recall.  But it gradually became unnecessary as the chain of thoughts formed after each repetition.  You started empty and finished with a piece of knowledge inside yourself.
+You will find that the recall became better and better with each repetition.  The first recall was disorganized and the last one was organized and fluid, like a story.  You might have tried to see part of the page with your mind's eye on the first recall.  But gradually, it became unnecessary as the chain of thoughts formed after each repetition.  You started empty and finished with a piece of knowledge inside yourself.
 
-What did you feel on each repetition and how it changed overtime?  I bet that recognizing this difference can help us to understand when we should expend more time to really understand something.  I asked four people to do this experiment and report what they felt.  The answers were essentially about becaming less anxious and disorganized and more calm and organized.  And this is the clue that we could use.
+What did you feel on each repetition and how did it change over time?  I bet that recognizing this difference can help us understand when we should spend more time to really understand something.  I asked four people to do this experiment and to report what they felt.  The answers were essentially about becoming less anxious and disorganized and more calm and organized.  And this is the clue that we can use.
 
-Our reading skills have all to do with our problem solving skills.  As stated in the famous [[https://en.wikipedia.org/wiki/How_to_Solve_It][How To Solve It by George Polya]], the first step of solving a problem is understating it.  To understand the problem, we have to read.  And let's be honest,  we usually read the problem once and try to solve it as go along.
+Our reading skills have everything to do with our problem solving skills.  As stated in the famous book "[[https://en.wikipedia.org/wiki/How_to_Solve_It][How To Solve It by George Polya]]", the first step of solving a problem is understating it.  To understand the problem, we have to read it.  And let's be honest,  we usually read the problem once and try to solve it as we go along.
 
 We tried to address the issue using active reading techniques.  Here is the process that we followed:
 
@@ -235,7 +235,7 @@ We tried to address the issue using active reading techniques.  Here is the proc
   3. Take a break and focus on the next 10 breathes (yep! like in meditation).
   4. Read the problem slowly to ensure full understand.
 
-After each step, ask yourself "What is this problem about?".  V and I tested this method in Leetcode problems and found an impressive improvement in the recall quality.  The difference was "night and day".
+After each step, ask yourself "What is this problem about?".  V and I tested this method in Leetcode problems and found an impressive improvement in recall quality.  The difference was "night and day".
 
 In conclusion, I will incorporate active reading in my training routine and will report back the results in the future.
 
